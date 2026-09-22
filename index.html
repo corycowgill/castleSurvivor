@@ -1018,6 +1018,19 @@ body.picking-coop #level-up-screen .divider { margin: 4px 0 8px; }
   margin-top: 10px; letter-spacing: 1px; text-align: center;
 }
 
+/* ─── CO-OP HUD (companion health) ─── */
+#coop-hud { margin-top: 5px; display: flex; flex-direction: column; gap: 3px; }
+.coop-hp-row { display: grid; grid-template-columns: 26px 1fr auto; gap: 6px; align-items: center; }
+.coop-hp-who { font-family: 'Cinzel', serif; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+.coop-hp-outer {
+  height: 8px; background: rgba(0,0,0,0.55);
+  border: 1px solid #3a2510; border-radius: 3px; overflow: hidden;
+}
+.coop-hp-inner { height: 100%; transition: width 0.15s; }
+.coop-hp-text { font-family: 'MedievalSharp', cursive; font-size: 10px; color: #8a7040; min-width: 54px; text-align: right; }
+.coop-hp-row.is-down { opacity: 0.45; }
+.coop-hp-row.is-down .coop-hp-text { color: #b05050; }
+
 /* ─── CO-OP JOIN ROSTER ─── */
 #coop-roster { margin: 6px 0 2px; text-align: center; }
 #coop-title {
@@ -1256,6 +1269,7 @@ body.picking-coop #level-up-screen .divider { margin: 4px 0 8px; }
       <div id="xp-bar-outer"><div id="xp-bar-inner"></div></div>
       <div id="xp-text">Level 1 - 0 / 30 XP</div>
       <div id="passive-indicator"></div>
+      <div id="coop-hud"></div>
     </div>
     <div id="hud-right">
       <div id="stats">
@@ -7913,8 +7927,46 @@ let _prevRelicHtml = '';
 const _hudPrev = {};
 function _setText(el, key, text) { if (_hudPrev[key] !== text) { _hudPrev[key] = text; el.textContent = text; } }
 function _setStyle(el, key, prop, val) { if (_hudPrev[key] !== val) { _hudPrev[key] = val; el.style[prop] = val; } }
+// Companion health rows. Player 1 keeps the full bar above; the others get a
+// compact row each in their ring colour so they can read their own HP.
+const _COOP_HUD_TINT = ['#e8c860', '#7ec8ff', '#8fe08f'];
+let _coopHudBuiltFor = -1;
+function updateCoopHud() {
+  const el = document.getElementById('coop-hud');
+  if (!el) return;
+  if (players.length < 2) {
+    if (_coopHudBuiltFor !== 0) { el.innerHTML = ''; _coopHudBuiltFor = 0; }
+    return;
+  }
+  // Rebuild only when the party size changes; per-frame work is width/text only.
+  if (_coopHudBuiltFor !== players.length) {
+    let html = '';
+    for (let i = 1; i < players.length; i++) {
+      const tint = _COOP_HUD_TINT[i] || '#ffffff';
+      html += `<div class="coop-hp-row" id="coop-hp-${i}">`
+        + `<div class="coop-hp-who" style="color:${tint}">P${i + 1}</div>`
+        + `<div class="coop-hp-outer"><div class="coop-hp-inner" id="coop-hp-bar-${i}" style="background:${tint}"></div></div>`
+        + `<div class="coop-hp-text" id="coop-hp-txt-${i}"></div></div>`;
+    }
+    el.innerHTML = html;
+    _coopHudBuiltFor = players.length;
+  }
+  for (let i = 1; i < players.length; i++) {
+    const ps = players[i].state;
+    const bar = document.getElementById(`coop-hp-bar-${i}`);
+    const txt = document.getElementById(`coop-hp-txt-${i}`);
+    const row = document.getElementById(`coop-hp-${i}`);
+    if (!bar || !txt) continue;
+    const pct = Math.max(0, ps.hp / ps.maxHp);
+    bar.style.width = `${(pct * 100).toFixed(1)}%`;
+    txt.textContent = ps.isDead ? 'DOWN' : `${Math.max(0, Math.ceil(ps.hp))}/${Math.round(ps.maxHp)}`;
+    if (row) row.classList.toggle('is-down', !!ps.isDead);
+  }
+}
+
 function updateHUD() {
   if (!_hudCached) _cacheHudEls();
+  updateCoopHud();
   const p = state.player;
   const hpPct = p.hp / p.maxHp;
   _setStyle(_hudEls.healthBar, 'hpW', 'width', `${(hpPct * 100).toFixed(1)}%`);
