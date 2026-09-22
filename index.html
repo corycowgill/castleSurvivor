@@ -1533,9 +1533,10 @@ const CHARACTER_PASSIVES = {
     apply: () => { state.player.speed += 1.5; state.player.armor += 1; state.player._dashCDBonus = 0.5; state.player.dashStrike = true; },
   },
 };
-function getDashCooldown() {
-  let cd = 2.5 - (state.player._dashCDBonus || 0);
-  const qb = playerWeapons.quickblade;
+function getDashCooldown(p) {
+  const pl = p || players[0];
+  let cd = 2.5 - (pl.state._dashCDBonus || 0);
+  const qb = pl.weapons.quickblade;
   if (qb && qb.owned && qb.evolved) cd *= WEAPON_STATS.quickblade.evo.dashCdMul;
   return Math.max(0.6, cd);
 }
@@ -5047,7 +5048,7 @@ function updatePlayer(p, dt) {
   const moving = dx !== 0 || dz !== 0;
   ps._moving = moving;
   // Crowd around the knight, for Wolfsbane and for anything else that scales with pressure
-  if (hasRelic('wolfsbane')) {
+  if (hasRelic('wolfsbane', p)) {
     let n = 0;
     const near = queryEnemies(pmesh.position.x, pmesh.position.z, 7);
     for (let i = 0; i < near.length; i++) if (!near[i].isDying && distSqXZ(near[i].mesh.position, pmesh.position) < 36) n++;
@@ -5056,12 +5057,12 @@ function updatePlayer(p, dt) {
 
   // Dash input (spacebar or gamepad B/right trigger or touch)
   const dashInput = inp.dash;
-  const dashCD = getDashCooldown();
+  const dashCD = getDashCooldown(p);
   if (dashInput && moving && ps.dashCooldown <= 0 && !ps.isDashing) {
     ps.isDashing = true;
     ps.dashCooldown = dashCD;
     ps.dashTimer = 0.15;
-    ps.iframes = hasRelic('windwalker') ? 0.4 : 0.2; // brief i-frames during dash
+    ps.iframes = hasRelic('windwalker', p) ? 0.4 : 0.2; // brief i-frames during dash
     ps._dashId = (ps._dashId || 0) + 1;
     runStats.dashesUsed++;
     // Store dash direction
@@ -5133,7 +5134,7 @@ function updatePlayer(p, dt) {
 
   // Auto-attack with the character's primary weapon
   const primary = ps.primaryWeapon || 'sword';
-  const pw = playerWeapons[primary];
+  const pw = p.weapons[primary];
   const pStats = WEAPON_STATS[primary];
   const pLvl = Math.min(5, pw.level);
   const pEvo = !!pw.evolved;
@@ -5239,7 +5240,7 @@ function updatePlayer(p, dt) {
         const value = pickup.value || 1;
         // Scales with the wave, not the player's level: level-based coin XP was
         // quadratic and pushed a strong run to level 60 by wave 20
-        const coinXP = Math.round((1 + Math.floor(state.wave / 5)) * value * (hasRelic('greed') ? 1.5 : 1));
+        const coinXP = Math.round((1 + Math.floor(state.wave / 5)) * value * (hasRelic('greed', p) ? 1.5 : 1));
         gainXP(coinXP);
         state.score += 10 * value;
         runStats.coinsCollected += value;
@@ -6161,24 +6162,28 @@ function updateDamageNumbers(dt) {
 }
 
 // ─── WEAPON UPDATES ───
-function updateWeapons(dt) {
-  if (!playerMesh || state.player.isDead) return;
+function updateWeapons(p, dt) {
+  const ps = p.state;
+  const pmesh = p.mesh;
+  const pw = p.weapons;
+  const wt = p.weaponTimers;
+  if (!pmesh || ps.isDead) return;
 
   // --- THROWING DAGGERS ---
-  if (playerWeapons.dagger.owned) {
-    const dLvl = Math.min(5, playerWeapons.dagger.level);
-    const dEvo = playerWeapons.dagger.evolved;
+  if (pw.dagger.owned) {
+    const dLvl = Math.min(5, pw.dagger.level);
+    const dEvo = pw.dagger.evolved;
     const stats = WEAPON_STATS.dagger;
-    weaponTimers.dagger -= dt;
-    if (weaponTimers.dagger <= 0) {
-      weaponTimers.dagger = stats.cooldown[dLvl] * (dEvo ? 0.6 : 1);
+    wt.dagger -= dt;
+    if (wt.dagger <= 0) {
+      wt.dagger = stats.cooldown[dLvl] * (dEvo ? 0.6 : 1);
       const count = stats.count[dLvl] + (dEvo ? 2 : 0);
       _daggerTargets.length = 0;
       const _daggerRangeSq = stats.range * stats.range;
       for (let ei = 0; ei < enemies.length; ei++) {
         const enemy = enemies[ei];
         if (enemy.isDying) continue;
-        const dSq = distSqXZ(playerMesh.position, enemy.mesh.position);
+        const dSq = distSqXZ(pmesh.position, enemy.mesh.position);
         if (dSq < _daggerRangeSq) _daggerTargets.push(ei, dSq);
       }
       for (let n = 0; n < Math.min(count, _daggerTargets.length / 2); n++) {
@@ -6192,30 +6197,30 @@ function updateWeapons(dt) {
           _daggerTargets[minIdx] = ti; _daggerTargets[minIdx + 1] = td;
         }
         const target = enemies[_daggerTargets[n * 2]];
-        _tv2.subVectors(target.mesh.position, playerMesh.position).normalize();
-        const daggerDmg = Math.round((dEvo ? stats.damage[dLvl] * 1.5 : stats.damage[dLvl]) * (state.player._projDmgMul || 1));
+        _tv2.subVectors(target.mesh.position, pmesh.position).normalize();
+        const daggerDmg = Math.round((dEvo ? stats.damage[dLvl] * 1.5 : stats.damage[dLvl]) * (ps._projDmgMul || 1));
         const daggerPierce = stats.pierce[dLvl] + (dEvo ? 3 : 0);
-        spawnProjectile('dagger', playerMesh.position, _tv2, daggerDmg, stats.speed * (dEvo ? 1.3 : 1), stats.range, daggerPierce);
+        spawnProjectile('dagger', pmesh.position, _tv2, daggerDmg, stats.speed * (dEvo ? 1.3 : 1), stats.range, daggerPierce);
       }
     }
   }
 
   // --- HOLY AURA ---
-  if (playerWeapons.holyAura.owned) {
-    const haLvl = Math.min(5, playerWeapons.holyAura.level);
-    const haEvo = playerWeapons.holyAura.evolved;
+  if (pw.holyAura.owned) {
+    const haLvl = Math.min(5, pw.holyAura.level);
+    const haEvo = pw.holyAura.evolved;
     const stats = WEAPON_STATS.holyAura;
-    weaponTimers.holyAura -= dt;
-    if (weaponTimers.holyAura <= 0) {
-      weaponTimers.holyAura = stats.cooldown[haLvl] * (haEvo ? 0.7 : 1);
-      const radius = (stats.radius[haLvl] + (haEvo ? 3 : 0)) * (state.player._aoeMul || 1);
+    wt.holyAura -= dt;
+    if (wt.holyAura <= 0) {
+      wt.holyAura = stats.cooldown[haLvl] * (haEvo ? 0.7 : 1);
+      const radius = (stats.radius[haLvl] + (haEvo ? 3 : 0)) * (ps._aoeMul || 1);
       const dmg = haEvo ? Math.round(stats.damage[haLvl] * 1.8) : stats.damage[haLvl];
       const _auraRadiusSq = radius * radius;
       const kbAmount = stats.knockback + (haEvo ? 0.8 : 0);
       for (let ei = 0; ei < enemies.length; ei++) {
         const enemy = enemies[ei];
         if (enemy.isDying) continue;
-        if (distSq(playerMesh.position, enemy.mesh.position) > _auraRadiusSq) continue;
+        if (distSq(pmesh.position, enemy.mesh.position) > _auraRadiusSq) continue;
         applyDamage(enemy, dmg, {
           source: 'holyAura', color: haEvo ? '#fff2c4' : '#ffd98a', flash: 0.1,
           knockback: kbAmount, kbTimer: haEvo ? 0.25 : 0.12,
@@ -6224,75 +6229,75 @@ function updateWeapons(dt) {
         if (haEvo && !enemy.isBoss && !enemy.isDying) enemy.stunTimer = 0.9;
       }
       // "A divine ring smites those who draw near" — gold light, not blue magic
-      vfx.holyPulse(playerMesh.position, radius, haEvo);
+      vfx.holyPulse(pmesh.position, radius, haEvo);
     }
   }
 
   // --- ARROW VOLLEY ---
-  if (playerWeapons.arrowVolley.owned) {
-    const avLvl = Math.min(5, playerWeapons.arrowVolley.level);
-    const avEvo = playerWeapons.arrowVolley.evolved;
+  if (pw.arrowVolley.owned) {
+    const avLvl = Math.min(5, pw.arrowVolley.level);
+    const avEvo = pw.arrowVolley.evolved;
     const stats = WEAPON_STATS.arrowVolley;
-    weaponTimers.arrowVolley -= dt;
-    if (weaponTimers.arrowVolley <= 0) {
-      weaponTimers.arrowVolley = stats.cooldown[avLvl] * (avEvo ? 0.5 : 1);
+    wt.arrowVolley -= dt;
+    if (wt.arrowVolley <= 0) {
+      wt.arrowVolley = stats.cooldown[avLvl] * (avEvo ? 0.5 : 1);
       const count = stats.count[avLvl] * (avEvo ? 2 : 1);
-      const avDmg = Math.round((avEvo ? stats.damage[avLvl] * 1.5 : stats.damage[avLvl]) * (state.player._projDmgMul || 1));
+      const avDmg = Math.round((avEvo ? stats.damage[avLvl] * 1.5 : stats.damage[avLvl]) * (ps._projDmgMul || 1));
       if (avEvo) {
         // Meteor Shower: arrows rain in all directions
         for (let i = 0; i < count; i++) {
           const angle = (i / count) * Math.PI * 2;
           _arrowDir.set(Math.sin(angle), 0, Math.cos(angle));
-          spawnProjectile('arrow', playerMesh.position, _arrowDir, avDmg, stats.speed, stats.range, 1);
+          spawnProjectile('arrow', pmesh.position, _arrowDir, avDmg, stats.speed, stats.range, 1);
         }
       } else {
-        const baseAngle = playerMesh.rotation.y;
+        const baseAngle = pmesh.rotation.y;
         const totalSpread = stats.spread * (count - 1);
         for (let i = 0; i < count; i++) {
           const angle = baseAngle - totalSpread / 2 + stats.spread * i;
           _arrowDir.set(Math.sin(angle), 0, Math.cos(angle));
-          spawnProjectile('arrow', playerMesh.position, _arrowDir, avDmg, stats.speed, stats.range, 0);
+          spawnProjectile('arrow', pmesh.position, _arrowDir, avDmg, stats.speed, stats.range, 0);
         }
       }
     }
   }
 
   // --- ORBITAL BOMB ---
-  if (playerWeapons.orbitalBomb.owned) {
-    const obLvl = Math.min(5, playerWeapons.orbitalBomb.level);
-    const obEvo = playerWeapons.orbitalBomb.evolved;
+  if (pw.orbitalBomb.owned) {
+    const obLvl = Math.min(5, pw.orbitalBomb.level);
+    const obEvo = pw.orbitalBomb.evolved;
     const stats = WEAPON_STATS.orbitalBomb;
-    weaponTimers.orbitalBomb -= dt;
-    if (weaponTimers.orbitalBomb <= 0) {
-      weaponTimers.orbitalBomb = stats.cooldown[obLvl] * (obEvo ? 0.6 : 1);
+    wt.orbitalBomb -= dt;
+    if (wt.orbitalBomb <= 0) {
+      wt.orbitalBomb = stats.cooldown[obLvl] * (obEvo ? 0.6 : 1);
       const bombCount = stats.count[obLvl] + (obEvo ? 2 : 0);
       for (let b = 0; b < bombCount; b++) {
         let bestDist = Infinity, bestEnemy = null;
         for (const enemy of enemies) {
           if (enemy.isDying) continue;
-          const d = distSqXZ(playerMesh.position, enemy.mesh.position);
+          const d = distSqXZ(pmesh.position, enemy.mesh.position);
           if (d < 900 && d < bestDist) { bestDist = d; bestEnemy = enemy; }
         }
-        const targetPos = bestEnemy ? bestEnemy.mesh.position : playerMesh.position;
+        const targetPos = bestEnemy ? bestEnemy.mesh.position : pmesh.position;
         const bombPos = new THREE.Vector3(
           targetPos.x + (Math.random() - 0.5) * 3,
           6,
           targetPos.z + (Math.random() - 0.5) * 3
         );
         const obDmg = obEvo ? Math.round(stats.damage[obLvl] * 2) : stats.damage[obLvl];
-        const obRad = (stats.radius[obLvl] + (obEvo ? 2 : 0)) * (state.player._aoeMul || 1);
+        const obRad = (stats.radius[obLvl] + (obEvo ? 2 : 0)) * (ps._aoeMul || 1);
         spawnOrbitalBomb(bombPos, obDmg, obRad, obEvo);
       }
     }
   }
 
   // --- WARDING SHIELDS ---
-  if (playerWeapons.wardShields.owned) {
-    const wsLvl = Math.min(5, playerWeapons.wardShields.level);
-    const wsEvo = playerWeapons.wardShields.evolved;
+  if (pw.wardShields.owned) {
+    const wsLvl = Math.min(5, pw.wardShields.level);
+    const wsEvo = pw.wardShields.evolved;
     const stats = WEAPON_STATS.wardShields;
     const count = wsEvo ? 6 : stats.count[wsLvl];
-    const radius = (stats.radius[wsLvl] + (wsEvo ? 1.2 : 0)) * (state.player._aoeMul || 1);
+    const radius = (stats.radius[wsLvl] + (wsEvo ? 1.2 : 0)) * (ps._aoeMul || 1);
     const dmg = wsEvo ? Math.round(stats.damage[wsLvl] * 1.6) : stats.damage[wsLvl];
     const hitInterval = stats.cooldown[wsLvl];
     syncWardShields(count);
@@ -6300,7 +6305,7 @@ function updateWeapons(dt) {
     for (let s = 0; s < wardShieldMeshes.length; s++) {
       const sh = wardShieldMeshes[s];
       const a = _shieldAngle + (s / count) * Math.PI * 2;
-      sh.position.set(playerMesh.position.x + Math.cos(a) * radius, 1.0, playerMesh.position.z + Math.sin(a) * radius);
+      sh.position.set(pmesh.position.x + Math.cos(a) * radius, 1.0, pmesh.position.z + Math.sin(a) * radius);
       sh.rotation.y = -a;
       // Strike anything the shield passes through
       const near = queryEnemies(sh.position.x, sh.position.z, 2.5);
@@ -6332,14 +6337,14 @@ function updateWeapons(dt) {
   }
 
   // --- STORM CALL ---
-  if (playerWeapons.stormCall.owned) {
-    const scLvl = Math.min(5, playerWeapons.stormCall.level);
-    const scEvo = playerWeapons.stormCall.evolved;
+  if (pw.stormCall.owned) {
+    const scLvl = Math.min(5, pw.stormCall.level);
+    const scEvo = pw.stormCall.evolved;
     const stats = WEAPON_STATS.stormCall;
-    weaponTimers.stormCall -= dt;
-    if (weaponTimers.stormCall <= 0) {
-      weaponTimers.stormCall = stats.cooldown[scLvl] * (scEvo ? 0.85 : 1);
-      const dmg = Math.round((scEvo ? stats.damage[scLvl] * 1.4 : stats.damage[scLvl]) * (state.player._projDmgMul || 1));
+    wt.stormCall -= dt;
+    if (wt.stormCall <= 0) {
+      wt.stormCall = stats.cooldown[scLvl] * (scEvo ? 0.85 : 1);
+      const dmg = Math.round((scEvo ? stats.damage[scLvl] * 1.4 : stats.damage[scLvl]) * (ps._projDmgMul || 1));
       const strikes = scEvo ? 3 : 1;
       const rangeSq = stats.range * stats.range;
       _chainHit.clear();
@@ -6348,7 +6353,7 @@ function updateWeapons(dt) {
         for (let ei = 0; ei < enemies.length; ei++) {
           const e = enemies[ei];
           if (e.isDying || _chainHit.has(e)) continue;
-          const d = distSqXZ(playerMesh.position, e.mesh.position);
+          const d = distSqXZ(pmesh.position, e.mesh.position);
           if (d < bestD) { bestD = d; best = e; }
         }
         if (!best) break;
@@ -6367,18 +6372,18 @@ function updateWeapons(dt) {
   }
 
   // --- TRAIL OF EMBERS ---
-  if (playerWeapons.emberTrail.owned) {
-    const etLvl = Math.min(5, playerWeapons.emberTrail.level);
-    const etEvo = playerWeapons.emberTrail.evolved;
+  if (pw.emberTrail.owned) {
+    const etLvl = Math.min(5, pw.emberTrail.level);
+    const etEvo = pw.emberTrail.evolved;
     const stats = WEAPON_STATS.emberTrail;
     const spacing = stats.cooldown[etLvl];
-    if (_emberLastX == null) { _emberLastX = playerMesh.position.x; _emberLastZ = playerMesh.position.z; }
-    const mdx = playerMesh.position.x - _emberLastX, mdz = playerMesh.position.z - _emberLastZ;
+    if (_emberLastX == null) { _emberLastX = pmesh.position.x; _emberLastZ = pmesh.position.z; }
+    const mdx = pmesh.position.x - _emberLastX, mdz = pmesh.position.z - _emberLastZ;
     if (mdx * mdx + mdz * mdz >= spacing * spacing) {
-      _emberLastX = playerMesh.position.x; _emberLastZ = playerMesh.position.z;
+      _emberLastX = pmesh.position.x; _emberLastZ = pmesh.position.z;
       burnPatches.push({
-        pos: new THREE.Vector3(playerMesh.position.x, 0, playerMesh.position.z),
-        radius: (stats.radius + (etEvo ? 1.0 : 0)) * (state.player._aoeMul || 1),
+        pos: new THREE.Vector3(pmesh.position.x, 0, pmesh.position.z),
+        radius: (stats.radius + (etEvo ? 1.0 : 0)) * (ps._aoeMul || 1),
         damage: etEvo ? Math.round(stats.damage[etLvl] * 1.3) : stats.damage[etLvl],
         life: stats.life[etLvl] + (etEvo ? 1 : 0),
         tickTimer: 0,
@@ -7055,7 +7060,7 @@ const RELICS = [
   { id: 'windwalker', name: 'Windwalker Boots',  icon: '🌬', desc: 'Dash cooldown -40%, and the dash shrugs off blows for 0.4s', unlock: 'wave10', hint: 'Reach Wave 10' },
 ];
 function isRelicUnlocked(r) { if (!r.unlock) return true; const meta = loadMeta(); return !!(meta.achievements && meta.achievements.includes(r.unlock)); }
-function hasRelic(id) { return !!(state.player.relics && state.player.relics[id]); }
+function hasRelic(id, p) { const st = (p || players[0]).state; return !!(st.relics && st.relics[id]); }
 function relicCount() { return state.player.relics ? Object.keys(state.player.relics).length : 0; }
 function relicUpgrade(r) {
   return {
@@ -8612,7 +8617,7 @@ function updateGame(dt, rawDt = dt) {
     applySeparation();
     updateEnemyProjectiles(dt);
     updateBossBoulders(dt);
-    updateWeapons(dt);
+    for (const pl of players) updateWeapons(pl, dt);
     updateProjectiles(dt);
     updateOrbitalBombs(dt);
     updateBurnPatches(dt);
