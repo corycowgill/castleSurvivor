@@ -62,6 +62,11 @@ async function openGame(headed) {
   const browser = await puppeteer.launch({
     executablePath: findBrowser(),
     headless: !headed,
+    // The __cs wait allows 420 s, but puppeteer's own protocol timeout defaults
+    // to 180 s and kills the underlying evaluate first -- a cold SwiftShader
+    // load of the asset set can exceed that and fail with a confusing
+    // "Runtime.callFunctionOn timed out" rather than a load error.
+    protocolTimeout: 600000,
     // --gpu: render on the real GPU (ANGLE over D3D11) instead of SwiftShader. Much
     // faster and free of SwiftShader's dropped tiles; SwiftShader stays the default
     // because it works on any machine and never competes with ComfyUI for VRAM.

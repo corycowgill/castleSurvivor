@@ -3566,11 +3566,13 @@ async function createPlayer(index = 0) {
 // prompt; for now it is the entry point the harness drives. Per-player passives
 // and Forge ranks are not applied yet -- joined players start on base stats
 // until clearRun() is converted to loop over players.
-async function joinPlayer(character = 'brennan') {
+async function joinPlayer(character = 'brennan', padIndex = null) {
   if (players.length >= MAX_PLAYERS) return null;
   const index = players.length;
   const p = makePlayer(index);
   p.character = character;
+  // Default to the Nth pad; a real join flow passes the pad that pressed A.
+  p.padIndex = padIndex != null ? padIndex : index;
   players[index] = p;
   await createPlayer(index);
   return p;
@@ -5014,85 +5016,74 @@ function getEventXPMul() { return activeWaveEvent?.effect?.xpMul || 1; }
 function getEventEnemySpeedMul() { return activeWaveEvent?.effect?.enemySpeedMul || 1; }
 
 // ─── GAME LOGIC ───
-function updatePlayer(dt) {
-  if (state.player.isDead) return;
+function updatePlayer(p, dt) {
+  const ps = p.state;
+  const pmesh = p.mesh;
+  if (!pmesh) return;
+  if (ps.isDead) return;
 
   // Tick down i-frames
-  if (state.player.iframes > 0) {
-    state.player.iframes -= dt;
+  if (ps.iframes > 0) {
+    ps.iframes -= dt;
     // Visual flicker during i-frames
-    if (playerMesh) playerMesh.visible = Math.sin(state.player.iframes * 30) > 0;
-  } else if (playerMesh && !playerMesh.visible) {
-    playerMesh.visible = true;
+    if (pmesh) pmesh.visible = Math.sin(ps.iframes * 30) > 0;
+  } else if (pmesh && !pmesh.visible) {
+    pmesh.visible = true;
   }
 
   // Tick down attack animation reset
-  if (state.player._atkResetTimer > 0) {
-    state.player._atkResetTimer -= dt;
-    if (state.player._atkResetTimer <= 0) state.player.isAttacking = false;
+  if (ps._atkResetTimer > 0) {
+    ps._atkResetTimer -= dt;
+    if (ps._atkResetTimer <= 0) ps.isAttacking = false;
   }
 
   // Tick down dash cooldown
-  if (state.player.dashCooldown > 0) state.player.dashCooldown -= dt;
+  if (ps.dashCooldown > 0) ps.dashCooldown -= dt;
 
-  // Movement (keyboard + gamepad)
-  let dx = 0, dz = 0;
-  if (keys['KeyW'] || keys['ArrowUp']) dz -= 1;
-  if (keys['KeyS'] || keys['ArrowDown']) dz += 1;
-  if (keys['KeyA'] || keys['ArrowLeft']) dx -= 1;
-  if (keys['KeyD'] || keys['ArrowRight']) dx += 1;
-
-  // Gamepad left stick
-  if (gamepadState.lx !== 0 || gamepadState.ly !== 0) {
-    dx += gamepadState.lx;
-    dz += gamepadState.ly;
-  }
-  // Touch stick
-  if (touchState.stickX !== 0 || touchState.stickY !== 0) {
-    dx += touchState.stickX;
-    dz += touchState.stickY;
-  }
+  // Movement, from whichever device drives this player
+  const inp = readInput(p);
+  let dx = inp.dx, dz = inp.dz;
 
   const moving = dx !== 0 || dz !== 0;
-  state.player._moving = moving;
+  ps._moving = moving;
   // Crowd around the knight, for Wolfsbane and for anything else that scales with pressure
   if (hasRelic('wolfsbane')) {
     let n = 0;
-    const near = queryEnemies(playerMesh.position.x, playerMesh.position.z, 7);
-    for (let i = 0; i < near.length; i++) if (!near[i].isDying && distSqXZ(near[i].mesh.position, playerMesh.position) < 36) n++;
-    state.player._crowdCount = n;
+    const near = queryEnemies(pmesh.position.x, pmesh.position.z, 7);
+    for (let i = 0; i < near.length; i++) if (!near[i].isDying && distSqXZ(near[i].mesh.position, pmesh.position) < 36) n++;
+    ps._crowdCount = n;
   }
 
   // Dash input (spacebar or gamepad B/right trigger or touch)
-  const dashInput = keys['Space'] || gamepadState.b || touchState.dash;
+  const dashInput = inp.dash;
   const dashCD = getDashCooldown();
-  if (dashInput && moving && state.player.dashCooldown <= 0 && !state.player.isDashing) {
-    state.player.isDashing = true;
-    state.player.dashCooldown = dashCD;
-    state.player.dashTimer = 0.15;
-    state.player.iframes = hasRelic('windwalker') ? 0.4 : 0.2; // brief i-frames during dash
-    state.player._dashId = (state.player._dashId || 0) + 1;
+  if (dashInput && moving && ps.dashCooldown <= 0 && !ps.isDashing) {
+    ps.isDashing = true;
+    ps.dashCooldown = dashCD;
+    ps.dashTimer = 0.15;
+    ps.iframes = hasRelic('windwalker') ? 0.4 : 0.2; // brief i-frames during dash
+    ps._dashId = (ps._dashId || 0) + 1;
     runStats.dashesUsed++;
     // Store dash direction
     const dLen = Math.sqrt(dx * dx + dz * dz);
-    state.player.dashDirX = dx / dLen;
-    state.player.dashDirZ = dz / dLen;
+    ps.dashDirX = dx / dLen;
+    ps.dashDirZ = dz / dLen;
     AudioSystem.play('swordSwing', { volume: 0.3, pitch: 1.6 });
-    vfx.dashEffect(playerMesh, state.player.dashDirX, state.player.dashDirZ);
+    vfx.dashEffect(pmesh, ps.dashDirX, ps.dashDirZ);
   }
 
   // Apply dash movement
-  if (state.player.isDashing) {
-    state.player.dashTimer -= dt;
-    if (state.player.dashTimer <= 0) {
-      state.player.isDashing = false;
+  if (ps.isDashing) {
+    ps.dashTimer -= dt;
+    if (ps.dashTimer <= 0) {
+      ps.isDashing = false;
     } else {
       const dashSpeed = 45;
-      playerMesh.position.x += state.player.dashDirX * dashSpeed * dt;
-      playerMesh.position.z += state.player.dashDirZ * dashSpeed * dt;
+      pmesh.position.x += ps.dashDirX * dashSpeed * dt;
+      pmesh.position.z += ps.dashDirZ * dashSpeed * dt;
       // Clamp to world
-      playerMesh.position.x = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, playerMesh.position.x));
-      playerMesh.position.z = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, playerMesh.position.z));
+      pmesh.position.x = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, pmesh.position.x));
+      pmesh.position.z = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, pmesh.position.z));
     }
   }
 
@@ -5101,8 +5092,8 @@ function updatePlayer(dt) {
     dx /= len;
     dz /= len;
 
-    let newX = playerMesh.position.x + dx * state.player.speed * dt;
-    let newZ = playerMesh.position.z + dz * state.player.speed * dt;
+    let newX = pmesh.position.x + dx * ps.speed * dt;
+    let newZ = pmesh.position.z + dz * ps.speed * dt;
 
     // Clamp to world bounds
     newX = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, newX));
@@ -5126,74 +5117,74 @@ function updatePlayer(dt) {
       }
     }
 
-    playerMesh.position.x = newX;
-    playerMesh.position.z = newZ;
+    pmesh.position.x = newX;
+    pmesh.position.z = newZ;
 
     // Face movement direction
     const angle = Math.atan2(dx, dz);
-    playerMesh.rotation.y = angle;
+    pmesh.rotation.y = angle;
 
-    if (!state.player.isAttacking) {
-      playPlayerAnim('Run_Anime');
+    if (!ps.isAttacking) {
+      playPlayerAnimFor(p, 'Run_Anime');
     }
-  } else if (!state.player.isAttacking) {
-    playPlayerAnim('Idle_A');
+  } else if (!ps.isAttacking) {
+    playPlayerAnimFor(p, 'Idle_A');
   }
 
   // Auto-attack with the character's primary weapon
-  const primary = state.player.primaryWeapon || 'sword';
+  const primary = ps.primaryWeapon || 'sword';
   const pw = playerWeapons[primary];
   const pStats = WEAPON_STATS[primary];
   const pLvl = Math.min(5, pw.level);
   const pEvo = !!pw.evolved;
   const evo = pStats.evo;
-  const pRange = pStats.range[pLvl] + (state.player.attackRange - ATTACK_RANGE) + (pEvo ? evo.range : 0);
-  const pCD = pStats.cooldown[pLvl] * (state.player.attackCooldown / ATTACK_COOLDOWN) * (pEvo ? evo.cdMul : 1);
-  const basePDmg = pStats.damage[pLvl] + (state.player.damage - 15);
+  const pRange = pStats.range[pLvl] + (ps.attackRange - ATTACK_RANGE) + (pEvo ? evo.range : 0);
+  const pCD = pStats.cooldown[pLvl] * (ps.attackCooldown / ATTACK_COOLDOWN) * (pEvo ? evo.cdMul : 1);
+  const basePDmg = pStats.damage[pLvl] + (ps.damage - 15);
   const pDmg = pEvo ? Math.round(basePDmg * evo.dmgMul) : basePDmg;
   const pKb = pEvo && evo.knockback != null ? evo.knockback : pStats.knockback;
-  state.player._primaryCD = pCD;
+  ps._primaryCD = pCD;
 
   // Swift Guardian: the dash itself is an attack. Each enemy is struck once per dash.
-  if (state.player.isDashing && state.player.dashStrike) {
+  if (ps.isDashing && ps.dashStrike) {
     const dashR2 = 1.4 * 1.4;
-    const dashId = state.player._dashId;
+    const dashId = ps._dashId;
     for (let ei = 0; ei < enemies.length; ei++) {
       const enemy = enemies[ei];
       if (enemy.isDying || enemy._dashHitId === dashId) continue;
-      if (distSqXZ(playerMesh.position, enemy.mesh.position) < dashR2) {
+      if (distSqXZ(pmesh.position, enemy.mesh.position) < dashR2) {
         enemy._dashHitId = dashId;
         damageEnemy(enemy, Math.round(pDmg * 1.2), 1.2);
       }
     }
   }
 
-  state.player.attackTimer -= dt;
-  if (state.player.attackTimer <= 0) {
+  ps.attackTimer -= dt;
+  if (ps.attackTimer <= 0) {
     let closestDistSq = pRange * pRange;
     let closestEnemy = null;
     for (let ei = 0; ei < enemies.length; ei++) {
       const enemy = enemies[ei];
       if (enemy.isDying) continue;
-      const dSq = distSq(playerMesh.position, enemy.mesh.position);
+      const dSq = distSq(pmesh.position, enemy.mesh.position);
       if (dSq < closestDistSq) { closestDistSq = dSq; closestEnemy = enemy; }
     }
 
     if (closestEnemy) {
-      _tv1.subVectors(closestEnemy.mesh.position, playerMesh.position);
-      playerMesh.rotation.y = Math.atan2(_tv1.x, _tv1.z);
+      _tv1.subVectors(closestEnemy.mesh.position, pmesh.position);
+      pmesh.rotation.y = Math.atan2(_tv1.x, _tv1.z);
 
       AudioSystem.play('swordSwing', { volume: 0.6, pitch: (primary === 'quickblade' ? 1.15 : primary === 'spear' ? 0.8 : 0.9) + Math.random() * 0.2 });
-      playPlayerAnim('Sword_Attack', false);
-      state.player.isAttacking = true;
-      state.player._atkResetTimer = Math.min(0.7, pCD * 0.9);
-      vfx.meleeSwing(playerMesh, pEvo ? evo.style : pStats.style);
+      playPlayerAnimFor(p, 'Sword_Attack', false);
+      ps.isAttacking = true;
+      ps._atkResetTimer = Math.min(0.7, pCD * 0.9);
+      vfx.meleeSwing(pmesh, pEvo ? evo.style : pStats.style);
 
       const atkRangeSq = (pRange + 0.5) * (pRange + 0.5);
       const cleaveLimit = (pStats.cleave ? pStats.cleave[pLvl] : 99) + (pEvo && evo.cleave ? evo.cleave : 0);
       const cone = pStats.shape === 'cone';
       const cosHalf = cone ? Math.cos(pEvo && evo.halfAngle != null ? evo.halfAngle : pStats.halfAngle) : -1;
-      const fx = Math.sin(playerMesh.rotation.y), fz = Math.cos(playerMesh.rotation.y);
+      const fx = Math.sin(pmesh.rotation.y), fz = Math.cos(pmesh.rotation.y);
       // Gather candidates, nearest first. Arc weapons hit a limited number of
       // targets: (1 + cleave) at full damage, then a few more at half. They used
       // to hit everything in range every swing, which made the sword a free aura.
@@ -5201,8 +5192,8 @@ function updatePlayer(dt) {
       for (let ei = 0; ei < enemies.length; ei++) {
         const enemy = enemies[ei];
         if (enemy.isDying) continue;
-        const ex = enemy.mesh.position.x - playerMesh.position.x;
-        const ez = enemy.mesh.position.z - playerMesh.position.z;
+        const ex = enemy.mesh.position.x - pmesh.position.x;
+        const ez = enemy.mesh.position.z - pmesh.position.z;
         const dSq = ex * ex + ez * ez;
         if (dSq >= atkRangeSq) continue;
         if (cone && dSq > 1.0) {
@@ -5223,18 +5214,18 @@ function updatePlayer(dt) {
         damageEnemy(_meleeHits[h].enemy, full ? pDmg : Math.round(pDmg * 0.5), pKb);
       }
       if (pEvo && evo.heal && hitCount > 0) {
-        state.player.hp = Math.min(state.player.maxHp, state.player.hp + Math.min(hitCount, 3));
+        ps.hp = Math.min(ps.maxHp, ps.hp + Math.min(hitCount, 3));
       }
-      state.player.attackTimer = pCD;
+      ps.attackTimer = pCD;
     }
   }
 
   // Regen
-  if (state.player.regen > 0) {
-    state.player.regenTimer += dt;
-    if (state.player.regenTimer >= 1) {
-      state.player.regenTimer = 0;
-      state.player.hp = Math.min(state.player.maxHp, state.player.hp + state.player.regen);
+  if (ps.regen > 0) {
+    ps.regenTimer += dt;
+    if (ps.regenTimer >= 1) {
+      ps.regenTimer = 0;
+      ps.hp = Math.min(ps.maxHp, ps.hp + ps.regen);
     }
   }
 
@@ -5242,7 +5233,7 @@ function updatePlayer(dt) {
   const _pickupRangeSq = PICKUP_RANGE * PICKUP_RANGE;
   for (let i = pickups.length - 1; i >= 0; i--) {
     const pickup = pickups[i];
-    const dSq = distSq(playerMesh.position, pickup.mesh.position);
+    const dSq = distSq(pmesh.position, pickup.mesh.position);
     if (dSq < _pickupRangeSq) {
       if (pickup.type === 'coin') {
         const value = pickup.value || 1;
@@ -5256,13 +5247,13 @@ function updatePlayer(dt) {
         vfx.collectEffect(pickup.mesh.position, 'coin');
         spawnDamageNumber(pickup.mesh.position, `+${coinXP} XP`, value > 1 ? '#ffe680' : '#e8c860');
       } else if (pickup.type === 'food') {
-        const foodHeal = Math.max(8, Math.round(state.player.maxHp * 0.08));
-        state.player.hp = Math.min(state.player.maxHp, state.player.hp + foodHeal);
+        const foodHeal = Math.max(8, Math.round(ps.maxHp * 0.08));
+        ps.hp = Math.min(ps.maxHp, ps.hp + foodHeal);
         spawnDamageNumber(pickup.mesh.position, `+${foodHeal} HP`, '#44cc44');
         runStats.foodEaten++;
         AudioSystem.play('foodPickup', { volume: 0.5 });
-        playPlayerAnim('Consume', false);
-        state.player._atkResetTimer = 0.3;
+        playPlayerAnimFor(p, 'Consume', false);
+        ps._atkResetTimer = 0.3;
         vfx.collectEffect(pickup.mesh.position, 'food');
       }
       scene.remove(pickup.mesh);
@@ -8590,7 +8581,7 @@ function updateGame(dt, rawDt = dt) {
   if (state.started && !state.paused && !state.gameOver) {
     state.time += dt;
     rebuildGrid();
-    updatePlayer(dt);
+    for (const pl of players) updatePlayer(pl, dt);
     // Rebuild nearby obstacle cache periodically
     _obstacleTimer += dt;
     if (_obstacleTimer >= 0.5) {
@@ -8696,11 +8687,37 @@ const gamepadState = {
 };
 const DEADZONE = 0.15;
 
+// Per-pad snapshots so each co-op player can be driven by its own controller.
+// gamepadState stays the FIRST pad's state and is what every menu reads, so
+// menu navigation is unchanged and any pad can still drive the front end.
+const gamepadStates = [];
+function padSlot(i) {
+  if (!gamepadStates[i]) gamepadStates[i] = {
+    lx: 0, ly: 0,
+    a: false, prevA: false, b: false, prevB: false, x: false, prevX: false, y: false, prevY: false,
+    start: false, prevStart: false,
+    dpadUp: false, prevDpadUp: false, dpadDown: false, prevDpadDown: false,
+    dpadLeft: false, prevDpadLeft: false, dpadRight: false, prevDpadRight: false,
+    navUp: false, prevNavUp: false, navDown: false, prevNavDown: false,
+    navLeft: false, prevNavLeft: false, navRight: false, prevNavRight: false,
+  };
+  return gamepadStates[i];
+}
+
 function pollGamepad() {
   const gamepads = navigator.getGamepads();
-  for (const gp of gamepads) {
+  let isFirst = true;
+  for (let i = 0; i < gamepads.length; i++) {
+    const gp = gamepads[i];
     if (!gp) continue;
-    const s = gamepadState;
+    readPad(gp, padSlot(i), false);
+    // The first connected pad also drives the shared menu state, and only it
+    // controls camera zoom, so a second player cannot fight the camera.
+    if (isFirst) { readPad(gp, gamepadState, true); isFirst = false; }
+  }
+}
+
+function readPad(gp, s, allowZoom) {
     // Left stick (axes 0 = X, axes 1 = Y)
     let lx = gp.axes[0] || 0;
     let ly = gp.axes[1] || 0;
@@ -8724,10 +8741,33 @@ function pollGamepad() {
     // Start button (index 9)
     s.prevStart = s.start; s.start = gp.buttons[9]?.pressed || false;
     // RB / LB (bumpers) for zoom in/out
-    if (gp.buttons[5]?.pressed) cameraZoom = Math.max(ZOOM_MIN, cameraZoom - 0.02);
-    if (gp.buttons[4]?.pressed) cameraZoom = Math.min(ZOOM_MAX, cameraZoom + 0.02);
-    break; // use first connected gamepad
+    if (allowZoom) {
+      if (gp.buttons[5]?.pressed) cameraZoom = Math.max(ZOOM_MIN, cameraZoom - 0.02);
+      if (gp.buttons[4]?.pressed) cameraZoom = Math.min(ZOOM_MAX, cameraZoom + 0.02);
+    }
+}
+
+// Which device drives a given player. Player 0 keeps keyboard + touch + the
+// shared (first-pad) state, so single-player behaviour is exactly as before;
+// joined players each read their own pad slot.
+function readInput(p) {
+  let dx = 0, dz = 0, dash = false;
+  if (p.index === 0) {
+    if (keys['KeyW'] || keys['ArrowUp']) dz -= 1;
+    if (keys['KeyS'] || keys['ArrowDown']) dz += 1;
+    if (keys['KeyA'] || keys['ArrowLeft']) dx -= 1;
+    if (keys['KeyD'] || keys['ArrowRight']) dx += 1;
+    if (gamepadState.lx !== 0 || gamepadState.ly !== 0) { dx += gamepadState.lx; dz += gamepadState.ly; }
+    if (touchState.stickX !== 0 || touchState.stickY !== 0) { dx += touchState.stickX; dz += touchState.stickY; }
+    dash = !!(keys['Space'] || gamepadState.b || touchState.dash);
+  } else {
+    const pad = p.padIndex != null ? gamepadStates[p.padIndex] : null;
+    if (pad) {
+      if (pad.lx !== 0 || pad.ly !== 0) { dx += pad.lx; dz += pad.ly; }
+      dash = !!pad.b;
+    }
   }
+  return { dx, dz, dash };
 }
 
 // ─── MENU NAVIGATION (controller + keyboard) ───
@@ -9818,6 +9858,7 @@ init().then(() => {
       state, enemies, pickups, playerWeapons, upgradeRanks, runStats, keys, weaponTimers,
       UPGRADES, WEAPON_STATS, MAPS, OGRE_LEVELS, FINAL_WAVE,
       players, nearestPlayer, alivePlayers, joinPlayer, makePlayer, createPlayer,
+      gamepadStates, padSlot, readInput,
       get playerMesh() { return playerMesh; },
       get selectedCharacter() { return selectedCharacter; },
       get loadedMap() { return loadedMap; },
