@@ -1,0 +1,287 @@
+{
+  "generated": "2026-09-20T23:06:06.517Z",
+  "results": [
+    {
+      "file": "Game3DAssets/village_rail_fence_corner_01.glb",
+      "name": "village_rail_fence_corner_01.glb",
+      "bytes": 363108,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 91363,
+      "vertices": 68162,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.397,
+        0.233
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.397,
+          0.233
+        ],
+        "drawnFrac": 0.153
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/village_rail_fence_gate_01.glb",
+      "name": "village_rail_fence_gate_01.glb",
+      "bytes": 325768,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 89301,
+      "vertices": 66732,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.765,
+        0.133
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.765,
+          0.133
+        ],
+        "drawnFrac": 0.3
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/nature_reeds_01.glb",
+      "name": "nature_reeds_01.glb",
+      "bytes": 312292,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 8614,
+      "vertices": 14746,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.859,
+        0.295,
+        0.815
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": false,
+        "meshes": 1,
+        "size": [
+          0.945,
+          0.552,
+          0.912
+        ],
+        "drawnFrac": 0.066,
+        "error": "splinter geometry (drawnFrac 0.066)"
+      },
+      "valid": false
+    },
+    {
+      "file": "Game3DAssets/prop_hay_pile_02.glb",
+      "name": "prop_hay_pile_02.glb",
+      "bytes": 109252,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 2804,
+      "vertices": 6662,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.968,
+        0.74,
+        0.928
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": false,
+        "meshes": 1,
+        "size": [
+          0.969,
+          0.744,
+          0.928
+        ],
+        "drawnFrac": 0.011,
+        "error": "splinter geometry (drawnFrac 0.011)"
+      },
+      "valid": false
+    },
+    {
+      "file": "Game3DAssets/prop_logs_02.glb",
+      "name": "prop_logs_02.glb",
+      "bytes": 366272,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 88407,
+      "vertices": 66625,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.698,
+        0.689
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.698,
+          0.689
+        ],
+        "drawnFrac": 0.457
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/prop_tree_stump_02.glb",
+      "name": "prop_tree_stump_02.glb",
+      "bytes": 230728,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 35975,
+      "vertices": 36914,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.544,
+        0.997
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.544,
+          0.997
+        ],
+        "drawnFrac": 0.272
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/prop_firewood_stack_02.glb",
+      "name": "prop_firewood_stack_02.glb",
+      "bytes": 387744,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 79310,
+      "vertices": 66200,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.806,
+        0.281
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.806,
+          0.281
+        ],
+        "drawnFrac": 0.288
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/nature_dead_tree_03.glb",
+      "name": "nature_dead_tree_03.glb",
+      "bytes": 388092,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 82800,
+      "vertices": 87553,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.858,
+        0.994
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.858,
+          0.994
+        ],
+        "drawnFrac": 0.142
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/nature_mushrooms_02.glb",
+      "name": "nature_mushrooms_02.glb",
+      "bytes": 210496,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 13490,
+      "vertices": 26396,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.872,
+        0.424,
+        0.718
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": false,
+        "meshes": 1,
+        "size": [
+          0.872,
+          0.424,
+          0.718
+        ],
+        "drawnFrac": 0.006,
+        "error": "rendered nothing (drawnFrac 0.006)"
+      },
+      "valid": false
+    }
+  ]
+}

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Castle Survivor — Asset Catalog</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #1a1a2e;
+    color: #e0e0e0;
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(135deg, #16213e 0%, #0f3460 100%);
+    padding: 24px 32px;
+    border-bottom: 2px solid #e94560;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  header h1 { font-size: 24px; color: #fff; }
+  .stats {
+    display: flex;
+    gap: 20px;
+    font-size: 14px;
+  }
+  .stat { text-align: center; }
+  .stat-val { font-size: 22px; font-weight: bold; color: #e94560; }
+  .stat-label { color: #aaa; font-size: 11px; text-transform: uppercase; }
+
+  .toolbar {
+    background: #16213e;
+    padding: 12px 32px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    border-bottom: 1px solid #333;
+  }
+  .toolbar input {
+    background: #0f3460;
+    border: 1px solid #444;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 240px;
+  }
+  .filter-btn {
+    background: #0f3460;
+    border: 1px solid #444;
+    color: #ccc;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.15s;
+  }
+  .filter-btn:hover { background: #1a3a6e; color: #fff; }
+  .filter-btn.active { background: #e94560; color: #fff; border-color: #e94560; }
+
+  .status-legend {
+    margin-left: auto;
+    display: flex;
+    gap: 12px;
+    font-size: 12px;
+    align-items: center;
+  }
+  .legend-item { display: flex; align-items: center; gap: 4px; }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    padding: 24px 32px;
+  }
+
+  .card {
+    background: #16213e;
+    border: 1px solid #333;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+
+  .card-img {
+    width: 100%;
+    height: 200px;
+    background: #0d1b2a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .card-img img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  .card-img .placeholder {
+    color: #444;
+    font-size: 48px;
+  }
+  .card-img .status-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .card-body {
+    padding: 12px 16px;
+  }
+  .card-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .card-id {
+    font-size: 12px;
+    color: #888;
+    font-family: monospace;
+    margin-bottom: 8px;
+  }
+  .card-meta {
+    display: flex;
+    gap: 12px;
+    font-size: 12px;
+    color: #aaa;
+    flex-wrap: wrap;
+  }
+  .card-meta span { white-space: nowrap; }
+
+  .card-tags {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: #0f3460;
+    color: #aaa;
+  }
+
+  .card-actions {
+    padding: 8px 16px 12px;
+    display: flex;
+    gap: 8px;
+  }
+  .card-actions a {
+    font-size: 12px;
+    color: #e94560;
+    text-decoration: none;
+  }
+  .card-actions a:hover { text-decoration: underline; }
+
+  .empty {
+    text-align: center;
+    padding: 60px;
+    color: #666;
+    font-size: 18px;
+  }
+
+  /* Status colors */
+  .status-pending { background: #444; color: #aaa; }
+  .status-image_generating, .status-bg_removing, .status-trellis_generating, .status-optimizing {
+    background: #f0a500; color: #000;
+  }
+  .status-image_complete, .status-bg_complete, .status-glb_complete {
+    background: #1e88e5; color: #fff;
+  }
+  .status-ready { background: #43a047; color: #fff; }
+  .status-image_failed, .status-glb_failed, .status-pipeline_failed {
+    background: #e53935; color: #fff;
+  }
+  .status-human_review { background: #8e24aa; color: #fff; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Castle Survivor Asset Catalog</h1>
+  <div class="stats" id="stats"></div>
+</header>
+
+<div class="toolbar">
+  <input type="text" id="search" placeholder="Search assets..." oninput="filterCards()">
+  <button class="filter-btn active" data-filter="all" onclick="setFilter(this)">All</button>
+  <button class="filter-btn" data-filter="village_clutter" onclick="setFilter(this)">Village</button>
+  <button class="filter-btn" data-filter="village_infrastructure" onclick="setFilter(this)">Infrastructure</button>
+  <button class="filter-btn" data-filter="blacksmith_kit" onclick="setFilter(this)">Blacksmith</button>
+  <button class="filter-btn" data-filter="farm_kit" onclick="setFilter(this)">Farm</button>
+  <button class="filter-btn" data-filter="tavern_kit" onclick="setFilter(this)">Tavern</button>
+  <button class="filter-btn" data-filter="nature" onclick="setFilter(this)">Nature</button>
+  <button class="filter-btn" data-filter="combat" onclick="setFilter(this)">Combat</button>
+  <button class="filter-btn" data-filter="terrain" onclick="setFilter(this)">Terrain</button>
+  <button class="filter-btn" data-filter="landmarks" onclick="setFilter(this)">Landmarks</button>
+
+  <div class="status-legend">
+    <div class="legend-item"><span class="legend-dot" style="background:#444"></span> Pending</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#f0a500"></span> In Progress</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#1e88e5"></span> Partial</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#43a047"></span> Ready</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#e53935"></span> Failed</div>
+  </div>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<script>
+let assets = [];
+let currentFilter = 'all';
+
+async function loadCatalog() {
+  try {
+    const res = await fetch('assets.json');
+    assets = await res.json();
+    renderStats();
+    renderGrid();
+  } catch (err) {
+    document.getElementById('grid').innerHTML =
+      '<div class="empty">Failed to load catalog. Make sure assets.json is in the same directory.</div>';
+  }
+}
+
+function renderStats() {
+  const counts = {};
+  for (const a of assets) counts[a.status] = (counts[a.status] || 0) + 1;
+  const ready = counts.ready || 0;
+  const failed = (counts.image_failed || 0) + (counts.glb_failed || 0) + (counts.pipeline_failed || 0);
+  const pending = counts.pending || 0;
+  const inProgress = assets.length - ready - failed - pending;
+
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><div class="stat-val">${assets.length}</div><div class="stat-label">Total</div></div>
+    <div class="stat"><div class="stat-val" style="color:#43a047">${ready}</div><div class="stat-label">Ready</div></div>
+    <div class="stat"><div class="stat-val" style="color:#f0a500">${inProgress}</div><div class="stat-label">In Progress</div></div>
+    <div class="stat"><div class="stat-val">${pending}</div><div class="stat-label">Pending</div></div>
+    <div class="stat"><div class="stat-val" style="color:#e53935">${failed}</div><div class="stat-label">Failed</div></div>
+  `;
+}
+
+function renderGrid() {
+  const search = document.getElementById('search').value.toLowerCase();
+  const grid = document.getElementById('grid');
+
+  const filtered = assets.filter(a => {
+    if (currentFilter !== 'all' && a.category !== currentFilter) return false;
+    if (search && !a.id.includes(search) && !a.name.toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="empty">No assets match your filter.</div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map(a => {
+    const thumbPath = `../thumbnails/${a.id}.png`;
+    const hasThumb = false; // Would need async check — rely on onerror
+    const statusClass = `status-${a.status}`;
+
+    const meta = [];
+    if (a.game?.scaleMeters) meta.push(`${a.game.scaleMeters}m`);
+    if (a.game?.collision) meta.push(a.game.collision);
+    if (a.game?.solid) meta.push('solid');
+    if (a.game?.breakable) meta.push('breakable');
+    if (a.optimization?.sizeAfter) meta.push(`${(a.optimization.sizeAfter/1024).toFixed(0)}KB`);
+
+    const tags = [];
+    if (a.family) tags.push(a.family);
+    if (a.batch) tags.push(`batch ${a.batch}`);
+
+    return `
+      <div class="card" data-category="${a.category}" data-id="${a.id}">
+        <div class="card-img">
+          <img src="${thumbPath}" alt="${a.name}"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="placeholder" style="display:none; align-items:center; justify-content:center; width:100%; height:100%;">
+            ${getCategoryIcon(a.category)}
+          </div>
+          <span class="status-badge ${statusClass}">${a.status.replace(/_/g, ' ')}</span>
+        </div>
+        <div class="card-body">
+          <div class="card-name">${a.name}</div>
+          <div class="card-id">${a.id}</div>
+          <div class="card-meta">${meta.map(m => `<span>${m}</span>`).join('')}</div>
+          <div class="card-tags">${tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+        </div>
+        ${a.status === 'ready' ? `
+          <div class="card-actions">
+            <a href="../glb_optimized/${a.id}.glb" download>Download GLB</a>
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function getCategoryIcon(cat) {
+  const icons = {
+    village_clutter: '\u2302',
+    village_infrastructure: '\u2616',
+    blacksmith_kit: '\u2692',
+    farm_kit: '\u2618',
+    tavern_kit: '\u2615',
+    nature: '\u2663',
+    combat: '\u2694',
+    terrain: '\u2587',
+    landmarks: '\u2606'
+  };
+  return icons[cat] || '\u25A1';
+}
+
+function setFilter(btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter = btn.dataset.filter;
+  renderGrid();
+}
+
+function filterCards() {
+  renderGrid();
+}
+
+loadCatalog();
+</script>
+</body>
+</html>

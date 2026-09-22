@@ -1,0 +1,11 @@
+{
+  "_readme": "ComfyUI API-format workflow for one Stable Audio 3 Small SFX clip. Load in the ComfyUI UI (Workflow > Open, API format is accepted) or POST to /prompt. Swap ckpt_name to stable_audio_3_small_music.safetensors for loops. 8 steps, cfg 1, lcm/simple is the template's setting.",
+  "1": { "class_type": "CheckpointLoaderSimple", "inputs": { "ckpt_name": "stable_audio_3_small_sfx.safetensors" } },
+  "2": { "class_type": "CLIPLoader", "inputs": { "clip_name": "t5gemma_b_b_ul2.safetensors", "type": "stable_audio", "device": "default" } },
+  "3": { "class_type": "CLIPTextEncode", "inputs": { "text": "Steel sword blade striking hard into leather armor and flesh with a sharp metallic clang and a wet thud, close-up, dry room, short decay. Length: 2 seconds", "clip": ["2", 0] } },
+  "4": { "class_type": "CLIPTextEncode", "inputs": { "text": "", "clip": ["2", 0] } },
+  "5": { "class_type": "EmptyLatentAudio", "inputs": { "seconds": 2, "batch_size": 1 } },
+  "6": { "class_type": "KSampler", "inputs": { "seed": 1, "steps": 8, "cfg": 1, "sampler_name": "lcm", "scheduler": "simple", "denoise": 1, "model": ["1", 0], "positive": ["3", 0], "negative": ["4", 0], "latent_image": ["5", 0] } },
+  "7": { "class_type": "VAEDecodeAudio", "inputs": { "samples": ["6", 0], "vae": ["1", 2] } },
+  "8": { "class_type": "SaveAudio", "inputs": { "audio": ["7", 0], "filename_prefix": "sa3/test" } }
+}

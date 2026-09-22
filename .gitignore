@@ -1,0 +1,20 @@
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+# Pipeline intermediates (curated GLBs live in Game3DAssets/)
+AssetFactory/glb_raw/
+AssetFactory/glb_optimized/
+AssetFactory/source_images/
+AssetFactory/trellis_input/
+AssetFactory/thumbnails/
+AssetFactory/reports/
+AssetFactory/scripts/__pycache__/
+# Harness output (regenerable)
+tools/shots/
+tools/reports/glb-candidates/
+# SD source renders (the .webp next to them is what the game loads)
+images/**/*.src.png
+AssetFactory/glb_pretint/
+AssetFactory/audio_raw/
+AssetFactory/glb_precompress/

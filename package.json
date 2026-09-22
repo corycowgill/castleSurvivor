@@ -1,0 +1,31 @@
+{
+  "name": "castlesurvivor",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "node tools/playtest.mjs smoke",
+    "smoke": "node tools/playtest.mjs smoke",
+    "balance": "node tools/playtest.mjs balance",
+    "profile": "node tools/playtest.mjs profile",
+    "enemies": "node tools/playtest.mjs enemies",
+    "icons": "node AssetFactory/scripts/gen-icons.mjs",
+    "maps": "node tools/generate-kingsfield.mjs && node tools/generate-darkwood.mjs",
+    "overhead": "node tools/playtest.mjs overhead --map kingsfield && node tools/playtest.mjs overhead --map darkwood",
+    "thumbs": "node tools/map-thumbs.mjs"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@gltf-transform/core": "^4.5.0",
+    "@gltf-transform/extensions": "^4.5.0",
+    "@gltf-transform/functions": "^4.5.0",
+    "draco3dgltf": "^1.5.7",
+    "sharp": "^0.35.4"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^25.11.0"
+  }
+}

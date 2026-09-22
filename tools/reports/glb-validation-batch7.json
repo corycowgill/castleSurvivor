@@ -1,0 +1,223 @@
+{
+  "generated": "2026-09-21T01:38:47.088Z",
+  "results": [
+    {
+      "file": "Game3DAssets/landmark_village_fountain.glb",
+      "name": "landmark_village_fountain.glb",
+      "bytes": 680808,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 71004,
+      "vertices": 63188,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.854,
+        1,
+        0.865
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.854,
+          1,
+          0.865
+        ],
+        "drawnFrac": 0.299
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/landmark_ancient_oak.glb",
+      "name": "landmark_ancient_oak.glb",
+      "bytes": 237412,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 6673,
+      "vertices": 10060,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.73,
+        0.93,
+        0.892
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.959,
+          0.956,
+          0.964
+        ],
+        "drawnFrac": 0.112
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/landmark_ruined_tower.glb",
+      "name": "landmark_ruined_tower.glb",
+      "bytes": 630588,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 87100,
+      "vertices": 79547,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.937,
+        0.804
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.937,
+          0.804
+        ],
+        "drawnFrac": 0.572
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/landmark_windmill.glb",
+      "name": "landmark_windmill.glb",
+      "bytes": 541996,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 71692,
+      "vertices": 66831,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.867,
+        1,
+        0.835
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.867,
+          1,
+          0.835
+        ],
+        "drawnFrac": 0.304
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/landmark_graveyard_gate.glb",
+      "name": "landmark_graveyard_gate.glb",
+      "bytes": 731748,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 82558,
+      "vertices": 72109,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.964,
+        0.411
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.964,
+          0.411
+        ],
+        "drawnFrac": 0.354
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/landmark_enemy_totem.glb",
+      "name": "landmark_enemy_totem.glb",
+      "bytes": 16640,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 178,
+      "vertices": 530,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.871,
+        0.986,
+        0.368
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": false,
+        "meshes": 1,
+        "size": [
+          0.942,
+          0.992,
+          0.439
+        ],
+        "drawnFrac": 0,
+        "error": "rendered nothing (drawnFrac 0)"
+      },
+      "valid": false
+    },
+    {
+      "file": "Game3DAssets/landmark_destroyed_watchtower.glb",
+      "name": "landmark_destroyed_watchtower.glb",
+      "bytes": 589032,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 72892,
+      "vertices": 71229,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.934,
+        0.741
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.934,
+          0.741
+        ],
+        "drawnFrac": 0.484
+      },
+      "valid": true
+    }
+  ]
+}

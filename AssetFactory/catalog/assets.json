@@ -1,0 +1,3354 @@
+[
+  {
+    "id": "prop_wood_crate_small_01",
+    "name": "Small Wooden Crate",
+    "category": "village_clutter",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Small medieval wooden storage crate. Rough-hewn planks with iron nail heads and simple metal corner brackets. Approximately 0.6 meters tall.",
+    "status": "glb_optimized",
+    "batch": 1,
+    "game": {
+      "scaleMeters": 0.6,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "health": 20,
+      "spawnWeight": 10,
+      "maxCluster": 4
+    },
+    "placement": {
+      "near": [
+        "house",
+        "tavern",
+        "blacksmith",
+        "farmHouse"
+      ],
+      "avoid": [
+        "stream"
+      ]
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_wood_crate_small_01.png",
+    "glbRaw": "AssetFactory/glb_raw/prop_wood_crate_small_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_wood_crate_small_01.glb",
+    "glbGame": "Game3DAssets/prop_wood_crate_small_01.glb"
+  },
+  {
+    "id": "prop_wood_crate_large_01",
+    "name": "Large Wooden Crate",
+    "category": "village_clutter",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Large medieval wooden shipping crate. Heavy planks with rope bindings and iron reinforcement bands. Approximately 1.0 meters tall.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 1,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "health": 40,
+      "spawnWeight": 6,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [
+        "house",
+        "tavern",
+        "blacksmith"
+      ],
+      "avoid": [
+        "stream"
+      ]
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_wood_crate_large_01.png",
+    "glbRaw": "AssetFactory/glb_raw/prop_wood_crate_large_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_wood_crate_large_01.glb",
+    "glbGame": "Game3DAssets/prop_wood_crate_large_01.glb"
+  },
+  {
+    "id": "prop_wood_crate_broken_01",
+    "name": "Broken Wooden Crate",
+    "category": "village_clutter",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Smashed medieval wooden crate. Splintered planks, broken sides, scattered debris. Shows clear destruction damage.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 0.5,
+      "collision": "box",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 3,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [
+        "combat_barricade_01",
+        "house"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_wood_crate_broken_01.png",
+    "glbRaw": "AssetFactory/glb_raw/prop_wood_crate_broken_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_wood_crate_broken_01.glb",
+    "glbGame": "Game3DAssets/prop_wood_crate_broken_01.glb"
+  },
+  {
+    "id": "prop_grain_sack_01",
+    "name": "Grain Sack",
+    "category": "village_clutter",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Burlap grain sack, tied at the top with rope. Slightly bulging, sitting upright. Approximately 0.7 meters tall.",
+    "status": "glb_optimized",
+    "batch": 1,
+    "game": {
+      "scaleMeters": 0.7,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 8,
+      "maxCluster": 5
+    },
+    "placement": {
+      "near": [
+        "house",
+        "farmHouse",
+        "tavern"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_grain_sack_01.png",
+    "glbRaw": "AssetFactory/glb_raw/prop_grain_sack_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_grain_sack_01.glb",
+    "glbGame": "Game3DAssets/prop_grain_sack_01.glb"
+  },
+  {
+    "id": "prop_grain_sack_stack_01",
+    "name": "Grain Sack Stack",
+    "category": "village_clutter",
+    "family": "wood",
+    "promptTemplate": "CLUSTER",
+    "promptDetails": "Stack of three burlap grain sacks piled together. Two on bottom, one on top. Tied with rope.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 1,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 4,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [
+        "farmHouse",
+        "tavern"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_grain_sack_stack_01.png",
+    "glbRaw": "AssetFactory/glb_raw/prop_grain_sack_stack_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_grain_sack_stack_01.glb",
+    "glbGame": "Game3DAssets/prop_grain_sack_stack_01.glb"
+  },
+  {
+    "id": "prop_hay_bale_01",
+    "name": "Hay Bale",
+    "category": "village_clutter",
+    "family": "farm",
+    "promptTemplate": "PROP",
+    "promptDetails": "Rectangular medieval hay bale bound with rope. Golden straw, tightly packed. Approximately 0.6 meters tall.",
+    "status": "glb_optimized",
+    "batch": 1,
+    "game": {
+      "scaleMeters": 0.6,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "health": 15,
+      "spawnWeight": 8,
+      "maxCluster": 6
+    },
+    "placement": {
+      "near": [
+        "farmHouse",
+        "horseStable"
+      ],
+      "avoid": [
+        "stream"
+      ]
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_hay_bale_01.png",
+    "glbRaw": "AssetFactory/glb_raw/prop_hay_bale_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_hay_bale_01.glb",
+    "glbGame": "Game3DAssets/prop_hay_bale_01.glb"
+  },
+  {
+    "id": "prop_hay_pile_01",
+    "name": "Hay Pile",
+    "category": "village_clutter",
+    "family": "farm",
+    "promptTemplate": "PROP",
+    "promptDetails": "Loose pile of golden hay/straw scattered on the ground. Irregular mound shape.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 0.4,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 5,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [
+        "farmHouse",
+        "horseStable"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_hay_pile_01.png",
+    "glbRaw": "AssetFactory/glb_raw/prop_hay_pile_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_hay_pile_01.glb",
+    "glbGame": "Game3DAssets/prop_hay_pile_01.glb"
+  },
+  {
+    "id": "prop_bucket_wood_01",
+    "name": "Wooden Bucket",
+    "category": "village_clutter",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval wooden bucket with iron bands and a rope handle. Round, slightly tapered.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 0.35,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": true,
+      "health": 10,
+      "spawnWeight": 6,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [
+        "house",
+        "farmHouse",
+        "village_water_well_01"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_bucket_wood_01.png",
+    "glbRaw": "AssetFactory/glb_raw/prop_bucket_wood_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_bucket_wood_01.glb",
+    "glbGame": "Game3DAssets/prop_bucket_wood_01.glb"
+  },
+  {
+    "id": "prop_bucket_metal_01",
+    "name": "Metal Bucket",
+    "category": "village_clutter",
+    "family": "stone",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval iron bucket with a curved handle. Dented and worn from use.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 0.35,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 4,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [
+        "blacksmith",
+        "village_water_well_01"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_bucket_metal_01.png",
+    "glbRaw": "AssetFactory/glb_raw/prop_bucket_metal_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_bucket_metal_01.glb",
+    "glbGame": "Game3DAssets/prop_bucket_metal_01.glb"
+  },
+  {
+    "id": "prop_bench_wood_01",
+    "name": "Wooden Bench",
+    "category": "village_clutter",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Simple medieval wooden bench. Thick plank seat on sturdy legs. Approximately 1.8 meters wide, 0.9 meters tall.",
+    "status": "glb_optimized",
+    "batch": 1,
+    "game": {
+      "scaleMeters": 0.9,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "health": 30,
+      "spawnWeight": 5,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [
+        "house",
+        "tavern",
+        "village_water_well_01"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_bench_wood_01.png",
+    "glbRaw": "AssetFactory/glb_raw/prop_bench_wood_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_bench_wood_01.glb",
+    "glbGame": "Game3DAssets/prop_bench_wood_01.glb"
+  },
+  {
+    "id": "prop_table_wood_01",
+    "name": "Wooden Table",
+    "category": "village_clutter",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Simple medieval wooden table. Thick plank top on four sturdy legs. Approximately 1.5 meters wide.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 0.8,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "health": 30,
+      "spawnWeight": 4,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [
+        "tavern",
+        "house"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_table_wood_01.png",
+    "glbRaw": "AssetFactory/glb_raw/prop_table_wood_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_table_wood_01.glb",
+    "glbGame": "Game3DAssets/prop_table_wood_01.glb"
+  },
+  {
+    "id": "prop_stool_wood_01",
+    "name": "Wooden Stool",
+    "category": "village_clutter",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Simple medieval three-legged wooden stool. Rustic construction.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 0.5,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": true,
+      "health": 10,
+      "spawnWeight": 5,
+      "maxCluster": 4
+    },
+    "placement": {
+      "near": [
+        "tavern",
+        "blacksmith"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_stool_wood_01.png",
+    "glbRaw": "AssetFactory/glb_raw/prop_stool_wood_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_stool_wood_01.glb",
+    "glbGame": "Game3DAssets/prop_stool_wood_01.glb"
+  },
+  {
+    "id": "prop_firewood_stack_01",
+    "name": "Firewood Stack",
+    "category": "village_clutter",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Neatly stacked pile of chopped firewood logs. Medieval woodpile approximately 1.0 meters tall.",
+    "status": "glb_optimized",
+    "batch": 1,
+    "game": {
+      "scaleMeters": 1,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 7,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [
+        "house",
+        "blacksmith",
+        "tavern"
+      ],
+      "avoid": [
+        "stream"
+      ]
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_firewood_stack_01.png",
+    "glbRaw": "AssetFactory/glb_raw/prop_firewood_stack_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_firewood_stack_01.glb",
+    "glbGame": "Game3DAssets/prop_firewood_stack_01.glb"
+  },
+  {
+    "id": "prop_logs_01",
+    "name": "Loose Logs",
+    "category": "village_clutter",
+    "family": "wood",
+    "promptTemplate": "CLUSTER",
+    "promptDetails": "A few loose uncut logs lying on the ground. Three to four logs of varying sizes.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 0.4,
+      "collision": "box",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 4,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [
+        "house",
+        "farmHouse"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_logs_01.png",
+    "glbRaw": "AssetFactory/glb_raw/prop_logs_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_logs_01.glb",
+    "glbGame": "Game3DAssets/prop_logs_01.glb"
+  },
+  {
+    "id": "prop_tree_stump_01",
+    "name": "Tree Stump",
+    "category": "village_clutter",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Cut tree stump with visible growth rings. Axe marks visible. Approximately 0.5 meters tall.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 0.5,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 4,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "farmHouse",
+        "house"
+      ],
+      "avoid": [
+        "stream"
+      ]
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_tree_stump_01.png",
+    "glbRaw": "AssetFactory/glb_raw/prop_tree_stump_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_tree_stump_01.glb",
+    "glbGame": "Game3DAssets/prop_tree_stump_01.glb"
+  },
+  {
+    "id": "prop_wheelbarrow_01",
+    "name": "Wheelbarrow",
+    "category": "village_clutter",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval wooden wheelbarrow with a single front wheel and two handles. Slightly worn.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 0.8,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "health": 20,
+      "spawnWeight": 3,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "farmHouse",
+        "blacksmith"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_wheelbarrow_01.png",
+    "glbRaw": "AssetFactory/glb_raw/prop_wheelbarrow_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_wheelbarrow_01.glb",
+    "glbGame": "Game3DAssets/prop_wheelbarrow_01.glb"
+  },
+  {
+    "id": "prop_cart_wheel_01",
+    "name": "Cart Wheel",
+    "category": "village_clutter",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Single medieval wooden cart wheel leaning slightly. Iron rim band and wooden spokes.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 0.8,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 3,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [
+        "blacksmith",
+        "farmHouse"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_cart_wheel_01.png",
+    "glbRaw": "AssetFactory/glb_raw/prop_cart_wheel_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_cart_wheel_01.glb",
+    "glbGame": "Game3DAssets/prop_cart_wheel_01.glb"
+  },
+  {
+    "id": "prop_basket_01",
+    "name": "Wicker Basket",
+    "category": "village_clutter",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval woven wicker basket with handle. Round shape, open top.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 0.4,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": true,
+      "health": 5,
+      "spawnWeight": 5,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [
+        "house",
+        "farmHouse",
+        "tavern"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_basket_01.png",
+    "glbRaw": "AssetFactory/glb_raw/prop_basket_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_basket_01.glb",
+    "glbGame": "Game3DAssets/prop_basket_01.glb"
+  },
+  {
+    "id": "prop_pottery_01",
+    "name": "Clay Pottery",
+    "category": "village_clutter",
+    "family": "stone",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval clay pottery jug. Round body with narrow neck, single handle. Terracotta colored.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 0.4,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": true,
+      "health": 5,
+      "spawnWeight": 5,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [
+        "house",
+        "tavern",
+        "apothecary"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_pottery_01.png",
+    "glbRaw": "AssetFactory/glb_raw/prop_pottery_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_pottery_01.glb",
+    "glbGame": "Game3DAssets/prop_pottery_01.glb"
+  },
+  {
+    "id": "prop_water_jug_01",
+    "name": "Water Jug",
+    "category": "village_clutter",
+    "family": "stone",
+    "promptTemplate": "PROP",
+    "promptDetails": "Large medieval ceramic water jug. Wide body, narrow opening, two small handles near the top.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 0.5,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": true,
+      "health": 5,
+      "spawnWeight": 4,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [
+        "house",
+        "village_water_well_01"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_water_jug_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\prop_water_jug_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/prop_water_jug_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_water_jug_01.glb",
+    "glbGame": "Game3DAssets/prop_water_jug_01.glb"
+  },
+  {
+    "id": "village_water_well_01",
+    "name": "Village Water Well",
+    "category": "village_infrastructure",
+    "family": "stone",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval stone water well with wooden roof structure, rope and bucket. Circular stone base with a wooden cross-beam and hanging bucket. Approximately 2.0 meters tall.",
+    "status": "glb_optimized",
+    "batch": 1,
+    "game": {
+      "scaleMeters": 2,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "house",
+        "tavern"
+      ],
+      "avoid": [
+        "farmHouse"
+      ]
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_water_well_01.png",
+    "glbRaw": "AssetFactory/glb_raw/village_water_well_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/village_water_well_01.glb",
+    "glbGame": "Game3DAssets/village_water_well_01.glb"
+  },
+  {
+    "id": "village_fence_straight_01",
+    "name": "Fence Segment",
+    "category": "village_infrastructure",
+    "family": "wood",
+    "promptTemplate": "MODULAR",
+    "promptDetails": "Straight modular wooden medieval fence segment. Two vertical posts with three horizontal rails. Fence begins and ends cleanly at matching connection points. Approximately 2 meters long, 1.2 meters tall.",
+    "status": "glb_optimized",
+    "batch": 1,
+    "game": {
+      "scaleMeters": 1.2,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "health": 25,
+      "spawnWeight": 8,
+      "maxCluster": 8
+    },
+    "placement": {
+      "near": [
+        "house",
+        "farmHouse"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_fence_straight_01.png",
+    "glbRaw": "AssetFactory/glb_raw/village_fence_straight_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/village_fence_straight_01.glb",
+    "glbGame": "Game3DAssets/village_fence_straight_01.glb"
+  },
+  {
+    "id": "village_fence_corner_01",
+    "name": "Fence Corner",
+    "category": "village_infrastructure",
+    "family": "wood",
+    "promptTemplate": "MODULAR",
+    "promptDetails": "90-degree corner piece for wooden medieval fence. Single corner post with rails extending in two perpendicular directions. Matches village_fence_straight_01 style.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 1.2,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "health": 25,
+      "spawnWeight": 4,
+      "maxCluster": 4
+    },
+    "placement": {
+      "near": [
+        "house",
+        "farmHouse"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_fence_corner_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\village_fence_corner_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/village_fence_corner_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/village_fence_corner_01.glb",
+    "glbGame": "Game3DAssets/village_fence_corner_01.glb"
+  },
+  {
+    "id": "village_fence_gate_01",
+    "name": "Fence Gate",
+    "category": "village_infrastructure",
+    "family": "wood",
+    "promptTemplate": "MODULAR",
+    "promptDetails": "Wooden medieval fence gate section. Two tall gate posts with a swinging gate between them. Matches fence segment style. Approximately 2 meters wide.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 1.5,
+      "collision": "box",
+      "solid": false,
+      "breakable": true,
+      "health": 30,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "village_fence_straight_01"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_fence_gate_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\village_fence_gate_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/village_fence_gate_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/village_fence_gate_01.glb",
+    "glbGame": "Game3DAssets/village_fence_gate_01.glb"
+  },
+  {
+    "id": "village_fence_broken_01",
+    "name": "Broken Fence",
+    "category": "village_infrastructure",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Damaged medieval wooden fence segment. Broken rails, one post leaning, splintered wood. Shows battle or age damage.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 1,
+      "collision": "box",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 3,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [
+        "combat_barricade_01"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_fence_broken_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\village_fence_broken_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/village_fence_broken_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/village_fence_broken_01.glb",
+    "glbGame": "Game3DAssets/village_fence_broken_01.glb"
+  },
+  {
+    "id": "village_signpost_01",
+    "name": "Signpost",
+    "category": "village_infrastructure",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval wooden signpost with two directional arrow signs pointing different directions. Tall wooden post, approximately 2.5 meters tall.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 2.5,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "house",
+        "tavern"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_signpost_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\village_signpost_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/village_signpost_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/village_signpost_01.glb",
+    "glbGame": "Game3DAssets/village_signpost_01.glb"
+  },
+  {
+    "id": "village_lantern_post_01",
+    "name": "Lantern Post",
+    "category": "village_infrastructure",
+    "family": "stone",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval iron lantern on a tall wooden post. Glass-paned lantern housing at the top. Do not include fire or glow effects. Approximately 3.0 meters tall.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 3,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 3,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "house",
+        "tavern"
+      ],
+      "avoid": [
+        "farmHouse"
+      ]
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_lantern_post_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\village_lantern_post_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/village_lantern_post_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/village_lantern_post_01.glb",
+    "glbGame": "Game3DAssets/village_lantern_post_01.glb"
+  },
+  {
+    "id": "village_hitching_post_01",
+    "name": "Hitching Post",
+    "category": "village_infrastructure",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval wooden hitching post for tying horses. Horizontal wooden rail on two vertical posts, with iron rings.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 1,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "tavern",
+        "horseStable"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_hitching_post_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\village_hitching_post_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/village_hitching_post_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/village_hitching_post_01.glb",
+    "glbGame": "Game3DAssets/village_hitching_post_01.glb"
+  },
+  {
+    "id": "village_market_stall_01",
+    "name": "Market Stall",
+    "category": "village_infrastructure",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval market stall with wooden frame and canvas awning. Counter/table at front for displaying goods. Approximately 2.5 meters wide.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 2.5,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [
+        "house",
+        "tavern"
+      ],
+      "avoid": [
+        "farmHouse"
+      ]
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_market_stall_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\village_market_stall_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/village_market_stall_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/village_market_stall_01.glb",
+    "glbGame": "Game3DAssets/village_market_stall_01.glb"
+  },
+  {
+    "id": "village_market_stall_02",
+    "name": "Market Stall (Variant)",
+    "category": "village_infrastructure",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval market stall variant with wooden frame and striped canvas awning. Different shape/color from stall_01. Approximately 2.5 meters wide.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 2.5,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [
+        "house",
+        "tavern"
+      ],
+      "avoid": [
+        "farmHouse"
+      ]
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_market_stall_02.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\village_market_stall_02.glb",
+    "glbRaw": "AssetFactory/glb_raw/village_market_stall_02.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/village_market_stall_02.glb",
+    "glbGame": "Game3DAssets/village_market_stall_02.glb"
+  },
+  {
+    "id": "village_water_trough_01",
+    "name": "Water Trough",
+    "category": "village_infrastructure",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval wooden water trough for animals. Long rectangular trough on short legs. Approximately 1.5 meters long.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 0.7,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "health": 30,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "horseStable",
+        "farmHouse"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_water_trough_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\village_water_trough_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/village_water_trough_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/village_water_trough_01.glb",
+    "glbGame": "Game3DAssets/village_water_trough_01.glb"
+  },
+  {
+    "id": "village_weapon_rack_01",
+    "name": "Weapon Rack",
+    "category": "village_infrastructure",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval wooden weapon rack holding swords and spears. Vertical frame with horizontal slots. Approximately 1.8 meters tall.",
+    "status": "glb_optimized",
+    "batch": 2,
+    "game": {
+      "scaleMeters": 1.8,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "health": 25,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "blacksmith",
+        "humanCastle"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_weapon_rack_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\village_weapon_rack_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/village_weapon_rack_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/village_weapon_rack_01.glb",
+    "glbGame": "Game3DAssets/village_weapon_rack_01.glb"
+  },
+  {
+    "id": "blacksmith_anvil_01",
+    "name": "Anvil",
+    "category": "blacksmith_kit",
+    "family": "stone",
+    "promptTemplate": "PROP",
+    "promptDetails": "Heavy medieval iron anvil on a thick wooden stump base. Classic horn shape. Dark iron with wear marks on the face.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 0.8,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "blacksmith"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\blacksmith_anvil_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\blacksmith_anvil_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/blacksmith_anvil_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/blacksmith_anvil_01.glb",
+    "glbGame": "Game3DAssets/blacksmith_anvil_01.glb"
+  },
+  {
+    "id": "blacksmith_forge_01",
+    "name": "Forge",
+    "category": "blacksmith_kit",
+    "family": "stone",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval stone and brick forge structure. Open hearth with chimney hood. Contains coal bed area. No fire or glow \u2014 just the physical structure. Approximately 1.5 meters tall.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 1.5,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "blacksmith"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\blacksmith_forge_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\blacksmith_forge_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/blacksmith_forge_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/blacksmith_forge_01.glb",
+    "glbGame": "Game3DAssets/blacksmith_forge_01.glb"
+  },
+  {
+    "id": "blacksmith_coal_pile_01",
+    "name": "Coal Pile",
+    "category": "blacksmith_kit",
+    "family": "stone",
+    "promptTemplate": "PROP",
+    "promptDetails": "Small mound of black coal/charcoal. Dark lumpy pile on the ground.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 0.4,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "blacksmith_forge_01"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\blacksmith_coal_pile_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\blacksmith_coal_pile_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/blacksmith_coal_pile_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/blacksmith_coal_pile_01.glb",
+    "glbGame": "Game3DAssets/blacksmith_coal_pile_01.glb"
+  },
+  {
+    "id": "blacksmith_weapon_rack_01",
+    "name": "Blacksmith Weapon Display",
+    "category": "blacksmith_kit",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval wooden weapon display rack with various unfinished swords and blades. Wall-leaning style rack.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 1.5,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "blacksmith"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\blacksmith_weapon_rack_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\blacksmith_weapon_rack_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/blacksmith_weapon_rack_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/blacksmith_weapon_rack_01.glb",
+    "glbGame": "Game3DAssets/blacksmith_weapon_rack_01.glb"
+  },
+  {
+    "id": "blacksmith_tool_rack_01",
+    "name": "Tool Rack",
+    "category": "blacksmith_kit",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval blacksmith tool rack. Wooden frame holding hammers, tongs, and other smithing tools.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 1.5,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "blacksmith"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\blacksmith_tool_rack_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\blacksmith_tool_rack_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/blacksmith_tool_rack_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/blacksmith_tool_rack_01.glb",
+    "glbGame": "Game3DAssets/blacksmith_tool_rack_01.glb"
+  },
+  {
+    "id": "blacksmith_water_barrel_01",
+    "name": "Quenching Barrel",
+    "category": "blacksmith_kit",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Large wooden barrel filled with dark water, used for quenching hot metal. Open top. Iron bands.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 0.9,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "blacksmith_forge_01",
+        "blacksmith_anvil_01"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\blacksmith_water_barrel_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\blacksmith_water_barrel_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/blacksmith_water_barrel_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/blacksmith_water_barrel_01.glb",
+    "glbGame": "Game3DAssets/blacksmith_water_barrel_01.glb"
+  },
+  {
+    "id": "blacksmith_grindstone_01",
+    "name": "Grindstone",
+    "category": "blacksmith_kit",
+    "family": "stone",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval pedal-operated grindstone. Large circular stone wheel on a wooden frame with foot pedal mechanism.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 1,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "blacksmith"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\blacksmith_grindstone_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\blacksmith_grindstone_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/blacksmith_grindstone_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/blacksmith_grindstone_01.glb",
+    "glbGame": "Game3DAssets/blacksmith_grindstone_01.glb"
+  },
+  {
+    "id": "farm_scarecrow_01",
+    "name": "Scarecrow",
+    "category": "farm_kit",
+    "family": "farm",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval scarecrow on a wooden cross frame. Ragged clothes, straw stuffing poking out, simple burlap sack head. Approximately 2.0 meters tall.",
+    "status": "glb_optimized",
+    "batch": 4,
+    "game": {
+      "scaleMeters": 2,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": true,
+      "health": 15,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "farmHouse"
+      ],
+      "avoid": [
+        "tavern",
+        "blacksmith"
+      ]
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\farm_scarecrow_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\farm_scarecrow_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/farm_scarecrow_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/farm_scarecrow_01.glb",
+    "glbGame": "Game3DAssets/farm_scarecrow_01.glb"
+  },
+  {
+    "id": "farm_pitchfork_01",
+    "name": "Pitchfork",
+    "category": "farm_kit",
+    "family": "farm",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval three-pronged iron pitchfork leaning against nothing (freestanding, slightly tilted). Wooden handle.",
+    "status": "bg_removing",
+    "batch": 4,
+    "game": {
+      "scaleMeters": 1.5,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "farmHouse",
+        "prop_hay_bale_01"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\farm_pitchfork_01.png"
+  },
+  {
+    "id": "farm_fence_01",
+    "name": "Farm Fence",
+    "category": "farm_kit",
+    "family": "farm",
+    "promptTemplate": "MODULAR",
+    "promptDetails": "Rustic split-rail farm fence segment. Rougher and more rural than village fence. Two horizontal rails between posts. Approximately 2 meters long.",
+    "status": "pending",
+    "batch": 4,
+    "game": {
+      "scaleMeters": 1,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "health": 15,
+      "spawnWeight": 6,
+      "maxCluster": 8
+    },
+    "placement": {
+      "near": [
+        "farmHouse"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "farm_fence_gate_01",
+    "name": "Farm Gate",
+    "category": "farm_kit",
+    "family": "farm",
+    "promptTemplate": "MODULAR",
+    "promptDetails": "Rustic farm gate matching split-rail fence style. Simple latch mechanism. Approximately 2 meters wide.",
+    "status": "pending",
+    "batch": 4,
+    "game": {
+      "scaleMeters": 1.2,
+      "collision": "box",
+      "solid": false,
+      "breakable": true,
+      "health": 20,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "farm_fence_01"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "farm_wood_cart_01",
+    "name": "Farm Cart",
+    "category": "farm_kit",
+    "family": "farm",
+    "promptTemplate": "PROP",
+    "promptDetails": "Small medieval wooden farm cart with two wheels. Open bed for hauling. Rustic construction.",
+    "status": "pending",
+    "batch": 4,
+    "game": {
+      "scaleMeters": 1.2,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "health": 40,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "farmHouse"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "tavern_table_01",
+    "name": "Tavern Table",
+    "category": "tavern_kit",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Round medieval tavern table. Thick wooden top on a central pedestal base. Sturdy and worn from use.",
+    "status": "pending",
+    "batch": 4,
+    "game": {
+      "scaleMeters": 0.8,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": true,
+      "health": 30,
+      "spawnWeight": 3,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [
+        "tavern",
+        "tavern2"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "tavern_bench_01",
+    "name": "Tavern Bench",
+    "category": "tavern_kit",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Long medieval tavern bench. Simple plank seat on sturdy legs. Sized for communal seating.",
+    "status": "pending",
+    "batch": 4,
+    "game": {
+      "scaleMeters": 0.5,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "health": 20,
+      "spawnWeight": 4,
+      "maxCluster": 4
+    },
+    "placement": {
+      "near": [
+        "tavern_table_01"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "tavern_stool_01",
+    "name": "Tavern Stool",
+    "category": "tavern_kit",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval bar stool. Taller than a regular stool, round seat on four legs with foot rail.",
+    "status": "pending",
+    "batch": 4,
+    "game": {
+      "scaleMeters": 0.7,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": true,
+      "health": 10,
+      "spawnWeight": 3,
+      "maxCluster": 4
+    },
+    "placement": {
+      "near": [
+        "tavern",
+        "tavern2"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "tavern_mug_oversized_01",
+    "name": "Oversized Mug",
+    "category": "tavern_kit",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Oversized medieval wooden beer mug/tankard. Exaggerated game-prop size, approximately 0.4 meters tall. Wooden with metal bands and handle.",
+    "status": "pending",
+    "batch": 4,
+    "game": {
+      "scaleMeters": 0.4,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": true,
+      "health": 5,
+      "spawnWeight": 4,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [
+        "tavern_table_01",
+        "tavern"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "tavern_barrel_small_01",
+    "name": "Small Barrel",
+    "category": "tavern_kit",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Small medieval ale barrel/keg. Lying on its side on a wooden stand. Tap/spigot at front.",
+    "status": "pending",
+    "batch": 4,
+    "game": {
+      "scaleMeters": 0.6,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": true,
+      "health": 20,
+      "spawnWeight": 3,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [
+        "tavern",
+        "tavern2"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "tavern_barrel_stack_01",
+    "name": "Barrel Stack",
+    "category": "tavern_kit",
+    "family": "wood",
+    "promptTemplate": "CLUSTER",
+    "promptDetails": "Stack of three medieval barrels. Two on bottom, one on top. Stored ale barrels. Iron-banded.",
+    "status": "pending",
+    "batch": 4,
+    "game": {
+      "scaleMeters": 1.2,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [
+        "tavern",
+        "tavern2"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "tavern_sign_01",
+    "name": "Tavern Sign",
+    "category": "tavern_kit",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval hanging tavern sign on iron bracket. Wooden sign with carved mug/tankard emblem. Hangs from a wall-mount bracket. No text.",
+    "status": "pending",
+    "batch": 4,
+    "game": {
+      "scaleMeters": 1,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "tavern",
+        "tavern2"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "tavern_crate_01",
+    "name": "Tavern Supply Crate",
+    "category": "tavern_kit",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval wooden supply crate with bottles/jugs visible inside. Open-topped crate.",
+    "status": "pending",
+    "batch": 4,
+    "game": {
+      "scaleMeters": 0.6,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "health": 15,
+      "spawnWeight": 3,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [
+        "tavern",
+        "tavern2"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "nature_oak_large_01",
+    "name": "Large Oak Tree",
+    "category": "nature",
+    "family": "tree",
+    "promptTemplate": "TREE",
+    "promptDetails": "Large old oak tree with thick trunk and wide spreading canopy. Chunky readable foliage clusters. Approximately 8 meters tall.",
+    "status": "glb_optimized",
+    "batch": 1,
+    "game": {
+      "scaleMeters": 8,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 4,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": [
+        "house",
+        "blacksmith"
+      ]
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_oak_large_01.png",
+    "glbRaw": "AssetFactory/glb_raw/nature_oak_large_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_oak_large_01.glb",
+    "glbGame": "Game3DAssets/nature_oak_large_01.glb"
+  },
+  {
+    "id": "nature_oak_large_02",
+    "name": "Large Oak Tree (Variant B)",
+    "category": "nature",
+    "family": "tree",
+    "promptTemplate": "TREE",
+    "promptDetails": "Large oak tree variant with asymmetric canopy leaning to one side. Different branch structure from oak_large_01. Approximately 7.5 meters tall.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 7.5,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 3,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": [
+        "house",
+        "blacksmith"
+      ]
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_oak_large_02.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_oak_large_02.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_oak_large_02.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_oak_large_02.glb",
+    "glbGame": "Game3DAssets/nature_oak_large_02.glb"
+  },
+  {
+    "id": "nature_oak_large_03",
+    "name": "Large Oak Tree (Variant C)",
+    "category": "nature",
+    "family": "tree",
+    "promptTemplate": "TREE",
+    "promptDetails": "Tall narrow oak tree with vertically oriented canopy. Less spread than variants A and B. Approximately 9 meters tall.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 9,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 3,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": [
+        "house",
+        "blacksmith"
+      ]
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_oak_large_03.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_oak_large_03.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_oak_large_03.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_oak_large_03.glb",
+    "glbGame": "Game3DAssets/nature_oak_large_03.glb"
+  },
+  {
+    "id": "nature_oak_small_01",
+    "name": "Small Oak Tree",
+    "category": "nature",
+    "family": "tree",
+    "promptTemplate": "TREE",
+    "promptDetails": "Young small oak tree. Thin trunk, modest canopy. Approximately 4 meters tall.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 4,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 5,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_oak_small_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_oak_small_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_oak_small_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_oak_small_01.glb",
+    "glbGame": "Game3DAssets/nature_oak_small_01.glb"
+  },
+  {
+    "id": "nature_oak_small_02",
+    "name": "Small Oak Tree (Variant B)",
+    "category": "nature",
+    "family": "tree",
+    "promptTemplate": "TREE",
+    "promptDetails": "Young oak tree variant with slightly different branch pattern. Approximately 4.5 meters tall.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 4.5,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 5,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_oak_small_02.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_oak_small_02.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_oak_small_02.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_oak_small_02.glb",
+    "glbGame": "Game3DAssets/nature_oak_small_02.glb"
+  },
+  {
+    "id": "nature_pine_02",
+    "name": "Pine Tree (Variant B)",
+    "category": "nature",
+    "family": "tree",
+    "promptTemplate": "TREE",
+    "promptDetails": "Tall conifer pine tree variant. Different branch distribution from existing pineTree asset. Approximately 7 meters tall.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 7,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 4,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_pine_02.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_pine_02.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_pine_02.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_pine_02.glb",
+    "glbGame": "Game3DAssets/nature_pine_02.glb"
+  },
+  {
+    "id": "nature_pine_03",
+    "name": "Pine Tree (Variant C)",
+    "category": "nature",
+    "family": "tree",
+    "promptTemplate": "TREE",
+    "promptDetails": "Short bushy pine/spruce tree. Dense low branches. Approximately 4 meters tall.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 4,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 4,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_pine_03.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_pine_03.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_pine_03.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_pine_03.glb",
+    "glbGame": "Game3DAssets/nature_pine_03.glb"
+  },
+  {
+    "id": "nature_dead_tree_01",
+    "name": "Dead Tree",
+    "category": "nature",
+    "family": "tree",
+    "promptTemplate": "TREE",
+    "promptDetails": "Dead leafless tree with bare gnarled branches. Twisted trunk, no foliage. Spooky and dramatic silhouette. Approximately 5 meters tall.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 5,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 3,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "ogreCastle"
+      ],
+      "avoid": [
+        "house"
+      ]
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_dead_tree_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_dead_tree_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_dead_tree_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_dead_tree_01.glb",
+    "glbGame": "Game3DAssets/nature_dead_tree_01.glb"
+  },
+  {
+    "id": "nature_dead_tree_02",
+    "name": "Dead Tree (Variant B)",
+    "category": "nature",
+    "family": "tree",
+    "promptTemplate": "TREE",
+    "promptDetails": "Dead twisted tree variant. Shorter, more broken branches. Approximately 4 meters tall.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 4,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 3,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "ogreCastle"
+      ],
+      "avoid": [
+        "house"
+      ]
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_dead_tree_02.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_dead_tree_02.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_dead_tree_02.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_dead_tree_02.glb",
+    "glbGame": "Game3DAssets/nature_dead_tree_02.glb"
+  },
+  {
+    "id": "nature_sapling_01",
+    "name": "Sapling",
+    "category": "nature",
+    "family": "tree",
+    "promptTemplate": "TREE",
+    "promptDetails": "Small young tree sapling with thin trunk and small leaf clusters. Approximately 2 meters tall.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 2,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 6,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_sapling_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_sapling_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_sapling_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_sapling_01.glb",
+    "glbGame": "Game3DAssets/nature_sapling_01.glb"
+  },
+  {
+    "id": "nature_bush_01",
+    "name": "Bush",
+    "category": "nature",
+    "family": "vegetation",
+    "promptTemplate": "PROP",
+    "promptDetails": "Round medieval fantasy bush/shrub. Dense green foliage, approximately 1.0 meter diameter.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 1,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 8,
+      "maxCluster": 4
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_bush_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_bush_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_bush_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_bush_01.glb",
+    "glbGame": "Game3DAssets/nature_bush_01.glb"
+  },
+  {
+    "id": "nature_bush_02",
+    "name": "Bush (Variant B)",
+    "category": "nature",
+    "family": "vegetation",
+    "promptTemplate": "PROP",
+    "promptDetails": "Wider spreading bush with flowers. Some small white or pink blossoms mixed in foliage.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 0.8,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 6,
+      "maxCluster": 4
+    },
+    "placement": {
+      "near": [
+        "house"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_bush_02.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_bush_02.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_bush_02.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_bush_02.glb",
+    "glbGame": "Game3DAssets/nature_bush_02.glb"
+  },
+  {
+    "id": "nature_bush_03",
+    "name": "Bush (Variant C)",
+    "category": "nature",
+    "family": "vegetation",
+    "promptTemplate": "PROP",
+    "promptDetails": "Tall narrow hedge-style bush. Approximately 1.5 meters tall, narrow profile.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 1.5,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 5,
+      "maxCluster": 6
+    },
+    "placement": {
+      "near": [
+        "house"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_bush_03.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_bush_03.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_bush_03.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_bush_03.glb",
+    "glbGame": "Game3DAssets/nature_bush_03.glb"
+  },
+  {
+    "id": "nature_rock_small_01",
+    "name": "Small Rock",
+    "category": "nature",
+    "family": "stone",
+    "promptTemplate": "PROP",
+    "promptDetails": "Small grey stone/rock. Irregular natural shape, approximately 0.4 meters.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 0.4,
+      "collision": "sphere",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 8,
+      "maxCluster": 5
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_rock_small_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_rock_small_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_rock_small_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_rock_small_01.glb",
+    "glbGame": "Game3DAssets/nature_rock_small_01.glb"
+  },
+  {
+    "id": "nature_rock_small_02",
+    "name": "Small Rock (Variant B)",
+    "category": "nature",
+    "family": "stone",
+    "promptTemplate": "PROP",
+    "promptDetails": "Small mossy stone. Green moss patches on grey rock. Approximately 0.5 meters.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 0.5,
+      "collision": "sphere",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 6,
+      "maxCluster": 4
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_rock_small_02.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_rock_small_02.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_rock_small_02.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_rock_small_02.glb",
+    "glbGame": "Game3DAssets/nature_rock_small_02.glb"
+  },
+  {
+    "id": "nature_rock_cluster_01",
+    "name": "Rock Cluster",
+    "category": "nature",
+    "family": "stone",
+    "promptTemplate": "CLUSTER",
+    "promptDetails": "Natural cluster of 3-5 grey rocks of varying sizes grouped together. Largest approximately 0.8 meters tall.",
+    "status": "glb_optimized",
+    "batch": 1,
+    "game": {
+      "scaleMeters": 0.8,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 5,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_rock_cluster_01.png",
+    "glbRaw": "AssetFactory/glb_raw/nature_rock_cluster_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_rock_cluster_01.glb",
+    "glbGame": "Game3DAssets/nature_rock_cluster_01.glb"
+  },
+  {
+    "id": "nature_rock_cluster_02",
+    "name": "Rock Cluster (Variant B)",
+    "category": "nature",
+    "family": "stone",
+    "promptTemplate": "CLUSTER",
+    "promptDetails": "Mossy rock cluster with 4-6 stones. Some with moss and lichen. Largest approximately 1.0 meter.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 1,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 4,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_rock_cluster_02.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_rock_cluster_02.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_rock_cluster_02.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_rock_cluster_02.glb",
+    "glbGame": "Game3DAssets/nature_rock_cluster_02.glb"
+  },
+  {
+    "id": "nature_grass_clump_01",
+    "name": "Grass Clump",
+    "category": "nature",
+    "family": "vegetation",
+    "promptTemplate": "PROP",
+    "promptDetails": "Tall wild grass clump. Wispy blades of grass, approximately 0.5 meters tall.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 0.5,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 10,
+      "maxCluster": 8
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_grass_clump_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_grass_clump_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_grass_clump_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_grass_clump_01.glb",
+    "glbGame": "Game3DAssets/nature_grass_clump_01.glb"
+  },
+  {
+    "id": "nature_grass_clump_02",
+    "name": "Grass Clump (Variant B)",
+    "category": "nature",
+    "family": "vegetation",
+    "promptTemplate": "PROP",
+    "promptDetails": "Short wild grass patch with some seed heads. Approximately 0.3 meters tall.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 0.3,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 10,
+      "maxCluster": 8
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_grass_clump_02.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_grass_clump_02.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_grass_clump_02.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_grass_clump_02.glb",
+    "glbGame": "Game3DAssets/nature_grass_clump_02.glb"
+  },
+  {
+    "id": "nature_flowers_01",
+    "name": "Wildflowers",
+    "category": "nature",
+    "family": "vegetation",
+    "promptTemplate": "PROP",
+    "promptDetails": "Small cluster of colorful medieval wildflowers. Mix of yellow and purple flowers with green stems.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 0.3,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 6,
+      "maxCluster": 5
+    },
+    "placement": {
+      "near": [
+        "house"
+      ],
+      "avoid": [
+        "ogreCastle"
+      ]
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_flowers_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_flowers_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_flowers_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_flowers_01.glb",
+    "glbGame": "Game3DAssets/nature_flowers_01.glb"
+  },
+  {
+    "id": "nature_flowers_02",
+    "name": "Wildflowers (Variant B)",
+    "category": "nature",
+    "family": "vegetation",
+    "promptTemplate": "PROP",
+    "promptDetails": "Cluster of white and red wildflowers. Different from flowers_01.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 0.3,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 6,
+      "maxCluster": 5
+    },
+    "placement": {
+      "near": [
+        "house"
+      ],
+      "avoid": [
+        "ogreCastle"
+      ]
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_flowers_02.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_flowers_02.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_flowers_02.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_flowers_02.glb",
+    "glbGame": "Game3DAssets/nature_flowers_02.glb"
+  },
+  {
+    "id": "nature_mushrooms_01",
+    "name": "Mushroom Cluster",
+    "category": "nature",
+    "family": "vegetation",
+    "promptTemplate": "CLUSTER",
+    "promptDetails": "Small cluster of fantasy mushrooms. 3-4 mushrooms of varying sizes with red/brown caps.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 0.3,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 4,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [
+        "nature_oak_large_01",
+        "nature_dead_tree_01"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_mushrooms_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_mushrooms_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_mushrooms_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_mushrooms_01.glb",
+    "glbGame": "Game3DAssets/nature_mushrooms_01.glb"
+  },
+  {
+    "id": "nature_fern_01",
+    "name": "Fern",
+    "category": "nature",
+    "family": "vegetation",
+    "promptTemplate": "PROP",
+    "promptDetails": "Single medieval fantasy fern plant. Green fronds spreading outward. Approximately 0.5 meters.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 0.5,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 6,
+      "maxCluster": 4
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_fern_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_fern_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_fern_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_fern_01.glb",
+    "glbGame": "Game3DAssets/nature_fern_01.glb"
+  },
+  {
+    "id": "nature_fallen_log_01",
+    "name": "Fallen Log",
+    "category": "nature",
+    "family": "tree",
+    "promptTemplate": "PROP",
+    "promptDetails": "Fallen tree trunk lying on the ground. Mossy and partially decomposed. Approximately 3 meters long.",
+    "status": "glb_optimized",
+    "batch": 3,
+    "game": {
+      "scaleMeters": 0.6,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 3,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": [
+        "house",
+        "tavern"
+      ]
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_fallen_log_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_fallen_log_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_fallen_log_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_fallen_log_01.glb",
+    "glbGame": "Game3DAssets/nature_fallen_log_01.glb"
+  },
+  {
+    "id": "combat_barricade_01",
+    "name": "Wooden Barricade",
+    "category": "combat",
+    "family": "war",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval wooden defensive barricade. Sharpened stakes and rough planks forming an X-frame barrier. Approximately 1.5 meters tall.",
+    "status": "glb_optimized",
+    "batch": 1,
+    "game": {
+      "scaleMeters": 1.5,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "health": 50,
+      "spawnWeight": 3,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_barricade_01.png",
+    "glbOptimized": "AssetFactory/glb_optimized/combat_barricade_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/combat_barricade_01.glb",
+    "glbGame": "Game3DAssets/combat_barricade_01.glb"
+  },
+  {
+    "id": "combat_spikes_01",
+    "name": "Spike Trap",
+    "category": "combat",
+    "family": "war",
+    "promptTemplate": "PROP",
+    "promptDetails": "Ground-level wooden spike trap. Sharpened wooden stakes pointing upward from a low wooden frame.",
+    "status": "pending",
+    "batch": 5,
+    "game": {
+      "scaleMeters": 0.5,
+      "collision": "box",
+      "solid": false,
+      "breakable": true,
+      "health": 20,
+      "spawnWeight": 3,
+      "maxCluster": 4
+    },
+    "placement": {
+      "near": [
+        "humanCastle"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "combat_broken_cart_01",
+    "name": "Broken Cart",
+    "category": "combat",
+    "family": "war",
+    "promptTemplate": "PROP",
+    "promptDetails": "Destroyed medieval cart. Broken wheels, splintered wood, collapsed frame. Battle damage evident.",
+    "status": "pending",
+    "batch": 5,
+    "game": {
+      "scaleMeters": 1.2,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "combat_broken_barrel_01",
+    "name": "Broken Barrel",
+    "category": "combat",
+    "family": "war",
+    "promptTemplate": "PROP",
+    "promptDetails": "Smashed medieval barrel. Iron bands loose, staves broken and scattered.",
+    "status": "pending",
+    "batch": 5,
+    "game": {
+      "scaleMeters": 0.7,
+      "collision": "box",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 3,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "combat_wall_rubble_01",
+    "name": "Wall Rubble",
+    "category": "combat",
+    "family": "stone",
+    "promptTemplate": "CLUSTER",
+    "promptDetails": "Pile of broken stone wall rubble. Crumbled masonry blocks and dust. Remnant of a destroyed wall.",
+    "status": "pending",
+    "batch": 5,
+    "game": {
+      "scaleMeters": 0.8,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 3,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "combat_wall_destroyed_01",
+    "name": "Destroyed Wall Section",
+    "category": "combat",
+    "family": "stone",
+    "promptTemplate": "PROP",
+    "promptDetails": "Partially destroyed stone wall segment. Top portion crumbled, bottom intact. Battle damage with cracks and missing stones.",
+    "status": "pending",
+    "batch": 5,
+    "game": {
+      "scaleMeters": 1.8,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "combat_abandoned_sword_01",
+    "name": "Abandoned Sword",
+    "category": "combat",
+    "family": "war",
+    "promptTemplate": "PROP",
+    "promptDetails": "Medieval sword stuck in the ground at an angle. Blade partially buried, handle and crossguard exposed.",
+    "status": "pending",
+    "batch": 5,
+    "game": {
+      "scaleMeters": 1,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "combat_abandoned_shield_01",
+    "name": "Abandoned Shield",
+    "category": "combat",
+    "family": "war",
+    "promptTemplate": "PROP",
+    "promptDetails": "Damaged medieval shield lying on the ground. Dented, scratched, partially broken. Simple heraldic design.",
+    "status": "pending",
+    "batch": 5,
+    "game": {
+      "scaleMeters": 0.7,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "combat_abandoned_sword_01"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "combat_arrow_cluster_01",
+    "name": "Arrow Cluster",
+    "category": "combat",
+    "family": "war",
+    "promptTemplate": "CLUSTER",
+    "promptDetails": "Cluster of 4-5 medieval arrows stuck in the ground at various angles. Aftermath of battle.",
+    "status": "pending",
+    "batch": 5,
+    "game": {
+      "scaleMeters": 0.6,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 3,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "combat_bones_01",
+    "name": "Scattered Bones",
+    "category": "combat",
+    "family": "war",
+    "promptTemplate": "CLUSTER",
+    "promptDetails": "Small pile of scattered bones on the ground. Old yellowed bones, not gory. Fantasy game style.",
+    "status": "pending",
+    "batch": 5,
+    "game": {
+      "scaleMeters": 0.5,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [
+        "ogreCastle"
+      ],
+      "avoid": [
+        "house"
+      ]
+    }
+  },
+  {
+    "id": "combat_skull_01",
+    "name": "Skull",
+    "category": "combat",
+    "family": "war",
+    "promptTemplate": "PROP",
+    "promptDetails": "Single human skull on the ground. Stylized fantasy game skull, not photorealistic.",
+    "status": "pending",
+    "batch": 5,
+    "game": {
+      "scaleMeters": 0.2,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [
+        "ogreCastle",
+        "combat_enemy_totem_01"
+      ],
+      "avoid": [
+        "house"
+      ]
+    }
+  },
+  {
+    "id": "combat_enemy_totem_01",
+    "name": "Enemy Totem",
+    "category": "combat",
+    "family": "war",
+    "promptTemplate": "PROP",
+    "promptDetails": "Menacing primitive totem pole made of bones, skulls, and rough wood. Enemy territory marker. Approximately 3.0 meters tall.",
+    "status": "pending",
+    "batch": 5,
+    "game": {
+      "scaleMeters": 3,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": true,
+      "health": 60,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "ogreCastle"
+      ],
+      "avoid": [
+        "house",
+        "tavern"
+      ]
+    }
+  },
+  {
+    "id": "combat_skull_stake_01",
+    "name": "Skull on Stake",
+    "category": "combat",
+    "family": "war",
+    "promptTemplate": "PROP",
+    "promptDetails": "Human skull impaled on a wooden stake. Warning marker. Approximately 2.0 meters tall.",
+    "status": "pending",
+    "batch": 5,
+    "game": {
+      "scaleMeters": 2,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": true,
+      "health": 15,
+      "spawnWeight": 2,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [
+        "ogreCastle",
+        "combat_enemy_totem_01"
+      ],
+      "avoid": [
+        "house"
+      ]
+    }
+  },
+  {
+    "id": "combat_burned_tree_01",
+    "name": "Burned Tree",
+    "category": "combat",
+    "family": "war",
+    "promptTemplate": "TREE",
+    "promptDetails": "Charred burned tree. Blackened trunk and branches, no leaves. Fire damage clearly visible. Approximately 4 meters tall.",
+    "status": "pending",
+    "batch": 5,
+    "game": {
+      "scaleMeters": 4,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "ogreCastle"
+      ],
+      "avoid": [
+        "house"
+      ]
+    }
+  },
+  {
+    "id": "combat_burned_cart_01",
+    "name": "Burned Cart",
+    "category": "combat",
+    "family": "war",
+    "promptTemplate": "PROP",
+    "promptDetails": "Charred remains of a medieval cart. Burned and blackened wood, collapsed structure.",
+    "status": "pending",
+    "batch": 5,
+    "game": {
+      "scaleMeters": 1,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "terrain_dirt_01",
+    "name": "Dirt Tile",
+    "category": "terrain",
+    "family": "terrain",
+    "promptTemplate": "TERRAIN",
+    "promptDetails": "Square dirt ground tile. Packed brown earth with subtle texture variation.",
+    "status": "pending",
+    "batch": 6,
+    "game": {
+      "scaleMeters": 4,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 8,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "terrain_dirt_02",
+    "name": "Dirt Tile (Variant B)",
+    "category": "terrain",
+    "family": "terrain",
+    "promptTemplate": "TERRAIN",
+    "promptDetails": "Square dirt ground tile variant. Slightly lighter color, some small pebbles embedded.",
+    "status": "pending",
+    "batch": 6,
+    "game": {
+      "scaleMeters": 4,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 6,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "terrain_road_corner",
+    "name": "Road Corner Tile",
+    "category": "terrain",
+    "family": "terrain",
+    "promptTemplate": "TERRAIN",
+    "promptDetails": "Square road tile with 90-degree corner turn. Dirt/cobble road surface making an L-shape.",
+    "status": "pending",
+    "batch": 6,
+    "game": {
+      "scaleMeters": 4,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 3,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "terrain_road_t",
+    "name": "Road T-Junction Tile",
+    "category": "terrain",
+    "family": "terrain",
+    "promptTemplate": "TERRAIN",
+    "promptDetails": "Square road tile with T-junction. Road surface forming a T-intersection.",
+    "status": "pending",
+    "batch": 6,
+    "game": {
+      "scaleMeters": 4,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "terrain_road_cross",
+    "name": "Road Crossroads Tile",
+    "category": "terrain",
+    "family": "terrain",
+    "promptTemplate": "TERRAIN",
+    "promptDetails": "Square road tile with 4-way crossroads. Road surface forming a plus/cross intersection.",
+    "status": "pending",
+    "batch": 6,
+    "game": {
+      "scaleMeters": 4,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "terrain_cobble_01",
+    "name": "Cobblestone Tile",
+    "category": "terrain",
+    "family": "terrain",
+    "promptTemplate": "TERRAIN",
+    "promptDetails": "Square cobblestone ground tile. Rounded stone pavers in a medieval pattern.",
+    "status": "pending",
+    "batch": 6,
+    "game": {
+      "scaleMeters": 4,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 4,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "house",
+        "tavern"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "terrain_plaza_01",
+    "name": "Plaza Tile",
+    "category": "terrain",
+    "family": "terrain",
+    "promptTemplate": "TERRAIN",
+    "promptDetails": "Square stone plaza tile. Flat cut stone pavers in a grid pattern. Village center flooring.",
+    "status": "pending",
+    "batch": 6,
+    "game": {
+      "scaleMeters": 4,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "village_water_well_01"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "terrain_stream_corner",
+    "name": "Stream Corner Tile",
+    "category": "terrain",
+    "family": "terrain",
+    "promptTemplate": "TERRAIN",
+    "promptDetails": "Square terrain tile with stream making a 90-degree turn. Water channel curving through the tile.",
+    "status": "pending",
+    "batch": 6,
+    "game": {
+      "scaleMeters": 4,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "terrain_bridge_01",
+    "name": "Small Bridge",
+    "category": "terrain",
+    "family": "stone",
+    "promptTemplate": "PROP",
+    "promptDetails": "Small medieval wooden bridge. Plank deck with simple post railings on both sides. Sized to span a single stream tile, approximately 4 meters long.",
+    "status": "pending",
+    "batch": 6,
+    "game": {
+      "scaleMeters": 1,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "stream"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "terrain_grass_mound_01",
+    "name": "Grass Mound",
+    "category": "terrain",
+    "family": "terrain",
+    "promptTemplate": "PROP",
+    "promptDetails": "Small grassy hill/mound. Gentle rise covered in grass. Approximately 1.5 meters tall, 3 meters wide.",
+    "status": "pending",
+    "batch": 6,
+    "game": {
+      "scaleMeters": 1.5,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 3,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": [
+        "house"
+      ]
+    }
+  },
+  {
+    "id": "terrain_rock_mound_01",
+    "name": "Rocky Mound",
+    "category": "terrain",
+    "family": "terrain",
+    "promptTemplate": "PROP",
+    "promptDetails": "Low rocky outcrop/mound. Exposed stone with some grass. Approximately 1.0 meter tall.",
+    "status": "pending",
+    "batch": 6,
+    "game": {
+      "scaleMeters": 1,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 3,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": [
+        "house"
+      ]
+    }
+  },
+  {
+    "id": "terrain_embankment_straight",
+    "name": "Embankment Straight",
+    "category": "terrain",
+    "family": "terrain",
+    "promptTemplate": "MODULAR",
+    "promptDetails": "Straight modular earth embankment segment. Raised earthen bank, approximately 1 meter tall and 4 meters long. Grass-covered.",
+    "status": "pending",
+    "batch": 6,
+    "game": {
+      "scaleMeters": 1,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 6
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "terrain_stone_steps_01",
+    "name": "Stone Steps",
+    "category": "terrain",
+    "family": "stone",
+    "promptTemplate": "PROP",
+    "promptDetails": "Short flight of 4-5 medieval stone steps. Cut stone, slightly worn. Approximately 1.5 meters wide.",
+    "status": "pending",
+    "batch": 6,
+    "game": {
+      "scaleMeters": 0.8,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "humanCastle"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "landmark_village_fountain",
+    "name": "Village Fountain",
+    "category": "landmarks",
+    "family": "stone",
+    "promptTemplate": "BUILDING",
+    "promptDetails": "Ornate medieval stone fountain. Tiered circular design with water basin. Central decorative column. Do not include water VFX. Approximately 3 meters tall.",
+    "status": "glb_optimized",
+    "batch": 7,
+    "game": {
+      "scaleMeters": 3,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_village_fountain.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\landmark_village_fountain.glb",
+    "glbRaw": "AssetFactory/glb_raw/landmark_village_fountain.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/landmark_village_fountain.glb",
+    "glbGame": "Game3DAssets/landmark_village_fountain.glb"
+  },
+  {
+    "id": "landmark_ancient_oak",
+    "name": "Ancient Oak",
+    "category": "landmarks",
+    "family": "tree",
+    "promptTemplate": "TREE",
+    "promptDetails": "Massive ancient oak tree. Enormous twisted trunk, sprawling canopy, hanging moss. A centerpiece tree. Approximately 12 meters tall.",
+    "status": "rejected",
+    "batch": 7,
+    "game": {
+      "scaleMeters": 12,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_ancient_oak.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\landmark_ancient_oak.glb",
+    "glbRaw": "AssetFactory/glb_raw/landmark_ancient_oak.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/landmark_ancient_oak.glb",
+    "glbGame": "Game3DAssets/landmark_ancient_oak.glb",
+    "rejectReason": "splinter geometry (thin canopy strands), manual review 2026-09-20"
+  },
+  {
+    "id": "landmark_ruined_tower",
+    "name": "Ivy Watchtower",
+    "category": "landmarks",
+    "family": "stone",
+    "promptTemplate": "BUILDING",
+    "promptDetails": "Partially collapsed medieval stone watchtower. Top portion crumbled, walls cracked. Ivy growing on remaining walls. Approximately 8 meters tall. (came out intact and ivy-clad; used as an old watchtower)",
+    "status": "glb_optimized",
+    "batch": 7,
+    "game": {
+      "scaleMeters": 8,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_ruined_tower.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\landmark_ruined_tower.glb",
+    "glbRaw": "AssetFactory/glb_raw/landmark_ruined_tower.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/landmark_ruined_tower.glb",
+    "glbGame": "Game3DAssets/landmark_ruined_tower.glb"
+  },
+  {
+    "id": "landmark_windmill",
+    "name": "Windmill",
+    "category": "landmarks",
+    "family": "stone",
+    "promptTemplate": "BUILDING",
+    "promptDetails": "Medieval stone windmill with wooden sail arms. Round stone tower base with conical roof and four large wooden blade arms. Do not animate blades. Approximately 10 meters tall.",
+    "status": "glb_optimized",
+    "batch": 7,
+    "game": {
+      "scaleMeters": 10,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "farmHouse"
+      ],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_windmill.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\landmark_windmill.glb",
+    "glbRaw": "AssetFactory/glb_raw/landmark_windmill.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/landmark_windmill.glb",
+    "glbGame": "Game3DAssets/landmark_windmill.glb"
+  },
+  {
+    "id": "landmark_graveyard_gate",
+    "name": "Graveyard Gate",
+    "category": "landmarks",
+    "family": "stone",
+    "promptTemplate": "BUILDING",
+    "promptDetails": "Wrought iron graveyard entrance gate between two stone pillars. Gothic arched iron gate, stone columns with carved details. Approximately 4 meters tall.",
+    "status": "glb_optimized",
+    "batch": 7,
+    "game": {
+      "scaleMeters": 4,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": [
+        "house",
+        "tavern"
+      ]
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_graveyard_gate.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\landmark_graveyard_gate.glb",
+    "glbRaw": "AssetFactory/glb_raw/landmark_graveyard_gate.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/landmark_graveyard_gate.glb",
+    "glbGame": "Game3DAssets/landmark_graveyard_gate.glb"
+  },
+  {
+    "id": "landmark_enemy_totem",
+    "name": "Grand Enemy Totem",
+    "category": "landmarks",
+    "family": "war",
+    "promptTemplate": "PROP",
+    "promptDetails": "Massive menacing totem pole of skulls, bones, and dark wood. A major enemy territory landmark. Glowing runes carved into the wood. Do not include glow VFX. Approximately 6 meters tall.",
+    "status": "rejected",
+    "batch": 7,
+    "game": {
+      "scaleMeters": 6,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": true,
+      "health": 200,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "ogreCastle"
+      ],
+      "avoid": [
+        "house"
+      ]
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_enemy_totem.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\landmark_enemy_totem.glb",
+    "glbRaw": "AssetFactory/glb_raw/landmark_enemy_totem.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/landmark_enemy_totem.glb",
+    "glbGame": "Game3DAssets/landmark_enemy_totem.glb",
+    "rejectReason": "178 triangles, rendered nothing (validate-glb 2026-09-20)"
+  },
+  {
+    "id": "landmark_destroyed_watchtower",
+    "name": "Border Keep",
+    "category": "landmarks",
+    "family": "stone",
+    "promptTemplate": "BUILDING",
+    "promptDetails": "Heavily destroyed medieval watchtower. Only lower walls remain, rubble around the base, burned wooden elements. Approximately 5 meters tall. (Trellis produced an intact fortified keep; kept as a border keep)",
+    "status": "glb_optimized",
+    "batch": 7,
+    "game": {
+      "scaleMeters": 5,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_destroyed_watchtower.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\landmark_destroyed_watchtower.glb",
+    "glbRaw": "AssetFactory/glb_raw/landmark_destroyed_watchtower.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/landmark_destroyed_watchtower.glb",
+    "glbGame": "Game3DAssets/landmark_destroyed_watchtower.glb"
+  },
+  {
+    "id": "village_rail_fence_straight_01",
+    "name": "Rail Pen",
+    "category": "village_infrastructure",
+    "family": "wood",
+    "promptTemplate": "MODULAR",
+    "promptDetails": "Straight rustic medieval split-rail wooden fence segment. Two rough oak posts with three horizontal rough-hewn rails, weathered dark brown wood, no paint. Approximately 2 meters long, 1.2 meters tall. (Trellis produced a closed four-post pen rather than a segment; kept as a livestock pen prop)",
+    "status": "glb_optimized",
+    "batch": 8,
+    "game": {
+      "scaleMeters": 1.6,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "health": 25,
+      "spawnWeight": 5,
+      "maxCluster": 4
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_rail_fence_straight_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\village_rail_fence_straight_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/village_rail_fence_straight_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/village_rail_fence_straight_01.glb",
+    "glbGame": "Game3DAssets/village_rail_fence_straight_01.glb"
+  },
+  {
+    "id": "village_rail_fence_corner_01",
+    "name": "Rail Fence Segment",
+    "category": "village_infrastructure",
+    "family": "wood",
+    "promptTemplate": "MODULAR",
+    "promptDetails": "Corner piece of a rustic medieval split-rail wooden fence: a heavy oak corner post with rough rails leaving at a right angle, weathered dark brown wood, no paint. Approximately 1.2 meters tall. (Trellis produced a straight two-post rail segment; used as the straight piece)",
+    "status": "glb_optimized",
+    "batch": 8,
+    "game": {
+      "scaleMeters": 1.2,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "health": 25,
+      "spawnWeight": 5,
+      "maxCluster": 4
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_rail_fence_corner_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\village_rail_fence_corner_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/village_rail_fence_corner_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/village_rail_fence_corner_01.glb",
+    "glbGame": "Game3DAssets/village_rail_fence_corner_01.glb"
+  },
+  {
+    "id": "village_rail_fence_gate_01",
+    "name": "Rail Fence Gate",
+    "category": "village_infrastructure",
+    "family": "wood",
+    "promptTemplate": "MODULAR",
+    "promptDetails": "Rustic medieval wooden farm gate between two oak posts, diagonal brace, iron hinges, weathered dark brown wood, no paint. Approximately 2 meters wide, 1.2 meters tall.",
+    "status": "glb_optimized",
+    "batch": 8,
+    "game": {
+      "scaleMeters": 1.2,
+      "collision": "none",
+      "solid": false,
+      "breakable": true,
+      "health": 25,
+      "spawnWeight": 5,
+      "maxCluster": 4
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_rail_fence_gate_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\village_rail_fence_gate_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/village_rail_fence_gate_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/village_rail_fence_gate_01.glb",
+    "glbGame": "Game3DAssets/village_rail_fence_gate_01.glb"
+  },
+  {
+    "id": "nature_reeds_01",
+    "name": "Reed Clump",
+    "category": "nature",
+    "family": "plant",
+    "promptTemplate": "CLUSTER",
+    "promptDetails": "Dense clump of tall green marsh reeds with brown cattail heads growing from a small mud base. Approximately 1.4 meters tall.",
+    "status": "rejected",
+    "batch": 8,
+    "game": {
+      "scaleMeters": 1.4,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "health": 0,
+      "spawnWeight": 5,
+      "maxCluster": 4
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_reeds_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_reeds_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_reeds_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_reeds_01.glb",
+    "glbGame": "Game3DAssets/nature_reeds_01.glb",
+    "rejectReason": "splinter geometry in viewer render (validate-glb.mjs 2026-09-20)"
+  },
+  {
+    "id": "prop_hay_pile_02",
+    "name": "Hay Pile",
+    "category": "village_clutter",
+    "family": "straw",
+    "promptTemplate": "PROP",
+    "promptDetails": "Loose rounded mound of golden straw and hay, chunky stylized strands, solid readable silhouette, no scattered wisps. Approximately 1.2 meters wide, 0.7 meters tall.",
+    "status": "rejected",
+    "batch": 8,
+    "game": {
+      "scaleMeters": 0.7,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": true,
+      "health": 25,
+      "spawnWeight": 5,
+      "maxCluster": 4
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_hay_pile_02.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\prop_hay_pile_02.glb",
+    "glbRaw": "AssetFactory/glb_raw/prop_hay_pile_02.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_hay_pile_02.glb",
+    "glbGame": "Game3DAssets/prop_hay_pile_02.glb",
+    "rejectReason": "splinter geometry in viewer render (validate-glb.mjs 2026-09-20)"
+  },
+  {
+    "id": "prop_logs_02",
+    "name": "Log Stack",
+    "category": "village_clutter",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Stack of four thick cut oak logs lying in a compact pyramid, pale cut ends visible, bark on. Approximately 1.6 meters long, 0.8 meters tall.",
+    "status": "glb_optimized",
+    "batch": 8,
+    "game": {
+      "scaleMeters": 0.8,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "health": 0,
+      "spawnWeight": 5,
+      "maxCluster": 4
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_logs_02.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\prop_logs_02.glb",
+    "glbRaw": "AssetFactory/glb_raw/prop_logs_02.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_logs_02.glb",
+    "glbGame": "Game3DAssets/prop_logs_02.glb"
+  },
+  {
+    "id": "prop_tree_stump_02",
+    "name": "Tree Stump",
+    "category": "village_clutter",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Wide cut oak tree stump with visible growth rings and an axe stuck in the top, thick roots flaring at the base. Approximately 0.6 meters tall, 0.9 meters wide.",
+    "status": "glb_optimized",
+    "batch": 8,
+    "game": {
+      "scaleMeters": 0.6,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "health": 0,
+      "spawnWeight": 5,
+      "maxCluster": 4
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_tree_stump_02.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\prop_tree_stump_02.glb",
+    "glbRaw": "AssetFactory/glb_raw/prop_tree_stump_02.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_tree_stump_02.glb",
+    "glbGame": "Game3DAssets/prop_tree_stump_02.glb"
+  },
+  {
+    "id": "prop_firewood_stack_02",
+    "name": "Firewood Stack",
+    "category": "village_clutter",
+    "family": "wood",
+    "promptTemplate": "PROP",
+    "promptDetails": "Neatly stacked rectangular pile of split firewood between two posts, chunky logs with pale cut faces. Approximately 1.2 meters wide, 1.0 meters tall.",
+    "status": "glb_optimized",
+    "batch": 8,
+    "game": {
+      "scaleMeters": 1.0,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "health": 25,
+      "spawnWeight": 5,
+      "maxCluster": 4
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_firewood_stack_02.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\prop_firewood_stack_02.glb",
+    "glbRaw": "AssetFactory/glb_raw/prop_firewood_stack_02.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/prop_firewood_stack_02.glb",
+    "glbGame": "Game3DAssets/prop_firewood_stack_02.glb"
+  },
+  {
+    "id": "nature_dead_tree_03",
+    "name": "Dead Tree",
+    "category": "nature",
+    "family": "plant",
+    "promptTemplate": "TREE",
+    "promptDetails": "Dead leafless oak tree with a thick twisted trunk and five thick bare branches, chunky readable silhouette, grey-brown bark, no thin twigs. Approximately 6 meters tall.",
+    "status": "glb_optimized",
+    "batch": 8,
+    "game": {
+      "scaleMeters": 6.0,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "health": 0,
+      "spawnWeight": 5,
+      "maxCluster": 4
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_dead_tree_03.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_dead_tree_03.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_dead_tree_03.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_dead_tree_03.glb",
+    "glbGame": "Game3DAssets/nature_dead_tree_03.glb"
+  },
+  {
+    "id": "nature_mushrooms_02",
+    "name": "Mushroom Cluster",
+    "category": "nature",
+    "family": "plant",
+    "promptTemplate": "CLUSTER",
+    "promptDetails": "Cluster of four chunky fantasy toadstools with thick stems and wide red-brown caps growing from a small mossy base. Approximately 0.5 meters tall.",
+    "status": "rejected",
+    "batch": 8,
+    "game": {
+      "scaleMeters": 0.5,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "health": 0,
+      "spawnWeight": 5,
+      "maxCluster": 4
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_mushrooms_02.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\nature_mushrooms_02.glb",
+    "glbRaw": "AssetFactory/glb_raw/nature_mushrooms_02.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/nature_mushrooms_02.glb",
+    "glbGame": "Game3DAssets/nature_mushrooms_02.glb",
+    "rejectReason": "splinter geometry in viewer render (validate-glb.mjs 2026-09-20)"
+  }
+]

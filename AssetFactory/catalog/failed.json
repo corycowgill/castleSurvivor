@@ -1,0 +1,74 @@
+[
+  {
+    "id": "nature_oak_large_01",
+    "reason": "Trellis generation failed",
+    "stage": "trellis",
+    "timestamp": "2026-09-18T14:49:26"
+  },
+  {
+    "id": "nature_rock_cluster_01",
+    "reason": "Trellis generation failed",
+    "stage": "trellis",
+    "timestamp": "2026-09-18T15:04:30"
+  },
+  {
+    "id": "prop_wood_crate_small_01",
+    "reason": "Trellis generation failed",
+    "stage": "trellis",
+    "timestamp": "2026-09-18T15:08:44"
+  },
+  {
+    "id": "combat_barricade_01",
+    "reason": "Trellis generation failed",
+    "stage": "trellis",
+    "timestamp": "2026-09-18T15:19:32"
+  },
+  {
+    "id": "prop_grain_sack_01",
+    "reason": "Trellis generation failed",
+    "stage": "trellis",
+    "timestamp": "2026-09-18T15:21:21"
+  },
+  {
+    "id": "prop_hay_bale_01",
+    "reason": "Trellis generation failed",
+    "stage": "trellis",
+    "timestamp": "2026-09-18T15:41:25"
+  },
+  {
+    "id": "prop_bench_wood_01",
+    "reason": "Trellis generation failed",
+    "stage": "trellis",
+    "timestamp": "2026-09-18T16:01:29"
+  },
+  {
+    "id": "prop_firewood_stack_01",
+    "reason": "Trellis generation failed",
+    "stage": "trellis",
+    "timestamp": "2026-09-18T16:21:38"
+  },
+  {
+    "id": "village_water_well_01",
+    "reason": "Trellis generation failed",
+    "stage": "trellis",
+    "timestamp": "2026-09-18T16:41:45"
+  },
+  {
+    "id": "village_fence_straight_01",
+    "reason": "Trellis generation failed",
+    "stage": "trellis",
+    "timestamp": "2026-09-18T17:01:51"
+  },
+  {
+    "id": "combat_barricade_01",
+    "reason": "'charmap' codec can't encode character '\\u2713' in position 4: character maps to <undefined>",
+    "stage": "pipeline",
+    "timestamp": "2026-09-18T17:01:54"
+  },
+  {
+    "id": "prop_wood_crate_large_01",
+    "reason": "'charmap' codec can't encode character '\\u2713' in position 4: character maps to <undefined>",
+    "stage": "pipeline",
+    "timestamp": "2026-09-19T07:59:31"
+  }
+]

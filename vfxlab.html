@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Castle Survivor — VFX Lab</title>
+<style>
+  :root {
+    --bg: #14110e;
+    --panel: rgba(20, 17, 14, 0.92);
+    --line: #3d342a;
+    --ink: #e8dcc8;
+    --dim: #9a8a72;
+    --gold: #e8c860;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); }
+  body { font: 13px/1.45 ui-monospace, "SF Mono", Menlo, Consolas, monospace; color: var(--ink); }
+  canvas { display: block; }
+
+  #panel {
+    position: fixed; top: 0; left: 0; bottom: 0; width: 290px;
+    background: var(--panel); border-right: 1px solid var(--line);
+    padding: 12px 14px 40px; overflow-y: auto;
+    backdrop-filter: blur(6px);
+  }
+  #panel h1 {
+    font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--gold); margin: 0 0 2px;
+  }
+  #panel .sub { color: var(--dim); font-size: 11px; margin-bottom: 14px; }
+
+  .group { margin-bottom: 14px; }
+  .group > h2 {
+    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--dim); margin: 0 0 6px; padding-bottom: 3px;
+    border-bottom: 1px solid var(--line);
+  }
+  .btns { display: flex; flex-wrap: wrap; gap: 4px; }
+  button {
+    font: inherit; font-size: 11px; cursor: pointer;
+    background: #241f19; color: var(--ink);
+    border: 1px solid var(--line); border-radius: 3px;
+    padding: 4px 7px;
+  }
+  button:hover { background: #33291f; border-color: var(--gold); }
+  button:active { transform: translateY(1px); }
+  button.on { background: var(--gold); color: #1a1510; border-color: var(--gold); }
+
+  .row { display: flex; align-items: center; gap: 8px; margin: 5px 0; }
+  .row label { flex: 0 0 96px; color: var(--dim); font-size: 11px; }
+  .row input[type=range] { flex: 1; min-width: 0; accent-color: var(--gold); }
+  .row output { flex: 0 0 38px; text-align: right; font-size: 11px; color: var(--gold); }
+
+  #hud {
+    position: fixed; top: 10px; right: 12px; text-align: right;
+    font-size: 11px; color: var(--dim); line-height: 1.7;
+    text-shadow: 0 1px 3px #000; pointer-events: none;
+  }
+  #hud b { color: var(--gold); font-weight: normal; }
+  #sheet {
+  position: fixed; inset: 0 0 0 290px; display: none;
+  background: rgba(8, 7, 6, 0.96); overflow: auto; padding: 18px;
+  backdrop-filter: blur(3px);
+}
+#sheet.on { display: block; }
+#sheet h3 {
+  margin: 0 0 12px; font-size: 11px; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--dim);
+}
+#sheet .grid { display: flex; flex-wrap: wrap; gap: 14px; }
+#sheet figure { margin: 0; text-align: center; }
+#sheet canvas {
+  display: block; width: 112px; height: 112px; image-rendering: pixelated;
+  /* Checker so alpha is readable, on a dark base like the game's */
+  background:
+    linear-gradient(45deg, #2a2521 25%, transparent 25%, transparent 75%, #2a2521 75%),
+    linear-gradient(45deg, #2a2521 25%, #171412 25%, #171412 75%, #2a2521 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 8px 8px;
+  border: 1px solid var(--line);
+}
+#sheet figure.atlas canvas { width: 224px; height: 224px; }
+#sheet figcaption { font-size: 10px; color: var(--dim); margin-top: 4px; }
+
+#err {
+    position: fixed; left: 302px; top: 10px; right: 12px;
+    background: #3a1414; border: 1px solid #a33; color: #ffd9d9;
+    padding: 8px 10px; border-radius: 4px; font-size: 11px;
+    white-space: pre-wrap; display: none; max-height: 40vh; overflow: auto;
+  }
+</style>
+</head>
+<body>
+
+<div id="panel">
+  <h1>VFX Lab</h1>
+  <div class="sub">Same camera, lighting and post-processing as the game, so sizes read true.</div>
+  <div id="groups"></div>
+</div>
+
+<div id="hud"></div>
+<div id="sheet"><h3>Generated sprite sheet — drawn procedurally at load</h3><div class="grid"></div></div>
+<div id="err"></div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { createVFXSystem } from './vfx.js';
+
+// Surface anything that throws — a silent failure in here would defeat the point.
+const errBox = document.getElementById('err');
+function showError(e) {
+  errBox.style.display = 'block';
+  errBox.textContent += (errBox.textContent ? '\n\n' : '') + (e?.stack || e?.message || String(e));
+}
+window.addEventListener('error', (e) => showError(e.error || e.message));
+window.addEventListener('unhandledrejection', (e) => showError(e.reason));
+
+// ─── SCENE (mirrors index.html so effects read at true scale) ───
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x1a1512);
+scene.fog = new THREE.Fog(0x1a1512, 40, 110);
+
+const camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 0.1, 300);
+const camOffset = new THREE.Vector3(0, 10, 8);
+let camZoom = 1.0;
+const camTarget = new THREE.Vector3(0, 0, 0);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.1;
+document.body.prepend(renderer.domElement);
+
+scene.add(new THREE.AmbientLight(0xffe8cc, 0.6));
+const dirLight = new THREE.DirectionalLight(0xfff0dd, 1.2);
+dirLight.position.set(20, 30, 10);
+dirLight.castShadow = true;
+dirLight.shadow.mapSize.set(1024, 1024);
+scene.add(dirLight);
+scene.add(new THREE.HemisphereLight(0x88aaff, 0x446622, 0.4));
+
+// Ground — checkered so soft-particle fading against it is obvious
+{
+  const c = document.createElement('canvas');
+  c.width = c.height = 128;
+  const g = c.getContext('2d');
+  g.fillStyle = '#3f4a30'; g.fillRect(0, 0, 128, 128);
+  g.fillStyle = '#36402a'; g.fillRect(0, 0, 64, 64); g.fillRect(64, 64, 64, 64);
+  const tex = new THREE.CanvasTexture(c);
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  tex.repeat.set(40, 40);
+  const ground = new THREE.Mesh(
+    new THREE.PlaneGeometry(200, 200),
+    new THREE.MeshStandardMaterial({ map: tex, roughness: 0.95 })
+  );
+  ground.rotation.x = -Math.PI / 2;
+  ground.receiveShadow = true;
+  scene.add(ground);
+}
+
+// Stand-in character for effects that attach to a mesh
+const dummy = new THREE.Group();
+{
+  const body = new THREE.Mesh(
+    new THREE.CapsuleGeometry(0.4, 1.0, 6, 12),
+    new THREE.MeshStandardMaterial({ color: 0x8899bb, roughness: 0.6 })
+  );
+  body.position.y = 0.9;
+  body.castShadow = true;
+  dummy.add(body);
+  const nose = new THREE.Mesh(
+    new THREE.ConeGeometry(0.16, 0.5, 8),
+    new THREE.MeshStandardMaterial({ color: 0xe8c860 })
+  );
+  nose.position.set(0, 0.9, 0.55);
+  nose.rotation.x = Math.PI / 2;
+  dummy.add(nose);
+}
+scene.add(dummy);
+
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(
+  new THREE.Vector2(Math.floor(innerWidth / 2), Math.floor(innerHeight / 2)), 0.58, 0.55, 0.80
+);
+composer.addPass(bloom);
+
+// Mirrors the game's heat-haze sampling so distortion is visible here too
+const DistortShader = {
+  uniforms: {
+    tDiffuse: { value: null },
+    tDistort: { value: null },
+    uDistortAmount: { value: 0.035 },
+  },
+  vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
+  fragmentShader: `
+    uniform sampler2D tDiffuse;
+    uniform sampler2D tDistort;
+    uniform float uDistortAmount;
+    varying vec2 vUv;
+    void main() {
+      vec2 uv = vUv;
+      if (uDistortAmount > 0.0) {
+        vec2 d = (texture2D(tDistort, vUv).rg - 0.5) * 2.0;
+        uv += d * uDistortAmount;
+      }
+      gl_FragColor = texture2D(tDiffuse, uv);
+    }
+  `,
+};
+const distortPass = new ShaderPass(DistortShader);
+composer.addPass(distortPass);
+composer.addPass(new OutputPass());
+
+const vfx = createVFXSystem(THREE, scene, camera, renderer);
+vfx.init();
+
+// ─── EFFECT CATALOGUE ───
+const O = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
+const ORIGIN = () => O(0, 0, 0);
+const DIR = () => O(0, 0, 1);
+
+// A fake projectile / enemy for the effects that expect one
+const fakeProjectile = { mesh: { position: O(0, 0.8, 0) }, direction: O(0, 0, 1) };
+let fakeProjT = 0, fakeProjType = null;
+
+const fakeEnemy = { mesh: dummy, isElite: true, _materials: [] };
+
+const CATALOGUE = [
+  ['Melee', [
+    ['swing',        () => vfx.meleeSwing(dummy, 'sword')],
+    ['swing evolved',() => vfx.meleeSwing(dummy, 'excalibur')],
+    ['swing club',   () => vfx.meleeSwing(dummy, 'club')],
+    ['impact',       () => vfx.meleeImpact(O(0, 1, 2), DIR(), 'sword')],
+    ['impact club',  () => vfx.meleeImpact(O(0, 1, 2), DIR(), 'club')],
+    ['blood',        () => vfx.bloodImpact(O(0, 1, 2), DIR(), 1.4)],
+    ['critical',     () => vfx.criticalHit(O(0, 1, 2))],
+  ]],
+  ['Projectiles', [
+    ['arrow',   () => { fakeProjType = 'arrow';  fakeProjT = 0; }],
+    ['dagger',  () => { fakeProjType = 'dagger'; fakeProjT = 0; }],
+    ['meteor',  () => { fakeProjType = 'meteor'; fakeProjT = 0; }],
+    ['storm',   () => { fakeProjType = 'storm';  fakeProjT = 0; }],
+    ['hit',     () => vfx.projectileHit(O(0, 1, 4), fakeProjType || 'arrow')],
+  ]],
+  ['Weapons', [
+    ['holy aura',    () => vfx.holyPulse(ORIGIN(), 5, false)],
+    ['divine judge', () => vfx.holyPulse(ORIGIN(), 8, true)],
+    ['aura pulse',   () => vfx.auraPulse(ORIGIN(), 5, 0x66ccff)],
+    ['arcane bomb',  () => vfx.arcaneExplosion(O(0, 0.4, 3), 3)],
+    ['burning gnd',  () => burnFor(4.0)],
+    ['explosion',    () => vfx.explosion(O(0, 0.4, 3), 3)],
+    ['ground slam',  () => vfx.groundSlam(ORIGIN(), 5)],
+    ['fireball',     () => vfx.fireball(O(0, 1, -3), O(0, 1, 3))],
+    ['THUNDER',      () => vfx.thunderStrike(O(0, 0, 2), false)],
+    ['thunder evo',  () => vfx.thunderStrike(O(0, 0, 2), true)],
+    ['lightning',    () => vfx.lightning(O(-4, 2, 0), O(4, 1, 0))],
+    ['chain x3',     () => {
+        // What Storm Kunai actually draws: an arc per jump between targets
+        vfx.lightning(O(-5, 1, 2), O(-1, 1, 3));
+        vfx.after(0.06, () => vfx.lightning(O(-1, 1, 3), O(3, 1, 1)));
+        vfx.after(0.12, () => vfx.lightning(O(3, 1, 1), O(6, 1, 4)));
+      }],
+    ['stun',         () => stunFor(1.5)],
+    ['heat haze',    () => vfx.heatDistortion(O(0, 0.5, 2), 4, 1.2, 1.4)],
+  ]],
+  ['Spectacle', [
+    ['rune gold',    () => vfx.runeCircle(ORIGIN(), { color: 0xffd257, radius: 4, duration: 2.2, sweep: 0.25 })],
+    ['rune arcane',  () => vfx.runeCircle(ORIGIN(), { color: 0xb96cff, radius: 4, duration: 2.2, sweep: 0.25 })],
+    ['rune danger',  () => vfx.runeCircle(ORIGIN(), { color: 0xff3311, radius: 4, duration: 1.6, sweep: 0.8 })],
+    ['vortex in',    () => vfx.vortex(ORIGIN(), 0xc46cff, { radius: 2.4, height: 4.5, count: 50 })],
+    ['vortex out',   () => vfx.vortex(ORIGIN(), 0xff8833, { radius: 2.4, height: 4.5, count: 50, inward: false })],
+    ['EVOLUTION',    () => {
+        // The full staged sequence used when a weapon evolves
+        vfx.runeCircle(ORIGIN(), { color: 0xffd257, radius: 4.5, duration: 2.4, sweep: 0.25, peakOpacity: 1.4 });
+        vfx.vortex(ORIGIN(), 0xffd257, { radius: 3.0, height: 6.0, count: 70, duration: 1.1 });
+        vfx.levelUp(dummy);
+        vfx.after(0.55, () => {
+          vfx.vortex(ORIGIN(), 0xffffff, { radius: 1.2, height: 5.0, count: 40, duration: 0.7, inward: false });
+          vfx.heatDistortion(ORIGIN(), 4, 0.7, 1.2);
+        });
+      }],
+  ]],
+  ['Wave events', [
+    ['gold rush',    () => setAmbience('goldRush')],
+    ['blood moon',   () => setAmbience('bloodMoon')],
+    ['blessed wind', () => setAmbience('blessedWind')],
+    ['armor light',  () => { setAmbience('armorOfLight'); vfx.defenseBoost(dummy, 0xffd98a); }],
+    ['berserker',    () => setAmbience('berserkerRage')],
+    ['arcane bless', () => setAmbience('arcanBlessing')],
+    ['magnetic',     () => setAmbience('magneticField')],
+    ['stop',         () => { setAmbience(null); vfx.removeBoost(dummy, 'defense'); }],
+    ['event start',  () => vfx.waveEventStart('goldRush', ORIGIN(), 0xe8c860)],
+    ['incoming',     () => vfx.incomingDust(ORIGIN(), 0)],
+  ]],
+  ['Enemies', [
+    ['spawn goblin', () => vfx.enemySpawn(O(0, 0, 3), 'goblin')],
+    ['spawn ogre',   () => vfx.enemySpawn(O(0, 0, 3), 'ogre')],
+    ['death goblin', () => vfx.enemyDeath(O(0, 0.5, 3), 'goblin')],
+    ['death wolf',   () => vfx.enemyDeath(O(0, 0.5, 3), 'wolf')],
+    ['death bat',    () => vfx.enemyDeath(O(0, 0.5, 3), 'bat')],
+    ['death ogre',   () => vfx.enemyDeath(O(0, 0.5, 3), 'ogre')],
+    ['death bomber', () => vfx.enemyDeath(O(0, 0.5, 3), 'goblinBomb')],
+    ['death boss',   () => vfx.enemyDeath(O(0, 0.5, 3), 'boss')],
+    ['death dragon', () => vfx.enemyDeath(O(0, 0.5, 3), 'dragonOgre')],
+    ['elite burst',  () => vfx.eliteSpawnBurst(O(0, 0, 3))],
+    ['elite aura',   () => toggleEliteAura()],
+  ]],
+  ['Boss', [
+    ['entrance',   () => vfx.bossEntrance(O(0, 0, 3), false)],
+    ['dragon ent', () => vfx.bossEntrance(O(0, 0, 3), true)],
+    ['slam',       () => vfx.bossSlam(O(0, 0, 3))],
+    ['impact',     () => vfx.bossImpact(O(0, 0.5, 3), 'boss')],
+    ['fire breath',() => vfx.bossFireBreath(O(0, 1.4, 1), DIR())],
+    ['telegraph',  () => vfx.bossTelegraph(O(0, 0, 3), 4, 1.0)],
+    ['ground crack', () => vfx.groundCrack(O(0, 0, 3), 1.5)],
+  ]],
+  ['Player', [
+    ['level up',   () => vfx.levelUp(dummy)],
+    ['lvl burst',  () => vfx.levelUpBurst(ORIGIN())],
+    ['heal',       () => vfx.heal(dummy)],
+    ['dash',       () => vfx.dashEffect(dummy, 0, 1)],
+    ['shield hit', () => vfx.shieldHit(dummy)],
+    ['death burst',() => vfx.deathBurst(O(0, 0.5, 0))],
+    ['wave flash', () => vfx.waveFlash(ORIGIN())],
+    ['footstep',   () => vfx.footstepDust(ORIGIN(), 1.2)],
+  ]],
+  ['Boosts', [
+    ['attack',   () => vfx.attackBoost(dummy)],
+    ['ranged',   () => vfx.rangedBoost(dummy)],
+    ['atk speed',() => vfx.attackSpeedBoost(dummy)],
+    ['move spd', () => vfx.movementSpeedBoost(dummy)],
+    ['defense',  () => vfx.defenseBoost(dummy)],
+    ['xp',       () => vfx.xpBoost(dummy)],
+    ['clear',    () => ['attackBoost','rangedBoost','attackSpeedBoost','movementSpeedBoost','defense','xpBoost']
+                        .forEach(t => vfx.removeBoost(dummy, t))],
+  ]],
+  ['Pickups & ambient', [
+    ['coin',    () => vfx.collectEffect(O(0, 0.5, 2), 'coin')],
+    ['food',    () => vfx.collectEffect(O(0, 0.5, 2), 'food')],
+    ['torch',   () => vfx.torchFlame(O(0, 1, 2))],
+    ['smoke',   () => {
+        // Slow and large, so the 4x4 flipbook's churn is actually visible
+        for (let i = 0; i < 6; i++) {
+          vfx.particles.getGroup('smoke', THREE.NormalBlending).emit({
+            x: (Math.random() - 0.5) * 2, y: 0.6, z: 2 + (Math.random() - 0.5) * 2,
+            vy: 0.7 + Math.random() * 0.5,
+            vx: (Math.random() - 0.5) * 0.5, vz: (Math.random() - 0.5) * 0.5,
+            color: 0x6b6152, colorEnd: 0x17140f,
+            sizeStart: 1.4, sizeEnd: 4.0, sizeEase: 0.5,
+            life: 3.0 + Math.random(), turbulence: 0.4,
+            opacityStart: 0.5, opacityEnd: 0, fadeIn: 0.15,
+            rotation: Math.random() * 6.283, rotSpeed: (Math.random() - 0.5) * 0.6,
+          });
+        }
+      }],
+    ['dust',    () => vfx.ambientDust(ORIGIN())],
+    ['ash',     () => vfx.ambientAsh(ORIGIN())],
+  ]],
+];
+
+// ─── TRANSIENT LAB STATE ───
+let ambienceId = null;
+function setAmbience(id) {
+  ambienceId = id;
+  refreshToggles();
+}
+
+let burnTimer = 0;
+function burnFor(seconds) { burnTimer = seconds; }
+
+let stunTimer = 0, stunSparkTimer = 0;
+function stunFor(seconds) { stunTimer = seconds; }
+
+let distortAmount = 0.035;
+
+let eliteAuraOn = false;
+function toggleEliteAura() { eliteAuraOn = !eliteAuraOn; refreshToggles(); }
+
+// ─── PANEL ───
+const groupsEl = document.getElementById('groups');
+const toggleButtons = [];
+
+for (const [title, entries] of CATALOGUE) {
+  const sec = document.createElement('div');
+  sec.className = 'group';
+  const h = document.createElement('h2');
+  h.textContent = title;
+  sec.appendChild(h);
+  const box = document.createElement('div');
+  box.className = 'btns';
+  for (const [label, fn] of entries) {
+    const b = document.createElement('button');
+    b.textContent = label;
+    b.onclick = () => { try { fn(); } catch (e) { showError(e); } };
+    b.dataset.label = label;
+    box.appendChild(b);
+    toggleButtons.push(b);
+  }
+  sec.appendChild(box);
+  groupsEl.appendChild(sec);
+}
+
+function refreshToggles() {
+  for (const b of toggleButtons) {
+    const l = b.dataset.label;
+    const active =
+      (l === 'elite aura' && eliteAuraOn) ||
+      (ambienceId === 'goldRush' && l === 'gold rush') ||
+      (ambienceId === 'bloodMoon' && l === 'blood moon') ||
+      (ambienceId === 'blessedWind' && l === 'blessed wind') ||
+      (ambienceId === 'armorOfLight' && l === 'armor light') ||
+      (ambienceId === 'berserkerRage' && l === 'berserker') ||
+      (ambienceId === 'arcanBlessing' && l === 'arcane bless') ||
+      (ambienceId === 'magneticField' && l === 'magnetic');
+    b.classList.toggle('on', !!active);
+  }
+}
+
+// ─── CONTROLS ───
+{
+  const sec = document.createElement('div');
+  sec.className = 'group';
+  sec.innerHTML = '<h2>Controls</h2>';
+
+  const slider = (label, min, max, step, value, onInput) => {
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.innerHTML = `<label>${label}</label><input type="range" min="${min}" max="${max}" step="${step}" value="${value}"><output>${value}</output>`;
+    const input = row.querySelector('input');
+    const out = row.querySelector('output');
+    input.addEventListener('input', () => { out.textContent = input.value; onInput(parseFloat(input.value)); });
+    sec.appendChild(row);
+  };
+
+  // The single most likely thing to need calibration after the move from
+  // gl_Points to world-space quads.
+  slider('particle size', 0.05, 1.0, 0.01, 0.28, v => vfx.setParticleScale(v));
+  slider('bloom', 0, 1.5, 0.02, 0.58, v => { bloom.strength = v; });
+  slider('heat haze', 0, 0.12, 0.002, 0.035, v => { distortAmount = v; });
+  slider('zoom', 0.4, 2.0, 0.05, 1.0, v => { camZoom = v; });
+
+  const box = document.createElement('div');
+  box.className = 'btns';
+  box.style.marginTop = '6px';
+
+  const repeat = document.createElement('button');
+  repeat.textContent = 'auto-repeat';
+  let repeating = false, lastFn = null;
+  repeat.onclick = () => { repeating = !repeating; repeat.classList.toggle('on', repeating); };
+  box.appendChild(repeat);
+
+  const quality = document.createElement('button');
+  let qi = 2;
+  const QUALS = ['LOW', 'MEDIUM', 'HIGH'];
+  quality.textContent = 'quality: HIGH';
+  quality.onclick = () => {
+    qi = (qi + 1) % 3;
+    quality.textContent = 'quality: ' + QUALS[qi];
+    vfx.setQuality(QUALS[qi]);
+  };
+  box.appendChild(quality);
+
+  // Every sprite is generated procedurally into a canvas at load, so the source
+  // canvases can be shown directly — no round trip through the GPU.
+  const sheetEl = document.getElementById('sheet');
+  const sheetBtn = document.createElement('button');
+  sheetBtn.textContent = 'sprites';
+  let sheetBuilt = false;
+  sheetBtn.onclick = () => {
+    if (!sheetBuilt) {
+      const grid = sheetEl.querySelector('.grid');
+      for (const [name, tex] of Object.entries(vfx.textures)) {
+        const img = tex?.image;
+        if (!img || !img.width) continue;
+        const fig = document.createElement('figure');
+        if (img.width !== img.height || img.width > 300) fig.className = 'atlas';
+        const cv = document.createElement('canvas');
+        cv.width = img.width; cv.height = img.height;
+        cv.getContext('2d').drawImage(img, 0, 0);
+        const cap = document.createElement('figcaption');
+        cap.textContent = `${name}  ${img.width}×${img.height}`;
+        fig.append(cv, cap);
+        grid.appendChild(fig);
+      }
+      sheetBuilt = true;
+    }
+    sheetEl.classList.toggle('on');
+    sheetBtn.classList.toggle('on', sheetEl.classList.contains('on'));
+  };
+  box.appendChild(sheetBtn);
+
+  const reset = document.createElement('button');
+  reset.textContent = 'reset';
+  reset.onclick = () => {
+    vfx.reset();
+    ambienceId = null; burnTimer = 0; stunTimer = 0; eliteAuraOn = false; fakeProjType = null;
+    errBox.style.display = 'none'; errBox.textContent = '';
+    refreshToggles();
+  };
+  box.appendChild(reset);
+
+  sec.appendChild(box);
+  groupsEl.appendChild(sec);
+
+  // Wrap every catalogue button so auto-repeat can replay the last one
+  for (const b of toggleButtons) {
+    const original = b.onclick;
+    b.onclick = () => { lastFn = original; original(); };
+  }
+  setInterval(() => { if (repeating && lastFn) lastFn(); }, 550);
+}
+
+// ─── LOOP ───
+const hud = document.getElementById('hud');
+const clock = new THREE.Clock();
+let fpsAccum = 0, fpsFrames = 0, fps = 0;
+
+function animate() {
+  requestAnimationFrame(animate);
+  const dt = Math.min(clock.getDelta(), 0.05);
+
+  // Orbit slowly so billboarding and velocity stretching can be judged from
+  // more than one angle.
+  const t = clock.elapsedTime * 0.12;
+  camera.position.set(
+    camTarget.x + Math.sin(t) * camOffset.z * camZoom,
+    camOffset.y * camZoom,
+    camTarget.z + Math.cos(t) * camOffset.z * camZoom
+  );
+  camera.lookAt(camTarget);
+
+  if (ambienceId) vfx.waveAmbience(ambienceId, ORIGIN(), dt);
+  if (burnTimer > 0) { burnTimer -= dt; vfx.burningGround(O(0, 0, 3), 2.5, dt); }
+  if (stunTimer > 0) {
+    stunTimer -= dt;
+    stunSparkTimer -= dt;
+    if (stunSparkTimer <= 0) { stunSparkTimer = 0.12; vfx.stunSpark(ORIGIN()); }
+  }
+  if (eliteAuraOn) vfx.eliteAura(fakeEnemy, dt);
+
+  if (fakeProjType) {
+    fakeProjT += dt;
+    fakeProjectile.mesh.position.set(0, 0.8, -6 + fakeProjT * 14);
+    vfx.projectileTrail(fakeProjectile, fakeProjType);
+    if (fakeProjT > 1.0) fakeProjType = null;
+  }
+
+  vfx.update(dt);
+  // A null buffer means nothing is distorting. Binding null would sample as
+  // white and decode to a full-screen offset, so zero the amount instead.
+  const distortTex = vfx.renderDistortion();
+  distortPass.uniforms.tDistort.value = distortTex;
+  distortPass.uniforms.uDistortAmount.value = distortTex ? distortAmount : 0;
+  composer.render();
+
+  fpsAccum += dt; fpsFrames++;
+  if (fpsAccum >= 0.5) { fps = Math.round(fpsFrames / fpsAccum); fpsAccum = 0; fpsFrames = 0; }
+  const s = vfx.stats();
+  hud.innerHTML = `<b>${fps}</b> fps<br><b>${s.live}</b> particles / <b>${s.groups}</b> groups`
+    + `<br><b>${s.decals}</b> decals · <b>${s.lights}</b> lights · <b>${s.arcs}</b> arcs`;
+}
+animate();
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+  composer.setSize(innerWidth, innerHeight);
+  vfx.resizeDistortion(renderer.domElement.width, renderer.domElement.height);
+});
+</script>
+</body>
+</html>

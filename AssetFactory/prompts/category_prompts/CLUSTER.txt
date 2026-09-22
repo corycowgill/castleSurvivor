@@ -1,0 +1,13 @@
+{base_prompt}
+
+{asset_description}
+
+A natural cluster or grouping of related objects arranged as a single cohesive prop.
+
+The cluster should read as one unified placement rather than separate objects.
+
+Compact arrangement suitable for environment decoration.
+
+No surrounding terrain.
+
+{extra_details}

@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Castle Survivor - Level Editor</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { overflow: hidden; background: #1a1a2e; font-family: 'Segoe UI', Arial, sans-serif; color: #ddd; display: flex; height: 100vh; }
+
+/* ─── LEFT PANEL: Asset Palette ─── */
+#palette {
+  width: 220px; background: #16213e; border-right: 2px solid #0f3460;
+  display: flex; flex-direction: column; overflow: hidden; flex-shrink: 0;
+}
+#palette h2 {
+  padding: 12px; font-size: 16px; color: #ffd700; border-bottom: 1px solid #0f3460;
+  text-align: center; background: #0f3460;
+}
+#palette-list {
+  flex: 1; overflow-y: auto; padding: 8px;
+}
+.palette-item {
+  padding: 10px 12px; margin: 4px 0; cursor: pointer; border-radius: 6px;
+  background: #1a1a3e; border: 2px solid transparent; font-size: 13px;
+  display: flex; align-items: center; gap: 8px; transition: all 0.15s;
+}
+.palette-item:hover { background: #252550; border-color: #444; }
+.palette-item.selected { background: #2a2a60; border-color: #ffd700; color: #ffd700; }
+.palette-item .icon {
+  width: 28px; height: 28px; border-radius: 4px; display: flex;
+  align-items: center; justify-content: center; font-size: 16px;
+  flex-shrink: 0;
+}
+.palette-category {
+  padding: 8px 12px 4px; font-size: 11px; color: #888;
+  text-transform: uppercase; letter-spacing: 1px; margin-top: 8px;
+}
+
+/* ─── CENTER: 3D Viewport ─── */
+#viewport {
+  flex: 1; position: relative; background: #111;
+}
+#viewport canvas { display: block; width: 100%; height: 100%; }
+
+#toolbar {
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 6px; background: rgba(15,15,30,0.9); padding: 6px 12px;
+  border-radius: 8px; border: 1px solid #333; z-index: 10;
+}
+.tool-btn {
+  padding: 8px 14px; font-size: 13px; cursor: pointer; border-radius: 5px;
+  background: #222; color: #ccc; border: 1px solid #444;
+  transition: all 0.15s;
+}
+.tool-btn:hover { background: #333; color: #fff; }
+.tool-btn.active { background: #0f3460; color: #ffd700; border-color: #ffd700; }
+
+#status-bar {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 6px 14px; background: rgba(15,15,30,0.9);
+  border-top: 1px solid #333; font-size: 12px; color: #888; z-index: 10;
+  display: flex; justify-content: space-between;
+}
+
+#context-menu {
+  position: absolute; display: none; background: #1a1a2e; border: 1px solid #444;
+  border-radius: 6px; padding: 4px 0; z-index: 100; min-width: 150px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+}
+.ctx-item {
+  padding: 8px 16px; cursor: pointer; font-size: 13px;
+}
+.ctx-item:hover { background: #0f3460; color: #ffd700; }
+.ctx-item.danger { color: #ff6666; }
+.ctx-item.danger:hover { background: #600; color: #fff; }
+
+/* ─── RIGHT PANEL: Properties ─── */
+#properties {
+  width: 260px; background: #16213e; border-left: 2px solid #0f3460;
+  display: flex; flex-direction: column; overflow: hidden; flex-shrink: 0;
+}
+#properties h2 {
+  padding: 12px; font-size: 16px; color: #ffd700; border-bottom: 1px solid #0f3460;
+  text-align: center; background: #0f3460;
+}
+#props-content {
+  flex: 1; overflow-y: auto; padding: 12px;
+}
+#props-none {
+  color: #666; text-align: center; padding: 40px 20px; font-size: 14px;
+}
+.prop-group {
+  margin-bottom: 14px;
+}
+.prop-group label {
+  display: block; font-size: 11px; color: #888; text-transform: uppercase;
+  letter-spacing: 0.5px; margin-bottom: 4px;
+}
+.prop-row {
+  display: flex; gap: 6px; align-items: center;
+}
+.prop-row span {
+  font-size: 11px; color: #666; width: 14px; text-align: center;
+}
+.prop-input {
+  flex: 1; padding: 6px 8px; background: #111; border: 1px solid #333;
+  border-radius: 4px; color: #ddd; font-size: 13px; outline: none;
+}
+.prop-input:focus { border-color: #ffd700; }
+.prop-checkbox {
+  width: 18px; height: 18px; accent-color: #ffd700;
+}
+.prop-select {
+  width: 100%; padding: 6px 8px; background: #111; border: 1px solid #333;
+  border-radius: 4px; color: #ddd; font-size: 13px; outline: none;
+}
+.prop-btn {
+  width: 100%; padding: 8px; margin-top: 6px; cursor: pointer;
+  border-radius: 5px; font-size: 13px; border: 1px solid;
+}
+.prop-btn.primary { background: #0f3460; color: #ffd700; border-color: #ffd700; }
+.prop-btn.primary:hover { background: #1a4a80; }
+.prop-btn.danger { background: #400; color: #f88; border-color: #f44; }
+.prop-btn.danger:hover { background: #600; }
+
+/* ─── Top action bar (second row below toolbar) ─── */
+#action-bar {
+  position: absolute; top: 52px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 6px; z-index: 10;
+  background: rgba(15,15,30,0.9); padding: 6px 12px;
+  border-radius: 8px; border: 1px solid #333;
+}
+#action-bar .tool-btn { font-size: 12px; padding: 6px 12px; white-space: nowrap; }
+
+/* ─── Grid size indicator ─── */
+#grid-info {
+  position: absolute; top: 10px; left: 230px; font-size: 12px;
+  color: #888; background: rgba(15,15,30,0.9); padding: 6px 12px;
+  border-radius: 6px; border: 1px solid #333; z-index: 10;
+}
+</style>
+</head>
+<body>
+
+<!-- LEFT: Asset Palette -->
+<div id="palette">
+  <h2>Assets</h2>
+  <div id="palette-list"></div>
+</div>
+
+<!-- CENTER: 3D Viewport -->
+<div id="viewport">
+  <div id="toolbar">
+    <button class="tool-btn active" data-tool="select" title="Select & Move (V)">Select</button>
+    <button class="tool-btn" data-tool="place" title="Place Mode (P)">Place</button>
+    <button class="tool-btn" data-tool="rotate" title="Rotate (R)">Rotate</button>
+    <button class="tool-btn" data-tool="scale" title="Scale (S)">Scale</button>
+  </div>
+  <div id="grid-info">Grid: 2.0</div>
+  <div id="action-bar">
+    <button class="tool-btn" onclick="loadDefaultMap()" title="Load map.json from project">Load Default Map</button>
+    <button class="tool-btn" onclick="saveDefaultMap()" title="Save directly to map.json" style="color:#4f4;border-color:#4f4">Save Default Map</button>
+    <button class="tool-btn" onclick="saveMap()">Export Copy</button>
+    <button class="tool-btn" onclick="loadMapFile()">Import File</button>
+    <button class="tool-btn" onclick="testInGame()">Test Game</button>
+    <button class="tool-btn" onclick="clearAll()">Clear All</button>
+  </div>
+  <div id="status-bar">
+    <span id="status-left">Ready</span>
+    <span id="status-right">Objects: 0</span>
+  </div>
+  <div id="context-menu">
+    <div class="ctx-item" onclick="duplicateSelected()">Duplicate</div>
+    <div class="ctx-item" onclick="toggleObstacle()">Toggle Obstacle</div>
+    <div class="ctx-item" onclick="selectAllOfType()">Select All of Same Type</div>
+    <div class="ctx-item danger" onclick="deleteSelected()">Delete</div>
+  </div>
+</div>
+
+<!-- RIGHT: Properties -->
+<div id="properties">
+  <h2>Properties</h2>
+  <div id="props-content">
+    <div id="level-settings" style="border-bottom:1px solid #0f3460;padding-bottom:12px;margin-bottom:12px">
+      <div class="prop-group">
+        <label style="color:#ffd700;font-size:13px;text-transform:none;letter-spacing:0">Level Settings</label>
+      </div>
+      <div class="prop-group">
+        <label>World Boundary</label>
+        <div class="prop-row">
+          <span style="width:auto;color:#888;font-size:12px">Size</span>
+          <input class="prop-input" id="prop-world-size" type="number" step="10" min="20" max="500" value="120">
+        </div>
+        <div style="font-size:11px;color:#666;margin-top:4px">Player can move from -size to +size on X and Z</div>
+      </div>
+      <div class="prop-group">
+        <label>Player Spawn</label>
+        <div class="prop-row">
+          <span>X</span><input class="prop-input" id="prop-spawn-x" type="number" step="1" value="0">
+          <span>Z</span><input class="prop-input" id="prop-spawn-z" type="number" step="1" value="0">
+        </div>
+      </div>
+      <div class="prop-group">
+        <label>Enemy Spawn Distance</label>
+        <div class="prop-row">
+          <input class="prop-input" id="prop-spawn-dist" type="number" step="5" min="10" max="200" value="35" style="width:100%">
+        </div>
+        <div style="font-size:11px;color:#666;margin-top:4px">How far from player enemies appear</div>
+      </div>
+    </div>
+    <div id="props-none">Select an object or<br>place a new asset</div>
+    <div id="props-form" style="display:none">
+      <div class="prop-group">
+        <label>Asset Type</label>
+        <div id="prop-type" style="font-size:15px;color:#ffd700;margin-bottom:4px"></div>
+      </div>
+      <div class="prop-group">
+        <label>Position</label>
+        <div class="prop-row">
+          <span>X</span><input class="prop-input" id="prop-px" type="number" step="0.5">
+          <span>Z</span><input class="prop-input" id="prop-pz" type="number" step="0.5">
+        </div>
+      </div>
+      <div class="prop-group">
+        <label>Rotation (degrees)</label>
+        <div class="prop-row">
+          <span>X</span><input class="prop-input" id="prop-rx" type="number" step="15">
+          <span>Y</span><input class="prop-input" id="prop-ry" type="number" step="15">
+          <span>Z</span><input class="prop-input" id="prop-rz" type="number" step="15">
+        </div>
+      </div>
+      <div class="prop-group">
+        <label>Scale</label>
+        <div class="prop-row">
+          <input class="prop-input" id="prop-scale" type="number" step="0.5" min="0.1" style="width:100%">
+        </div>
+      </div>
+      <div class="prop-group">
+        <label>Collision</label>
+        <div class="prop-row" style="gap:10px">
+          <input type="checkbox" class="prop-checkbox" id="prop-obstacle">
+          <span style="width:auto;color:#ccc;font-size:13px">Solid Obstacle</span>
+        </div>
+      </div>
+      <div class="prop-group">
+        <label>Obstacle Radius</label>
+        <div class="prop-row">
+          <input class="prop-input" id="prop-radius" type="number" step="0.5" min="0" style="width:100%">
+        </div>
+      </div>
+      <div class="prop-group">
+        <button class="prop-btn primary" onclick="duplicateSelected()">Duplicate</button>
+        <button class="prop-btn danger" onclick="deleteSelected()">Delete</button>
+      </div>
+    </div>
+    <div id="props-multi" style="display:none">
+      <div class="prop-group">
+        <label>Multi-Selection</label>
+        <div id="multi-count" style="font-size:15px;color:#ffd700;margin-bottom:8px"></div>
+      </div>
+      <div class="prop-group">
+        <label>Set Scale (all selected)</label>
+        <div class="prop-row">
+          <input class="prop-input" id="multi-scale" type="number" step="0.5" min="0.1" style="width:100%">
+        </div>
+        <button class="prop-btn primary" onclick="applyMultiScale()" style="margin-top:4px">Apply Scale</button>
+      </div>
+      <div class="prop-group">
+        <label>Set Rotation (all selected, degrees)</label>
+        <div class="prop-row">
+          <span>X</span><input class="prop-input" id="multi-rx" type="number" step="15">
+          <span>Y</span><input class="prop-input" id="multi-ry" type="number" step="15">
+          <span>Z</span><input class="prop-input" id="multi-rz" type="number" step="15">
+        </div>
+        <button class="prop-btn primary" onclick="applyMultiRotation()" style="margin-top:4px">Apply Rotation</button>
+      </div>
+      <div class="prop-group">
+        <label>Collision</label>
+        <div style="display:flex;gap:6px;margin-top:4px">
+          <button class="prop-btn primary" onclick="applyMultiObstacle(true)" style="flex:1">All Solid</button>
+          <button class="prop-btn primary" onclick="applyMultiObstacle(false)" style="flex:1">All Passable</button>
+        </div>
+      </div>
+      <div class="prop-group">
+        <label>Obstacle Radius (all selected)</label>
+        <div class="prop-row">
+          <input class="prop-input" id="multi-radius" type="number" step="0.5" min="0" style="width:100%">
+        </div>
+        <button class="prop-btn primary" onclick="applyMultiRadius()" style="margin-top:4px">Apply Radius</button>
+      </div>
+      <div class="prop-group">
+        <button class="prop-btn danger" onclick="deleteSelected()">Delete All Selected</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden file input for loading -->
+<input type="file" id="file-input" accept=".json" style="display:none">
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { EXTRA_ASSETS, EXTRA_CATEGORIES } from './assets-extra.js';
+
+// ─── ASSET DEFINITIONS ───
+const ASSET_DEFS = [
+  // Structures
+  { key: 'humanCastle', name: 'Human Castle', file: 'HumanCastle.glb', category: 'structures', defaultScale: 10, obstacle: true, radius: 5, icon: '🏰' },
+  { key: 'ogreCastle', name: 'Ogre Castle', file: 'OrgreCastle.glb', category: 'structures', defaultScale: 10, obstacle: true, radius: 5, icon: '🏯' },
+  { key: 'house', name: 'Peasant House', file: 'peasntHouse1WithMesh_00001_.glb', category: 'structures', defaultScale: 6, obstacle: true, radius: 3, icon: '🏠' },
+  { key: 'farmHouse', name: 'Farm House', file: 'farmHouse.glb', category: 'structures', defaultScale: 6, obstacle: true, radius: 3, icon: '🏡' },
+  { key: 'blacksmith', name: 'Blacksmith', file: 'blacksmithBuilding.glb', category: 'structures', defaultScale: 6, obstacle: true, radius: 3, icon: '🔨' },
+  { key: 'apothecary', name: 'Apothecary', file: 'apothecaryBuilding.glb', category: 'structures', defaultScale: 6, obstacle: true, radius: 3, icon: '🧪' },
+  { key: 'tavern', name: 'Tavern', file: 'tavernBuilding.glb', category: 'structures', defaultScale: 6, obstacle: true, radius: 3, icon: '🍺' },
+  { key: 'tavern2', name: 'Tavern (Alt)', file: 'tavernBuilding_2.glb', category: 'structures', defaultScale: 6, obstacle: true, radius: 3, icon: '🍻' },
+  { key: 'horseStable', name: 'Horse Stable', file: 'horseStable.glb', category: 'structures', defaultScale: 6, obstacle: true, radius: 3, icon: '🐴' },
+  // Walls & Props
+  { key: 'wall', name: 'Stone Wall', file: 'sonteWallWithMesh_00001_.glb', category: 'props', defaultScale: 4, obstacle: true, radius: 2, icon: '🧱' },
+  { key: 'barrel', name: 'Barrel', file: 'barrelWithMesh_00001_.glb', category: 'props', defaultScale: 1.7, obstacle: true, radius: 0.85, icon: '🛢' },
+  { key: 'boulder', name: 'Boulder', file: 'boulder.glb', category: 'props', defaultScale: 3.2, obstacle: true, radius: 1.7, icon: '🪨' },
+  { key: 'townStatue', name: 'Town Statue', file: 'townStatue.glb', category: 'props', defaultScale: 4.5, obstacle: true, radius: 1.8, icon: '🗿' },
+  { key: 'horseCart', name: 'Horse Cart', file: 'horseCart.glb', category: 'props', defaultScale: 4, obstacle: true, radius: 2, icon: '🛒' },
+  { key: 'horse', name: 'Horse', file: 'horse.glb', category: 'props', defaultScale: 3.6, obstacle: true, radius: 1.5, icon: '🐎' },
+  // Nature
+  { key: 'pineTree', name: 'Pine Tree', file: 'pineTree.glb', category: 'nature', defaultScale: 5, obstacle: true, radius: 1, icon: '🌲' },
+  { key: 'shrubbery', name: 'Shrubbery', file: 'shrubbery.glb', category: 'nature', defaultScale: 2.6, obstacle: false, radius: 0, icon: '🌿' },
+  { key: 'pumpkinPatch', name: 'Pumpkin Patch', file: 'pumpkingPatch.glb', category: 'nature', defaultScale: 4, obstacle: false, radius: 0, icon: '🎃' },
+  { key: 'cornTile', name: 'Corn Field', file: 'cornTile.glb', category: 'nature', defaultScale: 5, obstacle: false, radius: 0, icon: '🌽' },
+  // Terrain
+  { key: 'grass', name: 'Grass Tile', file: 'grassTile1WithMesh_00001_.glb', category: 'terrain', defaultScale: 8, obstacle: false, radius: 0, icon: '🟩' },
+  { key: 'road', name: 'Road Tile', file: 'roadTile1WithMesh_00001_.glb', category: 'terrain', defaultScale: 6, obstacle: false, radius: 0, icon: '🟫' },
+  { key: 'stream', name: 'Stream Tile', file: 'streamTile.glb', category: 'terrain', defaultScale: 6, obstacle: false, radius: 0, icon: '🌊' },
+  // Loot / Pickups
+  { key: 'chest', name: 'Treasure Chest', file: 'treasure_chestWithMesh_00001_.glb', category: 'loot', defaultScale: 1.8, obstacle: false, radius: 0, icon: '📦' },
+  { key: 'coin', name: 'Coin', file: 'coinWithMesh_00001_.glb', category: 'loot', defaultScale: 1.5, obstacle: false, radius: 0, icon: '🪙' },
+  { key: 'food', name: 'Food', file: 'foodWithMesh_00001_.glb', category: 'loot', defaultScale: 1.5, obstacle: false, radius: 0, icon: '🍖' },
+  { key: 'healthPowerup', name: 'Health Powerup', file: 'healthPowerup.glb', category: 'loot', defaultScale: 2, obstacle: false, radius: 0, icon: '💚' },
+  { key: 'speedPowerup', name: 'Speed Powerup', file: 'speedPowerup.glb', category: 'loot', defaultScale: 2, obstacle: false, radius: 0, icon: '💨' },
+  // Weapons (decorative)
+  { key: 'sword', name: 'Sword', file: 'swordWithMesh_00001_.glb', category: 'weapons', defaultScale: 2, obstacle: false, radius: 0, icon: '🗡' },
+  { key: 'club', name: 'Club', file: 'clubWithMesh_00001_.glb', category: 'weapons', defaultScale: 2, obstacle: false, radius: 0, icon: '🏏' },
+  { key: 'dagger', name: 'Dagger', file: 'daggerWithMesh_00001_.glb', category: 'weapons', defaultScale: 2, obstacle: false, radius: 0, icon: '🔪' },
+  { key: 'bow', name: 'Bow', file: 'bow.glb', category: 'weapons', defaultScale: 2, obstacle: false, radius: 0, icon: '🏹' },
+  { key: 'arrow', name: 'Arrow', file: 'arros.glb', category: 'weapons', defaultScale: 2, obstacle: false, radius: 0, icon: '➡' },
+];
+
+const CATEGORIES = [
+  { key: 'structures', name: 'Structures' },
+  { key: 'props', name: 'Props & Walls' },
+  { key: 'village', name: 'Village Fixtures' },
+  { key: 'nature', name: 'Nature' },
+  { key: 'tree', name: 'Trees' },
+  { key: 'terrain', name: 'Terrain' },
+  { key: 'loot', name: 'Loot & Pickups' },
+  { key: 'weapons', name: 'Weapons' },
+];
+// Pipeline-generated props (validated in a viewer; see tools/add-assets.mjs)
+for (const a of EXTRA_ASSETS) if (!ASSET_DEFS.some(d => d.key === a.key)) ASSET_DEFS.push(a);
+for (const c of EXTRA_CATEGORIES) if (!CATEGORIES.some(x => x.key === c.key)) CATEGORIES.push(c);
+
+// ─── STATE ───
+let currentTool = 'select';
+let selectedAssetDef = null; // palette selection for placing
+let selectedObject = null;   // single selected (for backwards compat)
+const selectedObjects = [];  // multi-select list
+let gridSnap = 2.0;
+const placedObjects = [];    // { mesh, data: { key, x, z, rotX, rotY, rotZ, scale, obstacle, radius } }
+const loadedGLTFs = {};      // cached parsed GLTFs
+
+// Level settings
+const levelSettings = {
+  worldSize: 120,
+  spawnX: 0,
+  spawnZ: 0,
+  enemySpawnDistance: 35,
+};
+
+// ─── THREE.JS SETUP ───
+const viewport = document.getElementById('viewport');
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x2d5a1e);
+
+// Orthographic camera (top-down)
+const frustum = 40;
+const aspect = viewport.clientWidth / viewport.clientHeight;
+const camera = new THREE.OrthographicCamera(
+  -frustum * aspect, frustum * aspect, frustum, -frustum, 0.1, 500
+);
+camera.position.set(0, 100, 0.001);
+camera.lookAt(0, 0, 0);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(viewport.clientWidth, viewport.clientHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+viewport.prepend(renderer.domElement);
+
+// Lights
+scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+const dirLight = new THREE.DirectionalLight(0xfff0dd, 1.0);
+dirLight.position.set(30, 80, 20);
+dirLight.castShadow = true;
+dirLight.shadow.mapSize.set(2048, 2048);
+dirLight.shadow.camera.near = 1;
+dirLight.shadow.camera.far = 200;
+dirLight.shadow.camera.left = -80;
+dirLight.shadow.camera.right = 80;
+dirLight.shadow.camera.top = 80;
+dirLight.shadow.camera.bottom = -80;
+scene.add(dirLight);
+
+// Ground plane
+const groundGeo = new THREE.PlaneGeometry(300, 300);
+const groundMat = new THREE.MeshStandardMaterial({ color: 0x3a7a28, roughness: 0.9 });
+const ground = new THREE.Mesh(groundGeo, groundMat);
+ground.rotation.x = -Math.PI / 2;
+ground.position.y = -0.05;
+ground.receiveShadow = true;
+ground.name = '__ground__';
+scene.add(ground);
+
+// Grid helper
+const gridHelper = new THREE.GridHelper(200, 100, 0x446633, 0x335522);
+gridHelper.position.y = 0.01;
+scene.add(gridHelper);
+
+// World boundary box
+const boundaryMat = new THREE.LineBasicMaterial({ color: 0xff4444, linewidth: 2 });
+const boundaryGeo = new THREE.BufferGeometry();
+const boundaryLine = new THREE.LineLoop(boundaryGeo, boundaryMat);
+boundaryLine.position.y = 0.5;
+scene.add(boundaryLine);
+
+// Player spawn marker
+const spawnMarkerGeo = new THREE.RingGeometry(0.5, 0.8, 6);
+const spawnMarkerMat = new THREE.MeshBasicMaterial({ color: 0x44ff44, side: THREE.DoubleSide, depthTest: false });
+const spawnMarker = new THREE.Mesh(spawnMarkerGeo, spawnMarkerMat);
+spawnMarker.rotation.x = -Math.PI / 2;
+spawnMarker.position.y = 0.15;
+spawnMarker.renderOrder = 999;
+scene.add(spawnMarker);
+
+function updateBoundaryVisual() {
+  const s = levelSettings.worldSize;
+  const pts = new Float32Array([
+    -s, 0, -s,  s, 0, -s,  s, 0, s,  -s, 0, s
+  ]);
+  boundaryLine.geometry.dispose();
+  boundaryLine.geometry = new THREE.BufferGeometry();
+  boundaryLine.geometry.setAttribute('position', new THREE.BufferAttribute(pts, 3));
+
+  spawnMarker.position.x = levelSettings.spawnX;
+  spawnMarker.position.z = levelSettings.spawnZ;
+}
+updateBoundaryVisual();
+
+// Selection highlight rings (pooled)
+const selectionRings = [];
+const ringGeo = new THREE.RingGeometry(0.8, 1.0, 32);
+const ringMat = new THREE.MeshBasicMaterial({ color: 0xffd700, side: THREE.DoubleSide, depthTest: false });
+const radiusRingGeo = new THREE.RingGeometry(0.95, 1.0, 48);
+const radiusRingMat = new THREE.MeshBasicMaterial({ color: 0xff4444, side: THREE.DoubleSide, transparent: true, opacity: 0.5, depthTest: false });
+
+function getSelectionRing() {
+  const ring = new THREE.Mesh(ringGeo, ringMat);
+  ring.rotation.x = -Math.PI / 2;
+  ring.position.y = 0.1;
+  ring.renderOrder = 999;
+  scene.add(ring);
+  const rRing = new THREE.Mesh(radiusRingGeo, radiusRingMat);
+  rRing.rotation.x = -Math.PI / 2;
+  rRing.position.y = 0.08;
+  rRing.renderOrder = 998;
+  rRing.visible = false;
+  scene.add(rRing);
+  return { ring, rRing };
+}
+
+function clearSelectionRings() {
+  for (const sr of selectionRings) {
+    scene.remove(sr.ring);
+    scene.remove(sr.rRing);
+  }
+  selectionRings.length = 0;
+}
+
+function updateSelectionRings() {
+  clearSelectionRings();
+  for (const entry of selectedObjects) {
+    const sr = getSelectionRing();
+    const box = new THREE.Box3().setFromObject(entry.mesh);
+    const size = box.getSize(new THREE.Vector3());
+    const maxDim = Math.max(size.x, size.z);
+    sr.ring.scale.setScalar(maxDim * 0.7 + 0.5);
+    sr.ring.position.x = entry.data.x;
+    sr.ring.position.z = entry.data.z;
+    if (entry.data.obstacle && entry.data.radius > 0) {
+      sr.rRing.scale.setScalar(entry.data.radius);
+      sr.rRing.position.x = entry.data.x;
+      sr.rRing.position.z = entry.data.z;
+      sr.rRing.visible = true;
+    }
+    selectionRings.push(sr);
+  }
+}
+
+// Placement preview ghost
+let ghostMesh = null;
+
+// ─── ASSET LOADING ───
+const loader = new GLTFLoader();
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
+dracoLoader.setDecoderConfig({ type: 'js' });
+loader.setDRACOLoader(dracoLoader);
+
+function loadGLTF(key) {
+  return new Promise((resolve, reject) => {
+    if (loadedGLTFs[key]) { resolve(loadedGLTFs[key]); return; }
+    const def = ASSET_DEFS.find(a => a.key === key);
+    if (!def) { reject(new Error('Unknown asset: ' + key)); return; }
+    loader.load('Game3DAssets/' + def.file, (gltf) => {
+      loadedGLTFs[key] = gltf;
+      resolve(gltf);
+    }, undefined, reject);
+  });
+}
+
+// Preload all assets
+async function preloadAll() {
+  setStatus('Loading assets...');
+  for (const def of ASSET_DEFS) {
+    await loadGLTF(def.key);
+  }
+  setStatus('All assets loaded');
+}
+
+// ─── ALIGN HELPER ───
+function alignToGround(obj) {
+  const box = new THREE.Box3().setFromObject(obj);
+  obj.position.y -= box.min.y;
+}
+
+// ─── PLACE OBJECT ───
+function createPlacedObject(key, x, z, rotX, rotY, rotZ, scale, obstacle, radius) {
+  const gltf = loadedGLTFs[key];
+  if (!gltf) return null;
+
+  const mesh = gltf.scene.clone();
+  mesh.position.set(x, 0, z);
+  mesh.scale.setScalar(scale);
+  mesh.rotation.set(rotX || 0, rotY || 0, rotZ || 0);
+  mesh.traverse(c => { if (c.isMesh) { c.castShadow = true; c.receiveShadow = true; } });
+  scene.add(mesh);
+  alignToGround(mesh);
+
+  const data = { key, x, z, rotX: rotX || 0, rotY: rotY || 0, rotZ: rotZ || 0, scale, obstacle, radius };
+  const entry = { mesh, data };
+  mesh.userData.editorEntry = entry;
+  placedObjects.push(entry);
+  updateObjectCount();
+  return entry;
+}
+
+function removeObject(entry) {
+  scene.remove(entry.mesh);
+  const idx = placedObjects.indexOf(entry);
+  if (idx >= 0) placedObjects.splice(idx, 1);
+  if (selectedObject === entry) deselectAll();
+  updateObjectCount();
+}
+
+// ─── SELECTION ───
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+function getClickedObject(event) {
+  const rect = renderer.domElement.getBoundingClientRect();
+  mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+
+  // Test against all placed objects
+  for (const entry of placedObjects) {
+    const hits = raycaster.intersectObject(entry.mesh, true);
+    if (hits.length > 0) return entry;
+  }
+  return null;
+}
+
+function getGroundPoint(event) {
+  const rect = renderer.domElement.getBoundingClientRect();
+  mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+  raycaster.setFromCamera(mouse, camera);
+
+  const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+  const point = new THREE.Vector3();
+  raycaster.ray.intersectPlane(plane, point);
+  return point;
+}
+
+function snapToGrid(val) {
+  if (gridSnap <= 0) return val;
+  return Math.round(val / gridSnap) * gridSnap;
+}
+
+function selectObject(entry, addToSelection = false) {
+  if (!entry) { deselectAll(); return; }
+
+  if (addToSelection) {
+    // Toggle in multi-select
+    const idx = selectedObjects.indexOf(entry);
+    if (idx >= 0) {
+      selectedObjects.splice(idx, 1);
+    } else {
+      selectedObjects.push(entry);
+    }
+  } else {
+    selectedObjects.length = 0;
+    selectedObjects.push(entry);
+  }
+
+  selectedObject = selectedObjects.length > 0 ? selectedObjects[selectedObjects.length - 1] : null;
+  updateSelectionRings();
+
+  if (selectedObjects.length === 1) {
+    showProperties(selectedObjects[0]);
+  } else if (selectedObjects.length > 1) {
+    showMultiProperties();
+  } else {
+    deselectAll();
+  }
+}
+
+function deselectAll() {
+  selectedObject = null;
+  selectedObjects.length = 0;
+  clearSelectionRings();
+  document.getElementById('props-form').style.display = 'none';
+  document.getElementById('props-multi').style.display = 'none';
+  document.getElementById('props-none').style.display = 'block';
+}
+
+// ─── PROPERTIES PANEL ───
+function showProperties(entry) {
+  const d = entry.data;
+  const def = ASSET_DEFS.find(a => a.key === d.key);
+  document.getElementById('props-none').style.display = 'none';
+  document.getElementById('props-form').style.display = 'block';
+  document.getElementById('prop-type').textContent = def ? def.name : d.key;
+  document.getElementById('prop-px').value = d.x;
+  document.getElementById('prop-pz').value = d.z;
+  document.getElementById('prop-rx').value = Math.round((d.rotX || 0) * 180 / Math.PI);
+  document.getElementById('prop-ry').value = Math.round((d.rotY || 0) * 180 / Math.PI);
+  document.getElementById('prop-rz').value = Math.round((d.rotZ || 0) * 180 / Math.PI);
+  document.getElementById('prop-scale').value = d.scale;
+  document.getElementById('prop-obstacle').checked = d.obstacle;
+  document.getElementById('prop-radius').value = d.radius;
+}
+
+function applyProperties() {
+  if (!selectedObject) return;
+  const d = selectedObject.data;
+  d.x = parseFloat(document.getElementById('prop-px').value) || 0;
+  d.z = parseFloat(document.getElementById('prop-pz').value) || 0;
+  d.rotX = (parseFloat(document.getElementById('prop-rx').value) || 0) * Math.PI / 180;
+  d.rotY = (parseFloat(document.getElementById('prop-ry').value) || 0) * Math.PI / 180;
+  d.rotZ = (parseFloat(document.getElementById('prop-rz').value) || 0) * Math.PI / 180;
+  d.scale = parseFloat(document.getElementById('prop-scale').value) || 1;
+  d.obstacle = document.getElementById('prop-obstacle').checked;
+  d.radius = parseFloat(document.getElementById('prop-radius').value) || 0;
+
+  selectedObject.mesh.position.set(d.x, 0, d.z);
+  selectedObject.mesh.rotation.set(d.rotX, d.rotY, d.rotZ);
+  selectedObject.mesh.scale.setScalar(d.scale);
+  alignToGround(selectedObject.mesh);
+
+  selectObject(selectedObject); // refresh selection visuals
+}
+
+// ─── MULTI-SELECT PROPERTIES ───
+function showMultiProperties() {
+  document.getElementById('props-none').style.display = 'none';
+  document.getElementById('props-form').style.display = 'none';
+  document.getElementById('props-multi').style.display = 'block';
+
+  const types = [...new Set(selectedObjects.map(e => e.data.key))];
+  const typeName = types.length === 1
+    ? (ASSET_DEFS.find(a => a.key === types[0])?.name || types[0])
+    : 'Mixed types';
+  document.getElementById('multi-count').textContent =
+    `${selectedObjects.length} objects selected (${typeName})`;
+
+  // Pre-fill with first object's values as hint
+  const first = selectedObjects[0].data;
+  document.getElementById('multi-scale').value = first.scale;
+  document.getElementById('multi-rx').value = Math.round((first.rotX || 0) * 180 / Math.PI);
+  document.getElementById('multi-ry').value = Math.round((first.rotY || 0) * 180 / Math.PI);
+  document.getElementById('multi-rz').value = Math.round((first.rotZ || 0) * 180 / Math.PI);
+  document.getElementById('multi-radius').value = first.radius;
+}
+
+window.applyMultiScale = function() {
+  const scale = parseFloat(document.getElementById('multi-scale').value);
+  if (!scale || scale <= 0) return;
+  for (const entry of selectedObjects) {
+    entry.data.scale = scale;
+    entry.mesh.scale.setScalar(scale);
+    alignToGround(entry.mesh);
+  }
+  updateSelectionRings();
+};
+
+window.applyMultiRotation = function() {
+  const rx = (parseFloat(document.getElementById('multi-rx').value) || 0) * Math.PI / 180;
+  const ry = (parseFloat(document.getElementById('multi-ry').value) || 0) * Math.PI / 180;
+  const rz = (parseFloat(document.getElementById('multi-rz').value) || 0) * Math.PI / 180;
+  for (const entry of selectedObjects) {
+    entry.data.rotX = rx;
+    entry.data.rotY = ry;
+    entry.data.rotZ = rz;
+    entry.mesh.rotation.set(rx, ry, rz);
+    alignToGround(entry.mesh);
+  }
+  updateSelectionRings();
+};
+
+window.applyMultiObstacle = function(val) {
+  for (const entry of selectedObjects) {
+    entry.data.obstacle = val;
+  }
+  updateSelectionRings();
+};
+
+window.applyMultiRadius = function() {
+  const radius = parseFloat(document.getElementById('multi-radius').value) || 0;
+  for (const entry of selectedObjects) {
+    entry.data.radius = radius;
+  }
+  updateSelectionRings();
+};
+
+// Wire up property inputs
+for (const id of ['prop-px','prop-pz','prop-rx','prop-ry','prop-rz','prop-scale','prop-obstacle','prop-radius']) {
+  document.getElementById(id).addEventListener('change', applyProperties);
+  document.getElementById(id).addEventListener('input', applyProperties);
+}
+
+// Wire up level settings inputs
+function applyLevelSettings() {
+  levelSettings.worldSize = parseFloat(document.getElementById('prop-world-size').value) || 120;
+  levelSettings.spawnX = parseFloat(document.getElementById('prop-spawn-x').value) || 0;
+  levelSettings.spawnZ = parseFloat(document.getElementById('prop-spawn-z').value) || 0;
+  levelSettings.enemySpawnDistance = parseFloat(document.getElementById('prop-spawn-dist').value) || 35;
+  updateBoundaryVisual();
+}
+function refreshLevelSettingsUI() {
+  document.getElementById('prop-world-size').value = levelSettings.worldSize;
+  document.getElementById('prop-spawn-x').value = levelSettings.spawnX;
+  document.getElementById('prop-spawn-z').value = levelSettings.spawnZ;
+  document.getElementById('prop-spawn-dist').value = levelSettings.enemySpawnDistance;
+  updateBoundaryVisual();
+}
+for (const id of ['prop-world-size','prop-spawn-x','prop-spawn-z','prop-spawn-dist']) {
+  document.getElementById(id).addEventListener('change', applyLevelSettings);
+  document.getElementById(id).addEventListener('input', applyLevelSettings);
+}
+
+// ─── GHOST / PREVIEW ───
+async function setGhost(key) {
+  if (ghostMesh) { scene.remove(ghostMesh); ghostMesh = null; }
+  if (!key) return;
+  const gltf = loadedGLTFs[key];
+  if (!gltf) return;
+  const def = ASSET_DEFS.find(a => a.key === key);
+  ghostMesh = gltf.scene.clone();
+  ghostMesh.scale.setScalar(def.defaultScale);
+  ghostMesh.traverse(c => {
+    if (c.isMesh) {
+      c.material = c.material.clone();
+      c.material.transparent = true;
+      c.material.opacity = 0.5;
+      c.material.depthWrite = false;
+    }
+  });
+  ghostMesh.visible = false;
+  scene.add(ghostMesh);
+  alignToGround(ghostMesh);
+}
+
+// ─── PALETTE ───
+function buildPalette() {
+  const list = document.getElementById('palette-list');
+  list.innerHTML = '';
+  for (const cat of CATEGORIES) {
+    const catDiv = document.createElement('div');
+    catDiv.className = 'palette-category';
+    catDiv.textContent = cat.name;
+    list.appendChild(catDiv);
+
+    for (const def of ASSET_DEFS.filter(a => a.category === cat.key)) {
+      const item = document.createElement('div');
+      item.className = 'palette-item';
+      item.dataset.key = def.key;
+      item.innerHTML = `<div class="icon">${def.icon}</div><div>${def.name}</div>`;
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.palette-item').forEach(el => el.classList.remove('selected'));
+        if (selectedAssetDef === def) {
+          selectedAssetDef = null;
+          setTool('select');
+          setGhost(null);
+          return;
+        }
+        selectedAssetDef = def;
+        item.classList.add('selected');
+        setTool('place');
+        setGhost(def.key);
+      });
+      list.appendChild(item);
+    }
+  }
+}
+
+// ─── TOOLS ───
+function setTool(name) {
+  currentTool = name;
+  document.querySelectorAll('.tool-btn[data-tool]').forEach(el => {
+    el.classList.toggle('active', el.dataset.tool === name);
+  });
+  if (name !== 'place') {
+    if (ghostMesh) { ghostMesh.visible = false; }
+  }
+  renderer.domElement.style.cursor =
+    name === 'place' ? 'crosshair' :
+    name === 'rotate' ? 'grab' :
+    name === 'scale' ? 'ns-resize' : 'default';
+}
+
+document.querySelectorAll('.tool-btn[data-tool]').forEach(el => {
+  el.addEventListener('click', () => {
+    if (el.dataset.tool !== 'place') {
+      selectedAssetDef = null;
+      document.querySelectorAll('.palette-item').forEach(p => p.classList.remove('selected'));
+      setGhost(null);
+    }
+    setTool(el.dataset.tool);
+  });
+});
+
+// ─── CAMERA PAN & ZOOM ───
+let isPanning = false;
+let panStart = { x: 0, y: 0 };
+let camStart = { x: 0, z: 0 };
+
+renderer.domElement.addEventListener('mousedown', (e) => {
+  if (e.button === 1 || (e.button === 0 && e.shiftKey)) {
+    isPanning = true;
+    panStart = { x: e.clientX, y: e.clientY };
+    camStart = { x: camera.position.x, z: camera.position.z };
+    e.preventDefault();
+  }
+});
+
+window.addEventListener('mousemove', (e) => {
+  if (isPanning) {
+    const dx = (e.clientX - panStart.x) * (frustum * 2 / viewport.clientHeight) * (camera.zoom ? 1/camera.zoom : 1);
+    const dy = (e.clientY - panStart.y) * (frustum * 2 / viewport.clientHeight) * (camera.zoom ? 1/camera.zoom : 1);
+    camera.position.x = camStart.x - dx;
+    camera.position.z = camStart.z - dy;
+    camera.lookAt(camera.position.x, 0, camera.position.z);
+  }
+});
+
+window.addEventListener('mouseup', () => { isPanning = false; });
+
+renderer.domElement.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  const zoomSpeed = 0.1;
+  camera.zoom = Math.max(0.2, Math.min(5, (camera.zoom || 1) + (e.deltaY > 0 ? -zoomSpeed : zoomSpeed)));
+  camera.updateProjectionMatrix();
+  document.getElementById('grid-info').textContent = `Grid: ${gridSnap} | Zoom: ${camera.zoom.toFixed(1)}x`;
+}, { passive: false });
+
+// ─── DRAG MOVE ───
+let isDragging = false;
+let dragEntry = null;
+let dragOffset = { x: 0, z: 0 };
+
+renderer.domElement.addEventListener('mousedown', (e) => {
+  if (e.button !== 0 || e.shiftKey) return;
+  hideContextMenu();
+
+  if (currentTool === 'place' && selectedAssetDef) {
+    // Place new object
+    const pt = getGroundPoint(e);
+    if (!pt) return;
+    const x = snapToGrid(pt.x);
+    const z = snapToGrid(pt.z);
+    const def = selectedAssetDef;
+    const entry = createPlacedObject(def.key, x, z, 0, 0, 0, def.defaultScale, def.obstacle, def.radius);
+    if (entry) selectObject(entry);
+    return;
+  }
+
+  if (currentTool === 'select') {
+    const entry = getClickedObject(e);
+    if (entry) {
+      selectObject(entry, e.ctrlKey || e.metaKey);
+      if (!e.ctrlKey && !e.metaKey) {
+        isDragging = true;
+        dragEntry = entry;
+        const pt = getGroundPoint(e);
+        dragOffset.x = entry.data.x - pt.x;
+        dragOffset.z = entry.data.z - pt.z;
+      }
+    } else if (!e.ctrlKey && !e.metaKey) {
+      deselectAll();
+    }
+    return;
+  }
+
+  if ((currentTool === 'rotate' || currentTool === 'scale') && !selectedObject) {
+    const entry = getClickedObject(e);
+    if (entry) selectObject(entry);
+  }
+});
+
+renderer.domElement.addEventListener('mousemove', (e) => {
+  const pt = getGroundPoint(e);
+  if (!pt) return;
+
+  // Ghost preview
+  if (currentTool === 'place' && ghostMesh) {
+    ghostMesh.position.x = snapToGrid(pt.x);
+    ghostMesh.position.z = snapToGrid(pt.z);
+    ghostMesh.visible = true;
+    alignToGround(ghostMesh);
+  }
+
+  // Drag move
+  if (isDragging && dragEntry) {
+    const x = snapToGrid(pt.x + dragOffset.x);
+    const z = snapToGrid(pt.z + dragOffset.z);
+    dragEntry.data.x = x;
+    dragEntry.data.z = z;
+    dragEntry.mesh.position.set(x, 0, z);
+    alignToGround(dragEntry.mesh);
+    updateSelectionRings();
+    if (selectedObjects.length === 1) showProperties(dragEntry);
+  }
+
+  // Status bar
+  document.getElementById('status-left').textContent =
+    `X: ${snapToGrid(pt.x).toFixed(1)}  Z: ${snapToGrid(pt.z).toFixed(1)}`;
+});
+
+renderer.domElement.addEventListener('mouseup', () => {
+  isDragging = false;
+  dragEntry = null;
+});
+
+// Rotate / Scale with mouse drag on selected
+let toolDragStart = null;
+renderer.domElement.addEventListener('mousedown', (e) => {
+  if (e.button !== 0 || e.shiftKey) return;
+  if ((currentTool === 'rotate' || currentTool === 'scale') && selectedObject) {
+    toolDragStart = { x: e.clientX, y: e.clientY, rotX: selectedObject.data.rotX || 0, rotY: selectedObject.data.rotY || 0, rotZ: selectedObject.data.rotZ || 0, scale: selectedObject.data.scale };
+  }
+});
+window.addEventListener('mousemove', (e) => {
+  if (!toolDragStart || !selectedObject) return;
+  const dx = e.clientX - toolDragStart.x;
+  const dy = e.clientY - toolDragStart.y;
+  if (currentTool === 'rotate') {
+    selectedObject.data.rotY = toolDragStart.rotY + dx * 0.02;
+    selectedObject.data.rotX = toolDragStart.rotX + dy * 0.02;
+    selectedObject.mesh.rotation.set(selectedObject.data.rotX, selectedObject.data.rotY, selectedObject.data.rotZ || 0);
+    showProperties(selectedObject);
+  } else if (currentTool === 'scale') {
+    const newScale = Math.max(0.1, toolDragStart.scale - dy * 0.05);
+    selectedObject.data.scale = newScale;
+    selectedObject.mesh.scale.setScalar(newScale);
+    alignToGround(selectedObject.mesh);
+    selectObject(selectedObject);
+    showProperties(selectedObject);
+  }
+});
+window.addEventListener('mouseup', () => { toolDragStart = null; });
+
+// ─── CONTEXT MENU ───
+renderer.domElement.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+  const entry = getClickedObject(e);
+  if (entry) {
+    selectObject(entry);
+    const menu = document.getElementById('context-menu');
+    menu.style.display = 'block';
+    menu.style.left = (e.clientX - viewport.getBoundingClientRect().left) + 'px';
+    menu.style.top = (e.clientY - viewport.getBoundingClientRect().top) + 'px';
+  }
+});
+
+function hideContextMenu() {
+  document.getElementById('context-menu').style.display = 'none';
+}
+document.addEventListener('click', hideContextMenu);
+
+// ─── KEYBOARD SHORTCUTS ───
+window.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT') return;
+  switch (e.code) {
+    case 'KeyV': setTool('select'); break;
+    case 'KeyP': setTool('place'); break;
+    case 'KeyR': setTool('rotate'); break;
+    case 'KeyS':
+      if (!e.ctrlKey) setTool('scale');
+      else { e.preventDefault(); saveMap(); }
+      break;
+    case 'Delete':
+    case 'Backspace':
+      deleteSelected(); break;
+    case 'KeyD':
+      if (e.ctrlKey) { e.preventDefault(); duplicateSelected(); }
+      break;
+    case 'Escape':
+      deselectAll();
+      selectedAssetDef = null;
+      document.querySelectorAll('.palette-item').forEach(p => p.classList.remove('selected'));
+      setGhost(null);
+      setTool('select');
+      break;
+    case 'BracketLeft':
+      gridSnap = Math.max(0.5, gridSnap - 0.5);
+      document.getElementById('grid-info').textContent = `Grid: ${gridSnap}`;
+      break;
+    case 'BracketRight':
+      gridSnap = Math.min(10, gridSnap + 0.5);
+      document.getElementById('grid-info').textContent = `Grid: ${gridSnap}`;
+      break;
+  }
+});
+
+// ─── ACTIONS ───
+window.deleteSelected = function() {
+  if (selectedObjects.length > 0) {
+    const toRemove = [...selectedObjects];
+    deselectAll();
+    for (const entry of toRemove) removeObject(entry);
+  }
+  hideContextMenu();
+};
+
+window.duplicateSelected = function() {
+  if (!selectedObject) return;
+  const d = selectedObject.data;
+  const entry = createPlacedObject(d.key, d.x + 2, d.z + 2, d.rotX || 0, d.rotY || 0, d.rotZ || 0, d.scale, d.obstacle, d.radius);
+  if (entry) selectObject(entry);
+  hideContextMenu();
+};
+
+window.toggleObstacle = function() {
+  if (!selectedObject) return;
+  for (const entry of selectedObjects) {
+    entry.data.obstacle = !entry.data.obstacle;
+  }
+  updateSelectionRings();
+  if (selectedObjects.length === 1) showProperties(selectedObject);
+  else showMultiProperties();
+  hideContextMenu();
+};
+
+window.selectAllOfType = function() {
+  if (!selectedObject) return;
+  const type = selectedObject.data.key;
+  selectedObjects.length = 0;
+  for (const entry of placedObjects) {
+    if (entry.data.key === type) selectedObjects.push(entry);
+  }
+  selectedObject = selectedObjects[selectedObjects.length - 1];
+  updateSelectionRings();
+  if (selectedObjects.length === 1) showProperties(selectedObject);
+  else showMultiProperties();
+  hideContextMenu();
+};
+
+window.clearAll = function() {
+  if (!confirm('Clear all placed objects?')) return;
+  while (placedObjects.length > 0) removeObject(placedObjects[0]);
+};
+
+// ─── DEFAULT MAP SAVE/LOAD (File System Access API) ───
+let _defaultMapFileHandle = null; // cached handle for repeated saves without re-picking
+
+window.loadDefaultMap = async function() {
+  try {
+    const resp = await fetch('map.json?_=' + Date.now()); // cache-bust
+    if (!resp.ok) throw new Error('map.json not found');
+    const text = await resp.text();
+    await loadMapFromJSON(text);
+    setStatus('Loaded default map.json (' + placedObjects.length + ' objects)');
+  } catch (e) {
+    setStatus('Failed to load map.json: ' + e.message);
+  }
+};
+
+window.saveDefaultMap = async function() {
+  const mapData = {
+    version: 1,
+    gridSnap,
+    worldSize: levelSettings.worldSize,
+    spawnX: levelSettings.spawnX,
+    spawnZ: levelSettings.spawnZ,
+    enemySpawnDistance: levelSettings.enemySpawnDistance,
+    objects: placedObjects.map(e => ({ ...e.data })),
+  };
+  const json = JSON.stringify(mapData, null, 2);
+
+  // Try File System Access API (Chrome/Edge) for direct save
+  if (window.showSaveFilePicker) {
+    try {
+      // Reuse existing handle if we have one, otherwise prompt
+      if (!_defaultMapFileHandle) {
+        _defaultMapFileHandle = await window.showSaveFilePicker({
+          suggestedName: 'map.json',
+          types: [{ description: 'JSON Map', accept: { 'application/json': ['.json'] } }],
+        });
+      }
+      const writable = await _defaultMapFileHandle.createWritable();
+      await writable.write(json);
+      await writable.close();
+      setStatus('Saved to map.json! (' + placedObjects.length + ' objects)');
+      // Also sync to localStorage for game testing
+      localStorage.setItem('castleSurvivor_map', json);
+      return;
+    } catch (e) {
+      if (e.name === 'AbortError') return; // user cancelled picker
+      console.warn('File System Access failed, falling back to download:', e);
+    }
+  }
+
+  // Fallback: download + localStorage
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'map.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  localStorage.setItem('castleSurvivor_map', json);
+  setStatus('Downloaded map.json (move to project root to apply). ' + placedObjects.length + ' objects');
+};
+
+// ─── SAVE / LOAD (EXPORT/IMPORT) ───
+window.saveMap = function() {
+  const mapData = {
+    version: 1,
+    gridSnap,
+    worldSize: levelSettings.worldSize,
+    spawnX: levelSettings.spawnX,
+    spawnZ: levelSettings.spawnZ,
+    enemySpawnDistance: levelSettings.enemySpawnDistance,
+    objects: placedObjects.map(e => ({ ...e.data })),
+  };
+  const json = JSON.stringify(mapData, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'map.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  setStatus('Map saved! (' + placedObjects.length + ' objects)');
+
+  // Also save to localStorage for game to read
+  localStorage.setItem('castleSurvivor_map', json);
+};
+
+window.loadMapFile = function() {
+  document.getElementById('file-input').click();
+};
+
+document.getElementById('file-input').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const text = await file.text();
+  await loadMapFromJSON(text);
+  e.target.value = '';
+});
+
+async function loadMapFromJSON(jsonText) {
+  const mapData = JSON.parse(jsonText);
+  // Clear existing
+  while (placedObjects.length > 0) removeObject(placedObjects[0]);
+
+  if (mapData.gridSnap) gridSnap = mapData.gridSnap;
+
+  // Restore level settings
+  if (mapData.worldSize !== undefined) levelSettings.worldSize = mapData.worldSize;
+  if (mapData.spawnX !== undefined) levelSettings.spawnX = mapData.spawnX;
+  if (mapData.spawnZ !== undefined) levelSettings.spawnZ = mapData.spawnZ;
+  if (mapData.enemySpawnDistance !== undefined) levelSettings.enemySpawnDistance = mapData.enemySpawnDistance;
+  refreshLevelSettingsUI();
+
+  for (const obj of mapData.objects) {
+    if (!obj.key) continue; // skip comment entries
+    await loadGLTF(obj.key); // ensure loaded
+    createPlacedObject(obj.key, obj.x, obj.z, obj.rotX || 0, obj.rotY || 0, obj.rotZ || 0, obj.scale, obj.obstacle, obj.radius);
+  }
+  setStatus('Map loaded! (' + mapData.objects.length + ' objects)');
+}
+
+window.testInGame = function() {
+  const mapData = {
+    version: 1,
+    gridSnap,
+    worldSize: levelSettings.worldSize,
+    spawnX: levelSettings.spawnX,
+    spawnZ: levelSettings.spawnZ,
+    enemySpawnDistance: levelSettings.enemySpawnDistance,
+    objects: placedObjects.map(e => ({ ...e.data })),
+  };
+  localStorage.setItem('castleSurvivor_map', JSON.stringify(mapData));
+  window.open('index.html', '_blank');
+};
+
+// ─── HELPERS ───
+function setStatus(text) {
+  document.getElementById('status-left').textContent = text;
+}
+
+function updateObjectCount() {
+  document.getElementById('status-right').textContent = `Objects: ${placedObjects.length}`;
+}
+
+// ─── AUTO-LOAD ───
+async function tryAutoLoad() {
+  // Try loading map.json from server (the default map)
+  try {
+    const resp = await fetch('map.json?_=' + Date.now());
+    if (resp.ok) {
+      const text = await resp.text();
+      await loadMapFromJSON(text);
+      setStatus('Default map loaded (' + placedObjects.length + ' objects) — Edit and click "Save Default Map" to save changes');
+      return;
+    }
+  } catch (e) {
+    console.error('Auto-load map.json failed:', e);
+    setStatus('Failed to auto-load map.json: ' + e.message);
+  }
+
+  // Try localStorage
+  try {
+    const saved = localStorage.getItem('castleSurvivor_map');
+    if (saved) {
+      await loadMapFromJSON(saved);
+      setStatus('Loaded map from localStorage (use "Load Default Map" to load map.json)');
+    }
+  } catch (e) {
+    console.error('Auto-load localStorage failed:', e);
+    setStatus('Failed to load from localStorage: ' + e.message);
+  }
+}
+
+// ─── RENDER LOOP ───
+function animate() {
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera);
+}
+
+// ─── RESIZE ───
+window.addEventListener('resize', () => {
+  const a = viewport.clientWidth / viewport.clientHeight;
+  camera.left = -frustum * a;
+  camera.right = frustum * a;
+  camera.updateProjectionMatrix();
+  renderer.setSize(viewport.clientWidth, viewport.clientHeight);
+});
+
+// ─── INIT ───
+async function init() {
+  buildPalette();
+  await preloadAll();
+  animate();
+  await tryAutoLoad();
+  // Don't overwrite tryAutoLoad status if it loaded something
+  if (placedObjects.length === 0) {
+    setStatus('Ready - Click "Load Default Map" or place assets');
+  }
+}
+
+init();
+</script>
+</body>
+</html>

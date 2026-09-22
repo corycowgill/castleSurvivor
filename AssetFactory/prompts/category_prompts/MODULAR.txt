@@ -1,0 +1,21 @@
+{base_prompt}
+
+{asset_description}
+
+Modular segment designed for seamless tiling.
+
+Begins and ends cleanly at matching connection points.
+
+Designed so identical copies can be placed end-to-end.
+
+Clean orthogonal edges at connection points.
+
+No vegetation attached.
+
+No terrain.
+
+No ground.
+
+Single modular segment only.
+
+{extra_details}

@@ -1,0 +1,19 @@
+{base_prompt}
+
+{asset_description}
+
+Square modular video game terrain tile.
+
+Orthogonal edges.
+
+Geometry reaches each required connection edge cleanly.
+
+Designed to seamlessly connect to identical neighboring tiles.
+
+Top-down compatible geometry.
+
+No surrounding environment.
+
+Single terrain tile only.
+
+{extra_details}

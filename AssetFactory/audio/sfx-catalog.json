@@ -1,0 +1,25 @@
+{
+  "_notes": "Stable Audio 3 Small SFX prompts. Style follows the model's own SFX reprompt template: source, material/timbre, space, temporal shape, then 'Length: N seconds'. `slot` is the AudioSystem key; files land in audio/<file>-<n>.wav. `music: true` entries use the Small Music checkpoint.",
+  "model_sfx": "stable_audio_3_small_sfx.safetensors",
+  "model_music": "stable_audio_3_small_music.safetensors",
+  "text_encoder": "t5gemma_b_b_ul2.safetensors",
+  "sounds": [
+    { "slot": "swordSwing",    "file": "sword-swing",    "seconds": 2, "variations": 3, "trim": 0.6,  "prompt": "Fast whoosh of a heavy steel longsword swung through the air, close-up, dry, quick air displacement with a faint metallic ring, no impact. Length: 2 seconds" },
+    { "slot": "swordHit",      "file": "sword-hit",      "seconds": 2, "variations": 3, "trim": 0.5,  "prompt": "Steel sword blade striking hard into leather armor and flesh with a sharp metallic clang and a wet thud, close-up, dry room, short decay. Length: 2 seconds" },
+    { "slot": "enemyDeath",    "file": "enemy-death",    "seconds": 2, "variations": 3, "trim": 0.9,  "prompt": "Small goblin creature death cry, a short guttural squeal cut off by a body collapsing onto grass, close-up, outdoor, dry. Length: 2 seconds" },
+    { "slot": "playerHit",     "file": "player-hit",     "seconds": 2, "variations": 2, "trim": 0.5,  "prompt": "Blunt impact on plate armor, a deep metallic clank with a low body thud, close-up, dry, very short decay. Length: 2 seconds" },
+    { "slot": "playerDeath",   "file": "player-death",   "seconds": 3, "variations": 1, "trim": 2.4,  "prompt": "A knight in plate armor falling to the ground, heavy metal armor crash and clatter settling onto stone, then silence, outdoor, dry. Length: 3 seconds" },
+    { "slot": "coinPickup",    "file": "coin-pickup",    "seconds": 2, "variations": 2, "trim": 0.4,  "prompt": "Single gold coin pickup chime, bright short metallic ting with a tiny sparkle, close-up, clean, very short decay. Length: 2 seconds" },
+    { "slot": "foodPickup",    "file": "food-pickup",    "seconds": 2, "variations": 1, "trim": 0.5,  "prompt": "Quick crunchy bite of a crisp apple and a satisfied gulp, close-up, dry, short. Length: 2 seconds" },
+    { "slot": "levelUp",       "file": "level-up",       "seconds": 3, "variations": 1, "trim": 1.6,  "prompt": "Triumphant short fanfare of rising bell chimes and a bright harp flourish, magical shimmer, medium hall reverb, uplifting, ends cleanly. Length: 3 seconds" },
+    { "slot": "waveStart",     "file": "wave-start",     "seconds": 3, "variations": 1, "trim": 1.6,  "prompt": "Medieval war horn blast, deep brassy sustained note with a slight rasp, outdoor battlefield with distant echo. Length: 3 seconds" },
+    { "slot": "upgradeSelect", "file": "upgrade-select", "seconds": 2, "variations": 1, "trim": 0.4,  "prompt": "Solid wooden UI confirm click with a subtle warm magical chime tail, close-up, clean, very short. Length: 2 seconds" },
+    { "slot": "thunder",       "file": "thunder",        "seconds": 4, "variations": 2, "trim": 2.6,  "prompt": "Close lightning strike: an instant sharp electric crack followed by a deep rolling thunder boom that decays over an open field, huge and powerful. Length: 4 seconds" },
+    { "slot": "blast",         "file": "blast",          "seconds": 3, "variations": 2, "trim": 2.2,  "prompt": "Dynamite explosion: sharp detonation crack, deep sub bass boom, followed by debris and gravel raining down on dirt, outdoor, medium distance. Length: 3 seconds" },
+    { "slot": "bossRoar",      "file": "boss-roar",      "seconds": 3, "variations": 2, "trim": 1.6,  "prompt": "Huge ogre monster roar, deep guttural bellow with a growling tail, close-up, outdoor with a slight echo, menacing. Length: 3 seconds" },
+    { "slot": "arrowLoose",    "file": "arrow-loose",    "seconds": 2, "variations": 3, "trim": 0.5,  "prompt": "Wooden longbow releasing an arrow, taut string twang and a quick arrow whoosh, close-up, dry, very short. Length: 2 seconds" },
+    { "slot": "shamanHeal",    "file": "shaman-heal",    "seconds": 2, "variations": 1, "trim": 0.9,  "prompt": "Dark magic healing pulse, a low eerie hum swelling into a soft crystalline shimmer and fading, otherworldly, medium reverb. Length: 2 seconds" },
+    { "slot": "bossMusic",     "file": "boss-music",     "seconds": 40, "variations": 1, "music": true, "loop": true, "prompt": "Dark epic orchestral battle music loop, pounding taiko drums, low brass ostinato, urgent string tremolo, menacing choir swell, 120 bpm, seamless loop, no intro, no ending" },
+    { "slot": "menuMusic",     "file": "menu-music",     "seconds": 40, "variations": 1, "music": true, "loop": true, "prompt": "Calm medieval fantasy tavern music loop, plucked lute and harp, soft wooden flute melody, gentle hand drum, warm and hopeful, 80 bpm, seamless loop, no intro, no ending" }
+  ]
+}

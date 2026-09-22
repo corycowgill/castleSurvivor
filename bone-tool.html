@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Bone Attachment Tool</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #1a1a2e; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; overflow: hidden; }
+#canvas-container { position: absolute; top: 0; left: 0; right: 320px; bottom: 0; }
+canvas { display: block; width: 100%; height: 100%; }
+#panel {
+  position: absolute; top: 0; right: 0; width: 320px; bottom: 0;
+  background: #16213e; overflow-y: auto; padding: 16px;
+  border-left: 2px solid #0f3460;
+}
+h2 { color: #e94560; font-size: 16px; margin-bottom: 12px; letter-spacing: 1px; }
+h3 { color: #0f3460; font-size: 13px; margin: 14px 0 6px; text-transform: uppercase; letter-spacing: 1px;
+     border-bottom: 1px solid #0f3460; padding-bottom: 4px; }
+label { display: block; font-size: 12px; color: #a0a0c0; margin-top: 8px; }
+select, input[type="text"] {
+  width: 100%; padding: 6px 8px; margin-top: 2px;
+  background: #1a1a2e; color: #e0e0e0; border: 1px solid #0f3460; border-radius: 4px; font-size: 13px;
+}
+.slider-row { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+.slider-row input[type="range"] { flex: 1; accent-color: #e94560; }
+.slider-row .val { width: 55px; text-align: right; font-size: 12px; color: #e94560; font-family: monospace; }
+button {
+  display: block; width: 100%; padding: 8px; margin-top: 10px; cursor: pointer;
+  background: #e94560; color: #fff; border: none; border-radius: 4px; font-size: 13px; font-weight: 600;
+}
+button:hover { background: #c73e54; }
+button.secondary { background: #0f3460; }
+button.secondary:hover { background: #1a4a80; }
+#output {
+  margin-top: 12px; padding: 10px; background: #0d1b2a; border-radius: 4px;
+  font-family: monospace; font-size: 11px; color: #4fc3f7; white-space: pre-wrap; word-break: break-all;
+  max-height: 200px; overflow-y: auto;
+}
+#bone-list { max-height: 150px; overflow-y: auto; margin-top: 4px; }
+.bone-item {
+  padding: 3px 6px; font-size: 12px; cursor: pointer; border-radius: 3px;
+}
+.bone-item:hover { background: #0f3460; }
+.bone-item.selected { background: #e94560; color: #fff; }
+.preset-row { display: flex; gap: 6px; margin-top: 8px; }
+.preset-row button { flex: 1; font-size: 11px; padding: 5px; }
+</style>
+</head>
+<body>
+<div id="canvas-container"><canvas id="viewer"></canvas></div>
+<div id="panel">
+  <h2>Bone Attachment Tool</h2>
+
+  <label>Character Model</label>
+  <select id="char-select">
+    <option value="dadwrig.glb">Dad (dadwrig)</option>
+    <option value="brennwrig.glb">Brennan (brennwrig)</option>
+    <option value="parkerwrig.glb">Parker (parkerwrig)</option>
+  </select>
+
+  <label>Weapon / Attachment</label>
+  <select id="weapon-select">
+    <option value="swordWithMesh_00001_.glb">Sword</option>
+    <option value="spearWeapon.glb">Spear</option>
+    <option value="shieldModel.glb">Shield</option>
+    <option value="daggerWithMesh_00001_.glb">Dagger</option>
+    <option value="clubWithMesh_00001_.glb">Club</option>
+    <option value="bow.glb">Bow</option>
+  </select>
+
+  <button id="load-btn">Load Models</button>
+
+  <h3>Bone</h3>
+  <div id="bone-list"></div>
+
+  <h3>Position</h3>
+  <label>X</label>
+  <div class="slider-row">
+    <input type="range" id="pos-x" min="-1" max="1" step="0.005" value="0">
+    <span class="val" id="pos-x-val">0.000</span>
+  </div>
+  <label>Y</label>
+  <div class="slider-row">
+    <input type="range" id="pos-y" min="-1" max="1" step="0.005" value="0.065">
+    <span class="val" id="pos-y-val">0.065</span>
+  </div>
+  <label>Z</label>
+  <div class="slider-row">
+    <input type="range" id="pos-z" min="-1" max="1" step="0.005" value="0.260">
+    <span class="val" id="pos-z-val">0.260</span>
+  </div>
+
+  <h3>Rotation (degrees)</h3>
+  <label>X</label>
+  <div class="slider-row">
+    <input type="range" id="rot-x" min="-360" max="360" step="1" value="-180">
+    <span class="val" id="rot-x-val">-180</span>
+  </div>
+  <label>Y</label>
+  <div class="slider-row">
+    <input type="range" id="rot-y" min="-360" max="360" step="1" value="-95">
+    <span class="val" id="rot-y-val">-95</span>
+  </div>
+  <label>Z</label>
+  <div class="slider-row">
+    <input type="range" id="rot-z" min="-360" max="360" step="1" value="-90">
+    <span class="val" id="rot-z-val">-90</span>
+  </div>
+
+  <h3>Scale</h3>
+  <div class="slider-row">
+    <input type="range" id="scale" min="0.01" max="3" step="0.01" value="0.55">
+    <span class="val" id="scale-val">0.55</span>
+  </div>
+
+  <div class="preset-row">
+    <button class="secondary" id="preset-sword">Sword Preset</button>
+    <button class="secondary" id="preset-reset">Reset All</button>
+  </div>
+
+  <button id="copy-btn">Copy Code to Clipboard</button>
+
+  <div id="output"></div>
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const canvas = document.getElementById('viewer');
+const container = document.getElementById('canvas-container');
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x1a1a2e);
+
+const camera = new THREE.PerspectiveCamera(40, 1, 0.01, 100);
+camera.position.set(0, 1.2, 3);
+
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+
+const controls = new OrbitControls(camera, canvas);
+controls.target.set(0, 0.8, 0);
+controls.enableDamping = true;
+
+// Lights
+scene.add(new THREE.AmbientLight(0xffe8cc, 0.8));
+const dirLight = new THREE.DirectionalLight(0xfff0dd, 1.5);
+dirLight.position.set(3, 5, 4);
+scene.add(dirLight);
+const backLight = new THREE.DirectionalLight(0x8888ff, 0.5);
+backLight.position.set(-3, 2, -3);
+scene.add(backLight);
+
+// Grid
+scene.add(new THREE.GridHelper(4, 20, 0x333355, 0x222244));
+
+const loader = new GLTFLoader();
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
+dracoLoader.setDecoderConfig({ type: 'js' });
+loader.setDRACOLoader(dracoLoader);
+
+let charModel = null;
+let charMixer = null;
+let weaponModel = null;
+let selectedBone = null;
+let bones = [];
+
+const DEG = Math.PI / 180;
+
+function resize() {
+  const w = container.clientWidth;
+  const h = container.clientHeight;
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+}
+window.addEventListener('resize', resize);
+resize();
+
+// Sliders
+const sliders = {
+  posX: document.getElementById('pos-x'),
+  posY: document.getElementById('pos-y'),
+  posZ: document.getElementById('pos-z'),
+  rotX: document.getElementById('rot-x'),
+  rotY: document.getElementById('rot-y'),
+  rotZ: document.getElementById('rot-z'),
+  scale: document.getElementById('scale'),
+};
+const vals = {
+  posX: document.getElementById('pos-x-val'),
+  posY: document.getElementById('pos-y-val'),
+  posZ: document.getElementById('pos-z-val'),
+  rotX: document.getElementById('rot-x-val'),
+  rotY: document.getElementById('rot-y-val'),
+  rotZ: document.getElementById('rot-z-val'),
+  scale: document.getElementById('scale-val'),
+};
+
+function updateWeaponTransform() {
+  if (!weaponModel) return;
+  weaponModel.position.set(
+    parseFloat(sliders.posX.value),
+    parseFloat(sliders.posY.value),
+    parseFloat(sliders.posZ.value)
+  );
+  weaponModel.rotation.set(
+    parseFloat(sliders.rotX.value) * DEG,
+    parseFloat(sliders.rotY.value) * DEG,
+    parseFloat(sliders.rotZ.value) * DEG
+  );
+  weaponModel.scale.setScalar(parseFloat(sliders.scale.value));
+
+  // Update value displays
+  vals.posX.textContent = parseFloat(sliders.posX.value).toFixed(3);
+  vals.posY.textContent = parseFloat(sliders.posY.value).toFixed(3);
+  vals.posZ.textContent = parseFloat(sliders.posZ.value).toFixed(3);
+  vals.rotX.textContent = sliders.rotX.value;
+  vals.rotY.textContent = sliders.rotY.value;
+  vals.rotZ.textContent = sliders.rotZ.value;
+  vals.scale.textContent = parseFloat(sliders.scale.value).toFixed(2);
+
+  updateOutput();
+}
+
+for (const slider of Object.values(sliders)) {
+  slider.addEventListener('input', updateWeaponTransform);
+}
+
+function updateOutput() {
+  const boneName = selectedBone ? selectedBone.name : 'hand_r';
+  const weaponFile = document.getElementById('weapon-select').value;
+  const charFile = document.getElementById('char-select').value;
+  const px = parseFloat(sliders.posX.value).toFixed(3);
+  const py = parseFloat(sliders.posY.value).toFixed(3);
+  const pz = parseFloat(sliders.posZ.value).toFixed(3);
+  const rx = sliders.rotX.value;
+  const ry = sliders.rotY.value;
+  const rz = sliders.rotZ.value;
+  const sc = parseFloat(sliders.scale.value).toFixed(2);
+
+  const code = `// Attach ${weaponFile} to ${boneName} on ${charFile}
+const DEG = Math.PI / 180;
+weapon.position.set(${px}, ${py}, ${pz});
+weapon.rotation.set(${rx} * DEG, ${ry} * DEG, ${rz} * DEG);
+weapon.scale.setScalar(${sc});`;
+
+  document.getElementById('output').textContent = code;
+}
+
+function selectBone(bone) {
+  selectedBone = bone;
+  // Re-attach weapon to new bone
+  if (weaponModel && weaponModel.parent) {
+    weaponModel.parent.remove(weaponModel);
+  }
+  if (weaponModel && bone) {
+    bone.add(weaponModel);
+    updateWeaponTransform();
+  }
+  // Update bone list highlighting
+  document.querySelectorAll('.bone-item').forEach(el => {
+    el.classList.toggle('selected', el.dataset.boneName === bone.name);
+  });
+  updateOutput();
+}
+
+function populateBoneList() {
+  const list = document.getElementById('bone-list');
+  list.innerHTML = '';
+  bones = [];
+  if (!charModel) return;
+  charModel.traverse(c => {
+    if (c.isBone) bones.push(c);
+  });
+  // Sort with hand bones first
+  bones.sort((a, b) => {
+    const priority = ['hand_r', 'hand_l', 'forearm_r', 'forearm_l', 'upper_arm_r', 'upper_arm_l', 'spine', 'head'];
+    const ai = priority.indexOf(a.name);
+    const bi = priority.indexOf(b.name);
+    if (ai !== -1 && bi !== -1) return ai - bi;
+    if (ai !== -1) return -1;
+    if (bi !== -1) return 1;
+    return a.name.localeCompare(b.name);
+  });
+  for (const bone of bones) {
+    const div = document.createElement('div');
+    div.className = 'bone-item';
+    div.textContent = bone.name;
+    div.dataset.boneName = bone.name;
+    div.addEventListener('click', () => selectBone(bone));
+    list.appendChild(div);
+  }
+}
+
+// Bone visualization
+let boneHelpers = [];
+function showBoneHelpers() {
+  clearBoneHelpers();
+  if (!charModel) return;
+  charModel.traverse(c => {
+    if (c.isBone) {
+      const sphere = new THREE.Mesh(
+        new THREE.SphereGeometry(0.008, 6, 6),
+        new THREE.MeshBasicMaterial({ color: 0x00ff88, depthTest: false })
+      );
+      sphere.renderOrder = 999;
+      c.add(sphere);
+      boneHelpers.push({ bone: c, helper: sphere });
+    }
+  });
+}
+function clearBoneHelpers() {
+  for (const { bone, helper } of boneHelpers) {
+    bone.remove(helper);
+    helper.geometry.dispose();
+    helper.material.dispose();
+  }
+  boneHelpers = [];
+}
+
+async function loadModels() {
+  const charFile = document.getElementById('char-select').value;
+  const weaponFile = document.getElementById('weapon-select').value;
+
+  // Clear existing
+  if (charModel) { scene.remove(charModel); charModel = null; }
+  if (charMixer) charMixer = null;
+  selectedBone = null;
+  clearBoneHelpers();
+
+  document.getElementById('output').textContent = 'Loading...';
+
+  try {
+    // Load character
+    const charGltf = await new Promise((res, rej) => {
+      loader.load('Game3DAssets/' + charFile, res, undefined, rej);
+    });
+    charModel = charGltf.scene;
+    charModel.scale.setScalar(1.5);
+    charModel.traverse(c => {
+      if (c.isMesh) { c.castShadow = true; c.receiveShadow = true; }
+    });
+    scene.add(charModel);
+
+    // Align to ground
+    const box = new THREE.Box3().setFromObject(charModel);
+    charModel.position.y -= box.min.y;
+
+    // Play idle animation
+    charMixer = new THREE.AnimationMixer(charModel);
+    // Try knightAnims for idle
+    try {
+      const animGltf = await new Promise((res, rej) => {
+        loader.load('Game3DAssets/knightWithAnimations.glb', res, undefined, rej);
+      });
+      for (const clip of animGltf.animations) {
+        if (clip.name === 'Idle_A') {
+          charMixer.clipAction(clip).play();
+          break;
+        }
+      }
+    } catch (e) {
+      // Use character's own animations
+      for (const clip of charGltf.animations) {
+        if (clip.name.includes('Idle') || clip.name.includes('idle')) {
+          charMixer.clipAction(clip).play();
+          break;
+        }
+      }
+    }
+
+    // Load weapon
+    const weaponGltf = await new Promise((res, rej) => {
+      loader.load('Game3DAssets/' + weaponFile, res, undefined, rej);
+    });
+    weaponModel = weaponGltf.scene;
+
+    // Populate bone list
+    populateBoneList();
+    showBoneHelpers();
+
+    // Auto-select hand_r
+    const handR = bones.find(b => b.name === 'hand_r');
+    const handL = bones.find(b => b.name === 'hand_l');
+    const defaultBone = weaponFile.includes('shield') ? (handL || handR || bones[0]) : (handR || bones[0]);
+    if (defaultBone) selectBone(defaultBone);
+
+    document.getElementById('output').textContent = `Loaded ${charFile} (${bones.length} bones) + ${weaponFile}`;
+
+  } catch (e) {
+    document.getElementById('output').textContent = 'Error: ' + e.message;
+    console.error(e);
+  }
+}
+
+document.getElementById('load-btn').addEventListener('click', loadModels);
+
+// Presets
+document.getElementById('preset-sword').addEventListener('click', () => {
+  sliders.posX.value = 0.005; sliders.posY.value = 0.065; sliders.posZ.value = 0.260;
+  sliders.rotX.value = -180; sliders.rotY.value = -95; sliders.rotZ.value = -90;
+  sliders.scale.value = 0.55;
+  updateWeaponTransform();
+});
+
+document.getElementById('preset-reset').addEventListener('click', () => {
+  sliders.posX.value = 0; sliders.posY.value = 0; sliders.posZ.value = 0;
+  sliders.rotX.value = 0; sliders.rotY.value = 0; sliders.rotZ.value = 0;
+  sliders.scale.value = 1;
+  updateWeaponTransform();
+});
+
+// Copy code
+document.getElementById('copy-btn').addEventListener('click', () => {
+  const text = document.getElementById('output').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    document.getElementById('copy-btn').textContent = 'Copied!';
+    setTimeout(() => { document.getElementById('copy-btn').textContent = 'Copy Code to Clipboard'; }, 1500);
+  });
+});
+
+// Render loop
+const clock = new THREE.Clock();
+function animate() {
+  requestAnimationFrame(animate);
+  const dt = clock.getDelta();
+  if (charMixer) charMixer.update(dt);
+  controls.update();
+
+  // Highlight selected bone
+  for (const { bone, helper } of boneHelpers) {
+    helper.material.color.setHex(bone === selectedBone ? 0xff4444 : 0x00ff88);
+    const s = bone === selectedBone ? 0.015 : 0.008;
+    helper.scale.setScalar(s / 0.008);
+  }
+
+  renderer.render(scene, camera);
+}
+animate();
+
+// Auto-load on start
+loadModels();
+</script>
+</body>
+</html>

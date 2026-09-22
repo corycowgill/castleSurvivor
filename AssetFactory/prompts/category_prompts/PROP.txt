@@ -1,0 +1,11 @@
+{base_prompt}
+
+{asset_description}
+
+Small to medium-sized medieval fantasy prop.
+
+Chunky, solid construction with readable material surfaces.
+
+Appropriate wear and weathering for a medieval village setting.
+
+{extra_details}

@@ -1,0 +1,51 @@
+Stylized medieval fantasy video game 3D asset concept art.
+
+Designed specifically as a clean reference image for image-to-3D reconstruction.
+
+Moderately stylized proportions, readable silhouette, handcrafted medieval fantasy aesthetic, slightly exaggerated shapes, chunky construction, believable materials, colorful but grounded fantasy game art.
+
+Match a polished third-person / isometric fantasy action game environment.
+
+Object centered exactly in the image.
+
+Show the COMPLETE object.
+
+Entire object must be visible with generous empty space around every edge.
+
+Single isolated object only.
+
+Three-quarter front perspective showing front, side, and top surfaces where appropriate.
+
+Camera approximately level with the object's center and slightly elevated.
+
+Neutral studio lighting.
+
+Soft even illumination.
+
+No dramatic shadows obscuring geometry.
+
+NO ENVIRONMENT.
+
+NO GROUND PLANE.
+
+NO FLOOR.
+
+NO SCENERY.
+
+NO OTHER OBJECTS.
+
+NO PEOPLE.
+
+NO TEXT.
+
+NO UI.
+
+NO BORDER.
+
+Transparent background preferred.
+
+If transparency is unavailable, use a perfectly uniform neutral background suitable for automatic background removal.
+
+Object must not touch or extend beyond image boundaries.
+
+Designed for clean Trellis 2.0 image-to-3D reconstruction.

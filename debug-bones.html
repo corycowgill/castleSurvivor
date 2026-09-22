@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html><head><title>Weapon Attachment Tool</title>
+<style>
+body { margin:0; background:#222; font-family: monospace; }
+#controls {
+  position:fixed; top:10px; right:10px; background:rgba(0,0,0,0.9);
+  color:#fff; padding:15px; z-index:100; border-radius:8px; width:280px;
+  font-size:13px;
+}
+#controls h3 { color:#ffd700; margin:0 0 10px; }
+.row { display:flex; align-items:center; margin:4px 0; gap:6px; }
+.row label { width:80px; color:#aaa; }
+.row input[type=range] { flex:1; }
+.row .val { width:50px; text-align:right; color:#ffd700; }
+#anim-btns { margin-top:12px; }
+#anim-btns button {
+  padding:4px 8px; margin:2px; cursor:pointer; background:#333;
+  color:#ccc; border:1px solid #555; border-radius:3px; font-size:11px;
+}
+#anim-btns button:hover { background:#555; }
+#anim-btns button.active { background:#0a4a0a; color:#4f4; border-color:#4f4; }
+#output { margin-top:12px; padding:8px; background:#111; border-radius:4px; font-size:11px; color:#8f8; }
+#char-select { margin-bottom:10px; }
+#char-select button {
+  padding:6px 12px; margin:2px; cursor:pointer; background:#333;
+  color:#ccc; border:1px solid #555; border-radius:3px; font-size:12px;
+}
+#char-select button:hover { background:#555; }
+#char-select button.active { background:#2a1a6a; color:#aaf; border-color:#88f; }
+#weapon-select { margin:8px 0; }
+#weapon-select button {
+  padding:4px 10px; margin:2px; cursor:pointer; background:#333;
+  color:#ccc; border:1px solid #555; border-radius:3px; font-size:11px;
+}
+#weapon-select button.active { background:#4a3a0a; color:#ffd700; border-color:#ffd700; }
+#bone-info { margin-top:8px; font-size:11px; color:#888; max-height:120px; overflow-y:auto; }
+</style>
+</head>
+<body>
+<div id="controls">
+  <h3>Weapon Attachment Tuner</h3>
+  <div id="char-select">
+    <b>Character:</b><br>
+    <button class="active" data-char="knight">Knight</button>
+    <button data-char="goblin">Goblin</button>
+    <button data-char="ogre">Ogre</button>
+  </div>
+  <div id="weapon-select">
+    <b>Weapon:</b>
+    <button class="active" data-wep="sword">Sword</button>
+    <button data-wep="club">Club</button>
+    <button data-wep="dagger">Dagger</button>
+  </div>
+  <div><b>Bone:</b> <span id="bone-name" style="color:#4f4">hand_r</span></div>
+  <hr style="border-color:#333;margin:8px 0">
+  <div class="row"><label>Pos X</label><input type="range" id="px" min="-0.5" max="0.5" step="0.005" value="0"><span class="val" id="px-v">0</span></div>
+  <div class="row"><label>Pos Y</label><input type="range" id="py" min="-0.5" max="0.5" step="0.005" value="0.065"><span class="val" id="py-v">0.065</span></div>
+  <div class="row"><label>Pos Z</label><input type="range" id="pz" min="-0.5" max="0.5" step="0.005" value="0.260"><span class="val" id="pz-v">0.260</span></div>
+  <hr style="border-color:#333;margin:8px 0">
+  <div class="row"><label>Rot X (deg)</label><input type="range" id="rx" min="-180" max="180" step="5" value="-180"><span class="val" id="rx-v">-180</span></div>
+  <div class="row"><label>Rot Y (deg)</label><input type="range" id="ry" min="-180" max="180" step="5" value="-95"><span class="val" id="ry-v">-95</span></div>
+  <div class="row"><label>Rot Z (deg)</label><input type="range" id="rz" min="-180" max="180" step="5" value="-90"><span class="val" id="rz-v">-90</span></div>
+  <hr style="border-color:#333;margin:8px 0">
+  <div class="row"><label>Scale</label><input type="range" id="sc" min="0.05" max="3" step="0.05" value="0.55"><span class="val" id="sc-v">0.55</span></div>
+  <div id="anim-btns"><b>Animation:</b><br></div>
+  <div id="output"></div>
+  <div id="bone-info"></div>
+</div>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x333333);
+const camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.01, 100);
+camera.position.set(0.5, 0.5, 1.2);
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 0.3, 0);
+
+scene.add(new THREE.AmbientLight(0xffffff, 1.2));
+const dl = new THREE.DirectionalLight(0xffffff, 1);
+dl.position.set(3, 5, 3);
+scene.add(dl);
+scene.add(new THREE.GridHelper(5, 20));
+
+const loader = new GLTFLoader();
+const DEG = Math.PI / 180;
+
+const CHARS = {
+  knight: { file: 'dadKnightRigged.glb', animFile: 'knightWithAnimations.glb', scale: 1 },
+  goblin: { file: 'goblineWithAnimations.glb', scale: 1 },
+  ogre:   { file: 'orgreWithAnimations.glb', scale: 1 },
+};
+const WEAPONS = {
+  sword:  'swordWithMesh_00001_.glb',
+  club:   'clubWithMesh_00001_.glb',
+  dagger: 'daggerWithMesh_00001_.glb',
+};
+
+let currentModel = null;
+let currentMixer = null;
+let currentAction = null;
+let currentWeapon = null;
+let currentHandBone = null;
+let currentChar = 'knight';
+let currentWep = 'sword';
+
+async function loadCharacter(charKey) {
+  // Clear old
+  if (currentModel) { scene.remove(currentModel); currentModel = null; }
+  currentMixer = null; currentAction = null; currentHandBone = null;
+  if (currentWeapon && currentHandBone) currentHandBone.remove(currentWeapon);
+  currentWeapon = null;
+
+  const charDef = CHARS[charKey];
+  const gltf = await new Promise((res, rej) => loader.load('Game3DAssets/' + charDef.file, res, undefined, rej));
+
+  // If this character has a separate animation file, load those too
+  let allClips = [...gltf.animations];
+  if (charDef.animFile) {
+    const animGltf = await new Promise((res, rej) => loader.load('Game3DAssets/' + charDef.animFile, res, undefined, rej));
+    const existingNames = new Set(allClips.map(c => c.name));
+    for (const clip of animGltf.animations) {
+      if (!existingNames.has(clip.name)) allClips.push(clip);
+    }
+  }
+
+  currentModel = gltf.scene;
+  currentModel.scale.setScalar(charDef.scale);
+  scene.add(currentModel);
+
+  currentMixer = new THREE.AnimationMixer(currentModel);
+
+  // Build animation buttons
+  const btns = document.getElementById('anim-btns');
+  btns.innerHTML = '<b>Animation:</b><br>';
+  const actions = {};
+  for (const clip of allClips) {
+    actions[clip.name] = currentMixer.clipAction(clip);
+    const btn = document.createElement('button');
+    btn.textContent = clip.name;
+    btn.onclick = () => {
+      if (currentAction) currentAction.fadeOut(0.2);
+      currentAction = actions[clip.name];
+      currentAction.reset().fadeIn(0.2).play();
+      btns.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    };
+    btns.appendChild(btn);
+  }
+  // Play first animation
+  const firstClip = allClips[0];
+  if (firstClip) {
+    currentAction = actions[firstClip.name];
+    currentAction.play();
+  }
+
+  // Find hand bone — try hand_r, then any bone with 'hand' and 'r'
+  const boneInfo = document.getElementById('bone-info');
+  boneInfo.innerHTML = '<b>Bones:</b><br>';
+  let handBone = null;
+  currentModel.traverse(c => {
+    if (c.isBone) {
+      const n = c.name.toLowerCase();
+      const isHand = n.includes('hand');
+      boneInfo.innerHTML += `<span style="color:${isHand ? '#4f4' : '#888'}">${c.name}</span><br>`;
+      if (!handBone && n === 'hand_r') handBone = c;
+      if (!handBone && isHand && n.includes('r')) handBone = c;
+    }
+  });
+  // Fallback: any bone with 'hand'
+  if (!handBone) {
+    currentModel.traverse(c => {
+      if (c.isBone && !handBone && c.name.toLowerCase().includes('hand')) handBone = c;
+    });
+  }
+
+  currentHandBone = handBone;
+  document.getElementById('bone-name').textContent = handBone ? handBone.name : 'NOT FOUND';
+
+  // Attach weapon
+  await loadWeapon(currentWep);
+}
+
+async function loadWeapon(wepKey) {
+  if (currentWeapon && currentHandBone) currentHandBone.remove(currentWeapon);
+  currentWeapon = null;
+  if (!currentHandBone) return;
+
+  const gltf = await new Promise((res, rej) => loader.load('Game3DAssets/' + WEAPONS[wepKey], res, undefined, rej));
+  currentWeapon = gltf.scene;
+  currentHandBone.add(currentWeapon);
+  updateWeapon();
+}
+
+function updateWeapon() {
+  if (!currentWeapon) return;
+  const px = parseFloat(document.getElementById('px').value);
+  const py = parseFloat(document.getElementById('py').value);
+  const pz = parseFloat(document.getElementById('pz').value);
+  const rx = parseFloat(document.getElementById('rx').value) * DEG;
+  const ry = parseFloat(document.getElementById('ry').value) * DEG;
+  const rz = parseFloat(document.getElementById('rz').value) * DEG;
+  const sc = parseFloat(document.getElementById('sc').value);
+
+  currentWeapon.position.set(px, py, pz);
+  currentWeapon.rotation.set(rx, ry, rz);
+  currentWeapon.scale.setScalar(sc);
+
+  document.getElementById('px-v').textContent = px.toFixed(3);
+  document.getElementById('py-v').textContent = py.toFixed(3);
+  document.getElementById('pz-v').textContent = pz.toFixed(3);
+  document.getElementById('rx-v').textContent = (rx/DEG).toFixed(0);
+  document.getElementById('ry-v').textContent = (ry/DEG).toFixed(0);
+  document.getElementById('rz-v').textContent = (rz/DEG).toFixed(0);
+  document.getElementById('sc-v').textContent = sc.toFixed(2);
+
+  document.getElementById('output').innerHTML =
+    `<b>${currentChar} + ${currentWep}:</b><br>` +
+    `bone: "${currentHandBone?.name}"<br>` +
+    `pos: (${px.toFixed(3)}, ${py.toFixed(3)}, ${pz.toFixed(3)})<br>` +
+    `rot: (${(rx/DEG).toFixed(0)}, ${(ry/DEG).toFixed(0)}, ${(rz/DEG).toFixed(0)}) deg<br>` +
+    `scale: ${sc.toFixed(2)}`;
+}
+
+// Wire sliders
+for (const id of ['px','py','pz','rx','ry','rz','sc']) {
+  document.getElementById(id).addEventListener('input', updateWeapon);
+}
+
+// Wire character buttons
+document.querySelectorAll('#char-select button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#char-select button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentChar = btn.dataset.char;
+    loadCharacter(currentChar);
+  });
+});
+
+// Wire weapon buttons
+document.querySelectorAll('#weapon-select button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#weapon-select button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentWep = btn.dataset.wep;
+    loadWeapon(currentWep);
+  });
+});
+
+// Start
+loadCharacter('knight');
+
+const clock = new THREE.Clock();
+function animate() {
+  requestAnimationFrame(animate);
+  if (currentMixer) currentMixer.update(clock.getDelta());
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+</body>
+</html>

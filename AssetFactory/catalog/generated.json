@@ -1,0 +1,1374 @@
+[
+  {
+    "id": "prop_wood_crate_small_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_wood_crate_small_01.png"
+    },
+    "timestamp": "2026-09-18T12:45:04"
+  },
+  {
+    "id": "prop_grain_sack_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_grain_sack_01.png"
+    },
+    "timestamp": "2026-09-18T12:45:29"
+  },
+  {
+    "id": "prop_hay_bale_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_hay_bale_01.png"
+    },
+    "timestamp": "2026-09-18T12:45:55"
+  },
+  {
+    "id": "prop_bench_wood_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_bench_wood_01.png"
+    },
+    "timestamp": "2026-09-18T12:46:20"
+  },
+  {
+    "id": "prop_firewood_stack_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_firewood_stack_01.png"
+    },
+    "timestamp": "2026-09-18T12:46:45"
+  },
+  {
+    "id": "village_water_well_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_water_well_01.png"
+    },
+    "timestamp": "2026-09-18T12:47:10"
+  },
+  {
+    "id": "village_fence_straight_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_fence_straight_01.png"
+    },
+    "timestamp": "2026-09-18T12:47:38"
+  },
+  {
+    "id": "nature_oak_large_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_oak_large_01.png"
+    },
+    "timestamp": "2026-09-18T12:48:03"
+  },
+  {
+    "id": "nature_rock_cluster_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_rock_cluster_01.png"
+    },
+    "timestamp": "2026-09-18T12:48:28"
+  },
+  {
+    "id": "combat_barricade_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_barricade_01.png"
+    },
+    "timestamp": "2026-09-18T12:48:53"
+  },
+  {
+    "id": "combat_barricade_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-18T17:01:54"
+  },
+  {
+    "id": "prop_wood_crate_large_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_wood_crate_large_01.png"
+    },
+    "timestamp": "2026-09-18T19:46:51"
+  },
+  {
+    "id": "prop_wood_crate_broken_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_wood_crate_broken_01.png"
+    },
+    "timestamp": "2026-09-18T19:47:22"
+  },
+  {
+    "id": "prop_grain_sack_stack_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_grain_sack_stack_01.png"
+    },
+    "timestamp": "2026-09-18T19:47:48"
+  },
+  {
+    "id": "prop_hay_pile_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_hay_pile_01.png"
+    },
+    "timestamp": "2026-09-18T19:48:14"
+  },
+  {
+    "id": "prop_bucket_wood_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_bucket_wood_01.png"
+    },
+    "timestamp": "2026-09-18T19:48:40"
+  },
+  {
+    "id": "prop_bucket_metal_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_bucket_metal_01.png"
+    },
+    "timestamp": "2026-09-18T19:49:07"
+  },
+  {
+    "id": "prop_table_wood_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_table_wood_01.png"
+    },
+    "timestamp": "2026-09-18T19:49:33"
+  },
+  {
+    "id": "prop_stool_wood_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_stool_wood_01.png"
+    },
+    "timestamp": "2026-09-18T19:49:59"
+  },
+  {
+    "id": "prop_logs_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_logs_01.png"
+    },
+    "timestamp": "2026-09-18T19:50:25"
+  },
+  {
+    "id": "prop_tree_stump_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_tree_stump_01.png"
+    },
+    "timestamp": "2026-09-18T19:50:51"
+  },
+  {
+    "id": "prop_wheelbarrow_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_wheelbarrow_01.png"
+    },
+    "timestamp": "2026-09-18T19:51:17"
+  },
+  {
+    "id": "prop_cart_wheel_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_cart_wheel_01.png"
+    },
+    "timestamp": "2026-09-18T19:51:43"
+  },
+  {
+    "id": "prop_basket_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_basket_01.png"
+    },
+    "timestamp": "2026-09-18T19:52:09"
+  },
+  {
+    "id": "prop_pottery_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_pottery_01.png"
+    },
+    "timestamp": "2026-09-18T19:52:35"
+  },
+  {
+    "id": "prop_water_jug_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_water_jug_01.png"
+    },
+    "timestamp": "2026-09-18T19:53:01"
+  },
+  {
+    "id": "village_fence_corner_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_fence_corner_01.png"
+    },
+    "timestamp": "2026-09-18T19:53:27"
+  },
+  {
+    "id": "village_fence_gate_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_fence_gate_01.png"
+    },
+    "timestamp": "2026-09-18T19:53:59"
+  },
+  {
+    "id": "village_fence_broken_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_fence_broken_01.png"
+    },
+    "timestamp": "2026-09-18T19:54:30"
+  },
+  {
+    "id": "village_signpost_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_signpost_01.png"
+    },
+    "timestamp": "2026-09-18T19:55:01"
+  },
+  {
+    "id": "village_lantern_post_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_lantern_post_01.png"
+    },
+    "timestamp": "2026-09-18T19:55:32"
+  },
+  {
+    "id": "village_hitching_post_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_hitching_post_01.png"
+    },
+    "timestamp": "2026-09-18T19:56:03"
+  },
+  {
+    "id": "village_market_stall_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_market_stall_01.png"
+    },
+    "timestamp": "2026-09-18T19:56:29"
+  },
+  {
+    "id": "village_market_stall_02",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_market_stall_02.png"
+    },
+    "timestamp": "2026-09-18T19:56:55"
+  },
+  {
+    "id": "village_water_trough_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_water_trough_01.png"
+    },
+    "timestamp": "2026-09-18T19:57:21"
+  },
+  {
+    "id": "village_weapon_rack_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_weapon_rack_01.png"
+    },
+    "timestamp": "2026-09-18T19:57:47"
+  },
+  {
+    "id": "prop_wood_crate_large_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T07:59:31"
+  },
+  {
+    "id": "prop_water_jug_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T08:08:46"
+  },
+  {
+    "id": "prop_water_jug_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T08:08:47"
+  },
+  {
+    "id": "village_fence_corner_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T08:18:07"
+  },
+  {
+    "id": "village_fence_corner_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T08:18:08"
+  },
+  {
+    "id": "village_fence_gate_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T08:22:34"
+  },
+  {
+    "id": "village_fence_gate_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T08:22:35"
+  },
+  {
+    "id": "village_fence_broken_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T08:26:44"
+  },
+  {
+    "id": "village_fence_broken_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T08:26:44"
+  },
+  {
+    "id": "village_signpost_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T08:30:33"
+  },
+  {
+    "id": "village_signpost_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T08:30:34"
+  },
+  {
+    "id": "village_lantern_post_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T08:34:17"
+  },
+  {
+    "id": "village_lantern_post_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T08:34:17"
+  },
+  {
+    "id": "village_hitching_post_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T08:37:57"
+  },
+  {
+    "id": "village_hitching_post_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T08:37:57"
+  },
+  {
+    "id": "village_market_stall_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T08:43:54"
+  },
+  {
+    "id": "village_market_stall_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T08:43:55"
+  },
+  {
+    "id": "village_water_trough_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T08:54:24"
+  },
+  {
+    "id": "village_water_trough_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T08:54:25"
+  },
+  {
+    "id": "village_weapon_rack_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T08:58:25"
+  },
+  {
+    "id": "village_weapon_rack_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T08:58:26"
+  },
+  {
+    "id": "blacksmith_anvil_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\blacksmith_anvil_01.png"
+    },
+    "timestamp": "2026-09-19T09:06:44"
+  },
+  {
+    "id": "blacksmith_anvil_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T09:12:11"
+  },
+  {
+    "id": "blacksmith_anvil_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T09:12:12"
+  },
+  {
+    "id": "blacksmith_forge_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\blacksmith_forge_01.png"
+    },
+    "timestamp": "2026-09-19T09:13:03"
+  },
+  {
+    "id": "blacksmith_forge_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T09:20:14"
+  },
+  {
+    "id": "blacksmith_forge_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T09:20:14"
+  },
+  {
+    "id": "blacksmith_coal_pile_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\blacksmith_coal_pile_01.png"
+    },
+    "timestamp": "2026-09-19T09:43:35"
+  },
+  {
+    "id": "blacksmith_coal_pile_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T09:52:29"
+  },
+  {
+    "id": "blacksmith_coal_pile_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T09:52:30"
+  },
+  {
+    "id": "blacksmith_weapon_rack_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\blacksmith_weapon_rack_01.png"
+    },
+    "timestamp": "2026-09-19T09:53:02"
+  },
+  {
+    "id": "blacksmith_weapon_rack_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T09:57:08"
+  },
+  {
+    "id": "blacksmith_weapon_rack_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T09:57:09"
+  },
+  {
+    "id": "blacksmith_tool_rack_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\blacksmith_tool_rack_01.png"
+    },
+    "timestamp": "2026-09-19T09:57:45"
+  },
+  {
+    "id": "blacksmith_tool_rack_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T10:01:49"
+  },
+  {
+    "id": "blacksmith_tool_rack_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T10:01:49"
+  },
+  {
+    "id": "blacksmith_water_barrel_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\blacksmith_water_barrel_01.png"
+    },
+    "timestamp": "2026-09-19T10:02:26"
+  },
+  {
+    "id": "blacksmith_water_barrel_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T10:08:53"
+  },
+  {
+    "id": "blacksmith_water_barrel_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T10:08:53"
+  },
+  {
+    "id": "blacksmith_grindstone_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\blacksmith_grindstone_01.png"
+    },
+    "timestamp": "2026-09-19T10:09:30"
+  },
+  {
+    "id": "blacksmith_grindstone_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T10:16:09"
+  },
+  {
+    "id": "blacksmith_grindstone_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T10:16:10"
+  },
+  {
+    "id": "nature_oak_large_02",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_oak_large_02.png"
+    },
+    "timestamp": "2026-09-19T10:16:46"
+  },
+  {
+    "id": "nature_oak_large_02",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T10:24:28"
+  },
+  {
+    "id": "nature_oak_large_02",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T10:24:29"
+  },
+  {
+    "id": "nature_oak_large_03",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_oak_large_03.png"
+    },
+    "timestamp": "2026-09-19T10:25:05"
+  },
+  {
+    "id": "nature_oak_large_03",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T10:32:58"
+  },
+  {
+    "id": "nature_oak_large_03",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T10:32:59"
+  },
+  {
+    "id": "nature_oak_small_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_oak_small_01.png"
+    },
+    "timestamp": "2026-09-19T10:33:35"
+  },
+  {
+    "id": "nature_oak_small_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T10:40:45"
+  },
+  {
+    "id": "nature_oak_small_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T10:40:46"
+  },
+  {
+    "id": "nature_oak_small_02",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_oak_small_02.png"
+    },
+    "timestamp": "2026-09-19T10:41:22"
+  },
+  {
+    "id": "nature_oak_small_02",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T10:49:41"
+  },
+  {
+    "id": "nature_oak_small_02",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T10:49:41"
+  },
+  {
+    "id": "nature_pine_02",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_pine_02.png"
+    },
+    "timestamp": "2026-09-19T10:50:17"
+  },
+  {
+    "id": "nature_pine_02",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T10:58:22"
+  },
+  {
+    "id": "nature_pine_02",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T10:58:22"
+  },
+  {
+    "id": "nature_pine_03",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_pine_03.png"
+    },
+    "timestamp": "2026-09-19T10:58:59"
+  },
+  {
+    "id": "nature_pine_03",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T11:05:33"
+  },
+  {
+    "id": "nature_pine_03",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T11:05:33"
+  },
+  {
+    "id": "nature_dead_tree_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_dead_tree_01.png"
+    },
+    "timestamp": "2026-09-19T11:06:10"
+  },
+  {
+    "id": "nature_dead_tree_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T11:11:36"
+  },
+  {
+    "id": "nature_dead_tree_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T11:11:36"
+  },
+  {
+    "id": "nature_dead_tree_02",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_dead_tree_02.png"
+    },
+    "timestamp": "2026-09-19T11:12:12"
+  },
+  {
+    "id": "nature_dead_tree_02",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T11:18:31"
+  },
+  {
+    "id": "nature_dead_tree_02",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T11:18:31"
+  },
+  {
+    "id": "nature_sapling_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_sapling_01.png"
+    },
+    "timestamp": "2026-09-19T11:19:08"
+  },
+  {
+    "id": "nature_sapling_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T12:25:59"
+  },
+  {
+    "id": "nature_sapling_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T12:26:00"
+  },
+  {
+    "id": "nature_bush_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_bush_01.png"
+    },
+    "timestamp": "2026-09-19T12:26:36"
+  },
+  {
+    "id": "nature_bush_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T12:32:25"
+  },
+  {
+    "id": "nature_bush_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T12:32:25"
+  },
+  {
+    "id": "nature_bush_02",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_bush_02.png"
+    },
+    "timestamp": "2026-09-19T12:33:02"
+  },
+  {
+    "id": "nature_bush_02",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T12:37:04"
+  },
+  {
+    "id": "nature_bush_02",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T12:37:04"
+  },
+  {
+    "id": "nature_bush_03",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_bush_03.png"
+    },
+    "timestamp": "2026-09-19T12:37:41"
+  },
+  {
+    "id": "nature_bush_03",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T12:40:37"
+  },
+  {
+    "id": "nature_bush_03",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T12:40:37"
+  },
+  {
+    "id": "nature_rock_small_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_rock_small_01.png"
+    },
+    "timestamp": "2026-09-19T12:41:08"
+  },
+  {
+    "id": "nature_rock_small_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T13:39:14"
+  },
+  {
+    "id": "nature_rock_small_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T13:39:14"
+  },
+  {
+    "id": "nature_rock_small_02",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_rock_small_02.png"
+    },
+    "timestamp": "2026-09-19T13:39:51"
+  },
+  {
+    "id": "nature_rock_small_02",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T13:46:44"
+  },
+  {
+    "id": "nature_rock_small_02",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T13:46:45"
+  },
+  {
+    "id": "nature_rock_cluster_02",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_rock_cluster_02.png"
+    },
+    "timestamp": "2026-09-19T13:47:21"
+  },
+  {
+    "id": "nature_rock_cluster_02",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T13:51:52"
+  },
+  {
+    "id": "nature_rock_cluster_02",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T13:51:53"
+  },
+  {
+    "id": "nature_grass_clump_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_grass_clump_01.png"
+    },
+    "timestamp": "2026-09-19T13:52:29"
+  },
+  {
+    "id": "nature_grass_clump_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T13:55:40"
+  },
+  {
+    "id": "nature_grass_clump_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T13:55:41"
+  },
+  {
+    "id": "nature_grass_clump_02",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_grass_clump_02.png"
+    },
+    "timestamp": "2026-09-19T13:56:17"
+  },
+  {
+    "id": "nature_grass_clump_02",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T14:00:35"
+  },
+  {
+    "id": "nature_grass_clump_02",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T14:00:35"
+  },
+  {
+    "id": "nature_flowers_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_flowers_01.png"
+    },
+    "timestamp": "2026-09-19T14:01:12"
+  },
+  {
+    "id": "nature_flowers_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T14:05:27"
+  },
+  {
+    "id": "nature_flowers_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T14:05:28"
+  },
+  {
+    "id": "nature_flowers_02",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_flowers_02.png"
+    },
+    "timestamp": "2026-09-19T14:06:04"
+  },
+  {
+    "id": "nature_flowers_02",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T14:09:36"
+  },
+  {
+    "id": "nature_flowers_02",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T14:09:37"
+  },
+  {
+    "id": "nature_mushrooms_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_mushrooms_01.png"
+    },
+    "timestamp": "2026-09-19T14:10:13"
+  },
+  {
+    "id": "nature_mushrooms_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T14:16:12"
+  },
+  {
+    "id": "nature_mushrooms_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T14:16:13"
+  },
+  {
+    "id": "nature_fern_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_fern_01.png"
+    },
+    "timestamp": "2026-09-19T14:16:49"
+  },
+  {
+    "id": "nature_fern_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T14:20:13"
+  },
+  {
+    "id": "nature_fern_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T14:20:14"
+  },
+  {
+    "id": "nature_fallen_log_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_fallen_log_01.png"
+    },
+    "timestamp": "2026-09-19T14:20:50"
+  },
+  {
+    "id": "nature_fallen_log_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T14:23:55"
+  },
+  {
+    "id": "nature_fallen_log_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T14:23:55"
+  },
+  {
+    "id": "village_market_stall_02",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T14:33:25"
+  },
+  {
+    "id": "village_market_stall_02",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T14:33:26"
+  },
+  {
+    "id": "farm_scarecrow_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\farm_scarecrow_01.png"
+    },
+    "timestamp": "2026-09-19T14:34:02"
+  },
+  {
+    "id": "farm_scarecrow_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-19T14:37:01"
+  },
+  {
+    "id": "farm_scarecrow_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-19T14:37:01"
+  },
+  {
+    "id": "farm_pitchfork_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\farm_pitchfork_01.png"
+    },
+    "timestamp": "2026-09-19T14:37:34"
+  },
+  {
+    "id": "village_rail_fence_straight_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_rail_fence_straight_01.png"
+    },
+    "timestamp": "2026-09-20T14:49:49"
+  },
+  {
+    "id": "village_rail_fence_straight_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-20T14:53:43"
+  },
+  {
+    "id": "village_rail_fence_straight_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-20T14:53:44"
+  },
+  {
+    "id": "village_rail_fence_corner_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_rail_fence_corner_01.png"
+    },
+    "timestamp": "2026-09-20T14:54:26"
+  },
+  {
+    "id": "village_rail_fence_corner_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-20T17:19:51"
+  },
+  {
+    "id": "village_rail_fence_corner_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-20T17:19:51"
+  },
+  {
+    "id": "village_rail_fence_gate_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\village\\village_rail_fence_gate_01.png"
+    },
+    "timestamp": "2026-09-20T17:20:33"
+  },
+  {
+    "id": "village_rail_fence_gate_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-20T17:23:45"
+  },
+  {
+    "id": "village_rail_fence_gate_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-20T17:23:46"
+  },
+  {
+    "id": "nature_reeds_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_reeds_01.png"
+    },
+    "timestamp": "2026-09-20T17:24:32"
+  },
+  {
+    "id": "nature_reeds_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-20T17:30:37"
+  },
+  {
+    "id": "nature_reeds_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-20T17:30:37"
+  },
+  {
+    "id": "prop_hay_pile_02",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_hay_pile_02.png"
+    },
+    "timestamp": "2026-09-20T17:31:14"
+  },
+  {
+    "id": "prop_hay_pile_02",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-20T17:36:36"
+  },
+  {
+    "id": "prop_hay_pile_02",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-20T17:36:37"
+  },
+  {
+    "id": "prop_logs_02",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_logs_02.png"
+    },
+    "timestamp": "2026-09-20T17:37:13"
+  },
+  {
+    "id": "prop_logs_02",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-20T17:43:06"
+  },
+  {
+    "id": "prop_logs_02",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-20T17:43:06"
+  },
+  {
+    "id": "prop_tree_stump_02",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_tree_stump_02.png"
+    },
+    "timestamp": "2026-09-20T17:43:43"
+  },
+  {
+    "id": "prop_tree_stump_02",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-20T17:49:15"
+  },
+  {
+    "id": "prop_tree_stump_02",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-20T17:49:16"
+  },
+  {
+    "id": "prop_firewood_stack_02",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\prop_firewood_stack_02.png"
+    },
+    "timestamp": "2026-09-20T17:49:52"
+  },
+  {
+    "id": "prop_firewood_stack_02",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-20T17:53:50"
+  },
+  {
+    "id": "prop_firewood_stack_02",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-20T17:53:51"
+  },
+  {
+    "id": "nature_dead_tree_03",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_dead_tree_03.png"
+    },
+    "timestamp": "2026-09-20T17:54:28"
+  },
+  {
+    "id": "nature_dead_tree_03",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-20T17:58:13"
+  },
+  {
+    "id": "nature_dead_tree_03",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-20T17:58:13"
+  },
+  {
+    "id": "nature_mushrooms_02",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\vegetation\\nature_mushrooms_02.png"
+    },
+    "timestamp": "2026-09-20T17:58:50"
+  },
+  {
+    "id": "nature_mushrooms_02",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-20T18:02:11"
+  },
+  {
+    "id": "nature_mushrooms_02",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-20T18:02:11"
+  },
+  {
+    "id": "landmark_village_fountain",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_village_fountain.png"
+    },
+    "timestamp": "2026-09-20T19:51:07"
+  },
+  {
+    "id": "landmark_village_fountain",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-20T19:55:37"
+  },
+  {
+    "id": "landmark_village_fountain",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-20T19:55:38"
+  },
+  {
+    "id": "landmark_ancient_oak",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_ancient_oak.png"
+    },
+    "timestamp": "2026-09-20T19:56:15"
+  },
+  {
+    "id": "landmark_ancient_oak",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-20T20:02:25"
+  },
+  {
+    "id": "landmark_ancient_oak",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-20T20:02:26"
+  },
+  {
+    "id": "landmark_ruined_tower",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_ruined_tower.png"
+    },
+    "timestamp": "2026-09-20T20:03:07"
+  },
+  {
+    "id": "landmark_ruined_tower",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-20T20:11:05"
+  },
+  {
+    "id": "landmark_ruined_tower",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-20T20:11:06"
+  },
+  {
+    "id": "landmark_windmill",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_windmill.png"
+    },
+    "timestamp": "2026-09-20T20:11:47"
+  },
+  {
+    "id": "landmark_windmill",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-20T20:18:07"
+  },
+  {
+    "id": "landmark_windmill",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-20T20:18:09"
+  },
+  {
+    "id": "landmark_graveyard_gate",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_graveyard_gate.png"
+    },
+    "timestamp": "2026-09-20T20:20:42"
+  },
+  {
+    "id": "landmark_graveyard_gate",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-20T20:25:15"
+  },
+  {
+    "id": "landmark_graveyard_gate",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-20T20:25:16"
+  },
+  {
+    "id": "landmark_enemy_totem",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_enemy_totem.png"
+    },
+    "timestamp": "2026-09-20T20:25:57"
+  },
+  {
+    "id": "landmark_enemy_totem",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-20T20:30:37"
+  },
+  {
+    "id": "landmark_enemy_totem",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-20T20:30:38"
+  },
+  {
+    "id": "landmark_destroyed_watchtower",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_destroyed_watchtower.png"
+    },
+    "timestamp": "2026-09-20T20:31:14"
+  },
+  {
+    "id": "landmark_destroyed_watchtower",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-20T20:38:12"
+  },
+  {
+    "id": "landmark_destroyed_watchtower",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-20T20:38:13"
+  }
+]

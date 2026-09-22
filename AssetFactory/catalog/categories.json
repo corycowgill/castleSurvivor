@@ -1,0 +1,65 @@
+{
+  "village_clutter": {
+    "name": "Village Clutter",
+    "description": "Small props scattered throughout the village",
+    "promptTemplate": "PROP",
+    "defaultTextureSize": 512,
+    "priority": 1
+  },
+  "village_infrastructure": {
+    "name": "Village Infrastructure",
+    "description": "Functional village structures and fixtures",
+    "promptTemplate": "PROP",
+    "defaultTextureSize": 1024,
+    "priority": 2
+  },
+  "blacksmith_kit": {
+    "name": "Blacksmith Kit",
+    "description": "Props for blacksmith area decoration",
+    "promptTemplate": "PROP",
+    "defaultTextureSize": 512,
+    "priority": 3
+  },
+  "farm_kit": {
+    "name": "Farm Kit",
+    "description": "Props for farm area decoration",
+    "promptTemplate": "PROP",
+    "defaultTextureSize": 512,
+    "priority": 4
+  },
+  "tavern_kit": {
+    "name": "Tavern Kit",
+    "description": "Props for tavern area decoration",
+    "promptTemplate": "PROP",
+    "defaultTextureSize": 512,
+    "priority": 5
+  },
+  "nature": {
+    "name": "Nature",
+    "description": "Trees, bushes, rocks, ground cover",
+    "promptTemplate": "TREE",
+    "defaultTextureSize": 1024,
+    "priority": 6
+  },
+  "combat": {
+    "name": "Combat / Destruction",
+    "description": "Battle damage, barricades, war debris",
+    "promptTemplate": "PROP",
+    "defaultTextureSize": 512,
+    "priority": 7
+  },
+  "terrain": {
+    "name": "Terrain",
+    "description": "Modular ground tiles and terrain features",
+    "promptTemplate": "TERRAIN",
+    "defaultTextureSize": 1024,
+    "priority": 8
+  },
+  "landmarks": {
+    "name": "Landmarks",
+    "description": "Hero pieces and unique structures",
+    "promptTemplate": "BUILDING",
+    "defaultTextureSize": 1024,
+    "priority": 9
+  }
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html><head><title>Debug Clone</title></head>
+<body style="margin:0;background:#333">
+<div id="info" style="position:fixed;top:10px;left:10px;color:#fff;font-family:monospace;font-size:14px;z-index:100;background:rgba(0,0,0,0.7);padding:10px"></div>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { SkeletonUtils } from 'three/addons/utils/SkeletonUtils.js';
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x444444);
+const camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.01, 1000);
+camera.position.set(0, 3, 5);
+const renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement);
+
+scene.add(new THREE.AmbientLight(0xffffff, 1.5));
+scene.add(new THREE.DirectionalLight(0xffffff, 1));
+scene.add(new THREE.GridHelper(20, 20));
+
+const loader = new GLTFLoader();
+const info = document.getElementById('info');
+const mixers = [];
+
+loader.load('Game3DAssets/knightWithAnimations.glb', (gltf) => {
+  // Test 1: direct scene (no clone)
+  const original = gltf.scene;
+  original.position.set(-3, 0, 0);
+  original.scale.setScalar(3);
+  scene.add(original);
+  const m1 = new THREE.AnimationMixer(original);
+  m1.clipAction(gltf.animations.find(a => a.name === 'Idle_A')).play();
+  mixers.push(m1);
+  info.innerHTML += 'Left: original scene, scale 3<br>';
+
+  // Test 2: scene.clone()
+  const cloned = gltf.scene.clone();
+  cloned.position.set(0, 0, 0);
+  cloned.scale.setScalar(3);
+  scene.add(cloned);
+  const m2 = new THREE.AnimationMixer(cloned);
+  m2.clipAction(gltf.animations.find(a => a.name === 'Run_Anime')).play();
+  mixers.push(m2);
+  info.innerHTML += 'Center: scene.clone(), scale 3<br>';
+
+  // Test 3: SkeletonUtils.clone()
+  const skCloned = SkeletonUtils.clone(gltf.scene);
+  skCloned.position.set(3, 0, 0);
+  skCloned.scale.setScalar(3);
+  scene.add(skCloned);
+  const m3 = new THREE.AnimationMixer(skCloned);
+  m3.clipAction(gltf.animations.find(a => a.name === 'Sword_Attack')).play();
+  mixers.push(m3);
+  info.innerHTML += 'Right: SkeletonUtils.clone(), scale 3<br>';
+
+  info.innerHTML += '<br>Which ones are visible?<br>';
+});
+
+const clock = new THREE.Clock();
+function animate() {
+  requestAnimationFrame(animate);
+  const dt = clock.getDelta();
+  for (const m of mixers) m.update(dt);
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+</script>
+</body>
+</html>

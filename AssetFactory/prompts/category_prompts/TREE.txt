@@ -1,0 +1,23 @@
+{base_prompt}
+
+{asset_description}
+
+Complete stylized medieval fantasy tree.
+
+Entire trunk, roots, branches and canopy visible.
+
+Clearly defined trunk and major branches.
+
+Chunky readable foliage masses rather than thousands of tiny leaves.
+
+No surrounding grass.
+
+No ground.
+
+No forest.
+
+Single isolated tree.
+
+Designed as a performant video game environment prop.
+
+{extra_details}

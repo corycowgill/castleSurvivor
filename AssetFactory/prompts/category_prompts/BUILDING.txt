@@ -1,0 +1,17 @@
+{base_prompt}
+
+{asset_description}
+
+Complete medieval fantasy building or structure.
+
+Entire structure visible from foundation to roof.
+
+Readable architectural silhouette with clear structural elements.
+
+Chunky stylized construction, thick walls, visible timber framing where appropriate.
+
+No surrounding terrain or other buildings.
+
+Single isolated structure.
+
+{extra_details}
