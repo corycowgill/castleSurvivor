@@ -1048,7 +1048,9 @@ body.picking-coop #level-up-screen .divider { margin: 4px 0 8px; }
 .coop-slot.joined .cs-who { color: #e8c860; }
 .coop-slot .cs-knight { font-family: 'MedievalSharp', cursive; font-size: 12px; color: #8a7040; }
 .coop-slot.joined .cs-knight { color: #d4a856; }
-#coop-hint { font-family: 'MedievalSharp', cursive; font-size: 11px; color: #6d5637; margin-top: 5px; }
+.coop-slot .cs-dev { font-family: 'MedievalSharp', cursive; font-size: 10px; color: #5f4a2a; }
+.coop-slot.joined .cs-dev { color: #8a7040; }
+#coop-hint { font-family: 'MedievalSharp', cursive; font-size: 11px; color: #6d5637; margin-top: 5px; line-height: 1.5; }
 #coop-hint b { color: #a8873f; }
 
 /* ─── SETTINGS ─── */
@@ -3730,13 +3732,16 @@ async function createPlayer(index = 0) {
 // prompt; for now it is the entry point the harness drives. Per-player passives
 // and Forge ranks are not applied yet -- joined players start on base stats
 // until clearRun() is converted to loop over players.
-async function joinPlayer(character = 'brennan', padIndex = null) {
+async function joinPlayer(character = 'brennan', device = null) {
   if (players.length >= MAX_PLAYERS) return null;
   const index = players.length;
   const p = makePlayer(index);
   p.character = character;
-  // Default to the Nth pad; a real join flow passes the pad that pressed A.
-  p.padIndex = padIndex != null ? padIndex : index;
+  // device is { type: 'pad', index } or { type: 'kb' }. A bare number is still
+  // accepted so the harness and older call sites keep working.
+  p.device = typeof device === 'number' ? { type: 'pad', index: device }
+    : device || { type: 'pad', index };
+  p.padIndex = p.device.type === 'pad' ? p.device.index : null;
   players[index] = p;
   await createPlayer(index);
   // The shared XP curve scales with party size, so rescale it now that the
@@ -9128,16 +9133,19 @@ function renderCoopRoster() {
     const padMsg = live >= 2
       ? `<b>${live} controllers detected</b>${which}`
       : `<b>${live} controller${live === 1 ? '' : 's'} detected</b>${which} — click the game window, then press a button on the 2nd pad`;
-    hint.innerHTML = `Press <b>A</b> on a second controller to join &bull; <b>Y</b> to change knight &bull; <b>B</b> to leave<br>${padMsg}`;
+    hint.innerHTML = `<b>A</b> on a 2nd controller to join &bull; <b>Y</b> change knight &bull; <b>B</b> leave`
+      + `<br>No 2nd pad? <b>Enter</b> joins on the keyboard (arrows to move, right shift to dash)`
+      + `<br>${padMsg}`;
   }
   const names = { dad: 'Dad', brennan: 'Brennan', parker: 'Parker' };
-  let html = `<div class="coop-slot joined"><div class="cs-who">P1</div><div class="cs-knight">${names[selectedCharacter] || selectedCharacter}</div></div>`;
+  let html = `<div class="coop-slot joined"><div class="cs-who">P1</div><div class="cs-knight">${names[selectedCharacter] || selectedCharacter}</div><div class="cs-dev">WASD / pad</div></div>`;
   let n = 2;
   for (const [, slot] of coopPending) {
-    html += `<div class="coop-slot joined"><div class="cs-who">P${n++}</div><div class="cs-knight">${names[slot.character] || slot.character}</div></div>`;
+    const dev = slot.device && slot.device.type === 'kb' ? 'arrows' : `pad ${slot.device ? slot.device.index : '?'}`;
+    html += `<div class="coop-slot joined"><div class="cs-who">P${n++}</div><div class="cs-knight">${names[slot.character] || slot.character}</div><div class="cs-dev">${dev}</div></div>`;
   }
   if (n <= MAX_PLAYERS && coopAvailableKnights().length) {
-    html += `<div class="coop-slot"><div class="cs-who">P${n}</div><div class="cs-knight">press A to join</div></div>`;
+    html += `<div class="coop-slot"><div class="cs-who">P${n}</div><div class="cs-knight">A on a pad</div><div class="cs-dev">or Enter for arrows</div></div>`;
   }
   slots.innerHTML = html;
 }
@@ -9159,6 +9167,8 @@ window.addEventListener('gamepaddisconnected', () => {
 });
 
 let _coopPadCount = -1;
+let _coopPrevEnter = false;
+let _coopPrevBack = false;
 function updateCoopJoin() {
   // Refresh when a pad wakes up, so the detected-controller readout is live.
   let live = 0;
@@ -9171,43 +9181,78 @@ function updateCoopJoin() {
     if (!pad) continue;
     // The pad driving player 1 cannot also claim a companion slot.
     if (i === primaryPadIndex) continue;
-    const slot = coopPending.get(i);
+    const key = 'pad:' + i;
+    const slot = coopPending.get(key);
     if (!slot) {
       if (pad.a && !pad.prevA && coopPending.size + 1 < MAX_PLAYERS) {
         const free = coopAvailableKnights();
-        if (free.length) { coopPending.set(i, { character: free[0] }); dirty = true; AudioSystem.play('upgradeSelect', { volume: 0.4 }); }
+        if (free.length) { coopPending.set(key, { character: free[0], device: { type: 'pad', index: i } }); dirty = true; AudioSystem.play('upgradeSelect', { volume: 0.4 }); }
       }
     } else {
       if (pad.y && !pad.prevY) {
         const free = coopAvailableKnights();
         if (free.length) { slot.character = free[0]; dirty = true; AudioSystem.play('upgradeSelect', { volume: 0.3 }); }
       }
-      if (pad.b && !pad.prevB) { coopPending.delete(i); dirty = true; }
+      if (pad.b && !pad.prevB) { coopPending.delete(key); dirty = true; }
     }
   }
+
+  // Keyboard companion: Enter joins and cycles knight, Backspace leaves. The
+  // escape hatch when a browser or an OS will not surface a second gamepad.
+  const kb = coopPending.get('kb');
+  if (keys['Enter'] && !_coopPrevEnter) {
+    if (!kb) {
+      if (coopPending.size + 1 < MAX_PLAYERS) {
+        const free = coopAvailableKnights();
+        if (free.length) { coopPending.set('kb', { character: free[0], device: { type: 'kb' } }); dirty = true; AudioSystem.play('upgradeSelect', { volume: 0.4 }); }
+      }
+    } else {
+      const free = coopAvailableKnights();
+      if (free.length) { kb.character = free[0]; dirty = true; AudioSystem.play('upgradeSelect', { volume: 0.3 }); }
+    }
+  }
+  if (keys['Backspace'] && !_coopPrevBack && kb) { coopPending.delete('kb'); dirty = true; }
+  _coopPrevEnter = !!keys['Enter'];
+  _coopPrevBack = !!keys['Backspace'];
+
   if (dirty) renderCoopRoster();
 }
 
 // Turn the roster into real players once the run has started.
 async function spawnCoopCompanions() {
-  for (const [padIndex, slot] of coopPending) {
-    await joinPlayer(slot.character, padIndex);
+  for (const [, slot] of coopPending) {
+    await joinPlayer(slot.character, slot.device);
   }
 }
 
 // Which device drives a given player. Player 0 keeps keyboard + touch + the
 // shared (first-pad) state, so single-player behaviour is exactly as before;
 // joined players each read their own pad slot.
+function keyboardCompanionActive() {
+  for (let i = 1; i < players.length; i++) if (players[i].device && players[i].device.type === 'kb') return true;
+  return false;
+}
+
 function readInput(p) {
   let dx = 0, dz = 0, dash = false;
   if (p.index === 0) {
-    if (keys['KeyW'] || keys['ArrowUp']) dz -= 1;
-    if (keys['KeyS'] || keys['ArrowDown']) dz += 1;
-    if (keys['KeyA'] || keys['ArrowLeft']) dx -= 1;
-    if (keys['KeyD'] || keys['ArrowRight']) dx += 1;
+    // WASD always. The arrows belong to player 1 too, unless a keyboard
+    // companion has claimed them for itself.
+    const arrows = !keyboardCompanionActive();
+    if (keys['KeyW'] || (arrows && keys['ArrowUp'])) dz -= 1;
+    if (keys['KeyS'] || (arrows && keys['ArrowDown'])) dz += 1;
+    if (keys['KeyA'] || (arrows && keys['ArrowLeft'])) dx -= 1;
+    if (keys['KeyD'] || (arrows && keys['ArrowRight'])) dx += 1;
     if (gamepadState.lx !== 0 || gamepadState.ly !== 0) { dx += gamepadState.lx; dz += gamepadState.ly; }
     if (touchState.stickX !== 0 || touchState.stickY !== 0) { dx += touchState.stickX; dz += touchState.stickY; }
     dash = !!(keys['Space'] || gamepadState.b || touchState.dash);
+  } else if (p.device && p.device.type === 'kb') {
+    // Keyboard companion: arrows to move, right shift or numpad 0 to dash.
+    if (keys['ArrowUp']) dz -= 1;
+    if (keys['ArrowDown']) dz += 1;
+    if (keys['ArrowLeft']) dx -= 1;
+    if (keys['ArrowRight']) dx += 1;
+    dash = !!(keys['ShiftRight'] || keys['Numpad0']);
   } else {
     const pad = p.padIndex != null ? gamepadStates[p.padIndex] : null;
     if (pad) {
