@@ -9130,9 +9130,14 @@ function renderCoopRoster() {
     } catch {}
     const live = slotsSeen.length;
     const which = live ? ` (slot${live > 1 ? 's' : ''} ${slotsSeen.join(', ')}${primaryPadIndex >= 0 ? `; P1 on ${primaryPadIndex}` : ''})` : '';
+    // One pad visible is the common Windows case: Xbox controllers over
+    // Bluetooth get a single connection slot, so powering on a second makes
+    // both drop rather than adding one. Wired or the Xbox adapter fixes it.
     const padMsg = live >= 2
       ? `<b>${live} controllers detected</b>${which}`
-      : `<b>${live} controller${live === 1 ? '' : 's'} detected</b>${which} — click the game window, then press a button on the 2nd pad`;
+      : live === 1
+        ? `<b>1 controller detected</b>${which} — 2nd Xbox pad on Bluetooth? Windows allows only one; connect it by <b>USB cable</b> or use an Xbox Wireless Adapter`
+        : `<b>No controllers detected</b> — click the game window, then press a button on a pad`;
     hint.innerHTML = `<b>A</b> on a 2nd controller to join &bull; <b>Y</b> change knight &bull; <b>B</b> leave`
       + `<br>No 2nd pad? <b>Enter</b> joins on the keyboard (arrows to move, right shift to dash)`
       + `<br>${padMsg}`;
