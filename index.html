@@ -3407,28 +3407,34 @@ function parseCharModel(charKey) {
   });
 }
 
-async function createPlayer() {
+// Spawn offsets so co-op knights do not start inside one another.
+const PLAYER_SPAWN_OFFSETS = [[0, 0], [-3, 2], [3, 2]];
+
+async function createPlayer(index = 0) {
+  const p = players[index] || (players[index] = makePlayer(index));
   // Remove old player mesh if switching characters. The model is re-parsed from
   // its buffer every run, so the old parse's textures, materials, geometries and
   // skeletons belong to nobody else and must be freed here (two 2048² textures
   // leaked per run before). Weapon attachments are clones of shared assets and
   // are skipped (they carry no charOwned flag).
-  if (playerMesh) {
-    scene.remove(playerMesh);
-    playerMesh.traverse(c => {
+  if (p.mesh) {
+    scene.remove(p.mesh);
+    p.mesh.traverse(c => {
       if (!c.userData.charOwned) return;
       if (c.isSkinnedMesh && c.skeleton) c.skeleton.dispose();
       if (c.geometry) c.geometry.dispose();
       const mats = Array.isArray(c.material) ? c.material : (c.material ? [c.material] : []);
       for (const m of mats) { for (const k of ['map', 'normalMap', 'roughnessMap', 'metalnessMap', 'emissiveMap', 'aoMap']) m[k]?.dispose(); m.dispose(); }
     });
-    playerMixer = null;
-    for (const key of Object.keys(playerAnims)) delete playerAnims[key];
-    currentPlayerAnim = '';
+    p.mixer = null;
+    for (const key of Object.keys(p.anims)) delete p.anims[key];
+    p.currentAnim = '';
   }
 
   const animGltf = assets.knightAnims; // full animation set (same skeleton)
-  const charInfo = CHARACTER_ASSETS[selectedCharacter];
+  // Player 0 still follows the title-screen selection; joined players carry their own.
+  if (index === 0) p.character = selectedCharacter;
+  const charInfo = CHARACTER_ASSETS[p.character];
 
   // Parse a fresh copy of the rigged character model
   let charGltf;
@@ -3439,11 +3445,12 @@ async function createPlayer() {
     charGltf = assets.knight;
   }
 
-  playerMesh = charGltf.scene;
-  if (charGltf !== assets.knight) playerMesh.traverse(c => { if (c.isMesh) c.userData.charOwned = true; });
-  playerMesh.position.set(PLAYER_SPAWN_X, 0, PLAYER_SPAWN_Z);
-  playerMesh.scale.setScalar(3.0);
-  playerMesh.traverse(c => {
+  p.mesh = charGltf.scene;
+  if (charGltf !== assets.knight) p.mesh.traverse(c => { if (c.isMesh) c.userData.charOwned = true; });
+  const spawnOff = PLAYER_SPAWN_OFFSETS[index] || [0, 0];
+  p.mesh.position.set(PLAYER_SPAWN_X + spawnOff[0], 0, PLAYER_SPAWN_Z + spawnOff[1]);
+  p.mesh.scale.setScalar(3.0);
+  p.mesh.traverse(c => {
     if (c.isMesh) {
       c.castShadow = true; c.receiveShadow = true;
       const mats = Array.isArray(c.material) ? c.material : [c.material];
@@ -3453,53 +3460,55 @@ async function createPlayer() {
       }
     }
   });
-  scene.add(playerMesh);
-  alignToGround(playerMesh);
+  scene.add(p.mesh);
+  alignToGround(p.mesh);
 
   // Hero readability: a soft contact shadow and a pale glow ring under the knight so
   // the silhouette stays readable on cobble and in Darkwood (critic-look report #1).
   // The ring is a scene-level mesh that follows the player each frame (not a child,
-  // so the character's 3.0 scale and animation don't affect it).
-  if (!_heroRing) {
+  // so the character's 3.0 scale and animation don't affect it). Each co-op player
+  // gets its own ring in its own colour.
+  if (!p.ring) {
+    const tint = PLAYER_RING_COLORS[index] || PLAYER_RING_COLORS[0];
     const g = new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2);
     const shadow = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ map: radialTex('rgba(0,0,0,0.5)', 'rgba(0,0,0,0)', 64), transparent: true, depthWrite: false }));
     shadow.scale.setScalar(3.2); shadow.renderOrder = 22;
-    const glow = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ map: radialTex('rgba(255,240,205,0.0)', 'rgba(255,240,205,0)', 64), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+    const glow = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ map: radialTex(tint + '0.0)', tint + '0)', 64), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
     // ring, not disc: a canvas gradient with a bright band near the edge
     const c = document.createElement('canvas'); c.width = c.height = 128; const ctx = c.getContext('2d');
     const grd = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
-    grd.addColorStop(0, 'rgba(255,240,205,0.0)'); grd.addColorStop(0.6, 'rgba(255,240,205,0.03)'); grd.addColorStop(0.82, 'rgba(255,235,190,0.4)'); grd.addColorStop(1, 'rgba(255,235,190,0)');
+    grd.addColorStop(0, tint + '0.0)'); grd.addColorStop(0.6, tint + '0.03)'); grd.addColorStop(0.82, tint + '0.4)'); grd.addColorStop(1, tint + '0)');
     ctx.fillStyle = grd; ctx.fillRect(0, 0, 128, 128);
     glow.material.map = new THREE.CanvasTexture(c); glow.material.map.colorSpace = THREE.SRGBColorSpace;
     glow.scale.setScalar(3.6); glow.renderOrder = 23;
-    _heroRing = new THREE.Group(); _heroRing.add(shadow); _heroRing.add(glow);
-    _heroRing.position.y = 0.07;
-    scene.add(_heroRing);
+    p.ring = new THREE.Group(); p.ring.add(shadow); p.ring.add(glow);
+    p.ring.position.y = 0.07;
+    scene.add(p.ring);
   }
-  _heroRing.visible = true;
+  p.ring.visible = true;
 
   // Set up animation mixer — use the character's own animations + fill missing from knightAnims
-  playerMixer = new THREE.AnimationMixer(playerMesh);
+  p.mixer = new THREE.AnimationMixer(p.mesh);
 
   // First add all animations from the shared knight animation set (full set of clips)
   if (animGltf) {
     for (const clip of animGltf.animations) {
-      playerAnims[clip.name] = playerMixer.clipAction(clip);
+      p.anims[clip.name] = p.mixer.clipAction(clip);
     }
   }
   // Then override with any animations baked into the character model itself
   for (const clip of charGltf.animations) {
-    playerAnims[clip.name] = playerMixer.clipAction(clip);
+    p.anims[clip.name] = p.mixer.clipAction(clip);
   }
 
   // Attach weapon to right hand bone
   let handBoneR = null;
-  playerMesh.traverse(c => {
+  p.mesh.traverse(c => {
     if (c.isBone && c.name === 'hand_r') handBoneR = c;
   });
   if (handBoneR) {
     const DEG = Math.PI / 180;
-    if (selectedCharacter === 'brennan' && assets.spear) {
+    if (p.character === 'brennan' && assets.spear) {
       const spear = assets.spear.scene.clone();
       spear.position.set(-0.010, 0.050, 0.170);
       spear.rotation.set(-272 * DEG, -59 * DEG, 3 * DEG);
@@ -3517,15 +3526,15 @@ async function createPlayer() {
   }
 
   // Attach shield to left hand (Dad & Parker)
-  if ((selectedCharacter === 'dad' || selectedCharacter === 'parker') && assets.shield) {
+  if ((p.character === 'dad' || p.character === 'parker') && assets.shield) {
     let handBoneL = null;
-    playerMesh.traverse(c => {
+    p.mesh.traverse(c => {
       if (c.isBone && c.name === 'hand_l') handBoneL = c;
     });
     if (handBoneL) {
       const DEG = Math.PI / 180;
       const shield = assets.shield.scene.clone();
-      const shieldZ = selectedCharacter === 'dad' ? 0.130 : 0.065;
+      const shieldZ = p.character === 'dad' ? 0.130 : 0.065;
       shield.position.set(-0.035, -0.065, shieldZ);
       shield.rotation.set(-272 * DEG, -101 * DEG, -68 * DEG);
       shield.scale.setScalar(0.48);
@@ -3537,12 +3546,50 @@ async function createPlayer() {
   // Stats (passive + Forge ranks) are applied by clearRun(), never here:
   // createPlayer runs at init AND on Begin Quest, and used to apply the passive
   // and Forge bonuses both times, so the first run was quietly stronger.
-  const passive = CHARACTER_PASSIVES[selectedCharacter];
-  const passiveEl = document.getElementById('passive-indicator');
-  if (passiveEl) passiveEl.textContent = passive ? `${passive.name}: ${passive.desc}` : '';
+  // The passive readout is player 0's; co-op HUD gets per-player readouts later.
+  if (index === 0) {
+    const passive = CHARACTER_PASSIVES[p.character];
+    const passiveEl = document.getElementById('passive-indicator');
+    if (passiveEl) passiveEl.textContent = passive ? `${passive.name}: ${passive.desc}` : '';
+  }
 
-  playPlayerAnim('Idle_A', true);
-  adoptLegacyIntoPlayer0();
+  // Legacy bindings must point at player 0 before anything animates through them.
+  if (index === 0) {
+    playerMesh = p.mesh; playerMixer = p.mixer; _heroRing = p.ring;
+    currentPlayerAnim = '';
+  }
+  playPlayerAnimFor(p, 'Idle_A', true);
+  if (index === 0) adoptLegacyIntoPlayer0();
+}
+
+// Bring another knight into the run. Phase B wires this to a "press A to join"
+// prompt; for now it is the entry point the harness drives. Per-player passives
+// and Forge ranks are not applied yet -- joined players start on base stats
+// until clearRun() is converted to loop over players.
+async function joinPlayer(character = 'brennan') {
+  if (players.length >= MAX_PLAYERS) return null;
+  const index = players.length;
+  const p = makePlayer(index);
+  p.character = character;
+  players[index] = p;
+  await createPlayer(index);
+  return p;
+}
+
+// Per-player animation. playPlayerAnim stays as the player-0 entry point so the
+// ~30 unconverted call sites keep working.
+function playPlayerAnimFor(p, name, loop = true) {
+  if (p.currentAnim === name) return;
+  if (!p.anims[name]) return;
+  if (p.anims[p.currentAnim]) p.anims[p.currentAnim].fadeOut(0.2);
+  p.currentAnim = name;
+  if (p.index === 0) currentPlayerAnim = name;
+  const action = p.anims[name];
+  action.reset();
+  action.setLoop(loop ? THREE.LoopRepeat : THREE.LoopOnce);
+  action.clampWhenFinished = !loop;
+  action.fadeIn(0.2);
+  action.play();
 }
 
 function playPlayerAnim(name, loop = true) {
@@ -8482,10 +8529,13 @@ function gameLoop() {
   }
   updateLanternLights(dt);
   lookUniforms.uTime.value = state.time;
-  if (_heroRing && playerMesh) {
-    _heroRing.position.set(playerMesh.position.x, 0.07, playerMesh.position.z);
-    _heroRing.visible = state.started && !state.player.isDead;
-    _heroRing.children[1].material.opacity = 0.55 + Math.sin(state.time * 2.2) * 0.1;
+  // Each player's ring follows its own knight.
+  const _ringPulse = 0.55 + Math.sin(state.time * 2.2) * 0.1;
+  for (const p of players) {
+    if (!p.ring || !p.mesh) continue;
+    p.ring.position.set(p.mesh.position.x, 0.07, p.mesh.position.z);
+    p.ring.visible = state.started && !p.state.isDead;
+    p.ring.children[1].material.opacity = _ringPulse;
   }
   gtaoPass.enabled = settings.ambientOcc && _aqLevel < 2;
 
@@ -8628,8 +8678,8 @@ function updateGame(dt, rawDt = dt) {
     if (_minimapTimer >= _MINIMAP_INTERVAL) { _minimapTimer = 0; updateMinimap(); }
     if (_swarmIndicatorTimer > 0) _swarmIndicatorTimer -= dt;
 
-    // Player animation mixer
-    if (playerMixer && _renderEnabled) playerMixer.update(dt);
+    // Player animation mixers (one per co-op player)
+    if (_renderEnabled) for (const p of players) if (p.mixer) p.mixer.update(dt);
   }
 }
 
@@ -9767,7 +9817,7 @@ init().then(() => {
     window.__cs = {
       state, enemies, pickups, playerWeapons, upgradeRanks, runStats, keys, weaponTimers,
       UPGRADES, WEAPON_STATS, MAPS, OGRE_LEVELS, FINAL_WAVE,
-      players, nearestPlayer, alivePlayers,
+      players, nearestPlayer, alivePlayers, joinPlayer, makePlayer, createPlayer,
       get playerMesh() { return playerMesh; },
       get selectedCharacter() { return selectedCharacter; },
       get loadedMap() { return loadedMap; },
