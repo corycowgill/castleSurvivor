@@ -1018,6 +1018,26 @@ body.picking-coop #level-up-screen .divider { margin: 4px 0 8px; }
   margin-top: 10px; letter-spacing: 1px; text-align: center;
 }
 
+/* ─── CO-OP JOIN ROSTER ─── */
+#coop-roster { margin: 6px 0 2px; text-align: center; }
+#coop-title {
+  font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 3px;
+  color: #8a6a3a; text-transform: uppercase; margin-bottom: 5px;
+}
+#coop-slots { display: flex; gap: 10px; justify-content: center; }
+.coop-slot {
+  min-width: 128px; padding: 6px 12px; border-radius: 5px;
+  border: 1px solid #4a3418; background: rgba(20,10,2,0.6);
+  font-family: 'Cinzel', serif; font-size: 12px; color: #6d5637;
+}
+.coop-slot.joined { border-color: #c9a253; background: linear-gradient(180deg, rgba(45,26,8,0.9), rgba(20,10,2,0.9)); }
+.coop-slot .cs-who { font-weight: 700; letter-spacing: 1px; }
+.coop-slot.joined .cs-who { color: #e8c860; }
+.coop-slot .cs-knight { font-family: 'MedievalSharp', cursive; font-size: 12px; color: #8a7040; }
+.coop-slot.joined .cs-knight { color: #d4a856; }
+#coop-hint { font-family: 'MedievalSharp', cursive; font-size: 11px; color: #6d5637; margin-top: 5px; }
+#coop-hint b { color: #a8873f; }
+
 /* ─── SETTINGS ─── */
 #settings-screen {
   position: fixed; inset: 0; display: none;
@@ -1129,6 +1149,11 @@ body.picking-coop #level-up-screen .divider { margin: 4px 0 8px; }
     </div>
     <div id="ogre-level-name">Normal</div>
     <div id="ogre-level-desc">The standard challenge — for those learning the blade.</div>
+  </div>
+  <div id="coop-roster">
+    <div id="coop-title">Companions</div>
+    <div id="coop-slots"></div>
+    <div id="coop-hint">Press <b>A</b> on a second controller to join &bull; <b>Y</b> to change knight &bull; <b>B</b> to leave</div>
   </div>
   <div id="start-gold"></div>
   <button id="start-btn">BEGIN QUEST</button>
@@ -1529,7 +1554,7 @@ const CHARACTER_PASSIVES = {
   dad: {
     name: 'Shield Wall',
     desc: '+2 Armor, +15 Max HP',
-    apply: () => { state.player.armor += 2; state.player.maxHp += 15; state.player.hp += 15; },
+    apply: (ps) => { ps.armor += 2; ps.maxHp += 15; ps.hp += 15; },
   },
   brennan: {
     name: 'Spear Reach',
@@ -1537,12 +1562,12 @@ const CHARACTER_PASSIVES = {
     // +10 HP (critic 2026-09-20b #2): with 100 HP and no armour he lost 6 of 10 bot runs before wave 8
     // +1 reroll (18.2): his early game is the most card-dependent; a free reroll per run softens the RNG.
     // apply() runs from clearRun() after rerollCharges is zeroed, before the Forge rerolls are added.
-    apply: () => { state.player.attackRange += 1.0; state.player.critChance += 0.10; state.player.maxHp += 10; state.player.hp += 10; rerollCharges += 1; },
+    apply: (ps) => { ps.attackRange += 1.0; ps.critChance += 0.10; ps.maxHp += 10; ps.hp += 10; rerollCharges += 1; },
   },
   parker: {
     name: 'Swift Guardian',
     desc: 'Quickblade primary, +1.5 Speed, +1 Armor, dashes cut through foes',
-    apply: () => { state.player.speed += 1.5; state.player.armor += 1; state.player._dashCDBonus = 0.5; state.player.dashStrike = true; },
+    apply: (ps) => { ps.speed += 1.5; ps.armor += 1; ps._dashCDBonus = 0.5; ps.dashStrike = true; },
   },
 };
 function getDashCooldown(p) {
@@ -3638,7 +3663,52 @@ async function joinPlayer(character = 'brennan', padIndex = null) {
   party.xpToNext = partyXpToNext(party.level);
   party.xp = Math.floor(party.xpToNext * frac);
   p.state.level = party.level;
+  // Joined knights get their character's passive and the Forge's flat stat
+  // ranks, which clearRun() only ever applied to player 0.
+  const passive = CHARACTER_PASSIVES[p.character];
+  if (passive) passive.apply(p.state);
+  applyForgeStatsTo(p.state);
+  p.state.primaryWeapon = p.character === 'brennan' ? 'spear' : p.character === 'parker' ? 'quickblade' : 'sword';
+  p.weapons[p.state.primaryWeapon].owned = true;
+  p.weapons[p.state.primaryWeapon].level = Math.max(1, p.weapons[p.state.primaryWeapon].level);
   return p;
+}
+
+// Drop every companion back out of the party. Called at the start of each run
+// so repeated quests do not stack players 2, 3, 4... on top of each other.
+function resetPartyToSolo() {
+  for (let i = players.length - 1; i >= 1; i--) {
+    const p = players[i];
+    if (p.mesh) {
+      scene.remove(p.mesh);
+      p.mesh.traverse(c => {
+        if (!c.userData.charOwned) return;
+        if (c.isSkinnedMesh && c.skeleton) c.skeleton.dispose();
+        if (c.geometry) c.geometry.dispose();
+        const mats = Array.isArray(c.material) ? c.material : (c.material ? [c.material] : []);
+        for (const m of mats) { for (const k of ['map', 'normalMap', 'roughnessMap', 'metalnessMap', 'emissiveMap', 'aoMap']) m[k]?.dispose(); m.dispose(); }
+      });
+    }
+    if (p.ring) scene.remove(p.ring);
+    players.length = i;
+  }
+}
+
+// The per-player slice of the Forge ranks. Run-wide effects (magnet range,
+// reroll and banish charges) stay global and are applied by applyForgeUpgrades.
+function applyForgeStatsTo(ps) {
+  const meta = loadMeta();
+  for (const upg of FORGE_UPGRADES) {
+    const rank = getForgeRank(meta, upg.id);
+    if (rank <= 0) continue;
+    const v = upg.perRank * rank;
+    if (upg.stat === 'maxHp') { ps.maxHp += v; ps.hp += v; }
+    else if (upg.stat === 'damage') ps.damage += v;
+    else if (upg.stat === 'speed') ps.speed += v;
+    else if (upg.stat === 'armor') ps.armor += v;
+    else if (upg.stat === 'critChance') ps.critChance += v;
+    else if (upg.stat === 'regen') ps.regen += v;
+  }
 }
 
 // Per-player animation. playPlayerAnim stays as the player-0 entry point so the
@@ -8437,6 +8507,7 @@ function clearRun() {
   banishCharges = 1;
   banishedUpgrades.clear();
   _banishMode = false;
+  resetPartyToSolo();
   _pendingLevelUps = 0;
   _pickingPlayer = null;
   _lastPickerIndex = -1;
@@ -8462,7 +8533,7 @@ function clearRun() {
   MAGNET_RANGE = 6.0;
   // Re-apply character passive and forge upgrades on reset
   const resetPassive = CHARACTER_PASSIVES[selectedCharacter];
-  if (resetPassive) resetPassive.apply();
+  if (resetPassive) resetPassive.apply(state.player);
   applyForgeUpgrades();
   refreshMasteryRanks();
   _completedMilestones.clear();
@@ -8606,6 +8677,8 @@ function gameLoop() {
   // Poll gamepad every frame, then drive whichever menu is open
   pollGamepad();
   handleMenuInput();
+  // Companion join is only live on the title screen.
+  if (!state.started) updateCoopJoin();
 
   if (_loopUpdates) updateGame(dt, rawDt);
   if (!_renderEnabled) return; // simulation-only mode (test harness)
@@ -8871,6 +8944,70 @@ function readPad(gp, s, allowZoom) {
       if (gp.buttons[5]?.pressed) cameraZoom = Math.max(ZOOM_MIN, cameraZoom - 0.02);
       if (gp.buttons[4]?.pressed) cameraZoom = Math.min(ZOOM_MAX, cameraZoom + 0.02);
     }
+}
+
+// ─── CO-OP JOIN (title screen) ───
+// Pads that are not driving player 0 can claim a slot before the run starts.
+// Joining is deliberately pre-run only: mid-run joins would need the party XP
+// curve and wave scaling to change under way.
+const COOP_KNIGHTS = ['dad', 'brennan', 'parker'];
+// padIndex -> { character }. Player 0 is not in here; it is the first pad.
+const coopPending = new Map();
+
+function coopAvailableKnights() {
+  const taken = new Set([selectedCharacter, ...[...coopPending.values()].map(s => s.character)]);
+  return COOP_KNIGHTS.filter(k => !taken.has(k) && !(settings.privateMode && k !== 'dad'));
+}
+
+function renderCoopRoster() {
+  const wrap = document.getElementById('coop-roster');
+  const slots = document.getElementById('coop-slots');
+  if (!wrap || !slots) return;
+  // Private Mode hides the other knights entirely, so co-op has nobody to add.
+  wrap.style.display = settings.privateMode ? 'none' : '';
+  const names = { dad: 'Dad', brennan: 'Brennan', parker: 'Parker' };
+  let html = `<div class="coop-slot joined"><div class="cs-who">P1</div><div class="cs-knight">${names[selectedCharacter] || selectedCharacter}</div></div>`;
+  let n = 2;
+  for (const [, slot] of coopPending) {
+    html += `<div class="coop-slot joined"><div class="cs-who">P${n++}</div><div class="cs-knight">${names[slot.character] || slot.character}</div></div>`;
+  }
+  if (n <= MAX_PLAYERS && coopAvailableKnights().length) {
+    html += `<div class="coop-slot"><div class="cs-who">P${n}</div><div class="cs-knight">press A to join</div></div>`;
+  }
+  slots.innerHTML = html;
+}
+
+// Called each frame while the title screen is up.
+function updateCoopJoin() {
+  if (settings.privateMode) return;
+  let dirty = false;
+  for (let i = 0; i < gamepadStates.length; i++) {
+    const pad = gamepadStates[i];
+    if (!pad) continue;
+    // Pad 0 drives player 1 and cannot also claim a companion slot.
+    if (i === 0) continue;
+    const slot = coopPending.get(i);
+    if (!slot) {
+      if (pad.a && !pad.prevA && coopPending.size + 1 < MAX_PLAYERS) {
+        const free = coopAvailableKnights();
+        if (free.length) { coopPending.set(i, { character: free[0] }); dirty = true; AudioSystem.play('upgradeSelect', { volume: 0.4 }); }
+      }
+    } else {
+      if (pad.y && !pad.prevY) {
+        const free = coopAvailableKnights();
+        if (free.length) { slot.character = free[0]; dirty = true; AudioSystem.play('upgradeSelect', { volume: 0.3 }); }
+      }
+      if (pad.b && !pad.prevB) { coopPending.delete(i); dirty = true; }
+    }
+  }
+  if (dirty) renderCoopRoster();
+}
+
+// Turn the roster into real players once the run has started.
+async function spawnCoopCompanions() {
+  for (const [padIndex, slot] of coopPending) {
+    await joinPlayer(slot.character, padIndex);
+  }
 }
 
 // Which device drives a given player. Player 0 keeps keyboard + touch + the
@@ -9382,9 +9519,18 @@ document.querySelectorAll('.char-card').forEach(card => {
     const passive = CHARACTER_PASSIVES[selectedCharacter];
     const passiveText = passive ? `\n⚔ ${passive.name}: ${passive.desc}` : '';
     document.getElementById('char-bio-area').textContent = CHARACTER_BIOS[selectedCharacter] + passiveText;
+    // P1 taking a knight can free or claim one for the companions.
+    for (const [pad, slot] of coopPending) {
+      if (slot.character === selectedCharacter) {
+        const free = coopAvailableKnights();
+        if (free.length) slot.character = free[0]; else coopPending.delete(pad);
+      }
+    }
+    renderCoopRoster();
   });
 });
 applyPrivateMode();
+renderCoopRoster();
 
 // ─── MAP SELECT UI ───
 document.querySelectorAll('.map-btn').forEach(btn => {
@@ -9475,6 +9621,8 @@ async function beginQuest() {
   clearRun();
   // Recreate player with selected character
   await createPlayer();
+  // Bring in whoever claimed a companion slot on the title screen.
+  await spawnCoopCompanions();
   // Show Ogre Level in HUD if > 0
   const ogreHud = document.getElementById('ogre-hud');
   if (selectedOgreLevel > 0) {
@@ -9984,7 +10132,7 @@ init().then(() => {
       state, enemies, pickups, playerWeapons, upgradeRanks, runStats, keys, weaponTimers,
       UPGRADES, WEAPON_STATS, MAPS, OGRE_LEVELS, FINAL_WAVE,
       players, nearestPlayer, alivePlayers, joinPlayer, makePlayer, createPlayer, partyFocus,
-      gamepadStates, padSlot, readInput, gainXP, partyXpToNext,
+      gamepadStates, padSlot, readInput, gainXP, partyXpToNext, coopPending, updateCoopJoin, renderCoopRoster,
       get playerMesh() { return playerMesh; },
       get selectedCharacter() { return selectedCharacter; },
       get loadedMap() { return loadedMap; },
