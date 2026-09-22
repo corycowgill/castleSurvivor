@@ -3319,6 +3319,85 @@ let playerMixer = null;
 const playerAnims = {};
 let currentPlayerAnim = '';
 
+// ─── PLAYERS (co-op) ───
+// Every per-player singleton is being migrated into this array (COOP-PLAN.md
+// Phase A). players[0] deliberately holds the SAME object references as the
+// legacy singletons above, so call sites that have not been converted yet keep
+// working unchanged; converted code reads p.state / p.mesh / p.weapons instead.
+// While players.length === 1 the game must behave exactly as it did before.
+const MAX_PLAYERS = 3;
+const players = [];
+// Ring colours per player slot, so three knights stay tellable apart.
+const PLAYER_RING_COLORS = ['rgba(255,235,190,', 'rgba(150,215,255,', 'rgba(180,255,180,'];
+
+function makePlayerState() {
+  return {
+    hp: PLAYER_MAX_HP, maxHp: PLAYER_MAX_HP,
+    level: 1, xp: 0, xpToNext: 23,
+    speed: PLAYER_SPEED, damage: 15,
+    attackRange: ATTACK_RANGE, attackCooldown: ATTACK_COOLDOWN, attackTimer: 0,
+    armor: 0, regen: 0, regenTimer: 0,
+    critChance: 0.05, critMultiplier: 2.0,
+    isAttacking: false, isDead: false, iframes: 0,
+    dashTimer: 0, dashCooldown: 0, isDashing: false,
+  };
+}
+function makeWeaponTable() {
+  const t = {};
+  for (const k in playerWeapons) t[k] = { owned: false, level: 0 };
+  t.sword = { owned: true, level: 1 };
+  return t;
+}
+function makePlayer(index) {
+  return {
+    index,
+    character: 'dad',
+    state: index === 0 ? state.player : makePlayerState(),
+    weapons: index === 0 ? playerWeapons : makeWeaponTable(),
+    weaponTimers: index === 0 ? weaponTimers : { dagger: 0, holyAura: 0, arrowVolley: 0, orbitalBomb: 0, stormCall: 0 },
+    mesh: null, mixer: null, anims: index === 0 ? playerAnims : {}, currentAnim: '',
+    ring: null,
+    rerollCharges: 0,
+    // Which device drives this player; assigned at join (Phase B).
+    input: index === 0 ? 'primary' : null,
+  };
+}
+// players[0] exists from boot so nothing has to null-check it.
+players.push(makePlayer(0));
+
+// createPlayer still assigns the legacy bindings, so players[0] adopts them at
+// the end of it. The direction reverses in the next increment, once createPlayer
+// builds into the player object directly; this drops out entirely after that.
+function adoptLegacyIntoPlayer0() {
+  const p = players[0];
+  p.mesh = playerMesh;
+  p.mixer = playerMixer;
+  p.anims = playerAnims;
+  p.currentAnim = currentPlayerAnim;
+  p.ring = _heroRing;
+  p.character = selectedCharacter;
+  p.weapons = playerWeapons;
+  p.state = state.player;
+}
+
+function alivePlayers() {
+  const out = [];
+  for (const p of players) if (p.mesh && !p.state.isDead) out.push(p);
+  return out;
+}
+// Enemy AI targets whoever is closest rather than a fixed knight. Falls back to
+// players[0] so a call during a frame where everyone is down still gets a target.
+function nearestPlayer(x, z) {
+  let best = null, bestD = Infinity;
+  for (const p of players) {
+    if (!p.mesh || p.state.isDead) continue;
+    const dx = p.mesh.position.x - x, dz = p.mesh.position.z - z;
+    const d = dx * dx + dz * dz;
+    if (d < bestD) { bestD = d; best = p; }
+  }
+  return best || players[0];
+}
+
 // Parse a fresh player character model from stored buffer
 function parseCharModel(charKey) {
   return new Promise((resolve, reject) => {
@@ -3463,6 +3542,7 @@ async function createPlayer() {
   if (passiveEl) passiveEl.textContent = passive ? `${passive.name}: ${passive.desc}` : '';
 
   playPlayerAnim('Idle_A', true);
+  adoptLegacyIntoPlayer0();
 }
 
 function playPlayerAnim(name, loop = true) {
@@ -3475,6 +3555,7 @@ function playPlayerAnim(name, loop = true) {
   }
 
   currentPlayerAnim = name;
+  players[0].currentAnim = name;
   const action = playerAnims[name];
   action.reset();
   action.setLoop(loop ? THREE.LoopRepeat : THREE.LoopOnce);
@@ -9686,6 +9767,8 @@ init().then(() => {
     window.__cs = {
       state, enemies, pickups, playerWeapons, upgradeRanks, runStats, keys, weaponTimers,
       UPGRADES, WEAPON_STATS, MAPS, OGRE_LEVELS, FINAL_WAVE,
+      players, nearestPlayer, alivePlayers,
+      get playerMesh() { return playerMesh; },
       get selectedCharacter() { return selectedCharacter; },
       get loadedMap() { return loadedMap; },
       get playerPos() { return playerMesh ? { x: playerMesh.position.x, z: playerMesh.position.z } : null; },
