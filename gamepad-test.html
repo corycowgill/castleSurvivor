@@ -26,6 +26,7 @@
 <h1>Gamepad Test</h1>
 <div class="sub">Local page. No third-party scripts, nothing for an ad blocker to block.</div>
 
+<div id="diag" class="count">Checking&hellip;</div>
 <div id="count" class="count">Waiting&hellip;</div>
 <div id="pads"></div>
 
@@ -33,7 +34,15 @@
   <b>Press a button on every controller.</b> Browsers hide a gamepad until it sends
   input, so a pad that is connected but untouched will not be listed here.
   <br><br>
-  <b>If a controller never appears:</b> the browser is not getting it from the OS.
+  <b>If the panel above says Blocked,</b> fix that first — the API is switched off
+  and no controller can appear regardless of hardware.
+  <br><br>
+  <b>If the API is available but no controller shows while PC games see them fine,</b>
+  the usual cause is a browser extension. Privacy and anti-fingerprinting extensions
+  block the Gamepad API deliberately. Test in an Incognito window, where extensions
+  are off by default; if the pads appear there, re-enable extensions one at a time.
+  <br><br>
+  <b>If a controller never appears anywhere:</b> the browser is not getting it from the OS.
   On Windows a second Xbox controller over Bluetooth usually does not get an XInput
   slot, so no browser can see it even though Windows shows it as connected and its
   Xbox button still opens Game Bar. Connect it with a <b>USB cable</b> — wired pads
@@ -46,8 +55,47 @@
 <script>
 const countEl = document.getElementById('count');
 const padsEl = document.getElementById('pads');
+const diagEl = document.getElementById('diag');
+
+// The conditions that make the Gamepad API return nothing regardless of what
+// the OS has. Reported up front so "it sees no pads" is never ambiguous.
+function diagnose() {
+  const problems = [];
+  const notes = [];
+
+  if (typeof navigator.getGamepads !== 'function') {
+    problems.push('navigator.getGamepads does not exist — the API is removed or blocked, almost certainly by a privacy extension');
+  }
+  // Chrome gates the Gamepad API on a secure context. https, localhost and
+  // file:// qualify; plain http:// to a hostname or LAN IP does not, and it
+  // fails silently with an empty list.
+  if (!window.isSecureContext) {
+    problems.push(`not a secure context (${location.protocol}//${location.hostname || 'file'}) — use https, localhost, or open the file directly`);
+  }
+  // A Permissions-Policy header can switch the API off for a whole site.
+  try {
+    if (document.featurePolicy && typeof document.featurePolicy.allowsFeature === 'function') {
+      if (!document.featurePolicy.allowsFeature('gamepad')) {
+        problems.push('a Permissions-Policy on this page disallows "gamepad"');
+      }
+    }
+  } catch {}
+  if (!document.hasFocus()) {
+    notes.push('this window is not focused — browsers stop reporting gamepads until it is; click the page');
+  }
+
+  if (problems.length) {
+    diagEl.className = 'count warn';
+    diagEl.innerHTML = '<b>Blocked:</b><br>' + problems.join('<br>');
+  } else {
+    diagEl.className = 'count ok';
+    diagEl.innerHTML = 'API available &bull; secure context &bull; policy allows gamepad'
+      + (notes.length ? '<br><b>But:</b> ' + notes.join('<br>') : '');
+  }
+}
 
 function render() {
+  diagnose();
   const gps = navigator.getGamepads ? navigator.getGamepads() : [];
   const live = [];
   for (let i = 0; i < gps.length; i++) if (gps[i]) live.push(gps[i]);
