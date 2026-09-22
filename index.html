@@ -3386,6 +3386,48 @@ function alivePlayers() {
   for (const p of players) if (p.mesh && !p.state.isDead) out.push(p);
   return out;
 }
+
+// Camera framing for 1-3 players: the shot centres on the party and pulls back
+// as it spreads. Beyond PARTY_LEASH a soft tether stops anyone leaving frame —
+// shared-screen co-op has no split view to fall back on.
+const _partyCenter = new THREE.Vector3();
+const PARTY_LEASH = 26;        // max distance from the centroid before tethering
+const PARTY_ZOOM_PER_UNIT = 0.022;
+const PARTY_ZOOM_MAX = 1.7;
+function partyFocus() {
+  const live = alivePlayers();
+  // Dead or not yet spawned: keep the last good framing rather than snapping to origin.
+  if (!live.length) return { center: _partyCenter, zoom: 1 };
+
+  let cx = 0, cz = 0;
+  for (const p of live) { cx += p.mesh.position.x; cz += p.mesh.position.z; }
+  cx /= live.length; cz /= live.length;
+
+  // Spread drives both the zoom-out and the leash.
+  let spread = 0;
+  for (const p of live) {
+    const d = Math.hypot(p.mesh.position.x - cx, p.mesh.position.z - cz);
+    if (d > spread) spread = d;
+  }
+
+  if (live.length > 1 && spread > PARTY_LEASH) {
+    // Pull the outliers back along the line to the centroid instead of hard
+    // clamping, so it reads as resistance rather than a wall.
+    for (const p of live) {
+      const dx = p.mesh.position.x - cx, dz = p.mesh.position.z - cz;
+      const d = Math.hypot(dx, dz);
+      if (d <= PARTY_LEASH || d === 0) continue;
+      const pull = (d - PARTY_LEASH) / d;
+      p.mesh.position.x -= dx * pull;
+      p.mesh.position.z -= dz * pull;
+    }
+    spread = PARTY_LEASH;
+  }
+
+  _partyCenter.set(cx, 0, cz);
+  const zoom = live.length > 1 ? Math.min(PARTY_ZOOM_MAX, 1 + spread * PARTY_ZOOM_PER_UNIT) : 1;
+  return { center: _partyCenter, zoom };
+}
 // Enemy AI targets whoever is closest rather than a fixed knight. Falls back to
 // players[0] so a call during a frame where everyone is down still gets a target.
 function nearestPlayer(x, z) {
@@ -8503,10 +8545,13 @@ function gameLoop() {
   if (_loopUpdates) updateGame(dt, rawDt);
   if (!_renderEnabled) return; // simulation-only mode (test harness)
 
-  // Camera follows player with zoom + shake (unless the harness pinned it overhead)
+  // Camera frames the whole party with zoom + shake (unless the harness pinned
+  // it overhead). With one player this is the old behaviour exactly: the
+  // centroid is that player and the spread is zero.
   if (playerMesh && !_overheadMode) {
-    _tv4.copy(cameraOffset).multiplyScalar(cameraZoom);
-    _tv5.copy(playerMesh.position).add(_tv4);
+    const framed = partyFocus();
+    _tv4.copy(cameraOffset).multiplyScalar(cameraZoom * framed.zoom);
+    _tv5.copy(framed.center).add(_tv4);
     const lerpFactor = 1 - Math.exp(-8 * dt);
     camera.position.lerp(_tv5, lerpFactor);
 
@@ -8520,7 +8565,7 @@ function gameLoop() {
       camera.position.z += (Math.random() - 0.5) * shakeAmount;
     }
 
-    camera.lookAt(playerMesh.position.x, 0, playerMesh.position.z);
+    camera.lookAt(_partyCenter.x, 0, _partyCenter.z);
   }
 
   // Shadow light follows player
@@ -9873,7 +9918,7 @@ init().then(() => {
     window.__cs = {
       state, enemies, pickups, playerWeapons, upgradeRanks, runStats, keys, weaponTimers,
       UPGRADES, WEAPON_STATS, MAPS, OGRE_LEVELS, FINAL_WAVE,
-      players, nearestPlayer, alivePlayers, joinPlayer, makePlayer, createPlayer,
+      players, nearestPlayer, alivePlayers, joinPlayer, makePlayer, createPlayer, partyFocus,
       gamepadStates, padSlot, readInput,
       get playerMesh() { return playerMesh; },
       get selectedCharacter() { return selectedCharacter; },
