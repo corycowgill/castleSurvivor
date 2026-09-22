@@ -8903,6 +8903,11 @@ function padSlot(i) {
   return gamepadStates[i];
 }
 
+// Which slot is driving player 1. This is the first NON-NULL pad, which is not
+// always index 0 -- Xbox pads can enumerate at 1 or 2 after a reconnect, and
+// assuming 0 made the primary pad try to join as a companion as well.
+let primaryPadIndex = -1;
+
 function pollGamepad() {
   const gamepads = navigator.getGamepads();
   let isFirst = true;
@@ -8912,7 +8917,7 @@ function pollGamepad() {
     readPad(gp, padSlot(i), false);
     // The first connected pad also drives the shared menu state, and only it
     // controls camera zoom, so a second player cannot fight the camera.
-    if (isFirst) { readPad(gp, gamepadState, true); isFirst = false; }
+    if (isFirst) { readPad(gp, gamepadState, true); isFirst = false; primaryPadIndex = i; }
   }
 }
 
@@ -8963,8 +8968,27 @@ function renderCoopRoster() {
   const wrap = document.getElementById('coop-roster');
   const slots = document.getElementById('coop-slots');
   if (!wrap || !slots) return;
-  // Private Mode hides the other knights entirely, so co-op has nobody to add.
-  wrap.style.display = settings.privateMode ? 'none' : '';
+  // Private Mode hides Brennan and Parker, which leaves co-op with no knights
+  // to hand out. Say so rather than silently removing the roster.
+  wrap.style.display = '';
+  if (settings.privateMode) {
+    slots.innerHTML = '<div class="coop-slot">Co-op is off while Private Mode is on</div>';
+    const h = document.getElementById('coop-hint');
+    if (h) h.innerHTML = 'Turn off <b>Private Mode</b> in Settings to let a second knight join';
+    return;
+  }
+  // Say how many pads the browser can actually see. Chrome does not report a
+  // gamepad until a button is pressed on that specific pad, so "1 controller"
+  // here with two plugged in means pad 2 simply has not woken up yet.
+  const hint = document.getElementById('coop-hint');
+  if (hint) {
+    let live = 0;
+    try { for (const gp of navigator.getGamepads()) if (gp) live++; } catch {}
+    const padMsg = live >= 2
+      ? `<b>${live} controllers detected</b>`
+      : `<b>${live} controller${live === 1 ? '' : 's'} detected</b> — press any button on the 2nd pad to wake it`;
+    hint.innerHTML = `Press <b>A</b> on a second controller to join &bull; <b>Y</b> to change knight &bull; <b>B</b> to leave<br>${padMsg}`;
+  }
   const names = { dad: 'Dad', brennan: 'Brennan', parker: 'Parker' };
   let html = `<div class="coop-slot joined"><div class="cs-who">P1</div><div class="cs-knight">${names[selectedCharacter] || selectedCharacter}</div></div>`;
   let n = 2;
@@ -8978,14 +9002,19 @@ function renderCoopRoster() {
 }
 
 // Called each frame while the title screen is up.
+let _coopPadCount = -1;
 function updateCoopJoin() {
+  // Refresh when a pad wakes up, so the detected-controller readout is live.
+  let live = 0;
+  try { for (const gp of navigator.getGamepads()) if (gp) live++; } catch {}
+  if (live !== _coopPadCount) { _coopPadCount = live; renderCoopRoster(); }
   if (settings.privateMode) return;
   let dirty = false;
   for (let i = 0; i < gamepadStates.length; i++) {
     const pad = gamepadStates[i];
     if (!pad) continue;
-    // Pad 0 drives player 1 and cannot also claim a companion slot.
-    if (i === 0) continue;
+    // The pad driving player 1 cannot also claim a companion slot.
+    if (i === primaryPadIndex) continue;
     const slot = coopPending.get(i);
     if (!slot) {
       if (pad.a && !pad.prevA && coopPending.size + 1 < MAX_PLAYERS) {
@@ -10132,7 +10161,8 @@ init().then(() => {
       state, enemies, pickups, playerWeapons, upgradeRanks, runStats, keys, weaponTimers,
       UPGRADES, WEAPON_STATS, MAPS, OGRE_LEVELS, FINAL_WAVE,
       players, nearestPlayer, alivePlayers, joinPlayer, makePlayer, createPlayer, partyFocus,
-      gamepadStates, padSlot, readInput, gainXP, partyXpToNext, coopPending, updateCoopJoin, renderCoopRoster,
+      gamepadStates, padSlot, readInput, gainXP, partyXpToNext, coopPending, updateCoopJoin, renderCoopRoster, pollGamepad,
+      get primaryPadIndex() { return primaryPadIndex; },
       get playerMesh() { return playerMesh; },
       get selectedCharacter() { return selectedCharacter; },
       get loadedMap() { return loadedMap; },
