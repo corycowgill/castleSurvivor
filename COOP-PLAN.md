@@ -72,34 +72,26 @@ This must be solved before the refactor, because it determines the shape of the 
 
 ---
 
-## Decisions I need from you
+## Decisions — RESOLVED 2026-09-22
 
-These four change the shape of the work. My recommendation is first in each case.
+| # | Decision | Choice |
+|---|---|---|
+| 1 | Level-up flow | **Non-blocking per-player card overlay** |
+| 2 | XP | **Shared pool, `xpToNext` scaled by player count** |
+| 3 | Death | **Downed + revive**, run ends when all are down |
+| 4 | Screen | **Shared screen** with centroid camera + soft leash |
 
-### Decision 1 — What replaces the level-up pause? **(blocks everything)**
+What each one commits us to:
 
-- **(a) Non-blocking per-player card overlay (recommended).** The game keeps running; each player picks their card from a corner overlay while still moving and fighting. This is what Risk of Rain 2 does. Best feel, most UI work.
-- (b) Batch level-ups and present them all at the wave break. Preserves the pause but moves it somewhere harmless. Much less UI work, but delays the dopamine.
-- (c) Auto-pick with a short "change it" window. Least work, least agency.
-- (d) Keep the pause. **I think this makes 3-player unplayable** and I'd argue against it.
+**1 — Non-blocking overlay.** `showLevelUp()` must stop setting `state.paused` (index.html:7402). The card picker becomes a non-modal, per-player overlay anchored to that player's HUD corner, driven by that player's input device only. The sim keeps running underneath, so card effects apply mid-combat and the picker must tolerate the owner being hit, downed or killed while it is open. This is the largest single piece of UI work in Phase B.
 
-### Decision 2 — Shared or split XP?
+**2 — Shared XP.** Gem pickup stays proximity-based but credits one party pool. `xpToNext` scales with `players.length` so a 3-player party levels at roughly solo pace rather than 3×. Needs a balance pass: the curve was tuned for one knight's DPS.
 
-- **(a) Shared pool with a scaled curve (recommended).** All gems feed one pool; `xpToNext` scales with player count so party pace matches solo pace. Keeps everyone together, no feel-bad when one player hoovers up gems.
-- (b) Per-player XP. Each collects their own. Encourages spreading out, but a player who dies early falls permanently behind — bad for a game played by kids of different ages.
+**3 — Downed + revive.** `triggerPlayerDeath()` (2097) no longer calls `gameOver()` directly — it puts the player into a downed state with a bleed-out timer. A teammate within range for N seconds revives. `gameOver()` fires only when every player is down. Adds a revive interaction, a downed visual, and a bleed-out HUD element.
 
-### Decision 3 — How does death work?
+**4 — Shared screen.** Camera targets the party centroid with zoom derived from the bounding radius, clamped to a max; beyond that a soft tether pulls stragglers back. Keeps the render cost flat and the family in one shared space.
 
-- **(a) Downed + revive (recommended).** Bleed-out timer, a teammate stands near you to revive. Run ends when all three are down. Standard, and it makes the kids help each other.
-- (b) Spectate until the next wave, then respawn at reduced HP.
-- (c) Keep it brutal — one death ends the run for everyone. Not recommended with a 7-year-old at the third controller.
-
-### Decision 4 — Same screen or split screen?
-
-- **(a) Shared screen with a camera leash (recommended).** A survivors-like keeps the action localised, so one camera works. If players spread past the max zoom, a soft tether pulls them back. Far less work than split screen and it keeps the family playing *together*.
-- (b) Split screen. Triples render cost on a build that already has a 1.4 GB heap. I'd avoid it.
-
-**Hardware note:** full 3-player local needs three controllers, or two controllers plus keyboard for P1. You currently have one Xbox pad. Worth confirming before Phase B.
+**Hardware prerequisite:** full 3-player local needs three controllers, or two plus keyboard for P1. Currently one Xbox pad — confirm before Phase B.
 
 ---
 
@@ -127,11 +119,11 @@ This is the biggest single chunk and the riskiest. Shipping it as a no-op first 
 1. **Per-player input.** `gamepadState` → `gamepadState[]` (small, already iterating). `readInput(playerIdx)` replacing the summed block at 4911–4926. Pad-to-player assignment on join.
 2. **Join flow.** "Press A to join" on the character select; each joining pad picks its own knight. Private Mode still applies.
 3. **Group camera.** Centroid, zoom from party bounding radius, soft leash beyond max zoom.
-4. **Level-up UI** per Decision 1.
-5. **Downed/revive** per Decision 3.
+4. **Level-up UI** — non-modal per-player card overlay; `showLevelUp()` stops pausing the sim.
+5. **Downed/revive** — bleed-out timer, proximity revive, `gameOver()` only when all are down.
 6. **HUD** — N health bars, N level/XP readouts, N minimap blips, player-coloured rings.
 7. **Difficulty scaling.** 3 players is ~3× DPS. Enemy HP and spawn rate need a party-size multiplier alongside `ogreMods`. This needs its own balance pass — expect the existing wave curve to feel trivial at 3P until retuned.
-8. **Shared-vs-split XP** per Decision 2.
+8. **Shared XP pool** — one pool fed by all pickups, `xpToNext` scaled by `players.length`.
 
 **Verify:** extend the harness bot to drive N players (`balance --players 3`). Target: a 3-player run that reaches wave 20 without being either trivial or impossible.
 
@@ -165,18 +157,18 @@ Skip entirely if you only want local.
 ## Risks
 
 - **The refactor touches ~350 sites in a 10k-line file.** Highest-risk change ever made to this codebase. Mitigated by Phase A shipping as a behavioural no-op and by the balance harness as a regression check.
-- **Memory.** The review just measured a 1.4 GB baseline heap, a 287 MB asset payload, and a returned per-run texture leak (+29 textures/run). Three player models makes all three worse. **I'd fix the leak and compress the payload before starting Phase A**, not after.
+- ~~**Memory.**~~ Resolved before Phase A: payload 287 → 72 MB, baseline heap 1,428 → ~870 MB (`e201486`). Three player models is now a much smaller marginal cost. Re-measure with `tools/heap-trend.mjs` once `players[]` lands.
 - **Balance.** The single-player curve is already fragile — the wave-5 boss kills 3 of 6 runs. 3-player scaling is a second full balance problem sitting on top of an unsolved first one.
-- **Uncommitted work.** The tree currently has ~515 uncommitted lines (metalness fix, touch support, lighting panel). **Commit before starting.** A refactor of this size on top of uncommitted work is asking for a bad day.
+- ~~**Uncommitted work.**~~ Tree is clean as of 2026-09-22. Keep it that way through Phase A — commit each converted region rather than landing ~350 sites in one change.
 
 ---
 
 ## Recommended sequence
 
-1. **Commit the working tree.** Non-negotiable before any of this.
-2. **Fix the texture leak and compress the assets** (review items 6 and 7). Co-op makes both worse; fix them while the code is still single-player.
-3. **Answer Decisions 1–4.**
-4. **Phase A** — refactor, verified as a no-op against the balance baseline.
+1. ~~**Commit the working tree.**~~ Done 2026-09-22 (`e201486`, `37aecc4`, `39ef7fc`).
+2. ~~**Compress the assets.**~~ Done — 287 MB → 72 MB, baseline heap 1,428 → ~870 MB. The texture leak turned out to be a stale-counter false positive, not a real leak.
+3. ~~**Answer Decisions 1–4.**~~ Done — see the resolved table above.
+4. **Phase A** — refactor, verified as a no-op against the balance baseline. ← **next**
 5. **Phase B** — local co-op. Ship it. Play it with the kids.
 6. **Re-decide on online** with the refactor already paid for and real 3-player experience in hand.
 
