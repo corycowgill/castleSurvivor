@@ -2146,22 +2146,78 @@ function triggerDamageFlash(intensity = 0.5) {
 
 let _deathSlowMo = 0;
 
-function triggerPlayerDeath() {
-  if (state.player.isDead) return;
-  state.player.hp = 0;
-  state.player.isDead = true;
-  state.player.iframes = 0;
-  if (playerMesh) playerMesh.visible = true;
+// Co-op: a knight who runs out of HP goes DOWN rather than ending the run, and
+// a teammate can pick them back up (COOP-PLAN decision 3). The run only ends
+// when the whole party is down. Solo is unchanged: with one player, going down
+// is the same thing as dying.
+const REVIVE_RANGE = 4.5;       // how close a rescuer must stand
+const REVIVE_SECONDS = 2.5;     // uninterrupted time to bring someone back
+const BLEED_OUT_SECONDS = 25;   // how long a downed knight has before it is final
+
+function triggerPlayerDeath(p) {
+  const pl = p || players[0];
+  const ps = pl.state;
+  if (ps.isDead) return;
+  ps.hp = 0;
+  ps.isDead = true;
+  ps.iframes = 0;
+  ps.reviveProgress = 0;
+  ps.bleedOut = BLEED_OUT_SECONDS;
+  if (pl.mesh) pl.mesh.visible = true;
   AudioSystem.play('playerDeath', { volume: 0.7 });
-  AudioSystem.stopMusic(1.5);
-  playPlayerAnim('Death_C', false);
+  playPlayerAnimFor(pl, 'Death_C', false);
   triggerShake(1.0, 0.8);
+  if (pl.mesh) vfx.deathBurst(pl.mesh.position);
+
+  // Anyone left standing? Then this is a knock-down, not the end of the run.
+  if (alivePlayers().length > 0) return;
+
+  AudioSystem.stopMusic(1.5);
   triggerDamageFlash(1.0);
   _deathSlowMo = 1.5;
-  if (playerMesh) {
-    vfx.deathBurst(playerMesh.position);
+  players[0].state._gameOverTimer = 2.5;
+}
+
+// Revive: a standing knight near a downed one fills a timer; break contact and
+// it decays. Bleeding out makes the down permanent for the rest of the run.
+function updateDownedPlayers(dt) {
+  if (players.length < 2) return;
+  for (const p of players) {
+    const ps = p.state;
+    if (!ps.isDead || !p.mesh || ps.bledOut) continue;
+
+    let rescuer = null;
+    for (const o of players) {
+      if (o === p || o.state.isDead || !o.mesh) continue;
+      const d = Math.hypot(o.mesh.position.x - p.mesh.position.x, o.mesh.position.z - p.mesh.position.z);
+      if (d <= REVIVE_RANGE) { rescuer = o; break; }
+    }
+
+    if (rescuer) {
+      ps.reviveProgress = (ps.reviveProgress || 0) + dt;
+      if (ps.reviveProgress >= REVIVE_SECONDS) {
+        ps.isDead = false;
+        ps.reviveProgress = 0;
+        ps.bleedOut = 0;
+        ps.hp = Math.max(1, Math.round(ps.maxHp * 0.4));
+        ps.iframes = 1.5; // a moment of grace so they are not instantly re-downed
+        playPlayerAnimFor(p, 'Idle_A', true);
+        AudioSystem.play('levelUp', { volume: 0.5, pitch: 0.9 });
+        if (p.mesh) vfx.levelUpBurst(p.mesh.position);
+      }
+    } else {
+      ps.reviveProgress = Math.max(0, (ps.reviveProgress || 0) - dt * 0.6);
+      ps.bleedOut = (ps.bleedOut || 0) - dt;
+      if (ps.bleedOut <= 0) {
+        ps.bledOut = true;
+        // Last one standing just fell: end the run.
+        if (alivePlayers().length === 0) {
+          AudioSystem.stopMusic(1.5);
+          players[0].state._gameOverTimer = 2.5;
+        }
+      }
+    }
   }
-  state.player._gameOverTimer = 2.5;
 }
 
 // ─── ASSET LOADING ───
@@ -5681,7 +5737,7 @@ function damagePlayer(rawAmount, fromPos, opts) {
   breakStreak();
   getDamageFlashEl().style.opacity = '1';
   _damageFlashCSSTimer = 0.1;
-  if (tps.hp <= 0) triggerPlayerDeath();
+  if (tps.hp <= 0) triggerPlayerDeath(tp);
   return true;
 }
 
@@ -7957,9 +8013,18 @@ function updateCoopHud() {
     const txt = document.getElementById(`coop-hp-txt-${i}`);
     const row = document.getElementById(`coop-hp-${i}`);
     if (!bar || !txt) continue;
-    const pct = Math.max(0, ps.hp / ps.maxHp);
-    bar.style.width = `${(pct * 100).toFixed(1)}%`;
-    txt.textContent = ps.isDead ? 'DOWN' : `${Math.max(0, Math.ceil(ps.hp))}/${Math.round(ps.maxHp)}`;
+    if (ps.isDead) {
+      // While down the bar shows rescue progress, or bleed-out if nobody is near.
+      const rev = (ps.reviveProgress || 0) / REVIVE_SECONDS;
+      bar.style.width = `${(Math.min(1, rev) * 100).toFixed(1)}%`;
+      txt.textContent = ps.bledOut ? 'LOST'
+        : rev > 0 ? `REVIVING ${Math.round(rev * 100)}%`
+        : `DOWN ${Math.max(0, Math.ceil(ps.bleedOut || 0))}s`;
+    } else {
+      const pct = Math.max(0, ps.hp / ps.maxHp);
+      bar.style.width = `${(pct * 100).toFixed(1)}%`;
+      txt.textContent = `${Math.max(0, Math.ceil(ps.hp))}/${Math.round(ps.maxHp)}`;
+    }
     if (row) row.classList.toggle('is-down', !!ps.isDead);
   }
 }
@@ -8833,6 +8898,7 @@ function updateGame(dt, rawDt = dt) {
     state.time += dt;
     rebuildGrid();
     for (const pl of players) updatePlayer(pl, dt);
+    updateDownedPlayers(dt);
     // Rebuild nearby obstacle cache periodically
     _obstacleTimer += dt;
     if (_obstacleTimer >= 0.5) {
@@ -10233,7 +10299,7 @@ init().then(() => {
       state, enemies, pickups, playerWeapons, upgradeRanks, runStats, keys, weaponTimers,
       UPGRADES, WEAPON_STATS, MAPS, OGRE_LEVELS, FINAL_WAVE,
       players, nearestPlayer, alivePlayers, joinPlayer, makePlayer, createPlayer, partyFocus,
-      gamepadStates, padSlot, readInput, gainXP, partyXpToNext, coopPending, updateCoopJoin, renderCoopRoster, pollGamepad,
+      gamepadStates, padSlot, readInput, gainXP, partyXpToNext, coopPending, updateCoopJoin, renderCoopRoster, pollGamepad, damagePlayer, triggerPlayerDeath,
       get primaryPadIndex() { return primaryPadIndex; },
       get playerMesh() { return playerMesh; },
       get selectedCharacter() { return selectedCharacter; },
