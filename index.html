@@ -8069,7 +8069,11 @@ function updateHUD() {
   _setText(_hudEls.healthText, 'hpT', `${Math.ceil(p.hp)} / ${p.maxHp}`);
   const xpPct = p.xp / p.xpToNext;
   _setStyle(_hudEls.xpBar, 'xpW', 'width', `${(xpPct * 100).toFixed(1)}%`);
-  _setText(_hudEls.xpText, 'xpT', `Level ${p.level} - ${p.xp} / ${p.xpToNext} XP`);
+  // XP is a shared party pool, so say so once there is a party -- otherwise the
+  // companions have no way to tell that P1's bar is theirs too.
+  _setText(_hudEls.xpText, 'xpT', players.length > 1
+    ? `Party Level ${p.level} - ${p.xp} / ${p.xpToNext} XP (shared)`
+    : `Level ${p.level} - ${p.xp} / ${p.xpToNext} XP`);
   const nearFull = xpPct >= 0.8;
   if (_hudPrev.nearFull !== nearFull) {
     _hudPrev.nearFull = nearFull;
@@ -8864,8 +8868,22 @@ function gameLoop() {
   for (const p of players) {
     if (!p.ring || !p.mesh) continue;
     p.ring.position.set(p.mesh.position.x, 0.07, p.mesh.position.z);
-    p.ring.visible = state.started && !p.state.isDead;
-    p.ring.children[1].material.opacity = _ringPulse;
+    const glow = p.ring.children[1];
+    if (p.state.isDead && !p.state.bledOut && players.length > 1) {
+      // Downed: keep the ring up as a marker. It pulses red on its own and
+      // brightens steadily while someone is reviving, so the rescuer sees
+      // progress on the knight rather than only in the HUD.
+      p.ring.visible = state.started;
+      const rev = Math.min(1, (p.state.reviveProgress || 0) / REVIVE_SECONDS);
+      glow.material.color.setRGB(1, 0.25 + rev * 0.6, 0.25 + rev * 0.5);
+      glow.material.opacity = rev > 0 ? 0.35 + rev * 0.65 : 0.3 + Math.sin(state.time * 6) * 0.15;
+      p.ring.scale.setScalar(1 + rev * 0.35);
+    } else {
+      p.ring.visible = state.started && !p.state.isDead;
+      glow.material.color.setRGB(1, 1, 1);
+      glow.material.opacity = _ringPulse;
+      p.ring.scale.setScalar(1);
+    }
   }
   gtaoPass.enabled = settings.ambientOcc && _aqLevel < 2;
 
@@ -10366,7 +10384,7 @@ init().then(() => {
     window.__cs = {
       state, enemies, pickups, playerWeapons, upgradeRanks, runStats, keys, weaponTimers,
       UPGRADES, WEAPON_STATS, MAPS, OGRE_LEVELS, FINAL_WAVE,
-      players, nearestPlayer, alivePlayers, joinPlayer, makePlayer, createPlayer, partyFocus,
+      players, nearestPlayer, alivePlayers, joinPlayer, makePlayer, createPlayer, partyFocus, AudioSystem,
       gamepadStates, padSlot, readInput, gainXP, partyXpToNext, coopPending, updateCoopJoin, renderCoopRoster, pollGamepad, damagePlayer, triggerPlayerDeath,
       partySpawnMul, partyHpMul, partyBossHpMul, partyMaxEnemies,
       get primaryPadIndex() { return primaryPadIndex; },
