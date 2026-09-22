@@ -1675,7 +1675,7 @@ function updateSpawnQueue(dt) {
   for (let i = _spawnQueue.length - 1; i >= 0; i--) {
     _spawnQueue[i].timer -= dt;
     if (_spawnQueue[i].timer <= 0) {
-      if (enemies.length < MAX_ENEMIES) spawnEnemy(_spawnQueue[i].type, _spawnQueue[i].angle, _spawnQueue[i].opts);
+      if (enemies.length < partyMaxEnemies()) spawnEnemy(_spawnQueue[i].type, _spawnQueue[i].angle, _spawnQueue[i].opts);
       swapRemove(_spawnQueue, i);
     }
   }
@@ -3488,6 +3488,20 @@ function adoptLegacyIntoPlayer0() {
   p.state = state.player;
 }
 
+// Party-size difficulty scaling. Three knights is roughly three times the DPS
+// against a curve tuned for one, so without this co-op is trivial. Pressure
+// scales close to linearly because more knights cover more ground, while enemy
+// HP rises only modestly -- bullet-sponge goblins feel worse than more goblins.
+// Bosses take focused party fire, so they scale nearer to linear.
+// Every multiplier is exactly 1.0 at one player, so solo is untouched.
+const PARTY_SCALE = { spawn: 0.8, hp: 0.25, bossHp: 0.7, cap: 0.6 };
+function partyCount() { return Math.max(1, players.length); }
+function partySpawnMul() { return 1 + PARTY_SCALE.spawn * (partyCount() - 1); }
+function partyHpMul() { return 1 + PARTY_SCALE.hp * (partyCount() - 1); }
+function partyBossHpMul() { return 1 + PARTY_SCALE.bossHp * (partyCount() - 1); }
+// The on-screen cap has to rise too, or the extra spawns just hit the ceiling.
+function partyMaxEnemies() { return Math.round(MAX_ENEMIES * (1 + PARTY_SCALE.cap * (partyCount() - 1))); }
+
 function alivePlayers() {
   const out = [];
   for (const p of players) if (p.mesh && !p.state.isDead) out.push(p);
@@ -3860,7 +3874,7 @@ const WEAPON_ATTACH = {
 
 // opts: { spread: angular jitter around fixedAngle (default 0.8), dist: exact spawn distance }
 function spawnEnemy(type, fixedAngle, opts) {
-  if (enemies.length >= MAX_ENEMIES) return;
+  if (enemies.length >= partyMaxEnemies()) return;
 
   const def = ENEMY_TYPES[type] || ENEMY_TYPES.goblin;
   const enemyType = def.id;
@@ -3968,7 +3982,7 @@ function spawnEnemy(type, fixedAngle, opts) {
   scoreVal = Math.round(scoreVal * xpWaveBonus);
 
   // Apply Ogre Level mutators
-  hp *= ogreMods.hpMul;
+  hp *= ogreMods.hpMul * partyHpMul();
   damage *= ogreMods.dmgMul;
   speed *= ogreMods.speedMul;
   // Past wave 10 the curve bends upward so the back half of a run keeps pace
@@ -4205,7 +4219,7 @@ function spawnBoss(wave) {
   scene.add(mesh);
   alignToGround(mesh);
 
-  const bossHp = Math.round((800 + wave * 260) * ogreMods.bossHpMul);
+  const bossHp = Math.round((800 + wave * 260) * ogreMods.bossHpMul * partyBossHpMul());
   const bossName = BOSS_NAMES[Math.floor(Math.random() * BOSS_NAMES.length)];
 
   const _materials = [];
@@ -4309,7 +4323,7 @@ function spawnDragonOgreBoss(wave, isFinal = false) {
   // 5x a dragon ogre: a full build took him down in 13–25s at 3x. He advances
   // at full speed and the fury ramp (updateEnemies) escalates him each minute,
   // so a weak build gets pushed instead of stalemating.
-  const bossHp = Math.round((1600 + wave * 320) * (isFinal ? 5.0 : 1) * ogreMods.bossHpMul);
+  const bossHp = Math.round((1600 + wave * 320) * (isFinal ? 5.0 : 1) * ogreMods.bossHpMul * partyBossHpMul());
   const bossName = isFinal ? 'THE OGRE KING' : DRAGON_OGRE_NAMES[Math.floor(Math.random() * DRAGON_OGRE_NAMES.length)];
   const dmgMul = (isFinal ? 1.2 : 1) * ogreMods.dmgMul;
 
@@ -7028,8 +7042,8 @@ function updateWaves(dt) {
     // Bot playtests showed 50 enemies on screen after one minute against a
     // level-1 kill rate of ~0.6/s. The trickle starts at one per spawn and packs
     // arrive from wave 2 (rats) and 3 (wolves).
-    const enemiesPerSpawn = Math.min(Math.round((1 + Math.floor(state.wave / 3)) * ogreMods.spawnMul), 9);
-    for (let i = 0; i < enemiesPerSpawn && enemies.length < MAX_ENEMIES; i++) {
+    const enemiesPerSpawn = Math.min(Math.round((1 + Math.floor(state.wave / 3)) * ogreMods.spawnMul * partySpawnMul()), 14);
+    for (let i = 0; i < enemiesPerSpawn && enemies.length < partyMaxEnemies(); i++) {
       spawnEnemy(rollEnemyType(state.wave));
     }
     // Small packs keep the trickle from feeling uniform
@@ -7212,7 +7226,11 @@ let _upgradeScreenOpen = false;
 // and xpForLevel is scaled by party size so three knights level at roughly solo
 // pace rather than three times it. Every player then gets their own card pick,
 // so builds still diverge.
-function partyXpToNext(level) { return Math.round(xpForLevel(level) * players.length); }
+// Scale the curve by how much XP the party actually earns, which tracks spawn
+// pressure rather than head count. Scaling by players.length overshot: a trio
+// gets ~1.8x the kills but was paying a 3x curve, so it levelled SLOWER than
+// solo -- the opposite of what shared XP is meant to do.
+function partyXpToNext(level) { return Math.round(xpForLevel(level) * partySpawnMul()); }
 
 function gainXP(amount) {
   amount = Math.floor(amount * getEventXPMul());
@@ -10300,6 +10318,7 @@ init().then(() => {
       UPGRADES, WEAPON_STATS, MAPS, OGRE_LEVELS, FINAL_WAVE,
       players, nearestPlayer, alivePlayers, joinPlayer, makePlayer, createPlayer, partyFocus,
       gamepadStates, padSlot, readInput, gainXP, partyXpToNext, coopPending, updateCoopJoin, renderCoopRoster, pollGamepad, damagePlayer, triggerPlayerDeath,
+      partySpawnMul, partyHpMul, partyBossHpMul, partyMaxEnemies,
       get primaryPadIndex() { return primaryPadIndex; },
       get playerMesh() { return playerMesh; },
       get selectedCharacter() { return selectedCharacter; },
