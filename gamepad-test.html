@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Gamepad Test</title>
+<style>
+  body { font-family: ui-monospace, Consolas, monospace; background: #14100c; color: #d8c8a0; margin: 0; padding: 24px; }
+  h1 { font-size: 20px; color: #e8c860; margin: 0 0 4px; }
+  .sub { color: #8a7040; font-size: 13px; margin-bottom: 18px; }
+  .count { font-size: 15px; margin: 14px 0; padding: 10px 14px; border-radius: 6px; border: 1px solid #5a3a1a; background: #1d1610; }
+  .count.ok { border-color: #4a8a3a; color: #9fe08f; }
+  .count.warn { border-color: #8a6a2a; color: #e8c860; }
+  .pad { border: 1px solid #5a3a1a; background: #1d1610; border-radius: 6px; padding: 12px 14px; margin-bottom: 12px; }
+  .pad h2 { font-size: 14px; margin: 0 0 6px; color: #e8c860; }
+  .id { color: #8a7040; font-size: 12px; word-break: break-all; margin-bottom: 8px; }
+  .row { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 6px; }
+  .b { min-width: 30px; text-align: center; padding: 3px 5px; font-size: 11px; border-radius: 3px; background: #2a2018; color: #6d5637; border: 1px solid #3a2a18; }
+  .b.on { background: #e8c860; color: #1a1208; border-color: #e8c860; font-weight: bold; }
+  .ax { font-size: 12px; color: #a89060; }
+  .note { margin-top: 20px; font-size: 13px; line-height: 1.7; color: #a89060; border-top: 1px solid #3a2a18; padding-top: 14px; }
+  .note b { color: #e8c860; }
+  code { background: #241c14; padding: 1px 5px; border-radius: 3px; color: #d8c8a0; }
+</style>
+</head>
+<body>
+<h1>Gamepad Test</h1>
+<div class="sub">Local page. No third-party scripts, nothing for an ad blocker to block.</div>
+
+<div id="count" class="count">Waiting&hellip;</div>
+<div id="pads"></div>
+
+<div class="note">
+  <b>Press a button on every controller.</b> Browsers hide a gamepad until it sends
+  input, so a pad that is connected but untouched will not be listed here.
+  <br><br>
+  <b>If a controller never appears:</b> the browser is not getting it from the OS.
+  On Windows a second Xbox controller over Bluetooth usually does not get an XInput
+  slot, so no browser can see it even though Windows shows it as connected and its
+  Xbox button still opens Game Bar. Connect it with a <b>USB cable</b> — wired pads
+  always enumerate — or use an <b>Xbox Wireless Adapter</b>.
+  <br><br>
+  In the game, <code>Enter</code> on the title screen joins a second player on the
+  keyboard instead, so co-op works without a second pad.
+</div>
+
+<script>
+const countEl = document.getElementById('count');
+const padsEl = document.getElementById('pads');
+
+function render() {
+  const gps = navigator.getGamepads ? navigator.getGamepads() : [];
+  const live = [];
+  for (let i = 0; i < gps.length; i++) if (gps[i]) live.push(gps[i]);
+
+  countEl.textContent = live.length === 0
+    ? '0 gamepads visible — press a button on each controller'
+    : `${live.length} gamepad${live.length === 1 ? '' : 's'} visible` +
+      (live.length === 1 ? ' — press a button on the other one' : '');
+  countEl.className = 'count ' + (live.length >= 2 ? 'ok' : 'warn');
+
+  padsEl.innerHTML = live.map(gp => {
+    const buttons = gp.buttons.map((b, i) =>
+      `<span class="b${b.pressed ? ' on' : ''}">${i}</span>`).join('');
+    const axes = gp.axes.map((a, i) => `ax${i}: ${a.toFixed(2)}`).join('   ');
+    return `<div class="pad">
+      <h2>slot ${gp.index} &mdash; ${gp.mapping || 'no mapping'} &mdash; ${gp.connected ? 'connected' : 'disconnected'}</h2>
+      <div class="id">${gp.id}</div>
+      <div class="row">${buttons}</div>
+      <div class="ax">${axes}</div>
+    </div>`;
+  }).join('');
+
+  requestAnimationFrame(render);
+}
+
+addEventListener('gamepadconnected', e => console.log('connected: slot', e.gamepad.index, e.gamepad.id));
+addEventListener('gamepaddisconnected', e => console.log('disconnected: slot', e.gamepad.index));
+render();
+</script>
+</body>
+</html>
