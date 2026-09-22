@@ -2420,7 +2420,11 @@ const AudioSystem = (() => {
   let noiseBuffer = null;
 
   function init() {
-    if (initialized) return;
+    // Always try to resume, even when already built. loadAll() constructs the
+    // context at page load, which is before any user gesture, so Chrome starts
+    // it suspended -- and the old early return meant the click that began the
+    // quest never un-suspended it, leaving the whole game silent.
+    if (initialized) { resumeIfSuspended(); return; }
     ctx = new (window.AudioContext || window.webkitAudioContext)();
     masterGain = ctx.createGain();
     masterGain.gain.value = volumes.master;
@@ -2599,9 +2603,22 @@ const AudioSystem = (() => {
     return synthSound(name, volume, pitch);
   }
 
+  // Chrome only lets a context resume from inside a user gesture, so this is
+  // called from init() (the Begin Quest click) and from the listeners below.
+  function resumeIfSuspended() {
+    if (ctx && ctx.state === 'suspended') ctx.resume().catch(() => {});
+  }
+  // Belt and braces: the first real interaction anywhere resumes audio. Without
+  // this, a context that failed to resume once stayed silent for the session.
+  for (const ev of ['pointerdown', 'keydown', 'touchstart']) {
+    window.addEventListener(ev, resumeIfSuspended, { capture: true });
+  }
+
   function playMusic(name, { fadeIn = 1.5 } = {}) {
+    // Resume BEFORE the buffer check. It used to come after, so a music slot
+    // that had not loaded skipped the resume and left everything muted.
+    resumeIfSuspended();
     if (!ctx || !buffers[name]) return;
-    if (ctx.state === 'suspended') ctx.resume();
     stopMusic(0.5);
     setTimeout(() => {
       const source = ctx.createBufferSource();
