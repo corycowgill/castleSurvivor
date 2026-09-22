@@ -441,6 +441,18 @@ canvas { display: block; }
   display: none; flex-direction: column; align-items: center; justify-content: center;
   z-index: 500;
 }
+/* Co-op: the fight keeps running, so the card picker becomes a compact panel
+   pinned to the left instead of a full-screen blackout. */
+body.picking-coop #level-up-screen {
+  inset: auto auto 12px 12px;
+  width: 440px; max-height: 62vh; overflow-y: auto;
+  background: linear-gradient(180deg, rgba(30,15,5,0.96), rgba(10,5,2,0.97));
+  border: 2px solid #5a3a1a; border-radius: 8px;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.7);
+  padding: 10px 14px 14px; align-items: stretch; justify-content: flex-start;
+}
+body.picking-coop #level-up-screen h2 { font-size: 24px; margin-bottom: 4px; }
+body.picking-coop #level-up-screen .divider { margin: 4px 0 8px; }
 #level-up-screen h2 {
   font-family: 'Cinzel Decorative', serif; font-size: 46px; font-weight: 900;
   color: #c9a253; letter-spacing: 3px; margin-bottom: 10px;
@@ -3618,6 +3630,14 @@ async function joinPlayer(character = 'brennan', padIndex = null) {
   p.padIndex = padIndex != null ? padIndex : index;
   players[index] = p;
   await createPlayer(index);
+  // The shared XP curve scales with party size, so rescale it now that the
+  // party is bigger. Keep progress toward the current level proportional
+  // rather than resetting it.
+  const party = players[0].state;
+  const frac = party.xpToNext > 0 ? party.xp / party.xpToNext : 0;
+  party.xpToNext = partyXpToNext(party.level);
+  party.xp = Math.floor(party.xpToNext * frac);
+  p.state.level = party.level;
   return p;
 }
 
@@ -7048,33 +7068,65 @@ function xpForLevel(level) {
 let _pendingLevelUps = 0;
 let _upgradeScreenOpen = false;
 
+// XP is a shared party pool (COOP-PLAN decision 2). players[0].state carries it,
+// and xpForLevel is scaled by party size so three knights level at roughly solo
+// pace rather than three times it. Every player then gets their own card pick,
+// so builds still diverge.
+function partyXpToNext(level) { return Math.round(xpForLevel(level) * players.length); }
+
 function gainXP(amount) {
   amount = Math.floor(amount * getEventXPMul());
-  state.player.xp += amount;
-  while (state.player.xp >= state.player.xpToNext) {
-    state.player.xp -= state.player.xpToNext;
-    state.player.level++;
-    state.player.xpToNext = xpForLevel(state.player.level);
-    _pendingLevelUps++;
-    if (playerMesh) {
-      vfx.levelUpBurst(playerMesh.position);
-      triggerShake(0.2, 0.15);
+  const party = players[0].state;
+  party.xp += amount;
+  while (party.xp >= party.xpToNext) {
+    party.xp -= party.xpToNext;
+    party.level++;
+    party.xpToNext = partyXpToNext(party.level);
+    // One pick each: the party levels together, each knight chooses their own card.
+    for (const p of players) {
+      p.pendingPicks = (p.pendingPicks || 0) + 1;
+      if (p !== players[0]) { p.state.level = party.level; }
+      if (p.mesh) vfx.levelUpBurst(p.mesh.position);
     }
+    _pendingLevelUps++;
+    triggerShake(0.2, 0.15);
   }
   if (_pendingLevelUps > 0 && !_upgradeScreenOpen && _victoryTimer <= 0) presentNextLevelUp();
 }
 
+// Whose card is currently on screen. In co-op the knights pick one after
+// another while the fight continues around them. Round-robin from whoever
+// picked last, so a player who banked several levels cannot make the others
+// wait through all of them.
+let _pickingPlayer = null;
+let _lastPickerIndex = -1;
+function nextPlayerNeedingPick() {
+  for (let i = 1; i <= players.length; i++) {
+    const p = players[(_lastPickerIndex + i) % players.length];
+    if ((p.pendingPicks || 0) > 0) return p;
+  }
+  return null;
+}
+
 function presentNextLevelUp() {
-  if (_pendingLevelUps <= 0) return;
-  _pendingLevelUps--;
+  const p = nextPlayerNeedingPick();
+  if (!p) { _pendingLevelUps = 0; return; }
+  _pickingPlayer = p;
+  _lastPickerIndex = p.index;
+  p.pendingPicks--;
+  if (!nextPlayerNeedingPick()) _pendingLevelUps = 0;
   showLevelUp(false);
 }
 
 function closeUpgradeScreen() {
   document.getElementById('level-up-screen').style.display = 'none';
+  document.body.classList.remove('picking-coop');
   _upgradeScreenOpen = false;
-  if (_pendingLevelUps > 0) presentNextLevelUp();
-  else state.paused = false;
+  _pickingPlayer = null;
+  // _lastPickerIndex deliberately survives here: it is what makes the next
+  // card go to a different knight instead of back to whoever just picked.
+  if (nextPlayerNeedingPick()) presentNextLevelUp();
+  else if (players.length === 1) state.paused = false;
 }
 
 // Ranks taken this run, per upgrade id. Drives evolution requirements and
@@ -7576,13 +7628,21 @@ function showLevelUp(isChest) {
     AudioSystem.play('levelUp', { volume: 0.7 });
     levelUpShockwave();
   }
-  state.paused = true;
+  // Solo keeps the full-screen pause it always had. In co-op the fight carries
+  // on underneath and the card panel is a corner overlay for one knight, because
+  // pausing on every level-up would stop the game roughly every 7 seconds at
+  // three players (COOP-PLAN decision 1).
+  const coop = players.length > 1;
+  state.paused = !coop;
+  document.body.classList.toggle('picking-coop', coop);
   _upgradeScreenOpen = true;
   const screen = document.getElementById('level-up-screen');
   const options = document.getElementById('upgrade-options');
   const heading = screen.querySelector('h2');
-  const queued = _pendingLevelUps > 0 ? ` <span style="font-size:20px;color:#8a7040">(+${_pendingLevelUps} more)</span>` : '';
-  heading.innerHTML = (isChest ? 'TREASURE!' : 'LEVEL UP') + queued;
+  const still = players.reduce((n, p) => n + (p.pendingPicks || 0), 0);
+  const queued = still > 0 ? ` <span style="font-size:20px;color:#8a7040">(+${still} more)</span>` : '';
+  const who = coop && _pickingPlayer ? `P${_pickingPlayer.index + 1} ` : '';
+  heading.innerHTML = who + (isChest ? 'TREASURE!' : 'LEVEL UP') + queued;
   heading.style.color = isChest ? '#e8c860' : '#c9a253';
   options.innerHTML = '';
   screen.style.display = 'flex';
@@ -8378,6 +8438,11 @@ function clearRun() {
   banishedUpgrades.clear();
   _banishMode = false;
   _pendingLevelUps = 0;
+  _pickingPlayer = null;
+  _lastPickerIndex = -1;
+  for (const p of players) p.pendingPicks = 0;
+  // Shared XP curve depends on party size, so reset it for the party that is playing.
+  players[0].state.xpToNext = partyXpToNext(1);
   _upgradeScreenOpen = false;
   _victoryTimer = 0;
   document.getElementById('level-up-screen').style.display = 'none';
@@ -9919,7 +9984,7 @@ init().then(() => {
       state, enemies, pickups, playerWeapons, upgradeRanks, runStats, keys, weaponTimers,
       UPGRADES, WEAPON_STATS, MAPS, OGRE_LEVELS, FINAL_WAVE,
       players, nearestPlayer, alivePlayers, joinPlayer, makePlayer, createPlayer, partyFocus,
-      gamepadStates, padSlot, readInput,
+      gamepadStates, padSlot, readInput, gainXP, partyXpToNext,
       get playerMesh() { return playerMesh; },
       get selectedCharacter() { return selectedCharacter; },
       get loadedMap() { return loadedMap; },
