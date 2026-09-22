@@ -8982,11 +8982,16 @@ function renderCoopRoster() {
   // here with two plugged in means pad 2 simply has not woken up yet.
   const hint = document.getElementById('coop-hint');
   if (hint) {
-    let live = 0;
-    try { for (const gp of navigator.getGamepads()) if (gp) live++; } catch {}
+    const slotsSeen = [];
+    try {
+      const gps = navigator.getGamepads();
+      for (let i = 0; i < gps.length; i++) if (gps[i]) slotsSeen.push(i);
+    } catch {}
+    const live = slotsSeen.length;
+    const which = live ? ` (slot${live > 1 ? 's' : ''} ${slotsSeen.join(', ')}${primaryPadIndex >= 0 ? `; P1 on ${primaryPadIndex}` : ''})` : '';
     const padMsg = live >= 2
-      ? `<b>${live} controllers detected</b>`
-      : `<b>${live} controller${live === 1 ? '' : 's'} detected</b> — press any button on the 2nd pad to wake it`;
+      ? `<b>${live} controllers detected</b>${which}`
+      : `<b>${live} controller${live === 1 ? '' : 's'} detected</b>${which} — click the game window, then press a button on the 2nd pad`;
     hint.innerHTML = `Press <b>A</b> on a second controller to join &bull; <b>Y</b> to change knight &bull; <b>B</b> to leave<br>${padMsg}`;
   }
   const names = { dad: 'Dad', brennan: 'Brennan', parker: 'Parker' };
@@ -9002,6 +9007,21 @@ function renderCoopRoster() {
 }
 
 // Called each frame while the title screen is up.
+// Chrome does not surface a gamepad until it is used while the page has focus,
+// so refresh the readout the moment it tells us one appeared or went away.
+window.addEventListener('gamepadconnected', () => { _coopPadCount = -1; renderCoopRoster(); });
+window.addEventListener('gamepaddisconnected', () => {
+  _coopPadCount = -1;
+  // Drop any companion whose pad just vanished, or its slot is stuck forever.
+  let dirty = false;
+  const gps = navigator.getGamepads();
+  for (const padIndex of [...coopPending.keys()]) {
+    if (!gps[padIndex]) { coopPending.delete(padIndex); dirty = true; }
+  }
+  renderCoopRoster();
+  if (dirty) AudioSystem.play('playerHit', { volume: 0.2, pitch: 1.3 });
+});
+
 let _coopPadCount = -1;
 function updateCoopJoin() {
   // Refresh when a pad wakes up, so the detected-controller readout is live.
