@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Castle Survivor</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@700;900&display=swap" rel="stylesheet">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { overflow: hidden; background: #000; font-family: 'Cinzel', 'Georgia', serif; }
+.touch-active { touch-action: none; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
 canvas { display: block; }
 
 /* ─── LOADING SCREEN ─── */
@@ -37,6 +38,16 @@ canvas { display: block; }
   background: linear-gradient(90deg, #8b5e20, #c9a253, #e8c860);
   box-shadow: 0 0 10px rgba(201,162,83,0.5);
   transition: width 0.3s;
+}
+#loading-quote {
+  font-family: 'MedievalSharp', cursive; font-size: 16px; color: #8a7040;
+  margin-top: 28px; max-width: 500px; text-align: center; line-height: 1.6;
+  font-style: italic; opacity: 0; transition: opacity 0.6s;
+}
+#loading-quote.visible { opacity: 1; }
+#loading-quote-attr {
+  font-family: 'Cinzel', serif; font-size: 12px; color: #5a4a2a;
+  margin-top: 6px; letter-spacing: 1px;
 }
 #load-text { font-family: 'MedievalSharp', cursive; font-size: 14px; color: #6a5030; }
 
@@ -305,6 +316,50 @@ canvas { display: block; }
   margin-top: 6px; line-height: 1.5;
 }
 .help-item-stats span { color: #aac080; }
+.help-item { cursor: pointer; transition: border-color 0.15s, transform 0.15s; }
+.help-item:active { transform: scale(0.98); }
+#help-modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 10100;
+  background: rgba(0,0,0,0.82); backdrop-filter: blur(4px);
+  justify-content: center; align-items: center;
+}
+#help-modal-overlay.active { display: flex; }
+#help-modal {
+  background: linear-gradient(180deg, #1e1008 0%, #0f0802 100%);
+  border: 2px solid #8b5e20; border-radius: 12px;
+  max-width: 540px; width: 90vw; max-height: 85vh; overflow-y: auto;
+  padding: 0; box-shadow: 0 0 60px rgba(201,162,83,0.15), 0 8px 32px rgba(0,0,0,0.7);
+}
+#help-modal-preview {
+  width: 100%; height: 260px; display: flex; align-items: center; justify-content: center;
+  background: radial-gradient(ellipse at 50% 60%, rgba(40,25,10,0.6), rgba(8,4,2,0.9));
+  border-bottom: 1px solid #3a2510; border-radius: 12px 12px 0 0;
+}
+#help-modal-preview canvas { width: 240px; height: 240px; }
+#help-modal-preview img {
+  width: 128px; height: 128px; border-radius: 8px;
+  border: 1px solid #5a3a1a; object-fit: cover;
+}
+#help-modal-body { padding: 24px 28px 28px; }
+#help-modal-name {
+  font-family: 'Cinzel', serif; font-size: 22px; font-weight: 700;
+  color: #c9a253; letter-spacing: 2px; margin-bottom: 12px;
+}
+#help-modal-desc {
+  font-family: 'MedievalSharp', cursive; font-size: 15px; color: #b89860;
+  line-height: 1.6; margin-bottom: 16px;
+}
+#help-modal-stats {
+  font-family: 'MedievalSharp', cursive; font-size: 14px; color: #7a9a5a;
+  line-height: 1.7;
+}
+#help-modal-stats span { color: #aac080; }
+#help-modal-close {
+  position: absolute; top: 12px; right: 16px;
+  font-size: 28px; color: #7a6030; background: none; border: none; cursor: pointer;
+  font-family: sans-serif; line-height: 1; padding: 4px 8px;
+}
+#help-modal-close:hover { color: #c9a253; }
 .help-section-title {
   font-family: 'Cinzel', serif; font-size: 14px; font-weight: 700;
   color: #8a6a3a; letter-spacing: 2px; text-transform: uppercase;
@@ -597,6 +652,52 @@ canvas { display: block; }
   font-family: 'MedievalSharp', cursive; font-size: 11px; color: #8a7040;
   text-shadow: 0 1px 2px rgba(0,0,0,0.8);
 }
+
+/* ─── TOUCH CONTROLS ─── */
+#touch-controls { display: none; }
+.touch-active.touch-gameplay #touch-controls { display: block; }
+#touch-stick-zone {
+  position: fixed; left: 0; bottom: 0; width: 50%; height: 50%;
+  z-index: 200; touch-action: none;
+}
+#touch-stick-base {
+  position: absolute; width: 120px; height: 120px; border-radius: 50%;
+  border: 2px solid rgba(201,162,83,0.35); background: rgba(15,8,2,0.3);
+  pointer-events: none; display: none;
+  transform: translate(-50%, -50%);
+}
+#touch-stick-knob {
+  position: absolute; width: 48px; height: 48px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,162,83,0.6), rgba(201,162,83,0.2));
+  border: 2px solid rgba(201,162,83,0.5);
+  pointer-events: none; display: none;
+  transform: translate(-50%, -50%);
+}
+#touch-dash-btn {
+  position: fixed; right: 24px; bottom: 80px; width: 64px; height: 64px;
+  border-radius: 50%; z-index: 200; touch-action: none;
+  background: radial-gradient(circle, rgba(30,15,5,0.85), rgba(15,8,2,0.9));
+  border: 2px solid rgba(201,162,83,0.5);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cinzel', serif; font-size: 12px; font-weight: 700;
+  color: #c9a253; text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+  -webkit-tap-highlight-color: transparent;
+}
+#touch-dash-btn.on-cd { opacity: 0.4; border-color: rgba(90,58,26,0.5); }
+#touch-pause-btn {
+  position: fixed; top: 12px; right: 12px; width: 40px; height: 40px;
+  border-radius: 8px; z-index: 200; touch-action: none;
+  background: rgba(15,8,2,0.7); border: 1px solid rgba(201,162,83,0.4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: #c9a253;
+  -webkit-tap-highlight-color: transparent;
+}
+.touch-active #weapon-hud { bottom: 12px; left: 12px; }
+.touch-active #relic-hud { bottom: 60px; left: 12px; }
+.touch-active #minimap { width: 110px; height: 110px; bottom: 10px; right: 10px; }
+.touch-active #dash-indicator { display: none !important; }
+.touch-active #hud-left { transform: scale(0.85); transform-origin: top left; }
+.touch-active #hud-right { transform: scale(0.85); transform-origin: top right; }
 
 /* ─── ENEMY OVERHEAD HEALTH BAR ─── */
 .enemy-hp-bar {
@@ -923,7 +1024,16 @@ canvas { display: block; }
 }
 .setting-label { font-family: 'Cinzel', serif; font-size: 14px; font-weight: 700; color: #d4a856; text-align: right; }
 .setting-value { font-family: 'MedievalSharp', cursive; font-size: 13px; color: #8a7040; }
-#settings-grid input[type=range] {
+#settings-grid-gfx {
+  display: grid; grid-template-columns: 180px 260px 60px; gap: 12px 16px;
+  align-items: center; margin: 10px 0 20px;
+}
+.setting-section-title {
+  font-family: 'Cinzel', serif; font-size: 13px; font-weight: 700; letter-spacing: 2px;
+  color: #8a6a3a; text-transform: uppercase;
+}
+.setting-value.overridden { color: #e8c860; }
+#settings-grid input[type=range], #settings-grid-gfx input[type=range] {
   width: 100%; accent-color: #c9a253; cursor: pointer; height: 22px;
 }
 .setting-toggle {
@@ -958,6 +1068,8 @@ canvas { display: block; }
   <div class="subtitle">A Tale of Steel and Sorcery</div>
   <div id="load-bar-outer"><div id="load-bar-inner"></div></div>
   <div id="load-text">Preparing the realm...</div>
+  <div id="loading-quote"></div>
+  <div id="loading-quote-attr"></div>
 </div>
 
 <div id="start-screen">
@@ -1037,6 +1149,10 @@ canvas { display: block; }
     <span class="setting-label">Hit Freeze</span><button class="setting-toggle" id="set-hitfreeze"></button><span></span>
     <span class="setting-label" title="Only Dad is selectable; Brennan and Parker are hidden">Private Mode</span><button class="setting-toggle" id="set-private"></button><span></span>
   </div>
+  <div class="divider" style="margin:4px 0 8px"></div>
+  <div class="setting-section-title">Lighting</div>
+  <div id="settings-grid-gfx"></div>
+  <button class="setting-toggle" id="set-gfx-reset" style="width:160px;margin:-10px 0 16px">RESET LIGHTING</button>
   <button class="menu-btn-secondary" id="settings-close-btn">RETURN</button>
   <div class="menu-hint">D-Pad / Arrows adjust &bull; A / Enter toggle &bull; B / Esc return</div>
 </div>
@@ -1058,6 +1174,18 @@ canvas { display: block; }
       <div id="help-tab-weapons" class="help-tab-content"></div>
       <div id="help-tab-enemies" class="help-tab-content"></div>
       <div id="help-tab-advanced" class="help-tab-content"></div>
+    </div>
+  </div>
+</div>
+
+<div id="help-modal-overlay">
+  <div id="help-modal" style="position:relative">
+    <button id="help-modal-close">&times;</button>
+    <div id="help-modal-preview"></div>
+    <div id="help-modal-body">
+      <div id="help-modal-name"></div>
+      <div id="help-modal-desc"></div>
+      <div id="help-modal-stats"></div>
     </div>
   </div>
 </div>
@@ -1159,6 +1287,11 @@ canvas { display: block; }
 <div id="streak-display" class="hud-strip"></div>
 <div id="wave-event-banner" class="hud-strip"><span id="wave-event-text"></span><span id="wave-event-desc"></span></div>
 <canvas id="minimap"></canvas>
+<div id="touch-controls">
+  <div id="touch-stick-zone"><div id="touch-stick-base"></div><div id="touch-stick-knob"></div></div>
+  <div id="touch-dash-btn">DASH</div>
+  <div id="touch-pause-btn">&#x2759;&#x2759;</div>
+</div>
 <div id="wave-announce" class="hud-strip"></div>
 
 <script type="importmap">
@@ -2003,6 +2136,10 @@ const assetList = [
   { key: 'ogre', file: 'orgreWithAnimations.glb', keepBuffer: true },
   { key: 'wolf', file: 'wolfWithAnimation.glb', keepBuffer: true },
   { key: 'dragonOgre', file: 'dragonOgreHybridBossWithAnimation.glb', keepBuffer: true },
+  { key: 'ogreWizard', file: 'ogreWizardWithAnimation.glb', keepBuffer: true },
+  { key: 'ogreKing', file: 'ogreKingRigged.glb', keepBuffer: true },
+  { key: 'ogreBoss', file: 'ogreBoss1Animation.glb', keepBuffer: true },
+  { key: 'goblinArcher', file: 'goblinArcherAnimation.glb', keepBuffer: true },
   { key: 'bat', file: 'batWithAnimation.glb', keepBuffer: true },
   { key: 'rat', file: 'ratEnemyAnimated.glb', keepBuffer: true },
   { key: 'goblinBomb', file: 'bombOgreWithAnimation.glb', keepBuffer: true },
@@ -2435,7 +2572,51 @@ const SETTINGS_KEY = 'castleSurvivor_settings';
 // ambientOcc (GTAO) is experimental and off: it blackens whole props on both the
 // software and the D3D11 renderer at this scene scale, so grounding comes from the
 // contact-shadow decals instead. Reachable through the debug hook (setAO) for tuning.
-const settings = { master: 70, sfx: 80, music: 40, shake: 100, dmgNumbers: true, hitFreeze: true, privateMode: false, ambientOcc: false };
+const settings = { master: 70, sfx: 80, music: 40, shake: 100, dmgNumbers: true, hitFreeze: true, privateMode: false, ambientOcc: false, gfx: {} };
+// Live look-dev controls. Each entry is null/absent until the user moves that
+// slider, in which case it overrides the active map's MAPS[].look value.
+// fallback is used before any map has loaded.
+const GFX_CONTROLS = [
+  ['exposure',  'Exposure',     0.4,  2.5, 0.05, 1.10],
+  ['ambient',   'Ambient',      0,    2,   0.05, 0.50],
+  ['key',       'Key Light',    0,    3,   0.05, 1.45],
+  ['fill',      'Fill Light',   0,    2,   0.05, 0.45],
+  ['keyRot',    'Key Rotation', 0,    360, 5,    31],
+  ['keyHeight', 'Key Height',   2,    40,  1,    18],
+];
+// The key light orbits the player at this radius; the original fixed offset was
+// (10, 18, 6), i.e. radius 11.66 at 31 degrees.
+const KEY_RADIUS = 11.66;
+// Resolved values, refreshed by applyGfx so the per-frame light update is cheap.
+// Seeded from the fallbacks so the render loop has numbers before the first map
+// load; effectiveGfx cannot run here because loadedMap is declared further down.
+const _gfx = {};
+for (const c of GFX_CONTROLS) _gfx[c[0]] = c[5];
+// `look` is passed explicitly during a map load, because loadedMap is not
+// updated until after applyLook runs; other callers resolve from loadedMap.
+function mapLookValue(key, look) {
+  const L = look || (loadedMap ? MAPS[loadedMap].look : null);
+  if (!L) return null;
+  if (key === 'exposure') return L.exposure;
+  if (key === 'ambient') return L.ambientIntensity;
+  if (key === 'key') return L.keyIntensity;
+  if (key === 'fill') return L.hemiIntensity;
+  return null; // keyRot / keyHeight are not part of the map look rig
+}
+function effectiveGfx(key, look) {
+  const v = settings.gfx[key];
+  if (v != null) return v;
+  const fromMap = mapLookValue(key, look);
+  if (fromMap != null) return fromMap;
+  return GFX_CONTROLS.find(c => c[0] === key)[5];
+}
+function applyGfx(look) {
+  for (const [key] of GFX_CONTROLS) _gfx[key] = effectiveGfx(key, look);
+  renderer.toneMappingExposure = _gfx.exposure;
+  ambientLight.intensity = _gfx.ambient;
+  dirLight.intensity = _gfx.key;
+  hemiLight.intensity = _gfx.fill;
+}
 const SETTING_TOGGLES = [['dmgNumbers', 'set-dmgnums'], ['hitFreeze', 'set-hitfreeze'], ['privateMode', 'set-private']];
 function loadSettings() {
   try {
@@ -2453,6 +2634,14 @@ function renderSettings() {
   for (const k of ['master', 'sfx', 'music', 'shake']) {
     document.getElementById('set-' + k).value = settings[k];
     document.getElementById('set-' + k + '-val').textContent = settings[k] + '%';
+  }
+  for (const [key, , , , step] of GFX_CONTROLS) {
+    const v = effectiveGfx(key);
+    const sl = document.getElementById('set-gfx-' + key);
+    const vl = document.getElementById('set-gfx-' + key + '-val');
+    sl.value = v;
+    vl.textContent = step < 1 ? v.toFixed(2) : v + (key === 'keyRot' ? '°' : '');
+    vl.classList.toggle('overridden', settings.gfx[key] != null);
   }
   for (const [k, id] of SETTING_TOGGLES) {
     const b = document.getElementById(id);
@@ -2480,6 +2669,22 @@ function initSettingsUI() {
       if (k === 'sfx' || k === 'master') AudioSystem.play('coinPickup', { volume: 0.4 });
     });
   }
+  const gfxGrid = document.getElementById('settings-grid-gfx');
+  for (const [key, label, min, max, step] of GFX_CONTROLS) {
+    gfxGrid.insertAdjacentHTML('beforeend',
+      `<span class="setting-label">${label}</span>` +
+      `<input type="range" id="set-gfx-${key}" min="${min}" max="${max}" step="${step}">` +
+      `<span class="setting-value" id="set-gfx-${key}-val"></span>`);
+    gfxGrid.querySelector('#set-gfx-' + key).addEventListener('input', (e) => {
+      settings.gfx[key] = parseFloat(e.target.value);
+      applyGfx(); saveSettings(); renderSettings();
+    });
+  }
+  document.getElementById('set-gfx-reset').addEventListener('click', () => {
+    settings.gfx = {};
+    applyGfx(); saveSettings(); renderSettings();
+    AudioSystem.play('upgradeSelect', { volume: 0.3 });
+  });
   for (const [k, id] of SETTING_TOGGLES) {
     document.getElementById(id).addEventListener('click', () => {
       settings[k] = !settings[k];
@@ -2748,14 +2953,14 @@ function addInstanced(list, geo, mat, y, order) {
 }
 function applyLook(def) {
   const L = def.look; if (!L) return;
-  dirLight.color.setHex(L.key); dirLight.intensity = L.keyIntensity;
-  ambientLight.color.setHex(L.ambient); ambientLight.intensity = L.ambientIntensity;
-  hemiLight.color.setHex(L.hemiSky); hemiLight.groundColor.setHex(L.hemiGround); hemiLight.intensity = L.hemiIntensity;
-  renderer.toneMappingExposure = L.exposure;
+  dirLight.color.setHex(L.key);
+  ambientLight.color.setHex(L.ambient);
+  hemiLight.color.setHex(L.hemiSky); hemiLight.groundColor.setHex(L.hemiGround);
   const u = damageFlashPass.uniforms, g = L.grade;
   u.uLift.value.fromArray(g.lift); u.uGain.value.fromArray(g.gain); u.uGamma.value.fromArray(g.gamma);
   u.uSaturation.value = g.saturation; u.uVignette.value = g.vignette;
   gtaoPass.blendIntensity = L.ao;
+  applyGfx(L); // intensities and exposure, so any user override survives the map load
 }
 let selectedMap = 'kingsfield';
 let loadedMap = null;
@@ -2973,7 +3178,14 @@ async function loadMap(mapId) {
     mesh.scale.setScalar(obj.scale);
     mesh.rotation.set(obj.rotX || 0, obj.rotY || 0, obj.rotZ || 0);
     mesh.traverse(c => {
-      if (c.isMesh) { c.castShadow = true; c.receiveShadow = true; }
+      if (c.isMesh) {
+        c.castShadow = true; c.receiveShadow = true;
+        const mats = Array.isArray(c.material) ? c.material : [c.material];
+        for (const m of mats) {
+          if (m.metalness != null) m.metalness = Math.min(m.metalness, 0.3);
+          if (m.roughness != null) m.roughness = Math.min(m.roughness, 0.85);
+        }
+      }
     });
     scene.add(mesh);
     mapMeshes.push(mesh);
@@ -3153,7 +3365,14 @@ async function createPlayer() {
   playerMesh.position.set(PLAYER_SPAWN_X, 0, PLAYER_SPAWN_Z);
   playerMesh.scale.setScalar(3.0);
   playerMesh.traverse(c => {
-    if (c.isMesh) { c.castShadow = true; c.receiveShadow = true; }
+    if (c.isMesh) {
+      c.castShadow = true; c.receiveShadow = true;
+      const mats = Array.isArray(c.material) ? c.material : [c.material];
+      for (const m of mats) {
+        if (m.metalness != null) m.metalness = Math.min(m.metalness, 0.3);
+        if (m.roughness != null) m.roughness = Math.min(m.roughness, 0.85);
+      }
+    }
   });
   scene.add(playerMesh);
   alignToGround(playerMesh);
@@ -3271,15 +3490,15 @@ function playPlayerAnim(name, loop = true) {
 // preset in WEAPON_ATTACH. Adding an enemy is a row here plus, if it needs one,
 // a behaviour branch in updateEnemies.
 const ENEMY_TYPES = {
-  goblin:     { id: 'goblin',     model: 'goblin',     scale: 2.8, hp: 14, speed: 4.5, speedW: 0.12, dmg: 4,  dmgW: 1.0,  xp: 2, score: 20, range: 1.8, cd: 1.2, radius: 0.5, weapon: 'dagger', canElite: true,  tint: null },
-  archer:     { id: 'archer',     model: 'goblin',     scale: 2.6, hp: 16, speed: 4.0, speedW: 0.08, dmg: 4,  dmgW: 0.5,  xp: 3, score: 25, range: 11,  cd: 3.0, radius: 0.5, weapon: 'bow',    canElite: false, tint: { hex: 0x8a9a22, i: 0.2 }, marker: 0xd8e04a },
+  goblin:     { id: 'goblin',     model: 'goblin',     scale: 2.8, hp: 14, speed: 4.5, speedW: 0.12, dmg: 4,  dmgW: 1.0,  xp: 2, score: 20, range: 1.8, cd: 1.2, radius: 0.5, weapon: 'dagger', canElite: true,  tint: null, colorMul: 0.55 },
+  archer:     { id: 'archer',     model: 'goblinArcher', scale: 2.6, hp: 16, speed: 4.0, speedW: 0.08, dmg: 4,  dmgW: 0.5,  xp: 3, score: 25, range: 11,  cd: 3.0, radius: 0.5, weapon: null,     canElite: false, tint: null, colorMul: 0.55 },
   rat:        { id: 'rat',        model: 'rat',        scale: 1.5, hp: 6,  speed: 8.5, speedW: 0.3,  dmg: 2,  dmgW: 0.3,  xp: 1, score: 8,  range: 1.2, cd: 0.8, radius: 0.3, weapon: null,     canElite: false, tint: null },
   wolf:       { id: 'wolf',       model: 'wolf',       scale: 2.2, hp: 12, speed: 8.0, speedW: 0.25, dmg: 4,  dmgW: 0.5,  xp: 1, score: 15, range: 1.5, cd: 0.7, radius: 0.5, weapon: null,     canElite: false, tint: { hex: 0x556677, i: 0.15 } },
   bat:        { id: 'bat',        model: 'bat',        scale: 1.8, hp: 8,  speed: 6.5, speedW: 0.2,  dmg: 3,  dmgW: 0.4,  xp: 1, score: 12, range: 1.5, cd: 0.8, radius: 0.5, weapon: null,     canElite: false, tint: { hex: 0x442266, i: 0.2 } },
   goblinBomb: { id: 'goblinBomb', model: 'goblinBomb', scale: 3.2, hp: 30, speed: 3.5, speedW: 0.08, dmg: 15, dmgW: 2.0,  xp: 4, score: 40, range: 6.0, cd: 3.0, radius: 0.6, weapon: null,     canElite: false, tint: { hex: 0xff4400, i: 0.15 }, marker: 0xff7a1a },
   ogre:       { id: 'ogre',       model: 'ogre',       scale: 4.0, hp: 60, speed: 3.0, speedW: 0.1,  dmg: 10, dmgW: 2.0,  xp: 5, score: 50, range: 2.5, cd: 2.0, radius: 0.8, weapon: 'club',   canElite: true,  tint: null },
   // Hangs back like an archer; every `cd` seconds heals every foe within 6 units. A priority target.
-  shaman:     { id: 'shaman',     model: 'goblin',     scale: 2.7, hp: 22, speed: 3.8, speedW: 0.08, dmg: 3,  dmgW: 0.6,  xp: 5, score: 45, range: 12,  cd: 4.0, radius: 0.5, weapon: null,     canElite: false, tint: { hex: 0x8833cc, i: 0.35 }, marker: 0xb06cff },
+  shaman:     { id: 'shaman',     model: 'ogreWizard', scale: 3.5, hp: 22, speed: 3.8, speedW: 0.08, dmg: 3,  dmgW: 0.6,  xp: 5, score: 45, range: 12,  cd: 4.0, radius: 0.5, weapon: null,     canElite: false, tint: { hex: 0x8833cc, i: 0.35 }, marker: 0xb06cff },
 };
 // Ground rings under priority targets: readable in a crowd at any distance,
 // which a tint on a 3D silhouette is not. Shared geometry, one material per colour.
@@ -3433,6 +3652,17 @@ function spawnEnemy(type, fixedAngle, opts) {
       _materials.push(c.material);
     }
   });
+
+  for (const mat of _materials) {
+    if (mat.metalness != null) mat.metalness = Math.min(mat.metalness, 0.3);
+    if (mat.roughness != null) mat.roughness = Math.min(mat.roughness, 0.85);
+  }
+
+  if (def.colorMul != null) {
+    for (const mat of _materials) {
+      mat.color.multiplyScalar(def.colorMul);
+    }
+  }
 
   // Elite multipliers
   if (isElite) {
@@ -3620,7 +3850,7 @@ const BOSS_NAMES = [
 function spawnBoss(wave) {
   if (currentBoss) return;
 
-  const gltf = cloneEnemyModel('ogre');
+  const gltf = cloneEnemyModel('ogreBoss');
   if (!gltf) return;
 
   const mesh = gltf.scene;
@@ -3642,21 +3872,6 @@ function spawnBoss(wave) {
   scene.add(mesh);
   alignToGround(mesh);
 
-  // Attach club
-  if (assets.club) {
-    let handBone = null;
-    mesh.traverse(c => { if (c.isBone && c.name === 'hand_r') handBone = c; });
-    if (handBone) {
-      const weapon = assets.club.scene.clone();
-      const DEG = Math.PI / 180;
-      weapon.position.set(0, 0.065, 0.260);
-      weapon.rotation.set(-180 * DEG, -95 * DEG, -90 * DEG);
-      weapon.scale.setScalar(0.7);
-      weapon.traverse(c => { if (c.isMesh) c.castShadow = true; });
-      handBone.add(weapon);
-    }
-  }
-
   const bossHp = Math.round((800 + wave * 260) * ogreMods.bossHpMul);
   const bossName = BOSS_NAMES[Math.floor(Math.random() * BOSS_NAMES.length)];
 
@@ -3664,6 +3879,10 @@ function spawnBoss(wave) {
   mesh.traverse(c => {
     if (c.isMesh && c.material) { c.material = c.material.clone(); _materials.push(c.material); }
   });
+  for (const mat of _materials) {
+    if (mat.metalness != null) mat.metalness = Math.min(mat.metalness, 0.3);
+    if (mat.roughness != null) mat.roughness = Math.min(mat.roughness, 0.85);
+  }
 
   const enemy = {
     mesh, mixer, anims, _materials,
@@ -3691,7 +3910,7 @@ function spawnBoss(wave) {
     pattern: null,
   };
 
-  playEnemyAnim(enemy, 'Run_Anime', true);
+  playEnemyAnim(enemy, 'Sprint', true);
   enemies.push(enemy);
   currentBoss = enemy;
   if (AudioSystem.hasSound('bossMusic')) AudioSystem.playMusic('bossMusic');
@@ -3722,8 +3941,9 @@ const DRAGON_OGRE_NAMES = [
 function spawnDragonOgreBoss(wave, isFinal = false) {
   if (currentBoss) return;
 
-  const gltf = cloneEnemyModel('dragonOgre');
-  if (!gltf) { console.error('No model for dragon ogre boss'); return; }
+  const modelKey = isFinal ? 'ogreKing' : 'dragonOgre';
+  const gltf = cloneEnemyModel(modelKey);
+  if (!gltf) { console.error('No model for ' + modelKey); return; }
 
   const mesh = gltf.scene;
   const mixer = new THREE.AnimationMixer(mesh);
@@ -3937,7 +4157,7 @@ function startPatternTelegraph(enemy, p, dir) {
   } else if (p.name === 'summon') {
     vfx.eliteSpawnBurst(pos);
   } else if (p.name === 'volley') {
-    playEnemyAnim(enemy, 'OverhandThrow', false);
+    playEnemyAnim(enemy, enemy.isFinalBoss ? 'Sword_Attack' : 'OverhandThrow', false);
   }
 }
 
@@ -3949,7 +4169,7 @@ function executePattern(enemy, p, dist) {
     AudioSystem.play('waveStart', { volume: 0.7, pitch: 0.5 });
     if (playerMesh) vfx.incomingDust(pos, Math.atan2(p.dx, p.dz));
   } else if (p.name === 'slam' || p.name === 'stomp') {
-    playEnemyAnim(enemy, enemy.type === 'boss' ? 'Chop_Tree' : 'Hit_Chest', false);
+    playEnemyAnim(enemy, enemy.type === 'boss' ? 'Chop_Tree' : enemy.isFinalBoss ? 'Attack_Ground_Pound' : 'Hit_Chest', false);
     enemy._atkAnimResetTimer = 0.8;
     vfx.groundSlam(pos, p.radius);
     triggerShake(0.7, 0.4);
@@ -3987,7 +4207,7 @@ function endPattern(enemy) {
 // cannot drop a boulder into the next game.
 function throwBoulder(enemy) {
   if (!assets.boulder) return;
-  playEnemyAnim(enemy, 'OverhandThrow', false);
+  playEnemyAnim(enemy, enemy.isFinalBoss ? 'Sword_Attack' : 'OverhandThrow', false);
   enemy.boulderReleaseTimer = 0.5;
   enemy.boulderAnimResetTimer = 1.2;
 }
@@ -4149,14 +4369,20 @@ function enemyDeathAnim(enemy) {
   if (enemy.type === 'rat') return 'Death';
   if (enemy.type === 'goblinBomb') return 'Death_C';
   if (enemy.type === 'wolf') return 'Death';
-  if (enemy.type === 'dragonOgre') return 'Death_D';
-  return (enemy.type === 'ogre' || enemy.type === 'boss') ? 'Death_C' : 'Death_A';
+  if (enemy.type === 'archer') return 'Hit_Knockback';
+  if (enemy.type === 'shaman') return 'Death_B';
+  if (enemy.type === 'dragonOgre') return enemy.isFinalBoss ? 'Death_B' : 'Death_D';
+  if (enemy.type === 'boss') return 'Death_A';
+  return enemy.type === 'ogre' ? 'Death_C' : 'Death_A';
 }
 function enemyRunAnim(enemy) {
   if (enemy.type === 'bat') return 'Flap';
   if (enemy.type === 'rat') return 'Run';
   if (enemy.type === 'goblinBomb') return 'Run_Anime';
   if (enemy.type === 'wolf') return 'Run';
+  if (enemy.type === 'archer') return 'Sprint';
+  if (enemy.type === 'shaman') return 'Jog';
+  if (enemy.type === 'boss') return 'Sprint';
   if (enemy.type === 'dragonOgre') return 'Sprint';
   return 'Run_Anime';
 }
@@ -4165,6 +4391,8 @@ function enemyHitAnim(enemy) {
   if (enemy.type === 'rat') return null;
   if (enemy.type === 'goblinBomb') return 'Hit_Chest';
   if (enemy.type === 'wolf') return null;
+  if (enemy.type === 'archer') return 'Hit_Chest';
+  if (enemy.type === 'shaman') return null;
   if (enemy.type === 'dragonOgre') return 'Hit_Chest';
   return (enemy.type === 'ogre' || enemy.type === 'boss') ? null : 'Hit_Chest';
 }
@@ -4691,6 +4919,11 @@ function updatePlayer(dt) {
     dx += gamepadState.lx;
     dz += gamepadState.ly;
   }
+  // Touch stick
+  if (touchState.stickX !== 0 || touchState.stickY !== 0) {
+    dx += touchState.stickX;
+    dz += touchState.stickY;
+  }
 
   const moving = dx !== 0 || dz !== 0;
   state.player._moving = moving;
@@ -4702,8 +4935,8 @@ function updatePlayer(dt) {
     state.player._crowdCount = n;
   }
 
-  // Dash input (spacebar or gamepad B/right trigger)
-  const dashInput = keys['Space'] || gamepadState.b;
+  // Dash input (spacebar or gamepad B/right trigger or touch)
+  const dashInput = keys['Space'] || gamepadState.b || touchState.dash;
   const dashCD = getDashCooldown();
   if (dashInput && moving && state.player.dashCooldown <= 0 && !state.player.isDashing) {
     state.player.isDashing = true;
@@ -5540,7 +5773,7 @@ function updateEnemies(dt) {
         resolveObstacles(nx, nz, 0.5);
         enemy.mesh.position.x = _colOut.x;
         enemy.mesh.position.z = _colOut.z;
-        if (!(enemy._atkAnimResetTimer > 0)) playEnemyAnim(enemy, 'Run_Anime', true);
+        if (!(enemy._atkAnimResetTimer > 0)) playEnemyAnim(enemy, enemy.isShaman ? 'Jog' : enemy.isArcher ? 'Sprint' : 'Run_Anime', true);
       }
       enemy.attackTimer -= dt;
       if (enemy.isShaman) {
@@ -5548,7 +5781,7 @@ function updateEnemies(dt) {
         // Telegraphed with a violet rune ring so the player can see who to kill.
         if (enemy.attackTimer <= 0 && dist < 22) {
           enemy.attackTimer = enemy.attackCooldown;
-          playEnemyAnim(enemy, 'Sword_Regular_B', false);
+          playEnemyAnim(enemy, 'Spell_Simple_Shoot', false);
           enemy._atkAnimResetTimer = 0.6;
           const hp = enemy.mesh.position;
           vfx.runeCircle(hp, { color: 0x9944ff, radius: 6, duration: 0.9, sweep: 0.2, peakOpacity: 0.9 });
@@ -5569,7 +5802,7 @@ function updateEnemies(dt) {
       }
       if (enemy.attackTimer <= 0 && dist < band + 6) {
         enemy.attackTimer = enemy.attackCooldown;
-        playEnemyAnim(enemy, 'Sword_Regular_B', false);
+        playEnemyAnim(enemy, 'Bow_Pull_Back', false);
         enemy._atkAnimResetTimer = 0.6;
         enemy.arrowReleaseTimer = 0.55; // was 0.4: the draw is the dodge window (18.3)
         // Drawing the bow off screen: warn at the screen edge so the shot is readable
@@ -5730,7 +5963,7 @@ function updateEnemies(dt) {
         enemy.attackTimer = enemy.attackCooldown;
         const atkAnim = enemy.type === 'rat' ? 'Bite'
           : enemy.type === 'wolf' ? 'Bite'
-          : enemy.type === 'dragonOgre' ? 'Hit_Chest'
+          : enemy.type === 'dragonOgre' ? (enemy.isFinalBoss ? 'Sword_Attack' : 'Hit_Chest')
           : (enemy.type === 'ogre' || enemy.type === 'boss') ? 'Chop_Tree' : 'Sword_Regular_B';
         playEnemyAnim(enemy, atkAnim, false);
         enemy.windupTimer = enemy.isRat ? 0.12 : enemy.isWolf ? 0.18 : (enemy.type === 'ogre' || enemy.isBoss) ? 0.45 : 0.28;
@@ -7361,6 +7594,7 @@ function _cacheHudEls() {
     weaponHud: document.getElementById('weapon-hud'),
     dashIcon: document.getElementById('dash-icon'),
     dashFill: document.getElementById('dash-cd-fill'),
+    touchDash: document.getElementById('touch-dash-btn'),
   };
   _hudCached = true;
 }
@@ -7435,6 +7669,10 @@ function updateHUD() {
       _hudEls.dashIcon.classList.remove('ready');
       _hudEls.dashFill.style.height = `${(1 - p.dashCooldown / dashCD) * 100}%`;
     }
+  }
+  // Touch dash button cooldown
+  if (_isTouch && _hudEls.touchDash) {
+    _hudEls.touchDash.classList.toggle('on-cd', p.dashCooldown > 0);
   }
 
   // Update weapon HUD — only rebuild DOM if content changed
@@ -7771,6 +8009,7 @@ function gameOver(victory = false) {
   state.victory = !!victory;
   AudioSystem.playMusic('gameOverMusic', { fadeIn: 2 });
   document.getElementById('hud').style.display = 'none';
+  document.body.classList.remove('touch-gameplay');
   document.getElementById('pause-screen').style.display = 'none';
   document.getElementById('settings-screen').style.display = 'none';
   document.getElementById('level-up-screen').style.display = 'none';
@@ -8042,6 +8281,7 @@ function startRun() {
   document.getElementById('settings-screen').style.display = 'none';
   document.getElementById('start-screen').style.display = 'none';
   document.getElementById('hud').style.display = 'block';
+  if (_isTouch) document.body.classList.add('touch-gameplay');
   state.started = true;
   state.gameOver = false;
   state.paused = false;
@@ -8063,6 +8303,7 @@ function returnToMenu() {
   AudioSystem.playMusic('menuMusic');
   for (const id of ['hud', 'game-over-screen', 'pause-screen', 'settings-screen', 'level-up-screen', 'boss-bar', 'scores-screen', 'forge-screen'])
     document.getElementById(id).style.display = 'none';
+  document.body.classList.remove('touch-gameplay');
   document.getElementById('start-screen').style.display = 'flex';
   updateStartGold();
   resumeCharacterPreviews();
@@ -8149,10 +8390,11 @@ function gameLoop() {
 
   // Shadow light follows player
   if (playerMesh) {
+    const kr = _gfx.keyRot * Math.PI / 180;
     dirLight.position.set(
-      playerMesh.position.x + 10,
-      18,
-      playerMesh.position.z + 6
+      playerMesh.position.x + Math.cos(kr) * KEY_RADIUS,
+      _gfx.keyHeight,
+      playerMesh.position.z + Math.sin(kr) * KEY_RADIUS
     );
     dirLight.target.position.copy(playerMesh.position);
     dirLight.target.updateMatrixWorld();
@@ -8608,6 +8850,80 @@ window.addEventListener('resize', () => {
   bloomPass.resolution.set(Math.floor(window.innerWidth / 2), Math.floor(window.innerHeight / 2));
 });
 
+// ─── TOUCH CONTROLS ───
+const touchState = { active: false, stickX: 0, stickY: 0, dash: false, stickId: -1, dashId: -1 };
+const _isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+if (_isTouch) document.body.classList.add('touch-active');
+
+(function initTouch() {
+  if (!_isTouch) return;
+  const zone = document.getElementById('touch-stick-zone');
+  const base = document.getElementById('touch-stick-base');
+  const knob = document.getElementById('touch-stick-knob');
+  const dashBtn = document.getElementById('touch-dash-btn');
+  const pauseBtn = document.getElementById('touch-pause-btn');
+  const STICK_RADIUS = 50;
+
+  zone.addEventListener('pointerdown', (e) => {
+    if (touchState.stickId >= 0) return;
+    e.preventDefault();
+    zone.setPointerCapture(e.pointerId);
+    touchState.stickId = e.pointerId;
+    touchState.originX = e.clientX;
+    touchState.originY = e.clientY;
+    base.style.display = 'block';
+    knob.style.display = 'block';
+    base.style.left = e.clientX + 'px';
+    base.style.top = e.clientY + 'px';
+    knob.style.left = e.clientX + 'px';
+    knob.style.top = e.clientY + 'px';
+  });
+
+  zone.addEventListener('pointermove', (e) => {
+    if (e.pointerId !== touchState.stickId) return;
+    e.preventDefault();
+    let dx = e.clientX - touchState.originX;
+    let dy = e.clientY - touchState.originY;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist > STICK_RADIUS) { dx *= STICK_RADIUS / dist; dy *= STICK_RADIUS / dist; }
+    knob.style.left = (touchState.originX + dx) + 'px';
+    knob.style.top = (touchState.originY + dy) + 'px';
+    touchState.stickX = dx / STICK_RADIUS;
+    touchState.stickY = dy / STICK_RADIUS;
+  });
+
+  function endStick(e) {
+    if (e.pointerId !== touchState.stickId) return;
+    touchState.stickId = -1;
+    touchState.stickX = 0;
+    touchState.stickY = 0;
+    base.style.display = 'none';
+    knob.style.display = 'none';
+  }
+  zone.addEventListener('pointerup', endStick);
+  zone.addEventListener('pointercancel', endStick);
+
+  dashBtn.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    touchState.dash = true;
+    touchState.dashId = e.pointerId;
+  });
+  function endDash(e) {
+    if (e.pointerId !== touchState.dashId) return;
+    touchState.dash = false;
+    touchState.dashId = -1;
+  }
+  dashBtn.addEventListener('pointerup', endDash);
+  dashBtn.addEventListener('pointercancel', endDash);
+
+  pauseBtn.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    togglePause();
+  });
+
+  document.addEventListener('touchmove', (e) => { if (e.target.closest('#touch-controls')) e.preventDefault(); }, { passive: false });
+})();
+
 // ─── CHARACTER PREVIEW RENDERERS ───
 const charPreviews = {};
 let charPreviewAnimId = null;
@@ -8960,7 +9276,9 @@ function populateHelpScreen() {
   for (const upg of statUpgrades) {
     const text = upgradeCardText(upg, 1);
     const rank = isFinite(upg.maxRank) ? ` &bull; Max ${upg.maxRank} picks` : ' &bull; Unlimited';
-    powerupHtml += `<div class="help-item">
+    const pDescEsc = text.desc.replace(/"/g, '&quot;');
+    const pStats = ('Common value shown' + rank).replace(/"/g, '&quot;');
+    powerupHtml += `<div class="help-item" data-modal-name="${upg.title}" data-modal-desc="${pDescEsc}" data-modal-stats="${pStats}" data-modal-icon="images/upgrades/${upg.id}.png">
       <img class="help-item-icon" src="images/upgrades/${upg.id}.png" onerror="this.style.display='none'" alt="${upg.title}">
       <div class="help-item-info">
         <div class="help-item-name">${upg.title}</div>
@@ -8994,7 +9312,10 @@ function populateHelpScreen() {
     const detail = weaponDetails[upg.id] || {};
     const unlock = WEAPON_UNLOCKS[upg.id];
     const lockNote = unlock && !isWeaponUnlocked(upg.id) ? ` <span style="color:#dd8866">🔒 Unlock: ${unlock.hint}</span>` : '';
-    weaponHtml += `<div class="help-item">
+    const wName = (detail.name || upg.title).replace(/"/g, '&quot;');
+    const wDescEsc = (detail.desc || upg.desc).replace(/"/g, '&quot;');
+    const wStatsEsc = (detail.stats || '').replace(/"/g, '&quot;');
+    weaponHtml += `<div class="help-item" data-modal-name="${wName}" data-modal-desc="${wDescEsc}" data-modal-stats="${wStatsEsc}" data-modal-icon="images/upgrades/${upg.id}.png">
       <img class="help-item-icon" src="images/upgrades/${upg.id}.png" onerror="this.style.display='none'" alt="${upg.title}">
       <div class="help-item-info">
         <div class="help-item-name">${detail.name || upg.title}${lockNote}</div>
@@ -9014,15 +9335,18 @@ function populateHelpScreen() {
     { id: 'archer', name: 'Goblin Archer', desc: 'Keeps its distance and looses arrows at you. The arrows fly straight, so a sidestep dodges them, but a line of archers will pin you down while the horde closes in. Hunt them or lose the field.', stats: st('archer', 'Range: 18 &bull; Appears: Wave 4+'), color: '#aabb33' },
     { id: 'wolf', name: 'Wolf', desc: 'Swift predators that hunt in packs. They circle and flank before closing in, making them hard to pin down. Elite wolves howl to speed up the entire pack.', stats: st('wolf', 'Appears: Wave 3+'), color: '#7799aa' },
     { id: 'bat', name: 'Bat', desc: 'Flying nocturnal creatures that dive-bomb from above. They fly high, then plunge down to strike before pulling back up. They ignore terrain and obstacles.', stats: st('bat', 'Appears: Wave 6+'), color: '#665588' },
-    { id: 'shaman', name: 'Goblin Shaman', desc: 'Stays behind the horde and every few seconds casts a violet ring that heals every foe near it. Left alone it undoes your work; cut through to it first.', stats: st('shaman', 'Heals 12% to foes within 6 &bull; Appears: Wave 7+'), color: '#b06cff' },
+    { id: 'shaman', name: 'Ogre Shaman', desc: 'A hulking mystic that hangs behind the horde and channels violet healing rings. Every few seconds it mends every foe nearby. Left alone it undoes your work; cut through to it first.', stats: st('shaman', 'Heals 12% to foes within 6 &bull; Appears: Wave 7+'), color: '#b06cff' },
     { id: 'goblinBomb', name: 'Goblin Bomber', desc: 'A deranged goblin strapped with explosives. Rushes toward you and begins flashing red when close. After a brief fuse, detonates in a massive explosion that damages everything nearby — including other enemies. Kill before detonation, or lure near enemy groups for devastating friendly fire!', stats: st('goblinBomb', 'Appears: Wave 4+'), color: '#ff6600' },
     { id: 'ogre', name: 'Ogre', desc: 'Hulking brutes that lumber toward you with devastating force. Slower than goblins but far more resilient, they can absorb many hits before falling.', stats: st('ogre', 'Appears: Wave 3+'), color: '#884422' },
     { id: 'boss', name: 'Boss Ogre', desc: 'A named champion on waves 5 and 15. Charges down a red lane, slams the ground in a ring, and summons goblins. Immune to knockback. Drops a shower of coins and food when slain.', stats: 'HP: 800 + 260×wave &bull; Speed: 3.2 &bull; Damage: 20 + 2.5×wave &bull; XP: 50+ &bull; Appears: Waves 5, 15', color: '#cc4444' },
-    { id: 'dragonOgre', name: 'Dragon Ogre', desc: 'A hybrid of dragon and ogre that hurls exploding boulders, throws volleys of them, and stomps. On wave 20 it returns as The Ogre King with five times the vigour, growing more furious with every minute of the fight: slay him to win the quest.', stats: 'HP: 1600 + 320×wave &bull; Speed: 3.5 &bull; Boulder Dmg: 30 + 3.5×wave &bull; XP: 80+ &bull; Appears: Waves 10, 20', color: '#ff6600' },
+    { id: 'dragonOgre', name: 'Dragon Ogre', desc: 'A hybrid of dragon and ogre that hurls exploding boulders, throws volleys of them, and stomps. Appears on wave 10 as a mid-run trial.', stats: 'HP: 1600 + 320×wave &bull; Speed: 3.5 &bull; Boulder Dmg: 30 + 3.5×wave &bull; XP: 80+ &bull; Appears: Wave 10', color: '#ff6600' },
+    { id: 'ogreKing', name: 'The Ogre King', desc: 'The final boss of wave 20. A towering, armoured ogre king with five times the vigour of a dragon ogre. He grows more furious with every minute of the fight: his speed and damage ramp relentlessly. Slay him to win the quest.', stats: 'HP: 5×(1600 + 320×wave) &bull; Speed: 3.5 (fury ramp) &bull; Boulder Dmg: 30 + 3.5×wave &bull; XP: 80+ &bull; Appears: Wave 20', color: '#ffcc33' },
   ];
   let enemyHtml = '';
   for (const e of enemyData) {
-    enemyHtml += `<div class="help-item">
+    const eDescEsc = e.desc.replace(/"/g, '&quot;');
+    const eStatsEsc = e.stats.replace(/"/g, '&quot;');
+    enemyHtml += `<div class="help-item" data-modal-name="${e.name}" data-modal-desc="${eDescEsc}" data-modal-stats="${eStatsEsc}" data-modal-color="${e.color}" data-modal-enemy="${e.id}">
       <canvas class="help-item-canvas" id="help-enemy-${e.id}" width="160" height="160"></canvas>
       <div class="help-item-info">
         <div class="help-item-name" style="color:${e.color}">${e.name}</div>
@@ -9038,12 +9362,13 @@ function populateHelpScreen() {
   advHtml += '<div class="help-item"><div class="help-item-info"><div class="help-item-desc">Evolutions come from <span style="color:#e8c860">treasure chests</span>, which elites and bosses drop. When a weapon is at Level 5 and you own its matching stat upgrade, the next chest you open <span style="color:#ffdd00">EVOLVES</span> it:</div></div></div>';
   for (const [wid, evo] of Object.entries(WEAPON_EVOLUTIONS)) {
     const reqUpg = UPGRADES.find(u => u.id === evo.requires);
-    advHtml += `<div class="help-item">
+    const evoReq = `Requires: ${weaponDetails[wid]?.name || wid} Lv5 + ${reqUpg?.title || evo.requires}`;
+    advHtml += `<div class="help-item" data-modal-name="${evo.evoName}" data-modal-desc="${evo.evoDesc.replace(/"/g,'&quot;')}" data-modal-stats="${evoReq.replace(/"/g,'&quot;')}" data-modal-color="#ffdd00" data-modal-icon="images/upgrades/${wid}.png">
       <img class="help-item-icon" src="images/upgrades/${wid}.png" onerror="this.style.display='none'" alt="${evo.evoName}">
       <div class="help-item-info">
         <div class="help-item-name" style="color:#ffdd00">${evo.evoName}</div>
         <div class="help-item-desc">${evo.evoDesc}</div>
-        <div class="help-item-stats">Requires: ${weaponDetails[wid]?.name || wid} Lv5 + ${reqUpg?.title || evo.requires}</div>
+        <div class="help-item-stats">${evoReq}</div>
       </div>
     </div>`;
   }
@@ -9052,7 +9377,7 @@ function populateHelpScreen() {
   advHtml += `<div class="help-item"><div class="help-item-info"><div class="help-item-desc">Relics are offered at level-up alongside stats. You may carry <span style="color:#5fd3c7">${MAX_RELICS}</span>. Each changes how you fight rather than how big your numbers are:</div></div></div>`;
   for (const r of RELICS) {
     const locked = !isRelicUnlocked(r);
-    advHtml += `<div class="help-item"${locked ? ' style="opacity:0.55"' : ''}><img class="help-item-icon" src="images/relics/${r.id}.png" alt="" onerror="this.outerHTML='<div class=&quot;upgrade-icon relic-icon&quot; style=&quot;width:64px;height:64px;font-size:28px&quot;>${r.icon}</div>'"><div class="help-item-info">
+    advHtml += `<div class="help-item" data-modal-name="${r.name.replace(/"/g,'&quot;')}" data-modal-desc="${r.desc.replace(/"/g,'&quot;')}${locked ? ' — Unlock: ' + r.hint : ''}" data-modal-color="#5fd3c7" data-modal-icon="images/relics/${r.id}.png"${locked ? ' style="opacity:0.55"' : ''}><img class="help-item-icon" src="images/relics/${r.id}.png" alt="" onerror="this.outerHTML='<div class=&quot;upgrade-icon relic-icon&quot; style=&quot;width:64px;height:64px;font-size:28px&quot;>${r.icon}</div>'"><div class="help-item-info">
       <div class="help-item-name" style="color:#5fd3c7">${locked ? '🔒 ' : ''}${r.name}</div>
       <div class="help-item-desc">${r.desc}${locked ? ` <span style="color:#c9a253">— Unlock: ${r.hint}</span>` : ''}</div>
     </div></div>`;
@@ -9061,17 +9386,18 @@ function populateHelpScreen() {
   advHtml += '<div class="help-section-title">Weapon Synergies</div>';
   advHtml += '<div class="help-item"><div class="help-item-info"><div class="help-item-desc">Owning specific weapon pairs unlocks passive bonuses:</div></div></div>';
   for (const syn of WEAPON_SYNERGIES) {
-    advHtml += `<div class="help-item"><div class="help-item-info">
+    const synReq = `Requires: ${syn.weapons.map(w => w === 'melee' ? 'Primary Weapon' : WEAPON_NAMES[w] || w).join(' + ')}`;
+    advHtml += `<div class="help-item" data-modal-name="${syn.name.replace(/"/g,'&quot;')}" data-modal-desc="${syn.desc.replace(/"/g,'&quot;')}" data-modal-stats="${synReq.replace(/"/g,'&quot;')}" data-modal-color="#88ddff"><div class="help-item-info">
       <div class="help-item-name" style="color:#88ddff">${syn.name}</div>
       <div class="help-item-desc">${syn.desc}</div>
-      <div class="help-item-stats">Requires: ${syn.weapons.map(w => w === 'melee' ? 'Primary Weapon' : WEAPON_NAMES[w] || w).join(' + ')}</div>
+      <div class="help-item-stats">${synReq}</div>
     </div></div>`;
   }
 
   advHtml += '<div class="help-section-title">Wave Events</div>';
   advHtml += '<div class="help-item"><div class="help-item-info"><div class="help-item-desc">Random events trigger during waves, granting temporary buffs or challenges:</div></div></div>';
   for (const evt of WAVE_EVENTS) {
-    advHtml += `<div class="help-item"><div class="help-item-info">
+    advHtml += `<div class="help-item" data-modal-name="${evt.name.replace(/"/g,'&quot;')}" data-modal-desc="${evt.desc.replace(/"/g,'&quot;')}${evt.duration > 0 ? ' (' + evt.duration + 's)' : ''}" data-modal-color="${evt.color}"><div class="help-item-info">
       <div class="help-item-name" style="color:${evt.color}">${evt.name}</div>
       <div class="help-item-desc">${evt.desc}${evt.duration > 0 ? ` (${evt.duration}s)` : ''}</div>
     </div></div>`;
@@ -9106,14 +9432,15 @@ async function setupHelpEnemyPreviews() {
   const enemyTypes = [
     { id: 'rat', modelKey: 'rat', scale: 2.0 },
     { id: 'goblin', modelKey: 'goblin', scale: 2.5 },
-    { id: 'archer', modelKey: 'goblin', scale: 2.5 },
-    { id: 'shaman', modelKey: 'goblin', scale: 2.5 },
+    { id: 'archer', modelKey: 'goblinArcher', scale: 1.8 },
+    { id: 'shaman', modelKey: 'ogreWizard', scale: 1.8 },
     { id: 'wolf', modelKey: 'wolf', scale: 2.2 },
     { id: 'bat', modelKey: 'bat', scale: 2.5 },
     { id: 'goblinBomb', modelKey: 'goblinBomb', scale: 2.5 },
     { id: 'ogre', modelKey: 'ogre', scale: 2.0 },
-    { id: 'boss', modelKey: 'ogre', scale: 3.5 },
+    { id: 'boss', modelKey: 'ogreBoss', scale: 1.8 },
     { id: 'dragonOgre', modelKey: 'dragonOgre', scale: 1.8 },
+    { id: 'ogreKing', modelKey: 'ogreKing', scale: 1.8 },
   ];
   // Single offscreen renderer shared by all previews (avoids WebGL context limits)
   const offCanvas = document.createElement('canvas');
@@ -9144,15 +9471,6 @@ async function setupHelpEnemyPreviews() {
         if (clip.name === 'Idle_A' || clip.name === 'idle' || clip.name === 'Idle') {
           mixer.clipAction(clip).play();
           break;
-        }
-      }
-      if (et.id === 'boss' && assets.club) {
-        let handBone = null;
-        model.traverse(c => { if (c.isBone && c.name === 'hand_r') handBone = c; });
-        if (handBone) {
-          const club = assets.club.scene.clone();
-          club.scale.setScalar(0.4);
-          handBone.add(club);
         }
       }
       sc.add(model);
@@ -9210,6 +9528,135 @@ document.querySelectorAll('.help-tab').forEach(tab => {
     document.getElementById(`help-tab-${tab.dataset.tab}`).classList.add('active');
   });
 });
+
+// ─── HELP MODAL (click-to-expand) ───
+const _helpModal = document.getElementById('help-modal-overlay');
+const _helpModalPreview = document.getElementById('help-modal-preview');
+const _helpModalName = document.getElementById('help-modal-name');
+const _helpModalDesc = document.getElementById('help-modal-desc');
+const _helpModalStats = document.getElementById('help-modal-stats');
+let _helpModalRenderer = null;
+let _helpModalAnimId = null;
+let _helpModalData = null;
+
+function openHelpModal(item) {
+  _helpModalName.innerHTML = item.name || '';
+  _helpModalName.style.color = item.color || '#c9a253';
+  _helpModalDesc.innerHTML = item.desc || '';
+  _helpModalStats.innerHTML = (item.stats || '').replace(/(\d+)/g, '<span>$1</span>');
+  _helpModalPreview.innerHTML = '';
+
+  if (item.enemyId && helpEnemyPreviews[item.enemyId]) {
+    const prev = helpEnemyPreviews[item.enemyId];
+    const canvas = document.createElement('canvas');
+    canvas.width = 480; canvas.height = 480;
+    _helpModalPreview.appendChild(canvas);
+    if (!_helpModalRenderer) {
+      const offC = document.createElement('canvas');
+      offC.width = 480; offC.height = 480;
+      _helpModalRenderer = new THREE.WebGLRenderer({ canvas: offC, alpha: true, antialias: true });
+      _helpModalRenderer.setSize(480, 480, false);
+      _helpModalRenderer.toneMapping = THREE.ACESFilmicToneMapping;
+      _helpModalRenderer.toneMappingExposure = 1.2;
+    }
+    const cam = new THREE.PerspectiveCamera(30, 1, 0.1, 50);
+    cam.position.set(0, 1.2, 4.0);
+    cam.lookAt(0, 0.7, 0);
+    _helpModalData = { prev, canvas, cam, ctx: canvas.getContext('2d') };
+    const clock = new THREE.Clock();
+    function animModal() {
+      _helpModalAnimId = requestAnimationFrame(animModal);
+      const dt = clock.getDelta();
+      if (_helpModalData.prev.mixer) _helpModalData.prev.mixer.update(dt);
+      if (_helpModalData.prev.model) _helpModalData.prev.model.rotation.y += 0.012;
+      _helpModalRenderer.render(_helpModalData.prev.scene, _helpModalData.cam);
+      _helpModalData.ctx.clearRect(0, 0, 480, 480);
+      _helpModalData.ctx.drawImage(_helpModalRenderer.domElement, 0, 0, 480, 480);
+    }
+    clock.start();
+    animModal();
+  } else if (item.iconSrc) {
+    const img = document.createElement('img');
+    img.src = item.iconSrc;
+    img.alt = item.name || '';
+    _helpModalPreview.appendChild(img);
+  } else {
+    _helpModalPreview.style.display = 'none';
+  }
+  if (_helpModalPreview.children.length > 0) _helpModalPreview.style.display = '';
+  _helpModal.classList.add('active');
+}
+
+function closeHelpModal() {
+  _helpModal.classList.remove('active');
+  if (_helpModalAnimId) { cancelAnimationFrame(_helpModalAnimId); _helpModalAnimId = null; }
+  _helpModalData = null;
+}
+
+document.getElementById('help-modal-close').addEventListener('click', closeHelpModal);
+_helpModal.addEventListener('click', (e) => { if (e.target === _helpModal) closeHelpModal(); });
+
+document.getElementById('help-content').addEventListener('click', (e) => {
+  const item = e.target.closest('.help-item');
+  if (!item || !item.dataset.modalName) return;
+  openHelpModal({
+    name: item.dataset.modalName,
+    desc: item.dataset.modalDesc || '',
+    stats: item.dataset.modalStats || '',
+    color: item.dataset.modalColor || '#c9a253',
+    enemyId: item.dataset.modalEnemy || null,
+    iconSrc: item.dataset.modalIcon || null,
+  });
+});
+
+// ─── LOADING SCREEN QUOTES ───
+const LOADING_QUOTES = [
+  { text: 'The blade itself incites to deeds of violence.', attr: '— Homer, The Odyssey' },
+  { text: 'A knight is sworn to valour. His heart knows only virtue.', attr: '— The Old Code' },
+  { text: 'Courage is not the absence of fear, but the triumph over it.', attr: '— A Wise King' },
+  { text: 'The walls will hold. They must hold.', attr: '— Last Stand at Helm\'s Deep' },
+  { text: 'Steel wins battles. Gold wins wars.', attr: '— Ancient Proverb' },
+  { text: 'In the darkest hour, the smallest light burns brightest.', attr: '— The Scrolls of Alderath' },
+  { text: 'No half measures. The horde does not negotiate.', attr: '— Commander of the Watch' },
+  { text: 'Every enemy you slay was once someone else\'s nightmare.', attr: '— The Veteran\'s Counsel' },
+  { text: 'Fortune favours the bold, but the bold still sharpen their swords.', attr: '— Dwarven Saying' },
+  { text: 'We do not choose our battles. We only choose how to face them.', attr: '— The Silver Knight' },
+  { text: 'Let them come. The castle has stood for a thousand years.', attr: '— Warden of the Stonewall' },
+  { text: 'A single arrow can be broken, but ten together are unyielding.', attr: '— Elven War Doctrine' },
+  { text: 'The ogres remember these lands. They mean to take them back.', attr: '— Ranger\'s Warning' },
+  { text: 'Monsters are not born. They are forged in darkness and hunger.', attr: '— The Beastiary' },
+  { text: 'When the last torch gutters, fight by starlight.', attr: '— Night Watch Oath' },
+  { text: 'Better to die standing than to live on your knees.', attr: '— The Free People' },
+  { text: 'Gold in your pocket, steel in your hand. That\'s a survivor.', attr: '— The Merchant Knight' },
+  { text: 'They called it madness. We called it Tuesday.', attr: '— Goblin Bomber Corps, Final Report' },
+  { text: 'The forest remembers every footstep. And it does not forgive.', attr: '— Darkwood Warning Stone' },
+  { text: 'An ogre\'s weakness is patience. They have none.', attr: '— Fieldcraft Manual' },
+];
+{
+  const quoteEl = document.getElementById('loading-quote');
+  const attrEl = document.getElementById('loading-quote-attr');
+  const shuffled = LOADING_QUOTES.slice().sort(() => Math.random() - 0.5);
+  let qi = 0;
+  function showNextQuote() {
+    quoteEl.classList.remove('visible');
+    setTimeout(() => {
+      const q = shuffled[qi % shuffled.length];
+      quoteEl.textContent = '"' + q.text + '"';
+      attrEl.textContent = q.attr;
+      quoteEl.classList.add('visible');
+      qi++;
+    }, 400);
+  }
+  showNextQuote();
+  const quoteInterval = setInterval(showNextQuote, 5000);
+  const loadObs = new MutationObserver(() => {
+    if (document.getElementById('loading-screen').style.display === 'none') {
+      clearInterval(quoteInterval);
+      loadObs.disconnect();
+    }
+  });
+  loadObs.observe(document.getElementById('loading-screen'), { attributes: true, attributeFilter: ['style'] });
+}
 
 async function init() {
   await loadAssets();
