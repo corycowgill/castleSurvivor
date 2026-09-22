@@ -5485,42 +5485,48 @@ function dropLoot(enemy) {
 function armorMultiplier() { return Math.max(0.4, 1 - state.player.armor * 0.045); }
 
 function damagePlayer(rawAmount, fromPos, opts) {
-  if (state.player.isDead) return false;
-  if (state.player.iframes > 0 || state.player.isDashing) return false;
+  // opts.target names the knight being hit; defaults to player 0 so the ~20
+  // unconverted call sites keep their old behaviour.
+  const tp = (opts && opts.target) || players[0];
+  const tps = tp.state;
+  const tpMesh = tp.mesh;
+  if (!tpMesh) return false;
+  if (tps.isDead) return false;
+  if (tps.iframes > 0 || tps.isDashing) return false;
   const o = opts || {};
   let mult = armorMultiplier();
-  const rel = state.player.relics;
+  const rel = tps.relics;
   // Warding Runes: half damage for 1.5s after a hit, once every 8s
   if (rel && rel.runes) {
-    if (state.time < state.player._runesUntil) mult *= 0.5;
-    else if (state.time >= state.player._runesReady) {
-      state.player._runesUntil = state.time + 1.5;
-      state.player._runesReady = state.time + 8;
-      vfx.defenseBoost(playerMesh, 0x5fd3c7);
-      vfx.after(1.5, () => vfx.removeBoost(playerMesh, 'defense'));
+    if (state.time < tps._runesUntil) mult *= 0.5;
+    else if (state.time >= tps._runesReady) {
+      tps._runesUntil = state.time + 1.5;
+      tps._runesReady = state.time + 8;
+      vfx.defenseBoost(tpMesh, 0x5fd3c7);
+      vfx.after(1.5, () => vfx.removeBoost(tpMesh, 'defense'));
     }
   }
   const dmg = Math.max(1, Math.round(rawAmount * mult));
-  state.player.hp -= dmg;
+  tps.hp -= dmg;
   const by = o.by || 'unknown';
   runStats.damageTakenBy[by] = (runStats.damageTakenBy[by] || 0) + dmg;
   // Phoenix Feather: one death, refused
-  if (state.player.hp <= 0 && rel && rel.phoenix && !state.player._phoenixUsed) {
-    state.player._phoenixUsed = true;
-    state.player.hp = Math.max(1, Math.round(state.player.maxHp * 0.35));
-    state.player.iframes = 1.5;
-    spawnDamageNumber(playerMesh.position, 'REBORN', '#ffb347');
+  if (tps.hp <= 0 && rel && rel.phoenix && !tps._phoenixUsed) {
+    tps._phoenixUsed = true;
+    tps.hp = Math.max(1, Math.round(tps.maxHp * 0.35));
+    tps.iframes = 1.5;
+    spawnDamageNumber(tpMesh.position, 'REBORN', '#ffb347');
     AudioSystem.play('levelUp', { volume: 0.9, pitch: 0.8 });
     triggerShake(0.6, 0.4);
-    vfx.levelUp(playerMesh);
-    vfx.vortex(playerMesh.position, 0xffb347, { radius: 2.5, height: 5, count: 60, duration: 0.9 });
+    vfx.levelUp(tpMesh);
+    vfx.vortex(tpMesh.position, 0xffb347, { radius: 2.5, height: 5, count: 60, duration: 0.9 });
     levelUpShockwave();
     return true;
   }
   // Short by default: a long window capped damage at ~3 hits/s no matter how
   // many enemies were on you, which is what made standing still safe.
-  state.player.iframes = o.iframes != null ? o.iframes : 0.15;
-  spawnDamageNumber(playerMesh.position, dmg, o.color || '#8b2020');
+  tps.iframes = o.iframes != null ? o.iframes : 0.15;
+  spawnDamageNumber(tpMesh.position, dmg, o.color || '#8b2020');
   AudioSystem.play('playerHit', { volume: o.volume != null ? o.volume : 0.5, pitch: o.pitch != null ? o.pitch : 0.9 + Math.random() * 0.2 });
   triggerShake(o.shake != null ? o.shake : 0.35, 0.2);
   triggerDamageFlash(o.flash != null ? o.flash : 0.6);
@@ -5528,7 +5534,7 @@ function damagePlayer(rawAmount, fromPos, opts) {
   breakStreak();
   getDamageFlashEl().style.opacity = '1';
   _damageFlashCSSTimer = 0.1;
-  if (state.player.hp <= 0) triggerPlayerDeath();
+  if (tps.hp <= 0) triggerPlayerDeath();
   return true;
 }
 
@@ -5603,7 +5609,12 @@ function updateEnemies(dt) {
   _animThrottleFrame++;
   for (let i = enemies.length - 1; i >= 0; i--) {
     const enemy = enemies[i];
-    const eDist = playerMesh ? distSqXZ(playerMesh.position, enemy.mesh.position) : 0;
+    // Co-op: every enemy chases whichever knight is closest to it, re-evaluated
+    // each frame so aggro shifts as the party moves apart.
+    const tgt = nearestPlayer(enemy.mesh.position.x, enemy.mesh.position.z);
+    const tgtMesh = tgt.mesh || tgtMesh;
+    enemy.target = tgt;
+    const eDist = tgtMesh ? distSqXZ(tgtMesh.position, enemy.mesh.position) : 0;
     // Animation is ~a third of simulation cost, so it is rate-limited by
     // distance: full rate on screen, half just off screen, quarter beyond, and
     // skipped entirely when nothing is being rendered (test harness).
@@ -5712,9 +5723,9 @@ function updateEnemies(dt) {
           // Ground Slam — AOE damage + knockback around the ogre
           const slamRadius = 5;
           const slamRadiusSq = slamRadius * slamRadius;
-          const pDistSq = distSqXZ(playerMesh.position, ePos);
+          const pDistSq = distSqXZ(tgtMesh.position, ePos);
           if (pDistSq < slamRadiusSq) {
-            damagePlayer(enemy.damage * 0.6, ePos, { iframes: 0.5, color: '#ff6600', shake: 0.5, flash: 0.4, by: 'elite ogre slam' });
+            damagePlayer(enemy.damage * 0.6, ePos, { iframes: 0.5, color: '#ff6600', shake: 0.5, flash: 0.4, by: 'elite ogre slam', target: enemy.target });
           }
           vfx.groundSlam(ePos, slamRadius);
           playEnemyAnim(enemy, 'Chop_Tree', false);
@@ -5738,10 +5749,10 @@ function updateEnemies(dt) {
         } else if (enemy.type === 'goblin') {
           // Slow Aura — slows player if nearby
           const slowRadius = 7;
-          const pDistSq2 = distSqXZ(playerMesh.position, ePos);
+          const pDistSq2 = distSqXZ(tgtMesh.position, ePos);
           if (pDistSq2 < slowRadius * slowRadius) {
             addBuff('speed', -2, 3);
-            spawnDamageNumber(playerMesh.position, 'SLOWED', '#8844cc');
+            spawnDamageNumber(tgtMesh.position, 'SLOWED', '#8844cc');
           }
           vfx.eliteSpawnBurst(ePos);
         }
@@ -5835,7 +5846,7 @@ function updateEnemies(dt) {
     }
 
     // Move toward player
-    _tv1.subVectors(playerMesh.position, enemy.mesh.position);
+    _tv1.subVectors(tgtMesh.position, enemy.mesh.position);
     const dist = _tv1.length();
     if (dist > 0) { _tv1.x /= dist; _tv1.y /= dist; _tv1.z /= dist; }
     const dir = _tv1;
@@ -5860,7 +5871,7 @@ function updateEnemies(dt) {
         // in motion; a crit's larger shove does. Stepping away still works.
         if (dist <= enemy.attackRange + 1.5) {
           if (state.player.iframes > 0 || state.player.isDashing) enemy.attackTimer = enemy.attackCooldown * 0.3;
-          else if (damagePlayer(enemy.damage, enemy.mesh.position, { by: enemy.isElite ? 'elite ' + enemy.type : enemy.type })) applyThorns(enemy);
+          else if (damagePlayer(enemy.damage, enemy.mesh.position, { by: enemy.isElite ? 'elite ' + enemy.type : enemy.type, target: enemy.target })) applyThorns(enemy);
         }
       }
       continue;
