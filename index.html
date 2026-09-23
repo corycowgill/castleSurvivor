@@ -1053,6 +1053,61 @@ body.picking-coop #level-up-screen .divider { margin: 4px 0 8px; }
 #coop-hint { font-family: 'MedievalSharp', cursive; font-size: 11px; color: #6d5637; margin-top: 5px; line-height: 1.5; }
 #coop-hint b { color: #a8873f; }
 
+.char-card-crest {
+  height: 96px; display: flex; align-items: center; justify-content: center;
+  font-size: 40px; color: #8a6a3a;
+  background: radial-gradient(ellipse at center, rgba(70,45,16,0.55), rgba(12,6,2,0.2));
+  border-radius: 8px; margin-bottom: 4px;
+}
+.char-card.selected .char-card-crest { color: #e8c860; }
+
+/* ─── SHORT / PHONE TITLE SCREEN ───
+   On a 932px-tall phone the title screen was 1293px of content, so BEGIN QUEST
+   sat 73px below the fold with no way to reach it -- body is overflow:hidden
+   and the flex centering defeated the start screen's own scroll. This compacts
+   the layout so everything fits, keeps the screen genuinely scrollable as a
+   fallback, and pins the button so it can never be lost off-screen again. */
+@media (max-height: 1000px), (pointer: coarse) {
+  #start-screen {
+    justify-content: flex-start;
+    padding-bottom: 92px;              /* room for the pinned button */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  #start-screen h1 { font-size: 38px; margin: 6px 0 0; }
+  #start-screen .subtitle { font-size: 13px; margin-bottom: 4px; }
+  .char-card { width: 132px; padding: 6px 6px 8px; }
+  .char-card canvas { width: 108px; height: 108px; }
+  .char-name { font-size: 14px; }
+  .char-title { font-size: 10px; }
+  #char-bio-area { font-size: 11px; padding: 6px 10px; margin: 4px 8px; }
+  #map-select-wrapper, #ogre-level-wrapper { margin: 4px 0; }
+  #map-thumb-row img, .map-thumb { width: 92px; height: 92px; }
+  #ogre-level-title, #map-select-title { font-size: 11px; }
+  .ogre-btn { width: 32px; height: 32px; font-size: 13px; }
+  #ogre-level-desc, #map-desc { font-size: 10px; }
+  #coop-roster { margin: 2px 0; }
+  #coop-slots { gap: 6px; }
+  .coop-slot { min-width: 96px; padding: 4px 8px; font-size: 11px; }
+  #coop-hint { font-size: 9px; line-height: 1.35; }
+  #start-gold { font-size: 12px; margin: 2px 0; }
+
+  /* Always reachable, whatever the content height does. */
+  #start-btn {
+    position: fixed; left: 50%; transform: translateX(-50%);
+    bottom: 14px; z-index: 1002; min-width: 220px;
+  }
+  /* The secondary menu ran off both edges at 430px wide. */
+  .menu-row {
+    margin-bottom: 6px; flex-wrap: wrap; justify-content: center;
+    gap: 5px; padding: 0 8px; max-width: 100%;
+  }
+  .menu-row button { font-size: 10px; padding: 5px 8px; letter-spacing: 0.5px; }
+  .char-card-crest { height: 72px; font-size: 32px; }
+  /* Controls legend is desktop guidance; it only crowds a phone. */
+  #start-screen .controls-hint, #start-screen .menu-hint { display: none; }
+}
+
 /* ─── MOBILE ASSET AUDIT ───
    iOS Safari gives no devtools, so the memory report has to live in the page.
    Triple-tap the top-left corner, or load with ?audit, to open it. */
@@ -9955,6 +10010,25 @@ const charPreviews = {};
 let charPreviewAnimId = null;
 
 async function setupCharacterPreviews() {
+  // Low quality runs one WebGL context, not four. Each preview was its own
+  // context with its own copy of a character model, which on iOS is a large
+  // slice of the memory budget before the game has even started.
+  if (LOW_QUALITY) {
+    for (const key of Object.keys(CHARACTER_ASSETS)) {
+      const canvas = document.getElementById('preview-' + key);
+      if (!canvas) continue;
+      const card = canvas.closest('.char-card');
+      canvas.remove();
+      if (card && !card.querySelector('.char-card-crest')) {
+        const crest = document.createElement('div');
+        crest.className = 'char-card-crest';
+        crest.textContent = key === 'parker' ? '\u2727' : key === 'brennan' ? '\u2694' : '\u1F6E1';
+        card.insertBefore(crest, card.firstChild);
+      }
+    }
+    return;
+  }
+
   const chars = ['dad', 'brennan', 'parker'];
   const animGltf = assets.knightAnims;
 
