@@ -1602,7 +1602,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 // shipped in. `number` is the commit count this change will produce. Do not
 // hand-edit: the stamper matches the two marker lines exactly.
 /* BUILD:START */
-const BUILD = { number: 39, date: '2026-09-23' };
+const BUILD = { number: 40, date: '2026-09-23' };
 /* BUILD:END */
 for (const el of document.querySelectorAll('.build-badge')) el.textContent = `BUILD ${BUILD.number}`;
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -4160,7 +4160,7 @@ async function joinPlayer(character = 'brennan', device = null) {
   // ranks, which clearRun() only ever applied to player 0.
   const passive = CHARACTER_PASSIVES[p.character];
   if (passive) passive.apply(p.state);
-  applyForgeStatsTo(p.state);
+  applyForgeStatsTo(p.state, p);   // each knight gets the upgrades THEY paid for
   p.state.primaryWeapon = CHARACTER_PRIMARY[p.character] || 'sword';
   p.weapons[p.state.primaryWeapon].owned = true;
   p.weapons[p.state.primaryWeapon].level = Math.max(1, p.weapons[p.state.primaryWeapon].level);
@@ -4189,8 +4189,8 @@ function resetPartyToSolo() {
 
 // The per-player slice of the Forge ranks. Run-wide effects (magnet range,
 // reroll and banish charges) stay global and are applied by applyForgeUpgrades.
-function applyForgeStatsTo(ps) {
-  const meta = loadMeta();
+function applyForgeStatsTo(ps, who) {
+  const meta = loadMeta(who);
   for (const upg of FORGE_UPGRADES) {
     const rank = getForgeRank(meta, upg.id);
     if (rank <= 0) continue;
@@ -7900,24 +7900,97 @@ const FORGE_UPGRADES = [
   { id: 'banish',     name: 'Fate\'s Scorn',         desc: '+1 Banish per run',         maxRank: 2, costs: [150, 350],               stat: 'banish',        perRank: 1 },
 ];
 
-function loadMeta() {
-  try {
-    const data = localStorage.getItem('castleSurvivor_meta');
-    if (data) return JSON.parse(data);
-  } catch {}
-  return { gold: 0, ranks: {} };
+// ─── PROFILES ───
+// One profile per knight, because the knights ARE the family. That makes the
+// whole feature invisible: there is nothing to pick, nothing to log into and no
+// way for a nine-year-old to bank a run into the wrong wallet.
+//
+// Split per profile: gold and Forge ranks. Your gold buys YOUR upgrades.
+// Shared across the family: weapon-unlock achievements, weapon mastery, wins and
+// the Ogre Level ladder. Those are content gates rather than earnings -- keeping
+// them shared means a kid who starts later is not locked out of half the game,
+// and the Hall of Fame and personal bests stay comparable across the family.
+const PROFILE_IDS = ['dad', 'brennan', 'parker'];
+const META_KEY = 'castleSurvivor_meta';
+const _emptyProfile = () => ({ gold: 0, ranks: {} });
+
+function _blankSave() {
+  const profiles = {};
+  for (const id of PROFILE_IDS) profiles[id] = _emptyProfile();
+  return { version: 2, shared: { achievements: [], mastery: {}, wins: 0, ogreUnlocked: 1 }, profiles };
 }
 
-function saveMeta(meta) {
-  try { localStorage.setItem('castleSurvivor_meta', JSON.stringify(meta)); } catch {}
+// v1 was a single wallet for the whole device. The gold in it was earned by
+// whoever happened to be playing, so it is copied to every profile rather than
+// handed to one knight -- nobody opens the Forge to find their savings gone.
+function _migrate(v1) {
+  const out = _blankSave();
+  out.shared.achievements = Array.isArray(v1.achievements) ? v1.achievements : [];
+  out.shared.mastery = v1.mastery || {};
+  out.shared.wins = v1.wins || 0;
+  out.shared.ogreUnlocked = v1.ogreUnlocked || 1;
+  for (const id of PROFILE_IDS) {
+    out.profiles[id] = { gold: v1.gold || 0, ranks: Object.assign({}, v1.ranks || {}) };
+  }
+  return out;
+}
+
+function loadSave() {
+  try {
+    const raw = localStorage.getItem(META_KEY);
+    if (!raw) return _blankSave();
+    const data = JSON.parse(raw);
+    if (!data || typeof data !== 'object') return _blankSave();
+    const save = data.version === 2 && data.profiles ? data : _migrate(data);
+    // Tolerate a hand-edited or partial save rather than throwing mid-run.
+    save.shared = Object.assign({ achievements: [], mastery: {}, wins: 0, ogreUnlocked: 1 }, save.shared);
+    save.profiles = save.profiles || {};
+    for (const id of PROFILE_IDS) save.profiles[id] = Object.assign(_emptyProfile(), save.profiles[id]);
+    return save;
+  } catch { return _blankSave(); }
+}
+
+function saveSave(save) {
+  try { localStorage.setItem(META_KEY, JSON.stringify(save)); } catch {}
+}
+
+function profileIdFor(who) {
+  // Accepts a profile id, a player object, or nothing (the knight on the menu).
+  if (typeof who === 'string' && PROFILE_IDS.includes(who)) return who;
+  if (who && typeof who === 'object' && PROFILE_IDS.includes(who.character)) return who.character;
+  return PROFILE_IDS.includes(selectedCharacter) ? selectedCharacter : PROFILE_IDS[0];
+}
+
+// A flat view that looks exactly like the old v1 meta, so every existing call
+// site keeps working: gold and ranks come from the profile, the rest is shared.
+function loadMeta(who) {
+  const save = loadSave();
+  const p = save.profiles[profileIdFor(who)] || _emptyProfile();
+  return {
+    gold: p.gold, ranks: p.ranks,
+    achievements: save.shared.achievements, mastery: save.shared.mastery,
+    wins: save.shared.wins, ogreUnlocked: save.shared.ogreUnlocked,
+    _profile: profileIdFor(who),
+  };
+}
+
+function saveMeta(meta, who) {
+  const id = profileIdFor(who || meta._profile);
+  const save = loadSave();
+  save.profiles[id] = { gold: meta.gold || 0, ranks: meta.ranks || {} };
+  save.shared.achievements = meta.achievements || save.shared.achievements;
+  save.shared.mastery = meta.mastery || save.shared.mastery;
+  save.shared.wins = meta.wins != null ? meta.wins : save.shared.wins;
+  save.shared.ogreUnlocked = meta.ogreUnlocked != null ? meta.ogreUnlocked : save.shared.ogreUnlocked;
+  saveSave(save);
 }
 
 function getForgeRank(meta, id) {
   return meta.ranks[id] || 0;
 }
 
-function calcRunGold() {
-  const meta = loadMeta();
+function calcRunGold(who) {
+  const meta = loadMeta(who);
   const goldBonus = getForgeRank(meta, 'treasure') * 0.15;
   let gold = 0;
   gold += state.wave * 10;
@@ -7955,8 +8028,10 @@ function applyForgeUpgrades() {
 }
 
 function renderForge() {
+  // The Forge always belongs to the knight selected on the title screen.
   const meta = loadMeta();
-  document.getElementById('forge-gold').textContent = `Gold: ${meta.gold}`;
+  const whoName = CHARACTER_NAMES[profileIdFor()] || 'Knight';
+  document.getElementById('forge-gold').textContent = `${whoName}'s Gold: ${meta.gold}`;
   const grid = document.getElementById('forge-grid');
   grid.innerHTML = '';
   for (const upg of FORGE_UPGRADES) {
@@ -7984,7 +8059,7 @@ function renderForge() {
         if (m.gold < c) return;
         m.gold -= c;
         m.ranks[upg.id] = r + 1;
-        saveMeta(m);
+        saveMeta(m);      // m carries _profile, so this lands in the right wallet
         renderForge();
         updateStartGold();
       });
@@ -8948,8 +9023,19 @@ function gameOver(victory = false) {
   const bestMins = Math.floor(best.time / 60);
   const bestSecs = Math.floor(best.time % 60);
 
-  const goldEarned = calcRunGold();
-  const meta = loadMeta();
+  // Every knight in the party banks the full amount into their own profile.
+  // Splitting it would make a co-op run worth less per person than a solo one,
+  // which quietly punishes playing together -- the opposite of the point when
+  // the party is a parent and two kids. Each knight's own Golden Touch rank
+  // applies to their own share, so the amounts can differ.
+  const goldByProfile = {};
+  for (const pl of players) {
+    const id = profileIdFor(pl);
+    if (goldByProfile[id] != null) continue;      // one payout per profile
+    goldByProfile[id] = calcRunGold(pl);
+  }
+  const goldEarned = goldByProfile[profileIdFor(players[0])] || calcRunGold(players[0]);
+  const meta = loadMeta(players[0]);
   meta.gold += goldEarned;
   AudioSystem.setMusicMuffle(0);
   // Achievements (run milestones) persist and gate weapon unlocks; mastery accrues kills
@@ -8979,7 +9065,16 @@ function gameOver(victory = false) {
       unlockLine = `<div id="go-placement" style="color:#ff7733">Ogre Level ${next} — ${OGRE_LEVELS[next].name} — unlocked!</div>`;
     }
   }
-  saveMeta(meta);
+  saveMeta(meta, players[0]);
+  // Companions: wallet only. The shared half was just written above and must not
+  // be written again from a stale copy.
+  for (const pl of players.slice(1)) {
+    const id = profileIdFor(pl);
+    if (id === profileIdFor(players[0])) continue;
+    const save = loadSave();
+    save.profiles[id].gold = (save.profiles[id].gold || 0) + (goldByProfile[id] || 0);
+    saveSave(save);
+  }
   refreshOgreButtons();
 
   document.getElementById('game-over-stats').innerHTML = `
@@ -10576,6 +10671,8 @@ document.querySelectorAll('.char-card').forEach(card => {
       }
     }
     renderCoopRoster();
+    // Gold is per knight now, so the title-screen purse follows the selection.
+    updateStartGold();
   });
 });
 applyPrivateMode();
@@ -11187,7 +11284,8 @@ init().then(() => {
       openAudit, closeAudit, collectAudit, renderAudit,
       setLowQuality, applyQualityMode, detectMobile,
       get lowQuality() { return LOW_QUALITY; },
-      gamepadStates, padSlot, readInput, touchState, gainXP, partyXpToNext, coopPending, updateCoopJoin, renderCoopRoster, pollGamepad, damagePlayer, triggerPlayerDeath,
+      gamepadStates, padSlot, readInput, touchState,
+      loadSave, saveSave, loadMeta, saveMeta, profileIdFor, PROFILE_IDS, gainXP, partyXpToNext, coopPending, updateCoopJoin, renderCoopRoster, pollGamepad, damagePlayer, triggerPlayerDeath,
       partySpawnMul, partyHpMul, partyBossHpMul, partyMaxEnemies,
       get primaryPadIndex() { return primaryPadIndex; },
       get playerMesh() { return playerMesh; },

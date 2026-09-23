@@ -253,7 +253,24 @@ Local co-op worked mechanically and 19/19 in `coop-verify`, but the first real s
 - [x] 24.3 **"How does revive work? There needs to be help on screen."** Revive is **proximity-only**: stand within `REVIVE_RANGE` 4.5 of a downed knight for `REVIVE_SECONDS` 2.5 uninterrupted, decaying at 0.6x/s if you leave, with `BLEED_OUT_SECONDS` 25 before it is permanent. There is no button to press - right for kids, impossible to guess. `updateReviveBanner` now names the knight and spells the whole mechanic out: `PARKER IS DOWN - 23s` / `RUN TO THEM AND STAND CLOSE - NO BUTTON NEEDED`, turning green to `REVIVING PARKER... 75%` / `KEEP STANDING CLOSE` once a rescuer is in range. The user had guessed it was a button press ("push B"), which is exactly the confusion this removes
 - Verified by screenshot at 1280x800 with a three-knight party (`tools/shots/coop-{hud,down,reviving,levelup}.png`) and `coop-verify` still 19/19
 
+## Phase 25 - Per-knight profiles (2026-09-23)
+"Each player can save their results in both single and co-op mode - make it really simple so the gold they earn goes to them."
+
+Three decisions, all taken deliberately:
+- **A profile is a knight.** The knights already ARE the family, so there is nothing to pick, nothing to log into, and no way for a nine-year-old to bank a run into the wrong wallet. The cost is that playing someone else's knight credits their profile, which is the right trade for this household.
+- **Split: gold and Forge ranks. Shared: weapon-unlock achievements, mastery, wins, the Ogre ladder, personal bests and the Hall of Fame.** Earnings are yours; content gates are not, so a kid who starts later is never locked out of half the game, and the leaderboards stay comparable across the family.
+- **A co-op run pays every knight the full amount**, not a split. Splitting would make co-op worth less per person than solo, which quietly punishes playing together - the opposite of the point when the party is a parent and two kids. Each knight's own Golden Touch rank applies to their own payout, so the amounts can differ.
+
+- [x] 25.1 Save schema v2: `{ version, shared: { achievements, mastery, wins, ogreUnlocked }, profiles: { dad, brennan, parker } }` with each profile `{ gold, ranks }`. `loadSave` / `saveSave` own the store
+- [x] 25.2 `loadMeta(who)` returns a **flat view that looks exactly like the old v1 meta** - gold and ranks from the profile, the rest from shared - so all ~15 existing call sites kept working unchanged. `saveMeta(meta, who)` writes each half back where it belongs. `who` accepts a profile id, a player object, or nothing (the knight selected on the menu)
+- [x] 25.3 Migration from v1 copies the old single wallet **to every profile** rather than handing it to one knight. Nobody opens the Forge to find their savings gone
+- [x] 25.4 `applyForgeStatsTo(ps, p)` per player, so in co-op each knight fights with the upgrades they paid for. `calcRunGold(who)` uses the earning knight's own Golden Touch. The Forge header reads `BRENNAN'S GOLD: 310`, and the title-screen purse follows the knight you select
+- [x] 25.5 `tools/profile-verify.mjs`, 9/9: v1 migration preserves gold and ranks for all three and keeps unlocks shared; spending from one wallet leaves the others untouched; Forge ranks are per knight; a three-knight co-op run pays all three (160 each). `coop-verify` 19/19, `touch-verify` 5/5 and smoke all still clean
+- [ ] 25.6 Not done, and worth knowing: run-wide Forge effects (magnet range, reroll and banish charges, the starting weapon) still come from player 1's profile via `applyForgeUpgrades`, because they are properties of the run rather than of a knight. If a companion buys Fate's Favor expecting their own extra reroll, they will not get it
+
+
 ## Changelog
+- 2026-09-23 - Phase 25: per-knight profiles. Gold and Forge ranks are per knight, unlocks and leaderboards stay shared, and a co-op run pays every knight in full. v1 saves migrate by copying the old wallet to all three.
 - 2026-09-23 - Phase 24: co-op legibility - named companion HP rows, the level-up picker moved bottom-centre and attributed to a knight, and on-screen revive instructions. 18.1b audio signed off.
 - 2026-09-23 - Build number on the title screen (bottom-right). tools/stamp-build.mjs rewrites the BUILD constant in index.html and .githooks/pre-commit runs it on every commit, so the number is the commit count and matches git rev-list --count. A fresh clone needs git config core.hooksPath .githooks once.
 - 2026-09-23 - Phase 23: frame pacing from a real DevTools trace. VFX lights were re-linking every shader in the scene on every explosion (661 stalls / 91 s, 15% of CPU); p99 17.9 -> 30.0 fps, sub-30 frames 3.14% -> 0.97%.
