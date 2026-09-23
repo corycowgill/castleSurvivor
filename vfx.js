@@ -18,6 +18,9 @@ let quality = VFX_QUALITY.HIGH;
 
 function setQuality(level) {
   quality = VFX_QUALITY[level] || VFX_QUALITY.HIGH;
+  // Changing quality changes how many lights stay resident, which re-links the
+  // scene once. That is fine for a settings toggle; see provisionVFXLights.
+  if (_lightsProvisioned >= 0) provisionVFXLights();
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -1870,43 +1873,68 @@ function updateDecals(dt) {
 // PHASE 11 — DYNAMIC VFX LIGHTING
 // ═══════════════════════════════════════════════════════════════════════════
 
-const vfxLights = [];
-const _lightPool = [];
+// The lights are RESIDENT: a fixed set is added to the scene once and never
+// added or removed again, only faded in and out.
+//
+// three.js bakes NUM_POINT_LIGHTS into every shader as a #define, so the moment
+// a light enters or leaves the scene the program cache key of EVERY material
+// changes and all of them re-link. This system used to scene.add() on each
+// explosion and scene.remove() 0.3 s later, so every blast, spark and bolt
+// recompiled the whole scene. The 2026-09-23 trace caught it: 661 synchronous
+// link stalls in 91 s, 13.8 s of blocked main thread (15% of all CPU), worst
+// single stall 964 ms -- and it worsened through a run because the rate of
+// explosions climbs. Holding the count fixed costs a few unused light slots in
+// the fragment loop and buys back every one of those stalls.
+const vfxLights = [];        // resident slots: { light, life, maxLife, peakIntensity }
 const MAX_VFX_LIGHTS = 6;
+let _lightsProvisioned = -1;
+
+// Only ever called at init and when the quality setting changes -- never during
+// play, because this is the one thing that legitimately re-links the scene.
+function provisionVFXLights() {
+  const want = quality.maxLights || MAX_VFX_LIGHTS;
+  if (want === _lightsProvisioned) return;
+  while (vfxLights.length > want) {
+    const slot = vfxLights.pop();
+    scene.remove(slot.light);
+  }
+  while (vfxLights.length < want) {
+    const light = new THREE.PointLight(0xffffff, 0, 0);
+    light.castShadow = false;
+    scene.add(light);
+    vfxLights.push({ light, life: 0, maxLife: 1, peakIntensity: 0 });
+  }
+  _lightsProvisioned = want;
+}
 
 function spawnVFXLight(pos, color = 0xff8800, intensity = 2, range = 8, duration = 0.3) {
-  const maxLights = quality.maxLights || MAX_VFX_LIGHTS;
-  if (vfxLights.length >= maxLights) {
-    // Remove oldest
-    const old = vfxLights.shift();
-    scene.remove(old.light);
-    _lightPool.push(old.light);
+  if (_lightsProvisioned < 0) provisionVFXLights();
+  if (vfxLights.length === 0) return;
+  // Take a spent slot if there is one, otherwise steal the one closest to death
+  // (the old code dropped the oldest; by remaining life is a better trade).
+  let slot = null;
+  for (const s of vfxLights) if (s.life <= 0) { slot = s; break; }
+  if (!slot) {
+    slot = vfxLights[0];
+    for (const s of vfxLights) if (s.life < slot.life) slot = s;
   }
-
-  let light = _lightPool.pop();
-  if (!light) {
-    light = new THREE.PointLight(0xffffff, 0, 0);
-  }
-  light.color.setHex(color);
-  light.intensity = intensity;
-  light.distance = range;
-  light.position.copy(pos);
-  light.position.y += 1;
-  scene.add(light);
-  vfxLights.push({ light, life: duration, maxLife: duration, peakIntensity: intensity });
+  slot.light.color.setHex(color);
+  slot.light.intensity = intensity;
+  slot.light.distance = range;
+  slot.light.position.copy(pos);
+  slot.light.position.y += 1;
+  slot.life = duration;
+  slot.maxLife = duration;
+  slot.peakIntensity = intensity;
 }
 
 function updateVFXLights(dt) {
-  for (let i = vfxLights.length - 1; i >= 0; i--) {
-    const l = vfxLights[i];
+  for (const l of vfxLights) {
+    if (l.life <= 0) continue;
     l.life -= dt;
     const t = Math.max(0, l.life / l.maxLife);
     l.light.intensity = l.peakIntensity * t * t; // quadratic falloff
-    if (l.life <= 0) {
-      scene.remove(l.light);
-      _lightPool.push(l.light);
-      vfxLights.splice(i, 1);
-    }
+    if (l.life <= 0) l.light.intensity = 0;      // dark, but still in the scene
   }
 }
 
@@ -2663,6 +2691,7 @@ const manager = {
   init() {
     generateTextures();
     initDistortion();
+    provisionVFXLights();
   },
 
   // Heat haze — see the HEAT DISTORTION section. The game calls
@@ -4714,8 +4743,8 @@ const manager = {
     }
     for (const d of decals) { scene.remove(d.mesh); d.geo.dispose(); d.mat.dispose(); }
     decals.length = 0;
-    for (const l of vfxLights) { scene.remove(l.light); _lightPool.push(l.light); }
-    vfxLights.length = 0;
+    // Darken the resident lights; removing them would re-link every material.
+    for (const l of vfxLights) { l.life = 0; l.peakIntensity = 0; l.light.intensity = 0; }
     for (const f of impactFlashes) { scene.remove(f.sprite); f.mat.dispose(); }
     impactFlashes.length = 0;
     for (const s of shockwaves) { scene.remove(s.mesh); s.geo.dispose(); s.mat.dispose(); }
@@ -4744,7 +4773,11 @@ const manager = {
     for (const group of Object.values(particleGroups)) group.dispose();
     for (const trail of trailInstances.values()) trail.dispose();
     for (const d of decals) { scene.remove(d.mesh); d.geo.dispose(); d.mat.dispose(); }
+    // Full teardown: the lights do leave the scene here, so the resident set
+    // has to be re-provisioned if the system is ever init()ed again.
     for (const l of vfxLights) { scene.remove(l.light); }
+    vfxLights.length = 0;
+    _lightsProvisioned = -1;
     for (const f of impactFlashes) { scene.remove(f.sprite); f.mat.dispose(); }
     for (const s of shockwaves) { scene.remove(s.mesh); s.geo.dispose(); s.mat.dispose(); }
     for (const a of slashArcs) { scene.remove(a.mesh); a.mat.dispose(); }

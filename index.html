@@ -1527,6 +1527,18 @@ const weaponTimers = { dagger: 0, holyAura: 0, arrowVolley: 0, orbitalBomb: 0, s
 function ownedWeaponCount() { let n = 0; for (const k in playerWeapons) if (playerWeapons[k].owned) n++; return n; }
 function weaponSlotsFull() { return ownedWeaponCount() >= MAX_WEAPON_SLOTS; }
 
+// Auto-targeting reach. The camera (offset 0,10,8 at zoom 2) shows roughly 24
+// units ahead of the knight and 11 behind, while enemies spawn 48-50 out. The
+// daggers used to acquire at 40 and arrows flew 50, so both killed at the spawn
+// ring: off every edge of the screen, with the XP stranded where the 6-unit
+// magnet never reaches it. 22 sits just inside the forward view, so a kill is
+// always something you can see -- and inside the 28 that _ANIM_FULL_RANGE_SQ
+// already treats as the outer visible radius. Every auto-targeted weapon clamps
+// to it; the close-quarters ones (aura 4-6.5, shields 2.8-3.6, chain 6, Storm
+// Call 14) were already well under it and are unchanged.
+const ENGAGE_RANGE = 22;
+function engageRange(r) { return Math.min(r, ENGAGE_RANGE); }
+
 // Weapon stats per level (index 0 = unused, 1-5 = levels)
 const WEAPON_STATS = {
   // Dad — balanced sweep. Hits everything around, first few at full damage.
@@ -1577,7 +1589,9 @@ const WEAPON_STATS = {
     damage:   [0, 8, 12, 16, 22, 30],
     count:    [0, 1, 1, 2, 2, 3],
     speed:    35,
-    range:    40,
+    // Per level, so levelling the daggers is what extends their reach. They stay
+    // the long-reach secondary without becoming a map-wide sniper.
+    range:    [0, 13, 15, 17, 19, 20],
     pierce:   [0, 0, 0, 1, 1, 2],
   },
   holyAura: {
@@ -1592,13 +1606,14 @@ const WEAPON_STATS = {
     count:    [0, 3, 4, 5, 6, 8],
     spread:   0.3,
     speed:    50,
-    range:    50,
+    range:    ENGAGE_RANGE,
   },
   orbitalBomb: {
     cooldown: [0, 8.0, 7.0, 6.0, 5.0, 4.0],
     damage:   [0, 40, 60, 85, 110, 150],
     radius:   [0, 4, 4.5, 5, 5.5, 6.5],
     count:    [0, 1, 1, 2, 2, 3],
+    range: ENGAGE_RANGE,
   },
   // Shields orbit the knight and strike whatever they touch (cooldown = per-enemy hit interval)
   wardShields: {
@@ -1613,7 +1628,7 @@ const WEAPON_STATS = {
     cooldown: [0, 2.2, 2.0, 1.8, 1.5, 1.2],
     damage:   [0, 18, 26, 36, 50, 70],
     chains:   [0, 1, 1, 2, 2, 3],
-    range: 14,
+    range: 14, // already well inside ENGAGE_RANGE -- the lightning is close work
   },
   // Burning ground left in the knight's wake (cooldown = distance between patches)
   emberTrail: {
@@ -2030,6 +2045,13 @@ let cameraZoom = ZOOM_MAX;
 let cameraShake = { intensity: 0, duration: 0, timer: 0 };
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
+// Every program three.js links is validated with gl.getProgramInfoLog, which
+// blocks the main thread until the driver has finished compiling. Useful while
+// developing a shader, ruinous during play: it is the call the 2026-09-23 trace
+// caught holding the thread for up to 964 ms. The VFX lights no longer re-link
+// the scene (see vfx.js), so the few remaining links should not also stall.
+// Flip this to true when working on a shader and you want the error text.
+renderer.debug.checkShaderErrors = false;
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.shadowMap.enabled = true;
@@ -2470,11 +2492,38 @@ function parseEnemyModel(type) {
   });
 }
 
+// Give every SkinnedMesh in a freshly cloned model a bounding sphere up front.
+//
+// Frustum.intersectsObject calls SkinnedMesh.computeBoundingSphere() whenever
+// boundingSphere is null, and that walks EVERY vertex through applyBoneTransform
+// (four bone lookups and a weighted blend each). A clone starts with null, so
+// every enemy paid a full skin of its mesh on the frame it first rendered --
+// thousands of times a run, arriving in bursts exactly when a wave spawns. The
+// 2026-09-23 trace put computeBoundingSphere + applyBoneTransform at ~10% of all
+// CPU.
+//
+// The bind-pose sphere from the geometry is free (it is already computed, and
+// costs no bone work), and inflating it covers the poses an animation reaches.
+// Culling still works; it just stops re-deriving the bounds per spawn.
+const SKIN_BOUNDS_SLACK = 1.8;
+function primeSkinnedBounds(root) {
+  root.traverse(c => {
+    if (!c.isSkinnedMesh || c.boundingSphere) return;
+    const g = c.geometry;
+    if (!g) return;
+    if (!g.boundingSphere) g.computeBoundingSphere();
+    if (!g.boundingSphere) return;
+    c.boundingSphere = g.boundingSphere.clone();
+    c.boundingSphere.radius *= SKIN_BOUNDS_SLACK;
+  });
+}
+
 // Fast clone: SkeletonUtils.clone avoids full GLB re-parse
 function cloneEnemyModel(type) {
   const source = assets[type];
   if (!source) return null;
   const clonedScene = SkeletonUtils.clone(source.scene);
+  primeSkinnedBounds(clonedScene);
   return { scene: clonedScene, animations: source.animations };
 }
 
@@ -3542,6 +3591,20 @@ async function loadMap(mapId) {
   if (contacts.length) addInstanced(contacts, _decalGeo, new THREE.MeshBasicMaterial({ map: _contactTex, transparent: true, depthWrite: false }), 0.045, 19);
   if (canopies.length) addInstanced(canopies, _decalGeo, new THREE.MeshBasicMaterial({ map: _canopyTex, transparent: true, depthWrite: false }), 0.05, 20);
   if (glows.length) addInstanced(glows, _decalGeo, new THREE.MeshBasicMaterial({ map: _glowTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: def.look?.lantern?.intensity >= 12 ? 0.42 : 0.18 }), 0.06, 21);
+
+  // Freeze the static set. The map never moves, but three.js re-derives a world
+  // matrix for every object in the scene every frame -- and twice per frame,
+  // because the heat-distortion pass is a second full renderer.render(). The
+  // 2026-09-23 trace spent ~20% of all CPU in updateMatrixWorld /
+  // multiplyMatrices / applyMatrix4 doing exactly this for ~1,400 props that had
+  // not moved since load. Composing the matrix once and clearing the auto-update
+  // flags skips both the compose and the parent multiply from then on.
+  for (let i = 0; i < mapMeshes.length; i++) {
+    const m = mapMeshes[i];
+    m.updateMatrix();
+    m.matrixAutoUpdate = false;
+    m.matrixWorldNeedsUpdate = true;   // one last world update, then it stays put
+  }
 
   loadedMap = mapId;
   console.log(`Map "${def.name}" loaded: ${mapData.objects.length} objects, ${obstacles.length} obstacles, ${breakables.length} breakables, ${mapData.decals?.length || 0} decals, ${mapData.tufts?.length || 0} tufts, ${lanternSources.length} lights`);
@@ -5508,7 +5571,9 @@ function updatePlayer(p, dt) {
   const pLvl = Math.min(5, pw.level);
   const pEvo = !!pw.evolved;
   const evo = pStats.evo;
-  const pRange = pStats.range[pLvl] + (ps.attackRange - ATTACK_RANGE) + (pEvo ? evo.range : 0);
+  // Clamped too: melee is nowhere near the cap, so this only ever bites a staff
+  // whose owner has poured range upgrades into it.
+  const pRange = engageRange(pStats.range[pLvl] + (ps.attackRange - ATTACK_RANGE) + (pEvo ? evo.range : 0));
   const pCD = pStats.cooldown[pLvl] * (ps.attackCooldown / ATTACK_COOLDOWN) * (pEvo ? evo.cdMul : 1);
   const basePDmg = pStats.damage[pLvl] + (ps.damage - 15);
   const pDmg = pEvo ? Math.round(basePDmg * evo.dmgMul) : basePDmg;
@@ -5554,7 +5619,9 @@ function updatePlayer(p, dt) {
         _tv1.normalize();
         const boltPierce = (pStats.pierce ? pStats.pierce[pLvl] : 0) + (pEvo && evo.pierceBonus ? evo.pierceBonus : 0);
         const origin = _tv2.copy(pmesh.position); origin.y += 1.6;
-        spawnProjectile('dagger', origin, _tv1, pDmg, pStats.speed, pRange + 6, boltPierce);
+        // A little overtravel past acquisition so a bolt still catches a target
+        // that stepped aside, but not enough to cross the map.
+        spawnProjectile('dagger', origin, _tv1, pDmg, pStats.speed, pRange + 4, boltPierce);
         ps.attackTimer = pCD;
         return;
       }
@@ -6564,7 +6631,8 @@ function updateWeapons(p, dt) {
       wt.dagger = stats.cooldown[dLvl] * (dEvo ? 0.6 : 1);
       const count = stats.count[dLvl] + (dEvo ? 2 : 0);
       _daggerTargets.length = 0;
-      const _daggerRangeSq = stats.range * stats.range;
+      const dRange = engageRange(stats.range[dLvl]);
+      const _daggerRangeSq = dRange * dRange;
       for (let ei = 0; ei < enemies.length; ei++) {
         const enemy = enemies[ei];
         if (enemy.isDying) continue;
@@ -6585,7 +6653,7 @@ function updateWeapons(p, dt) {
         _tv2.subVectors(target.mesh.position, pmesh.position).normalize();
         const daggerDmg = Math.round((dEvo ? stats.damage[dLvl] * 1.5 : stats.damage[dLvl]) * (ps._projDmgMul || 1));
         const daggerPierce = stats.pierce[dLvl] + (dEvo ? 3 : 0);
-        spawnProjectile('dagger', pmesh.position, _tv2, daggerDmg, stats.speed * (dEvo ? 1.3 : 1), stats.range, daggerPierce);
+        spawnProjectile('dagger', pmesh.position, _tv2, daggerDmg, stats.speed * (dEvo ? 1.3 : 1), dRange, daggerPierce);
       }
     }
   }
@@ -6633,7 +6701,7 @@ function updateWeapons(p, dt) {
         for (let i = 0; i < count; i++) {
           const angle = (i / count) * Math.PI * 2;
           _arrowDir.set(Math.sin(angle), 0, Math.cos(angle));
-          spawnProjectile('arrow', pmesh.position, _arrowDir, avDmg, stats.speed, stats.range, 1);
+          spawnProjectile('arrow', pmesh.position, _arrowDir, avDmg, stats.speed, engageRange(stats.range), 1);
         }
       } else {
         const baseAngle = pmesh.rotation.y;
@@ -6641,7 +6709,7 @@ function updateWeapons(p, dt) {
         for (let i = 0; i < count; i++) {
           const angle = baseAngle - totalSpread / 2 + stats.spread * i;
           _arrowDir.set(Math.sin(angle), 0, Math.cos(angle));
-          spawnProjectile('arrow', pmesh.position, _arrowDir, avDmg, stats.speed, stats.range, 0);
+          spawnProjectile('arrow', pmesh.position, _arrowDir, avDmg, stats.speed, engageRange(stats.range), 0);
         }
       }
     }
@@ -6656,12 +6724,14 @@ function updateWeapons(p, dt) {
     if (wt.orbitalBomb <= 0) {
       wt.orbitalBomb = stats.cooldown[obLvl] * (obEvo ? 0.6 : 1);
       const bombCount = stats.count[obLvl] + (obEvo ? 2 : 0);
+      const obRange = engageRange(stats.range);
+      const obRangeSq = obRange * obRange;
       for (let b = 0; b < bombCount; b++) {
         let bestDist = Infinity, bestEnemy = null;
         for (const enemy of enemies) {
           if (enemy.isDying) continue;
           const d = distSqXZ(pmesh.position, enemy.mesh.position);
-          if (d < 900 && d < bestDist) { bestDist = d; bestEnemy = enemy; }
+          if (d < obRangeSq && d < bestDist) { bestDist = d; bestEnemy = enemy; }
         }
         const targetPos = bestEnemy ? bestEnemy.mesh.position : pmesh.position;
         const bombPos = new THREE.Vector3(
@@ -10475,7 +10545,7 @@ function populateHelpScreen() {
     sword: { name: 'Sword — Dad', desc: 'A balanced sweep that strikes everything around you. Higher levels deal more damage, swing faster, reach further and cleave more foes at full power.', stats: 'Damage: 15→55 &bull; Cooldown: 1.2→0.75s &bull; Range: 3.5→5.0 &bull; Cleave: 0→2' },
     spear: { name: 'Spear — Brennan', desc: 'A long thrust in a narrow cone. The nearest foes in the line take full damage and are shoved back; the rest take half. Slow, but it reaches well past the horde\'s front rank.', stats: 'Damage: 22→68 &bull; Cooldown: 1.4→0.95s &bull; Range: 5.0→6.8 &bull; Full-damage targets: 2→4' },
     quickblade: { name: 'Quickblade — Parker', desc: 'Light and fast. Low damage per hit but a blistering tempo, and Parker\'s dash cuts through anything it passes.', stats: 'Damage: 12→40 &bull; Cooldown: 0.7→0.4s &bull; Range: 3.0→4.2 &bull; Cleave: 1→3' },
-    dagger: { name: 'Throwing Daggers', desc: 'Enchanted blades that automatically seek the nearest enemy. Higher levels add more daggers and pierce through foes.', stats: 'Damage: 8→30 &bull; Cooldown: 1.2→0.5s &bull; Daggers: 1→3 &bull; Pierce: 0→2' },
+    dagger: { name: 'Throwing Daggers', desc: 'Enchanted blades that automatically seek the nearest enemy. Higher levels add more daggers and pierce through foes.', stats: 'Damage: 8→30 &bull; Cooldown: 1.2→0.5s &bull; Daggers: 1→3 &bull; Pierce: 0→2 &bull; Range: 13→20' },
     holyAura: { name: 'Holy Aura', desc: 'A divine ring of energy that periodically pulses outward, damaging and knocking back all nearby enemies.', stats: 'Damage: 6→30 &bull; Cooldown: 1.5→0.7s &bull; Radius: 4→6.5 &bull; Knockback: Yes' },
     arrowVolley: { name: 'Arrow Volley', desc: 'Fires a fan of arrows in the direction you face. Higher levels add more arrows and deal more damage.', stats: 'Damage: 12→50 &bull; Cooldown: 3.5→1.5s &bull; Arrows: 3→8 &bull; Spread: Fan pattern' },
     orbitalBomb: { name: 'Arcane Bomb', desc: 'Drops enchanted bombs from the sky onto clusters of enemies. Higher levels increase damage, blast radius, and drop count.', stats: 'Damage: 40→150 &bull; Cooldown: 8→4s &bull; Radius: 4→6.5 &bull; Bombs: 1→3' },

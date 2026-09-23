@@ -26,6 +26,9 @@ const ICONS = {
   // Weapons (level-up cards, HUD tooltips, Codex, evolutions)
   spear:       { dir: 'images/upgrades', subject: 'a long knight\'s war spear with a gleaming leaf-shaped steel tip and dark oak shaft, leather-wrapped grip, thrust forward, cold blue steel glint' },
   quickblade:  { dir: 'images/upgrades', subject: 'a slim curved silver quickblade sword with fast motion streaks and a storm-blue energy trail, lightning-fast slash' },
+  // Parker's wizard primary. quickblade is still here because it remains a
+  // level-up weapon; the staff is what he now starts with.
+  staff:       { dir: 'images/upgrades', subject: 'a tall gnarled dark wood sorcery staff topped with a glowing arcane blue crystal, carved runes along the shaft, swirling violet magic energy around the tip, inside a pitch-black cave, black background, dark stone floor', seed: 8123 },
   wardShields: { dir: 'images/upgrades', subject: 'three small round bronze heater shields with golden crests floating in an orbiting circle, protective golden ward glow' },
   stormCall:   { dir: 'images/upgrades', subject: 'a dramatic forked lightning bolt striking down from a dark storm cloud, crackling electric blue-white energy' },
   emberTrail:  { dir: 'images/upgrades', subject: 'a trail of burning footprints and glowing embers across dark ground, flames rising, orange and red fire' },
