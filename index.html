@@ -15,10 +15,17 @@ canvas { display: block; }
 /* ─── LOADING SCREEN ─── */
 #loading-screen {
   position: fixed; inset: 0;
-  background: radial-gradient(ellipse at center, #2a1505 0%, #0d0604 70%, #000 100%);
+  background: url('castleBackgroundTitle.png') center center / cover no-repeat;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   z-index: 1000; color: #c9a253;
 }
+/* Darkened so the title, bar and status text stay legible over the art, and so
+   the hand-off to the title screen is a fade rather than a jump. */
+#loading-screen::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(10,6,3,0.55) 0%, rgba(6,3,1,0.82) 65%, rgba(0,0,0,0.92) 100%);
+}
+#loading-screen > * { position: relative; z-index: 1; }
 #loading-screen h1 {
   font-family: 'Cinzel Decorative', serif; font-size: 52px; font-weight: 900;
   color: #c9a253; margin-bottom: 8px; letter-spacing: 4px;
@@ -668,18 +675,23 @@ body.picking-coop #level-up-screen .divider { margin: 4px 0 8px; }
 /* ─── TOUCH CONTROLS ─── */
 #touch-controls { display: none; }
 .touch-active.touch-gameplay #touch-controls { display: block; }
+/* The stick follows the thumb: touching anywhere that is not a button draws
+   it there. It used to be pinned to the bottom-left quadrant, which meant a
+   touch anywhere else did nothing at all and read as broken controls.
+   z-index sits below the dash and pause buttons so those still take their own
+   touches; the HUD is above this and is pointer-events:none anyway. */
 #touch-stick-zone {
-  position: fixed; left: 0; bottom: 0; width: 50%; height: 50%;
-  z-index: 200; touch-action: none;
+  position: fixed; inset: 0;
+  z-index: 190; touch-action: none;
 }
 #touch-stick-base {
-  position: absolute; width: 120px; height: 120px; border-radius: 50%;
+  position: fixed; width: 120px; height: 120px; border-radius: 50%;
   border: 2px solid rgba(201,162,83,0.35); background: rgba(15,8,2,0.3);
   pointer-events: none; display: none;
   transform: translate(-50%, -50%);
 }
 #touch-stick-knob {
-  position: absolute; width: 48px; height: 48px; border-radius: 50%;
+  position: fixed; width: 48px; height: 48px; border-radius: 50%;
   background: radial-gradient(circle, rgba(201,162,83,0.6), rgba(201,162,83,0.2));
   border: 2px solid rgba(201,162,83,0.5);
   pointer-events: none; display: none;
