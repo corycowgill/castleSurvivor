@@ -1238,6 +1238,9 @@ body.picking-coop #level-up-screen .divider { margin: 4px 0 8px; }
     <span class="setting-label" title="Only Dad is selectable; Brennan and Parker are hidden">Private Mode</span><button class="setting-toggle" id="set-private"></button><span></span>
   </div>
   <div class="divider" style="margin:4px 0 8px"></div>
+  <div id="settings-grid-perf" style="display:grid;grid-template-columns:180px 260px 60px;gap:12px 16px;align-items:center;margin:6px 0 14px">
+    <span class="setting-label" title="Fewer props, no shadows, lower resolution. Needed on phones.">Low Quality</span><button class="setting-toggle" id="set-lowq"></button><span class="setting-value" id="set-lowq-note"></span>
+  </div>
   <div class="setting-section-title">Lighting</div>
   <div id="settings-grid-gfx"></div>
   <button class="setting-toggle" id="set-gfx-reset" style="width:160px;margin:-10px 0 16px">RESET LIGHTING</button>
@@ -2814,6 +2817,14 @@ function renderSettings() {
     document.getElementById('set-' + k).value = settings[k];
     document.getElementById('set-' + k + '-val').textContent = settings[k] + '%';
   }
+  const lowqBtn = document.getElementById('set-lowq');
+  if (lowqBtn) {
+    lowqBtn.textContent = LOW_QUALITY ? 'ON' : 'OFF';
+    lowqBtn.classList.toggle('on', LOW_QUALITY);
+    const note = document.getElementById('set-lowq-note');
+    if (note) note.textContent = detectMobile() ? 'mobile' : '';
+  }
+
   for (const [key, , , , step] of GFX_CONTROLS) {
     const v = effectiveGfx(key);
     const sl = document.getElementById('set-gfx-' + key);
@@ -2848,6 +2859,15 @@ function initSettingsUI() {
       if (k === 'sfx' || k === 'master') AudioSystem.play('coinPickup', { volume: 0.4 });
     });
   }
+  const lowqBtn = document.getElementById('set-lowq');
+  if (lowqBtn) {
+    lowqBtn.addEventListener('click', () => {
+      // Prop culling is decided at map load, so this needs a reload to take
+      // full effect. Everything else (shadows, resolution, VFX) applies at once.
+      setLowQuality(!LOW_QUALITY, true);
+    });
+  }
+
   const gfxGrid = document.getElementById('settings-grid-gfx');
   for (const [key, label, min, max, step] of GFX_CONTROLS) {
     gfxGrid.insertAdjacentHTML('beforeend',
@@ -3327,6 +3347,15 @@ async function loadMap(mapId) {
   }
   if (!_glowTex) { _glowTex = radialTex('rgba(255,190,110,0.55)', 'rgba(255,160,60,0)'); _canopyTex = radialTex('rgba(0,0,0,0.5)', 'rgba(0,0,0,0)'); _contactTex = radialTex('rgba(0,0,0,0.42)', 'rgba(0,0,0,0)', 64); }
 
+  // Low quality thins the decoration BEFORE the asset list is derived, so the
+  // culled props are never fetched or decoded. Culling at placement time only
+  // saved draw calls -- the GLB and its textures stayed resident either way.
+  if (LOW_QUALITY) {
+    const before = mapData.objects.length;
+    mapData.objects = mapData.objects.filter((o, i) => lowqKeepObject(o, i));
+    _lowqCulledCount = before - mapData.objects.length;
+  }
+
   // Load any assets referenced by the map that aren't already loaded
   const neededKeys = [...new Set(mapData.objects.map(o => o.key))];
   const extraLoads = [];
@@ -3356,7 +3385,7 @@ async function loadMap(mapId) {
     mesh.rotation.set(obj.rotX || 0, obj.rotY || 0, obj.rotZ || 0);
     mesh.traverse(c => {
       if (c.isMesh) {
-        c.castShadow = true; c.receiveShadow = true;
+        c.castShadow = !LOW_QUALITY; c.receiveShadow = !LOW_QUALITY;
         const mats = Array.isArray(c.material) ? c.material : [c.material];
         for (const m of mats) {
           if (m.metalness != null) m.metalness = Math.min(m.metalness, 0.3);
@@ -9175,6 +9204,90 @@ function readPad(gp, s, allowZoom) {
     }
 }
 
+// ─── LOW QUALITY / MOBILE MODE ───
+// The audit showed what actually kills the tab on iOS: ~518 MB of texture,
+// 8.2 M triangles and 1,221 shadow casters, from a map carrying 1,939 objects.
+// None of that is one big asset, so the fix is to load less of it and draw it
+// more cheaply rather than to shrink any single thing.
+//
+// Purely decorative keys and how much of each to keep. Obstacles, buildings,
+// landmarks and anything with collision are never culled -- losing those would
+// change the map rather than just its dressing.
+// A key at 0 is dropped entirely, so its GLB and textures are never fetched --
+// that is where the memory saving comes from. Anything between 0 and 1 still
+// loads its asset, so those values only buy draw calls and triangles.
+const LOWQ_DECOR_KEEP = {
+  // dropped outright: small scatter nobody navigates by
+  nature_flowers_02: 0, nature_fern_01: 0, nature_rock_small_02: 0,
+  nature_rock_cluster_02: 0, prop_logs_02: 0, prop_wood_crate_small_01: 0,
+  village_lantern_post_01: 0, prop_tree_stump_02: 0, nature_grass_tuft_01: 0,
+  // thinned: still recognisable, far fewer instances
+  pineTree: 0.3, shrubbery: 0.2, oakTree: 0.5,
+  village_rail_fence_corner_01: 0.35, village_fence_corner_01: 0.35,
+  village_rail_fence_straight_01: 0.35, village_fence_straight_01: 0.35,
+  pumpkingPatch: 0.35, cornTile: 0.4, hayBales: 0.35, barrel: 0.45,
+};
+
+const LOWQ_KEY = 'castleSurvivor_lowq';
+function detectMobile() {
+  const coarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+  const small = Math.min(screen.width, screen.height) <= 820;
+  const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
+    || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  return iOS || (coarse && small);
+}
+// Explicit choice wins; otherwise phones default to low so Safari survives.
+// ?lowq=1 / ?lowq=0 overrides both, which is how you A/B it on a device.
+function resolveLowQuality() {
+  const q = new URLSearchParams(location.search).get('lowq');
+  if (q === '1' || q === 'on') return true;
+  if (q === '0' || q === 'off') return false;
+  try {
+    const saved = localStorage.getItem(LOWQ_KEY);
+    if (saved === '1') return true;
+    if (saved === '0') return false;
+  } catch {}
+  return detectMobile();
+}
+let LOW_QUALITY = resolveLowQuality();
+let _lowqCulledCount = 0;
+function lowqDecorKeep(key) { return LOW_QUALITY ? (LOWQ_DECOR_KEEP[key] ?? 1) : 1; }
+
+// Deterministic per-object keep test, so the same props survive on every load
+// and the map does not shimmer between runs.
+function lowqKeepObject(obj, index) {
+  const keep = lowqDecorKeep(obj.key);
+  if (keep >= 1) return true;
+  if (keep <= 0) return false;
+  const h = Math.abs(Math.sin((index + 1) * 12.9898) * 43758.5453) % 1;
+  return h < keep;
+}
+
+// Applied once the renderer exists and again whenever the setting changes.
+function applyQualityMode() {
+  const dpr = LOW_QUALITY ? Math.min(window.devicePixelRatio, 1.5)
+                          : Math.min(window.devicePixelRatio, 2);
+  renderer.setPixelRatio(dpr);
+  // Shadows are the single biggest cost here: one map fed by 1,221 casters.
+  renderer.shadowMap.enabled = !LOW_QUALITY;
+  dirLight.castShadow = !LOW_QUALITY;
+  if (LOW_QUALITY) {
+    dirLight.shadow.mapSize.set(512, 512);
+    if (dirLight.shadow.map) { dirLight.shadow.map.dispose(); dirLight.shadow.map = null; }
+  }
+  if (typeof bloomPass !== 'undefined' && bloomPass) bloomPass.enabled = !LOW_QUALITY;
+  if (typeof gtaoPass !== 'undefined' && gtaoPass) gtaoPass.enabled = !LOW_QUALITY && settings.ambientOcc;
+  vfx.setQuality(LOW_QUALITY ? 'LOW' : 'HIGH');
+}
+
+function setLowQuality(on, reload) {
+  LOW_QUALITY = !!on;
+  try { localStorage.setItem(LOWQ_KEY, on ? '1' : '0'); } catch {}
+  applyQualityMode();
+  // Prop culling happens at map load, so the decoration only changes on reload.
+  if (reload) location.reload();
+}
+
 // ─── MOBILE ASSET AUDIT ───
 // iOS Safari kills a tab that grows past a few hundred MB, and it gives you no
 // devtools to find out why. This measures the live scene on the device: texture
@@ -9270,7 +9383,10 @@ function renderAudit() {
   const over = a.texMB > AUDIT_BUDGET.textureMB || a.totalMB > AUDIT_BUDGET.totalMB || (a.byRes[4096] || 0) > 0;
 
   const out = [
-    row('Device pixel ratio', num(window.devicePixelRatio, 2)),
+    row('Quality mode', LOW_QUALITY ? 'LOW' : 'HIGH', LOW_QUALITY ? 'ok' : 'warn',
+        LOW_QUALITY && _lowqCulledCount ? '<span class="dim">' + _lowqCulledCount + ' props culled</span>' : ''),
+    row('Device pixel ratio', num(window.devicePixelRatio, 2), null,
+        '<span class="dim">rendering at ' + num(renderer.getPixelRatio(), 2) + '</span>'),
     row('Screen', screen.width + 'x' + screen.height),
     '',
     '<span class="dim">TEXTURES</span>',
@@ -10596,6 +10712,9 @@ async function init() {
   camera.position.set(0, 10, 8);
   camera.lookAt(0, 0, 0);
 
+  // Renderer, lights, passes and vfx all exist by now, so the quality mode can
+  // be applied before the first frame is drawn.
+  applyQualityMode();
   gameLoop();
 }
 
@@ -10609,6 +10728,8 @@ init().then(() => {
       UPGRADES, WEAPON_STATS, MAPS, OGRE_LEVELS, FINAL_WAVE,
       players, nearestPlayer, alivePlayers, joinPlayer, makePlayer, createPlayer, partyFocus, AudioSystem, projectiles, CHARACTER_PRIMARY,
       openAudit, closeAudit, collectAudit, renderAudit,
+      setLowQuality, applyQualityMode, detectMobile,
+      get lowQuality() { return LOW_QUALITY; },
       gamepadStates, padSlot, readInput, gainXP, partyXpToNext, coopPending, updateCoopJoin, renderCoopRoster, pollGamepad, damagePlayer, triggerPlayerDeath,
       partySpawnMul, partyHpMul, partyBossHpMul, partyMaxEnemies,
       get primaryPadIndex() { return primaryPadIndex; },
