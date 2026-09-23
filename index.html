@@ -1053,6 +1053,31 @@ body.picking-coop #level-up-screen .divider { margin: 4px 0 8px; }
 #coop-hint { font-family: 'MedievalSharp', cursive; font-size: 11px; color: #6d5637; margin-top: 5px; line-height: 1.5; }
 #coop-hint b { color: #a8873f; }
 
+/* ─── MOBILE ASSET AUDIT ───
+   iOS Safari gives no devtools, so the memory report has to live in the page.
+   Triple-tap the top-left corner, or load with ?audit, to open it. */
+#audit-overlay {
+  position: fixed; inset: 0; z-index: 4000; display: none;
+  background: rgba(6,8,12,0.94); color: #d8e4f0;
+  font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px;
+  padding: 16px; overflow-y: auto; -webkit-overflow-scrolling: touch;
+}
+#audit-overlay h3 { margin: 0 0 10px; font-size: 14px; letter-spacing: 2px; color: #e8c860; }
+#audit-body { white-space: pre; line-height: 1.55; }
+#audit-body .bad  { color: #ff6b6b; font-weight: bold; }
+#audit-body .warn { color: #ffcc55; }
+#audit-body .ok   { color: #7fe08f; }
+#audit-body .dim  { color: #6d7d90; }
+#audit-actions { position: sticky; bottom: 0; padding-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+#audit-actions button {
+  font-family: inherit; font-size: 13px; padding: 10px 14px; border-radius: 6px;
+  border: 1px solid #44566a; background: #16202c; color: #d8e4f0;
+}
+#audit-tap {
+  position: fixed; left: 0; top: 0; width: 72px; height: 72px; z-index: 3999;
+  background: transparent;
+}
+
 /* ─── SETTINGS ─── */
 #settings-screen {
   position: fixed; inset: 0; display: none;
@@ -1186,6 +1211,17 @@ body.picking-coop #level-up-screen .divider { margin: 4px 0 8px; }
     Xbox Controller Supported &bull; D-Pad navigates menus, A selects, B goes back<br>
     Collect Coins for XP, Food for Healing &bull; Slay the Ogre King on Wave 20
     <div id="start-tip"></div>
+  </div>
+</div>
+
+<div id="audit-tap"></div>
+<div id="audit-overlay">
+  <h3>CASTLE SURVIVOR — MOBILE ASSET AUDIT</h3>
+  <div id="audit-body">Measuring…</div>
+  <div id="audit-actions">
+    <button id="audit-refresh">Refresh</button>
+    <button id="audit-copy">Copy</button>
+    <button id="audit-close">Close</button>
   </div>
 </div>
 
@@ -8945,7 +8981,15 @@ function gameLoop() {
   damageFlashPass.uniforms.tDistort.value = distortTex;
   damageFlashPass.uniforms.uDistortAmount.value = distortTex ? 0.035 : 0.0;
 
+  // renderer.info.render resets at the start of every render pass, and the
+  // composer's last pass is a single fullscreen quad -- which is why this used
+  // to report "1 draw call" for a 1,200-mesh scene. Turning autoReset off makes
+  // the counters accumulate across every pass in the frame; reset manually here.
+  renderer.info.autoReset = false;
+  renderer.info.reset();
   composer.render();
+  _lastFrameStats.calls = renderer.info.render.calls;
+  _lastFrameStats.triangles = renderer.info.render.triangles;
 }
 
 // One tick of game simulation. Split out of gameLoop so a test harness can step
@@ -9130,6 +9174,164 @@ function readPad(gp, s, allowZoom) {
       if (gp.buttons[4]?.pressed) cameraZoom = Math.min(ZOOM_MAX, cameraZoom + 0.02);
     }
 }
+
+// ─── MOBILE ASSET AUDIT ───
+// iOS Safari kills a tab that grows past a few hundred MB, and it gives you no
+// devtools to find out why. This measures the live scene on the device: texture
+// memory by resolution (the usual culprit), geometry, draw calls and shadow
+// maps, against a budget a phone can actually hold.
+// Snapshot of the last drawn frame. renderer.info.render is cleared per render
+// pass, so it must be captured immediately after composer.render().
+const _lastFrameStats = { calls: 0, triangles: 0 };
+
+const AUDIT_BUDGET = {
+  textureMB: 250,   // iOS starts evicting well before this
+  totalMB: 400,     // real risk of the tab being killed past here
+  drawCalls: 300,
+  trianglesM: 1.5,
+};
+
+function auditTextureBytes(img) {
+  if (!img) return 0;
+  const w = img.width || img.videoWidth || 0;
+  const h = img.height || img.videoHeight || 0;
+  if (!w || !h) return 0;
+  return w * h * 4 * 1.3333;   // 1.333x covers the mipmap chain
+}
+
+const AUDIT_MAP_KEYS = ['map', 'normalMap', 'roughnessMap', 'metalnessMap', 'emissiveMap',
+                        'aoMap', 'alphaMap', 'bumpMap', 'displacementMap', 'lightMap', 'envMap'];
+
+function collectAudit() {
+  const ri = renderer.info;
+  const seenTex = new Set(), seenGeo = new Set(), seenMat = new Set();
+  const byRes = {};
+  let texBytes = 0, tris = 0, meshes = 0, skinned = 0, shadowCasters = 0, shadowMaps = 0;
+
+  const noteTexture = (t) => {
+    if (!t || !t.image || seenTex.has(t.uuid)) return;
+    seenTex.add(t.uuid);
+    const key = Math.max(t.image.width || 0, t.image.height || 0);
+    if (key) byRes[key] = (byRes[key] || 0) + 1;
+    texBytes += auditTextureBytes(t.image);
+  };
+
+  scene.traverse(o => {
+    if (o.isMesh || o.isSkinnedMesh || o.isSprite || o.isInstancedMesh) {
+      meshes++;
+      if (o.isSkinnedMesh) skinned++;
+      if (o.castShadow) shadowCasters++;
+      const g = o.geometry;
+      if (g && !seenGeo.has(g.uuid)) {
+        seenGeo.add(g.uuid);
+        const verts = g.index ? g.index.count : (g.attributes && g.attributes.position ? g.attributes.position.count : 0);
+        tris += (verts / 3) * (o.isInstancedMesh ? (o.count || 1) : 1);
+      }
+      const mats = Array.isArray(o.material) ? o.material : (o.material ? [o.material] : []);
+      for (const m of mats) {
+        if (!m || seenMat.has(m.uuid)) continue;
+        seenMat.add(m.uuid);
+        for (const k of AUDIT_MAP_KEYS) noteTexture(m[k]);
+      }
+    }
+    if (o.isLight && o.castShadow) {
+      shadowMaps++;
+      if (o.shadow && o.shadow.mapSize) texBytes += o.shadow.mapSize.width * o.shadow.mapSize.height * 4;
+    }
+  });
+
+  const texMB = texBytes / 1048576;
+  const heapMB = performance.memory ? performance.memory.usedJSHeapSize / 1048576 : null;
+  return {
+    textures: seenTex.size, glTextures: ri.memory.textures, byRes, texMB,
+    geometries: seenGeo.size, materials: seenMat.size,
+    meshes, skinned, shadowCasters, shadowMaps,
+    triangles: tris, drawCalls: _lastFrameStats.calls || ri.render.calls,
+    programs: ri.programs ? ri.programs.length : 0,
+    heapMB, sceneChildren: scene.children.length,
+    totalMB: texMB + (heapMB || 0),
+  };
+}
+
+function renderAudit() {
+  const a = collectAudit();
+  const num = (v, d) => v.toLocaleString(undefined, { maximumFractionDigits: d || 0, minimumFractionDigits: d || 0 });
+  const grade = (v, limit) => v > limit ? 'bad' : (v > limit * 0.75 ? 'warn' : 'ok');
+  const row = (label, value, cls, note) =>
+    label.padEnd(26) + '<span class="' + (cls || 'dim') + '">' + String(value).padStart(9) + '</span>' + (note ? '  ' + note : '');
+
+  const resList = Object.keys(a.byRes).map(Number).filter(Boolean).sort((x, y) => y - x);
+  const resRows = resList.map(r => {
+    const cls = r >= 4096 ? 'bad' : r >= 2048 ? 'warn' : 'ok';
+    const each = (r * r * 4 * 1.3333) / 1048576;
+    return row('  ' + r + 'x' + r, a.byRes[r], cls, '<span class="dim">' + num(each, 1) + ' MB each</span>');
+  }).join('\n');
+
+  const over = a.texMB > AUDIT_BUDGET.textureMB || a.totalMB > AUDIT_BUDGET.totalMB || (a.byRes[4096] || 0) > 0;
+
+  const out = [
+    row('Device pixel ratio', num(window.devicePixelRatio, 2)),
+    row('Screen', screen.width + 'x' + screen.height),
+    '',
+    '<span class="dim">TEXTURES</span>',
+    row('Unique in scene', a.textures),
+    row('Held by GL', a.glTextures, grade(a.glTextures, 260)),
+    resRows,
+    row('Estimated texture RAM', num(a.texMB) + ' MB', grade(a.texMB, AUDIT_BUDGET.textureMB)),
+    '',
+    '<span class="dim">GEOMETRY</span>',
+    row('Triangles', num(a.triangles / 1e6, 2) + ' M', grade(a.triangles / 1e6, AUDIT_BUDGET.trianglesM)),
+    row('Geometries', a.geometries),
+    row('Materials', a.materials),
+    row('Meshes', a.meshes, null, '<span class="dim">' + a.skinned + ' skinned</span>'),
+    '',
+    '<span class="dim">RENDER</span>',
+    row('Draw calls/frame', a.drawCalls, grade(a.drawCalls, AUDIT_BUDGET.drawCalls)),
+    row('Shader programs', a.programs),
+    row('Shadow-casting lights', a.shadowMaps, grade(a.shadowMaps, 3)),
+    row('Shadow casters', a.shadowCasters),
+    row('Scene children', a.sceneChildren),
+    '',
+    '<span class="dim">MEMORY</span>',
+    row('JS heap', a.heapMB == null ? 'n/a' : num(a.heapMB) + ' MB', a.heapMB ? grade(a.heapMB, 300) : 'dim'),
+    row('Textures + heap', num(a.totalMB) + ' MB', grade(a.totalMB, AUDIT_BUDGET.totalMB)),
+    '',
+    over
+      ? '<span class="bad">MOBILE MEMORY BUDGET EXCEEDED</span>\n<span class="dim">iOS Safari kills a tab long before a desktop would struggle.\nBiggest wins in order: drop 2048 and 4096 maps to 1024,\ncut shadow-casting lights, lower devicePixelRatio.</span>'
+      : '<span class="ok">Within mobile budget</span>',
+  ].join('\n');
+
+  document.getElementById('audit-body').innerHTML = out;
+  return a;
+}
+
+function openAudit() {
+  document.getElementById('audit-overlay').style.display = 'block';
+  renderAudit();
+}
+function closeAudit() { document.getElementById('audit-overlay').style.display = 'none'; }
+
+// Triple-tap the top-left corner. There are no devtools on iOS, so the way in
+// has to be a gesture that will not fire by accident mid-fight.
+let _auditTaps = 0, _auditTapTimer = 0;
+document.getElementById('audit-tap').addEventListener('pointerdown', () => {
+  _auditTaps++;
+  clearTimeout(_auditTapTimer);
+  _auditTapTimer = setTimeout(() => { _auditTaps = 0; }, 600);
+  if (_auditTaps >= 3) { _auditTaps = 0; openAudit(); }
+});
+document.getElementById('audit-refresh').addEventListener('click', renderAudit);
+document.getElementById('audit-close').addEventListener('click', closeAudit);
+document.getElementById('audit-copy').addEventListener('click', () => {
+  const btn = document.getElementById('audit-copy');
+  const txt = document.getElementById('audit-body').textContent;
+  // Clipboard is blocked in some iOS contexts; the overlay text stays selectable.
+  Promise.resolve(navigator.clipboard && navigator.clipboard.writeText(txt))
+    .then(() => { btn.textContent = 'Copied'; })
+    .catch(() => { btn.textContent = 'Select text'; })
+    .then(() => setTimeout(() => { btn.textContent = 'Copy'; }, 1400));
+});
+if (new URLSearchParams(location.search).has('audit')) openAudit();
 
 // ─── CO-OP JOIN (title screen) ───
 // Pads that are not driving player 0 can claim a slot before the run starts.
@@ -10406,6 +10608,7 @@ init().then(() => {
       state, enemies, pickups, playerWeapons, upgradeRanks, runStats, keys, weaponTimers,
       UPGRADES, WEAPON_STATS, MAPS, OGRE_LEVELS, FINAL_WAVE,
       players, nearestPlayer, alivePlayers, joinPlayer, makePlayer, createPlayer, partyFocus, AudioSystem, projectiles, CHARACTER_PRIMARY,
+      openAudit, closeAudit, collectAudit, renderAudit,
       gamepadStates, padSlot, readInput, gainXP, partyXpToNext, coopPending, updateCoopJoin, renderCoopRoster, pollGamepad, damagePlayer, triggerPlayerDeath,
       partySpawnMul, partyHpMul, partyBossHpMul, partyMaxEnemies,
       get primaryPadIndex() { return primaryPadIndex; },
