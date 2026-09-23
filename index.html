@@ -9953,62 +9953,106 @@ if (_isTouch) document.body.classList.add('touch-active');
   const pauseBtn = document.getElementById('touch-pause-btn');
   const STICK_RADIUS = 50;
 
-  zone.addEventListener('pointerdown', (e) => {
+  // Input is driven by Touch Events where they exist, and Pointer Events
+  // otherwise. iOS Safari has long-standing trouble with setPointerCapture
+  // combined with preventDefault on pointerdown -- the capture can drop and
+  // pointermove then stops firing, which left the stick dead on iPhone while
+  // working everywhere else. Touch Events are reliable on WebKit, so they win
+  // when present and the pointer path is never registered alongside them.
+  const USE_TOUCH_EVENTS = 'ontouchstart' in window;
+
+  function stickStart(id, x, y) {
     if (touchState.stickId >= 0) return;
-    e.preventDefault();
-    zone.setPointerCapture(e.pointerId);
-    touchState.stickId = e.pointerId;
-    touchState.originX = e.clientX;
-    touchState.originY = e.clientY;
+    touchState.stickId = id;
+    touchState.originX = x;
+    touchState.originY = y;
     base.style.display = 'block';
     knob.style.display = 'block';
-    base.style.left = e.clientX + 'px';
-    base.style.top = e.clientY + 'px';
-    knob.style.left = e.clientX + 'px';
-    knob.style.top = e.clientY + 'px';
-  });
-
-  zone.addEventListener('pointermove', (e) => {
-    if (e.pointerId !== touchState.stickId) return;
-    e.preventDefault();
-    let dx = e.clientX - touchState.originX;
-    let dy = e.clientY - touchState.originY;
+    base.style.left = x + 'px';  base.style.top = y + 'px';
+    knob.style.left = x + 'px';  knob.style.top = y + 'px';
+  }
+  function stickMove(id, x, y) {
+    if (id !== touchState.stickId) return;
+    let dx = x - touchState.originX;
+    let dy = y - touchState.originY;
     const dist = Math.sqrt(dx * dx + dy * dy);
     if (dist > STICK_RADIUS) { dx *= STICK_RADIUS / dist; dy *= STICK_RADIUS / dist; }
     knob.style.left = (touchState.originX + dx) + 'px';
     knob.style.top = (touchState.originY + dy) + 'px';
     touchState.stickX = dx / STICK_RADIUS;
     touchState.stickY = dy / STICK_RADIUS;
-  });
-
-  function endStick(e) {
-    if (e.pointerId !== touchState.stickId) return;
+  }
+  function stickEnd(id) {
+    if (id !== touchState.stickId) return;
     touchState.stickId = -1;
     touchState.stickX = 0;
     touchState.stickY = 0;
     base.style.display = 'none';
     knob.style.display = 'none';
   }
-  zone.addEventListener('pointerup', endStick);
-  zone.addEventListener('pointercancel', endStick);
-
-  dashBtn.addEventListener('pointerdown', (e) => {
-    e.preventDefault();
-    touchState.dash = true;
-    touchState.dashId = e.pointerId;
-  });
-  function endDash(e) {
-    if (e.pointerId !== touchState.dashId) return;
+  function dashStart(id) { touchState.dash = true; touchState.dashId = id; }
+  function dashEnd(id) {
+    if (id !== touchState.dashId) return;
     touchState.dash = false;
     touchState.dashId = -1;
   }
-  dashBtn.addEventListener('pointerup', endDash);
-  dashBtn.addEventListener('pointercancel', endDash);
 
-  pauseBtn.addEventListener('pointerdown', (e) => {
-    e.preventDefault();
-    togglePause();
-  });
+  if (USE_TOUCH_EVENTS) {
+    // identifier can be 0, so compare against undefined rather than truthiness.
+    const find = (list, id) => {
+      for (let i = 0; i < list.length; i++) if (list[i].identifier === id) return list[i];
+      return null;
+    };
+    zone.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      const t = e.changedTouches[0];
+      if (t) stickStart(t.identifier, t.clientX, t.clientY);
+    }, { passive: false });
+    zone.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      const t = find(e.changedTouches, touchState.stickId);
+      if (t) stickMove(t.identifier, t.clientX, t.clientY);
+    }, { passive: false });
+    const endT = (e) => {
+      const t = find(e.changedTouches, touchState.stickId);
+      if (t) stickEnd(t.identifier);
+    };
+    zone.addEventListener('touchend', endT);
+    zone.addEventListener('touchcancel', endT);
+
+    dashBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      const t = e.changedTouches[0];
+      if (t) dashStart(t.identifier);
+    }, { passive: false });
+    const endD = (e) => {
+      const t = find(e.changedTouches, touchState.dashId);
+      if (t) dashEnd(t.identifier);
+    };
+    dashBtn.addEventListener('touchend', endD);
+    dashBtn.addEventListener('touchcancel', endD);
+
+    pauseBtn.addEventListener('touchstart', (e) => { e.preventDefault(); togglePause(); }, { passive: false });
+  } else {
+    zone.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      zone.setPointerCapture(e.pointerId);
+      stickStart(e.pointerId, e.clientX, e.clientY);
+    });
+    zone.addEventListener('pointermove', (e) => {
+      if (e.pointerId !== touchState.stickId) return;
+      e.preventDefault();
+      stickMove(e.pointerId, e.clientX, e.clientY);
+    });
+    zone.addEventListener('pointerup', (e) => stickEnd(e.pointerId));
+    zone.addEventListener('pointercancel', (e) => stickEnd(e.pointerId));
+
+    dashBtn.addEventListener('pointerdown', (e) => { e.preventDefault(); dashStart(e.pointerId); });
+    dashBtn.addEventListener('pointerup', (e) => dashEnd(e.pointerId));
+    dashBtn.addEventListener('pointercancel', (e) => dashEnd(e.pointerId));
+
+    pauseBtn.addEventListener('pointerdown', (e) => { e.preventDefault(); togglePause(); });
+  }
 
   document.addEventListener('touchmove', (e) => { if (e.target.closest('#touch-controls')) e.preventDefault(); }, { passive: false });
 })();
