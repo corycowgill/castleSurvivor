@@ -61,5 +61,19 @@
     "promptTemplate": "BUILDING",
     "defaultTextureSize": 1024,
     "priority": 9
+  },
+  "volcanic": {
+    "name": "Volcanic Terrain",
+    "description": "Basalt, cooled lava, ash and obsidian for the Emberreach map",
+    "promptTemplate": "VOLCANIC",
+    "defaultTextureSize": 512,
+    "priority": 10
+  },
+  "ogre_camp": {
+    "name": "Ogre Camp",
+    "description": "Crude ogre-built structures, fires and war gear",
+    "promptTemplate": "OGRE",
+    "defaultTextureSize": 512,
+    "priority": 11
   }
 }

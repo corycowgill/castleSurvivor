@@ -9,9 +9,10 @@
     "profile": "node tools/playtest.mjs profile",
     "enemies": "node tools/playtest.mjs enemies",
     "icons": "node AssetFactory/scripts/gen-icons.mjs",
-    "maps": "node tools/generate-kingsfield.mjs && node tools/generate-darkwood.mjs",
-    "overhead": "node tools/playtest.mjs overhead --map kingsfield && node tools/playtest.mjs overhead --map darkwood",
-    "thumbs": "node tools/map-thumbs.mjs"
+    "maps": "node tools/generate-kingsfield.mjs && node tools/generate-darkwood.mjs && node tools/generate-emberreach.mjs",
+    "overhead": "node tools/playtest.mjs overhead --map kingsfield && node tools/playtest.mjs overhead --map darkwood && node tools/playtest.mjs overhead --map emberreach",
+    "thumbs": "node tools/map-thumbs.mjs",
+    "charred": "node tools/char-glb.mjs && node tools/add-assets.mjs"
   },
   "type": "module",
   "keywords": [],

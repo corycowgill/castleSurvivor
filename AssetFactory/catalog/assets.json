@@ -1014,7 +1014,7 @@
     "category": "blacksmith_kit",
     "family": "stone",
     "promptTemplate": "PROP",
-    "promptDetails": "Medieval stone and brick forge structure. Open hearth with chimney hood. Contains coal bed area. No fire or glow \u2014 just the physical structure. Approximately 1.5 meters tall.",
+    "promptDetails": "Medieval stone and brick forge structure. Open hearth with chimney hood. Contains coal bed area. No fire or glow — just the physical structure. Approximately 1.5 meters tall.",
     "status": "glb_optimized",
     "batch": 3,
     "game": {
@@ -1223,7 +1223,7 @@
     "family": "farm",
     "promptTemplate": "PROP",
     "promptDetails": "Medieval three-pronged iron pitchfork leaning against nothing (freestanding, slightly tilted). Wooden handle.",
-    "status": "bg_removing",
+    "status": "pending",
     "batch": 4,
     "game": {
       "scaleMeters": 1.5,
@@ -2237,7 +2237,7 @@
     "family": "war",
     "promptTemplate": "PROP",
     "promptDetails": "Ground-level wooden spike trap. Sharpened wooden stakes pointing upward from a low wooden frame.",
-    "status": "pending",
+    "status": "rejected",
     "batch": 5,
     "game": {
       "scaleMeters": 0.5,
@@ -2253,7 +2253,13 @@
         "humanCastle"
       ],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_spikes_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\combat_spikes_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/combat_spikes_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/combat_spikes_01.glb",
+    "glbGame": "Game3DAssets/combat_spikes_01.glb",
+    "rejectReason": "Trellis produced a 1449-tri sliver that renders nothing (drawnFrac 0.001)"
   },
   {
     "id": "combat_broken_cart_01",
@@ -2262,7 +2268,7 @@
     "family": "war",
     "promptTemplate": "PROP",
     "promptDetails": "Destroyed medieval cart. Broken wheels, splintered wood, collapsed frame. Battle damage evident.",
-    "status": "pending",
+    "status": "glb_optimized",
     "batch": 5,
     "game": {
       "scaleMeters": 1.2,
@@ -2275,7 +2281,12 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_broken_cart_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\combat_broken_cart_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/combat_broken_cart_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/combat_broken_cart_01.glb",
+    "glbGame": "Game3DAssets/combat_broken_cart_01.glb"
   },
   {
     "id": "combat_broken_barrel_01",
@@ -2297,7 +2308,8 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_broken_barrel_01.png"
   },
   {
     "id": "combat_wall_rubble_01",
@@ -2566,7 +2578,8 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_burned_cart_01.png"
   },
   {
     "id": "terrain_dirt_01",
@@ -3276,7 +3289,7 @@
     "status": "glb_optimized",
     "batch": 8,
     "game": {
-      "scaleMeters": 1.0,
+      "scaleMeters": 1,
       "collision": "box",
       "solid": true,
       "breakable": true,
@@ -3304,7 +3317,7 @@
     "status": "glb_optimized",
     "batch": 8,
     "game": {
-      "scaleMeters": 6.0,
+      "scaleMeters": 6,
       "collision": "cylinder",
       "solid": true,
       "breakable": false,
@@ -3350,5 +3363,655 @@
     "glbOptimized": "AssetFactory/glb_optimized/nature_mushrooms_02.glb",
     "glbGame": "Game3DAssets/nature_mushrooms_02.glb",
     "rejectReason": "splinter geometry in viewer render (validate-glb.mjs 2026-09-20)"
+  },
+  {
+    "id": "volcanic_spire_01",
+    "name": "Basalt Spire",
+    "category": "volcanic",
+    "family": "rock",
+    "promptTemplate": "VOLCANIC",
+    "promptDetails": "A tall jagged spire of columnar basalt thrusting straight up out of the ground, narrowing to a broken point. Hexagonal column facets down the sides, pale ash caught in the crevices, a few thin orange fissures near the base. Approximately 5 meters tall.",
+    "status": "pending",
+    "batch": 9,
+    "game": {
+      "scaleMeters": 5,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 3,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "volcanic_spire_02",
+    "name": "Basalt Spire (Variant B)",
+    "category": "volcanic",
+    "family": "rock",
+    "promptTemplate": "VOLCANIC",
+    "promptDetails": "A leaning wedge of broken black basalt, snapped off at an angle with a sheared flat face and a rubble skirt at its foot. Rough crusted rock, ash dusted, one deep orange-glowing crack up the leaning side. Approximately 3.5 meters tall.",
+    "status": "pending",
+    "batch": 9,
+    "game": {
+      "scaleMeters": 3.5,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 4,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "volcanic_rock_cluster_01",
+    "name": "Basalt Cluster",
+    "category": "volcanic",
+    "family": "rock",
+    "promptTemplate": "VOLCANIC",
+    "promptDetails": "A compact cluster of five or six angular black basalt chunks of different sizes heaped together, sharp fractured faces, grey ash settled between them. Approximately 1.6 meters tall.",
+    "status": "pending",
+    "batch": 9,
+    "game": {
+      "scaleMeters": 1.6,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 8,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "volcanic_boulder_01",
+    "name": "Volcanic Boulder",
+    "category": "volcanic",
+    "family": "rock",
+    "promptTemplate": "VOLCANIC",
+    "promptDetails": "A single big rounded boulder of dark volcanic rock, pocked and bubbled like cooled lava, split by one wide crack that glows orange deep inside. Ash dusted on top. Approximately 2.4 meters tall.",
+    "status": "pending",
+    "batch": 9,
+    "game": {
+      "scaleMeters": 2.4,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 5,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "volcanic_lava_rock_01",
+    "name": "Glowing Lava Rock",
+    "category": "volcanic",
+    "family": "rock",
+    "promptTemplate": "VOLCANIC",
+    "promptDetails": "A knee-high slab of black crusted lava rock broken into plates, with a web of bright orange glowing fissures running between the plates like cracked embers in a fireplace. Approximately 1.2 meters tall.",
+    "status": "pending",
+    "batch": 9,
+    "game": {
+      "scaleMeters": 1.2,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 7,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "volcanic_vent_01",
+    "name": "Fumarole Vent",
+    "category": "volcanic",
+    "family": "rock",
+    "promptTemplate": "VOLCANIC",
+    "promptDetails": "A small squat volcanic vent cone: a ring of crusted yellow-stained rock built up around a dark open hole in the middle, the rim caked in pale sulphur, the throat glowing dull orange. No smoke plume. Approximately 1.6 meters tall.",
+    "status": "pending",
+    "batch": 9,
+    "game": {
+      "scaleMeters": 1.6,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 4,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "volcanic_obsidian_shards_01",
+    "name": "Obsidian Shards",
+    "category": "volcanic",
+    "family": "rock",
+    "promptTemplate": "VOLCANIC",
+    "promptDetails": "A cluster of tall sharp shards of glossy black obsidian jutting up out of a low rocky base at different angles, like broken black glass blades. Deep black with hard bright highlights along the edges. Approximately 2 meters tall.",
+    "status": "pending",
+    "batch": 9,
+    "game": {
+      "scaleMeters": 2,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 5,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "volcanic_ash_mound_01",
+    "name": "Ash Drift",
+    "category": "volcanic",
+    "family": "rock",
+    "promptTemplate": "VOLCANIC",
+    "promptDetails": "A low soft drift of pale grey volcanic ash piled up like a snow bank, smooth wind-rippled surface, with two or three dark rocks half buried in it. Approximately 1 meter tall.",
+    "status": "pending",
+    "batch": 9,
+    "game": {
+      "scaleMeters": 1,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 8,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "volcanic_sulfur_crust_01",
+    "name": "Sulfur Crust",
+    "category": "volcanic",
+    "family": "rock",
+    "promptTemplate": "VOLCANIC",
+    "promptDetails": "A low crusty patch of bright yellow sulphur deposit built up over dark rock, knobbly and mineral, with pale white-yellow crystalline edges. Approximately 0.6 meters tall.",
+    "status": "pending",
+    "batch": 9,
+    "game": {
+      "scaleMeters": 0.6,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 7,
+      "maxCluster": 4
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "volcanic_crater_slab_01",
+    "name": "Cracked Lava Slab",
+    "category": "volcanic",
+    "family": "rock",
+    "promptTemplate": "VOLCANIC",
+    "promptDetails": "A wide flat slab of cooled black lava crust lying almost flat on the ground, broken into tilted plates with thin orange glowing seams between them, edges crumbling to cinder. Wider than it is tall. Approximately 1.4 meters wide and low to the ground.",
+    "status": "pending",
+    "batch": 9,
+    "game": {
+      "scaleMeters": 1.4,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 6,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "ogre_brazier_01",
+    "name": "Ogre Brazier",
+    "category": "ogre_camp",
+    "family": "ogre",
+    "promptTemplate": "OGRE",
+    "promptDetails": "A huge crude brazier: a heavy black iron bowl on three bent iron legs, heaped with glowing orange coals and charred wood. Riveted iron, soot-blackened, a bone charm hanging from one leg. Approximately 1.8 meters tall.",
+    "status": "pending",
+    "batch": 9,
+    "game": {
+      "scaleMeters": 1.8,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 4,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "ogreCastle"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "ogre_cook_pot_01",
+    "name": "Ogre Cauldron",
+    "category": "ogre_camp",
+    "family": "ogre",
+    "promptTemplate": "OGRE",
+    "promptDetails": "An enormous dented black iron cooking cauldron slung from a crude tripod of lashed timber over a bed of glowing coals. Thick iron rim, rivets, soup slopped down the side, a giant wooden ladle hooked on the rim. Approximately 2.2 meters tall.",
+    "status": "pending",
+    "batch": 9,
+    "game": {
+      "scaleMeters": 2.2,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "ogreCastle"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "ogre_totem_01",
+    "name": "Ogre Skull Totem",
+    "category": "ogre_camp",
+    "family": "ogre",
+    "promptTemplate": "OGRE",
+    "promptDetails": "A tall crude totem pole of rough dark timber, lashed with rawhide, mounted with stylized animal and goblin skulls and hung with feathers, teeth and strips of hide. Carved with harsh angular ogre marks daubed in red. Approximately 3.4 meters tall.",
+    "status": "pending",
+    "batch": 9,
+    "game": {
+      "scaleMeters": 3.4,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": true,
+      "spawnWeight": 3,
+      "maxCluster": 1,
+      "health": 60
+    },
+    "placement": {
+      "near": [
+        "ogreCastle"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "ogre_bone_pile_01",
+    "name": "Bone Heap",
+    "category": "ogre_camp",
+    "family": "ogre",
+    "promptTemplate": "OGRE",
+    "promptDetails": "A heaped pile of big pale yellowed animal bones, ribs and leg bones, tossed together with one large cartoon-stylized horned skull on top. Clean dry bones, no blood, no gore. Approximately 1.1 meters tall.",
+    "status": "pending",
+    "batch": 9,
+    "game": {
+      "scaleMeters": 1.1,
+      "collision": "box",
+      "solid": false,
+      "breakable": true,
+      "spawnWeight": 6,
+      "maxCluster": 3,
+      "health": 20
+    },
+    "placement": {
+      "near": [
+        "ogreCastle"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "ogre_spike_wall_01",
+    "name": "Ogre Stake Wall",
+    "category": "ogre_camp",
+    "family": "ogre",
+    "promptTemplate": "OGRE",
+    "promptDetails": "A straight section of crude defensive wall made of thick tree trunks sharpened to points at the top, driven into the ground shoulder to shoulder and lashed together with two horizontal rails of rope-bound timber. Scorched and weathered. A straight modular segment with clean flat ends. Approximately 2.4 meters tall.",
+    "status": "pending",
+    "batch": 9,
+    "game": {
+      "scaleMeters": 2.4,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 4,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "ogreCastle"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "ogre_banner_01",
+    "name": "Ogre War Banner",
+    "category": "ogre_camp",
+    "family": "ogre",
+    "promptTemplate": "OGRE",
+    "promptDetails": "A tall crude banner pole of rough timber topped with a stylized iron skull finial, flying a big ragged torn banner of dark red hide with a harsh angular ogre rune daubed on it in black. Rope lashings, tattered edges. Approximately 3.8 meters tall.",
+    "status": "pending",
+    "batch": 9,
+    "game": {
+      "scaleMeters": 3.8,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": true,
+      "spawnWeight": 4,
+      "maxCluster": 1,
+      "health": 30
+    },
+    "placement": {
+      "near": [
+        "ogreCastle"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "ogre_cage_01",
+    "name": "Ogre Prisoner Cage",
+    "category": "ogre_camp",
+    "family": "ogre",
+    "promptTemplate": "OGRE",
+    "promptDetails": "A big crude cage of thick timber bars bound with black iron bands and rope, roughly cube shaped on a plank floor, with a heavy barred door held shut by an oversized iron padlock. Empty. Weathered scorched wood. Approximately 2.6 meters tall.",
+    "status": "pending",
+    "batch": 9,
+    "game": {
+      "scaleMeters": 2.6,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "spawnWeight": 3,
+      "maxCluster": 1,
+      "health": 80
+    },
+    "placement": {
+      "near": [
+        "ogreCastle"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "ogre_butcher_block_01",
+    "name": "Ogre Butcher Block",
+    "category": "ogre_camp",
+    "family": "ogre",
+    "promptTemplate": "OGRE",
+    "promptDetails": "A massive chopping block cut from a single tree trunk, deeply scarred and hacked across the top, with an oversized rusty iron cleaver buried in it and a coil of rope at the base. No blood, no meat. Approximately 1.2 meters tall.",
+    "status": "pending",
+    "batch": 9,
+    "game": {
+      "scaleMeters": 1.2,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "spawnWeight": 4,
+      "maxCluster": 1,
+      "health": 40
+    },
+    "placement": {
+      "near": [
+        "ogreCastle"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "ogre_weapon_rack_01",
+    "name": "Ogre Weapon Rack",
+    "category": "ogre_camp",
+    "family": "ogre",
+    "promptTemplate": "OGRE",
+    "promptDetails": "A crude A-frame rack of lashed timber holding oversized ogre weapons: two huge knobbly wooden clubs, a rusty iron cleaver and a spiked maul, plus a battered round hide shield leaning against the foot. Approximately 2 meters tall.",
+    "status": "pending",
+    "batch": 9,
+    "game": {
+      "scaleMeters": 2,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "spawnWeight": 4,
+      "maxCluster": 1,
+      "health": 40
+    },
+    "placement": {
+      "near": [
+        "ogreCastle"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "ogre_hut_01",
+    "name": "Ogre Hide Hut",
+    "category": "ogre_camp",
+    "family": "ogre",
+    "promptTemplate": "BUILDING",
+    "promptDetails": "A large crude ogre dwelling: a domed frame of huge curved bones and rough timber poles lashed together and covered with stitched brown animal hides, a low dark doorway hung with a hide flap, skulls and antlers fixed above it, a crooked stone chimney at the back. Approximately 4.5 meters tall.",
+    "status": "pending",
+    "batch": 9,
+    "game": {
+      "scaleMeters": 4.5,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "ogreCastle"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "ogre_forge_01",
+    "name": "Ogre Slag Forge",
+    "category": "ogre_camp",
+    "family": "ogre",
+    "promptTemplate": "OGRE",
+    "promptDetails": "A brutal open forge built of stacked black basalt blocks and iron plate, its firebox packed with glowing orange coals, a huge crude bellows of hide and timber strapped to one side and a soot-stained iron chimney hood above. Slag and cinder heaped at the base. Approximately 2.6 meters tall.",
+    "status": "pending",
+    "batch": 10,
+    "game": {
+      "scaleMeters": 2.6,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [
+        "ogreCastle"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "ogre_barricade_01",
+    "name": "Ogre Iron Barricade",
+    "category": "ogre_camp",
+    "family": "ogre",
+    "promptTemplate": "OGRE",
+    "promptDetails": "A crude portable barricade: a heavy frame of rough timber crossed with black iron bars and bristling with outward-pointing iron spikes, braced by two angled legs, bound with rope and chain. Approximately 1.8 meters tall.",
+    "status": "pending",
+    "batch": 10,
+    "game": {
+      "scaleMeters": 1.8,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "spawnWeight": 5,
+      "maxCluster": 2,
+      "health": 60
+    },
+    "placement": {
+      "near": [
+        "ogreCastle"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "ogre_skull_pile_01",
+    "name": "Skull Cairn",
+    "category": "ogre_camp",
+    "family": "ogre",
+    "promptTemplate": "OGRE",
+    "promptDetails": "A cairn of stylized pale skulls stacked into a rough pyramid on a base of dark volcanic stones, bound with a strand of rope and topped with one large horned skull. Clean dry bone, cartoon fantasy style, no blood, no gore. Approximately 1.4 meters tall.",
+    "status": "pending",
+    "batch": 10,
+    "game": {
+      "scaleMeters": 1.4,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "spawnWeight": 4,
+      "maxCluster": 2,
+      "health": 30
+    },
+    "placement": {
+      "near": [
+        "ogreCastle"
+      ],
+      "avoid": []
+    }
+  },
+  {
+    "id": "burnt_tree_giant_01",
+    "name": "Great Charred Tree",
+    "category": "volcanic",
+    "family": "tree",
+    "promptTemplate": "DEADTREE",
+    "status": "pending",
+    "batch": 10,
+    "promptDetails": "An enormous ancient dead tree, burnt black, with a massive buttressed trunk and huge twisted clawing branches reaching upward and outward. Deeply fissured charred bark with pale ash-grey wood showing in the splits. Approximately 9 meters tall.",
+    "game": {
+      "scaleMeters": 9,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "landmark_ogre_gate",
+    "name": "The Black Gate",
+    "category": "landmarks",
+    "family": "landmark",
+    "promptTemplate": "BUILDING",
+    "promptDetails": "A colossal fortress gateway built by ogres: two massive square towers of rough black basalt blocks flanking a huge pair of iron-banded timber doors, the lintel mounted with giant horned skulls, iron spikes along the battlements, tattered red banners hanging either side. Scorched, battle-scarred, monumental. Approximately 14 meters tall.",
+    "status": "pending",
+    "batch": 10,
+    "game": {
+      "scaleMeters": 14,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "landmark_volcano_cone_01",
+    "name": "Smoking Cone",
+    "category": "landmarks",
+    "family": "landmark",
+    "promptTemplate": "TERRAIN",
+    "promptDetails": "A stylized volcano: a steep broad cone of near-black ash and basalt with a broken crater rim at the top glowing orange from within, and three bright orange lava channels running down its flanks and fading out before the base. Ash-grey streaks between the lava runs. A single solid mountain form, no smoke plume, no clouds, no surrounding landscape. Approximately 20 meters tall.",
+    "status": "pending",
+    "batch": 10,
+    "game": {
+      "scaleMeters": 20,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "landmark_obsidian_arch_01",
+    "name": "Obsidian Arch",
+    "category": "landmarks",
+    "family": "landmark",
+    "promptTemplate": "VOLCANIC",
+    "promptDetails": "A natural arch of glossy black volcanic rock, two thick weathered legs meeting in a heavy span overhead, the stone faceted and glassy with sharp bright edge highlights and pale ash dusting the top of the span. Approximately 10 meters tall.",
+    "status": "pending",
+    "batch": 10,
+    "game": {
+      "scaleMeters": 10,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
+  },
+  {
+    "id": "landmark_ogre_idol_01",
+    "name": "Ogre Idol",
+    "category": "landmarks",
+    "family": "landmark",
+    "promptTemplate": "BUILDING",
+    "promptDetails": "A colossal crude idol carved from a single block of dark volcanic stone: a squat brutish ogre figure, seated, with a heavy jaw and tusks, oversized fists resting on its knees, harsh angular chisel marks all over it and glowing orange gemstones set in the eye sockets. Chipped, weathered, half sunk in ash. Approximately 9 meters tall.",
+    "status": "pending",
+    "batch": 10,
+    "game": {
+      "scaleMeters": 9,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    }
   }
 ]

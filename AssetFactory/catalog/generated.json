@@ -1370,5 +1370,61 @@
     "stage": "optimize",
     "metadata": {},
     "timestamp": "2026-09-20T20:38:13"
+  },
+  {
+    "id": "combat_spikes_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_spikes_01.png"
+    },
+    "timestamp": "2026-09-23T15:52:07"
+  },
+  {
+    "id": "combat_spikes_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-23T15:57:36"
+  },
+  {
+    "id": "combat_spikes_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-23T15:57:37"
+  },
+  {
+    "id": "combat_broken_cart_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_broken_cart_01.png"
+    },
+    "timestamp": "2026-09-23T15:58:19"
+  },
+  {
+    "id": "combat_broken_cart_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-23T16:09:54"
+  },
+  {
+    "id": "combat_broken_cart_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-23T16:09:55"
+  },
+  {
+    "id": "combat_broken_barrel_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_broken_barrel_01.png"
+    },
+    "timestamp": "2026-09-23T16:10:37"
+  },
+  {
+    "id": "combat_burned_cart_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_burned_cart_01.png"
+    },
+    "timestamp": "2026-09-23T16:57:55"
   }
 ]

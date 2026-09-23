@@ -70,5 +70,23 @@
     "reason": "'charmap' codec can't encode character '\\u2713' in position 4: character maps to <undefined>",
     "stage": "pipeline",
     "timestamp": "2026-09-19T07:59:31"
+  },
+  {
+    "id": "combat_enemy_totem_01",
+    "reason": "All image generation attempts failed",
+    "stage": "image",
+    "timestamp": "2026-09-23T16:40:03"
+  },
+  {
+    "id": "combat_skull_stake_01",
+    "reason": "All image generation attempts failed",
+    "stage": "image",
+    "timestamp": "2026-09-23T16:48:32"
+  },
+  {
+    "id": "combat_burned_tree_01",
+    "reason": "All image generation attempts failed",
+    "stage": "image",
+    "timestamp": "2026-09-23T16:56:48"
   }
 ]

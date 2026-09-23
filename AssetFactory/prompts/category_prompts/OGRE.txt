@@ -1,0 +1,19 @@
+{base_prompt}
+
+{asset_description}
+
+Crude object built by ogres: oversized, heavy, brutal, lashed together rather than crafted.
+
+Materials are rough unplaned timber, animal hide and bone, and dark hand-beaten black iron with rivets.
+
+Bound with thick rope and rawhide lashings, studded with crude iron nails.
+
+Weathered, soot-stained, scorched at the edges, clearly used and abused.
+
+Exaggerated chunky proportions with a bold readable silhouette, hand-painted stylized game texture, warm firelit colour against dark materials.
+
+Menacing but cartoon-stylized, suitable for an all-ages fantasy game: no blood, no gore, no realistic corpses.
+
+No fire, no flames, no smoke, no particles.
+
+{extra_details}

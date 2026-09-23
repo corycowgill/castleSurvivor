@@ -33,6 +33,15 @@ const TEXTURES = {
   litter:     { subject: 'autumn leaf litter, brown and orange fallen leaves on dark soil seen straight from above' },
   needles:    { subject: 'dry brown pine needles and cones on dark forest soil seen straight from above' },
   moss:       { subject: 'thick green moss with tiny ferns on dark damp soil seen straight from above' },
+  // Emberreach (volcano / ogre homeland). Base is `ash`; the splat layers are
+  // basalt (bare rock), cinder (burnt ground), lavaCrust (glowing bank apron) and
+  // sulfur (vent deposits). lavaFlow scrolls along the lava ribbons.
+  ash:        { subject: 'fine pale grey volcanic ash with wind ripples and a few small dark cinder specks, seen straight from above', seed: 201 },
+  basalt:     { subject: 'dark grey-black volcanic basalt rock, cracked into angular plates with fine grey ash in the seams, seen straight from above', seed: 202 },
+  cinder:     { subject: 'matte black burnt earth, soot and fine charcoal dust with flecks of pale grey ash and a few tiny dull orange sparks, dark and unlit, seen straight from above', seed: 233 },
+  lavaCrust:  { subject: 'black cooled lava crust broken into plates with a bright network of glowing orange and yellow molten cracks between them, seen straight from above', seed: 204 },
+  sulfur:     { subject: 'crusty bright yellow sulphur mineral deposit over dark volcanic rock, pale yellow-white crystalline edges, seen straight from above', seed: 205 },
+  lavaFlow:   { subject: 'bright molten lava flowing, glowing yellow-white at the hottest veins through orange to deep red, with drifting dark grey crust plates on the surface, seen straight from above', seed: 206 },
 };
 const DECALS = {
   puddle:     { subject: 'a single shallow muddy rain puddle, seen straight from above' },
@@ -47,12 +56,21 @@ const DECALS = {
   mushrooms:  { subject: 'a cluster of small brown forest mushrooms on soil, seen straight from above' },
   roots:      { subject: 'chunky stylized tree roots radiating outward from the centre over dark soil, seen straight from above, no trunk, no leaves', seed: 103, painterly: true },
   rootsMud:   { subject: 'an irregular patch of bare dark forest soil with small twigs and pine cones, seen straight from above', seed: 12 },
+  // Emberreach decals
+  scorch:     { subject: 'a very dark near-black charcoal burn scar shaped like an irregular blot, pure black soot in the middle with charred dark grey edges and a few black cinder flakes, extremely dark against the white background, seen straight from above', seed: 252, painterly: true },
+  emberCrack: { subject: 'a jagged crack splitting dark ground open with molten orange light glowing up out of it, seen straight from above', seed: 212, painterly: true },
+  ashDrift:   { subject: 'a soft irregular drift of pale grey volcanic ash settled over dark ground, seen straight from above', seed: 213, painterly: true },
+  sulfurStain:{ subject: 'an irregular stain of crusty bright yellow sulphur deposit on dark rock, seen straight from above', seed: 214, painterly: true },
+  slag:       { subject: 'a spill of dark glassy slag and iron scrap with a few dull orange hot pieces, seen straight from above', seed: 215, painterly: true },
 };
 const SPRITES = {
   tuft1: { subject: 'a single clump of green meadow grass, side view, game sprite' },
   tuft2: { subject: 'a single tall clump of wild green grass with seed heads, side view, game sprite, pure white background', seed: 5 },
   tuft3: { subject: 'a single small clump of dry yellow grass, side view, game sprite' },
   reeds: { subject: 'a single clump of tall green reeds with brown cattails, side view, game sprite, pure white background', seed: 9 },
+  // Emberreach tufts: dead stalks, not grass
+  ashTuft:    { subject: 'a single small clump of dead brittle grey-brown grass stalks, dried and withered, side view, game sprite, pure white background', seed: 221 },
+  cinderTuft: { subject: 'a single small clump of burnt black charred grass stalks with pale ash on the tips, side view, game sprite, pure white background', seed: 222 },
 };
 
 function hashSeed(str) { let h = 0; for (let i = 0; i < str.length; i++) { h = ((h << 5) - h) + str.charCodeAt(i); h |= 0; } return Math.abs(h) % 4294967295; }

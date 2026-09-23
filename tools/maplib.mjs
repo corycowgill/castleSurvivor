@@ -33,6 +33,14 @@ Object.assign(ASSET, {
   landmark_ruined_tower: { scale: 10.5, r: 3.6 }, landmark_windmill: { scale: 13, r: 3.4 },
   landmark_graveyard_gate: { scale: 5.4, r: 1.6 }, landmark_destroyed_watchtower: { scale: 6.8, r: 3.0 },
 });
+// Emberreach hero pieces (batch 10). Same 1.35 units/m as the other tall fixtures;
+// collision is the footprint you actually walk into, not the silhouette — the cone
+// is a mountain you route around, the arch is two legs you walk between.
+for (const [k, v] of Object.entries({
+  landmark_ogre_gate: { scale: 19, r: 7.0 }, landmark_volcano_cone_01: { scale: 27, r: 13.0 },
+  landmark_obsidian_arch_01: { scale: 13.5, r: 3.2 }, landmark_ogre_idol_01: { scale: 12, r: 3.4 },
+  burnt_tree_giant_01: { scale: 11.7, r: 1.8 },
+})) if (ASSET[k]) ASSET[k] = v;   // only once the mesh is registered
 // Fence sets: the picket set (re-tinted oak) and the rail set from Trellis batch 8
 export const FENCE_SETS = {
   picket: { straight: 'village_fence_straight_01', broken: 'village_fence_broken_01', corner: 'village_fence_corner_01', gate: 'village_fence_gate_01' },
@@ -72,7 +80,31 @@ export class MapBuilder {
     // Splat map: 4 float channels over the world, written as RGBA PNG (row 0 = north / -z)
     this.splatSize = 512;
     this.splat = new Float32Array(this.splatSize * this.splatSize * 4);
-    this.decals = []; this.tufts = []; this.shafts = []; this.streams = [];
+    this.decals = []; this.tufts = []; this.shafts = []; this.streams = []; this.barriers = [];
+    this.missing = {};
+  }
+  // Is this mesh registered? The Emberreach generator runs while its Trellis batch
+  // is still going, so it asks before it places and records what was not there yet.
+  has(key) { return !!ASSET[key]; }
+  // First registered key from a preference list, so a generator can name the asset
+  // it wants and the stand-in it will accept: pick('ogre_hut_01', 'farmHouse')
+  pick(...keys) { return keys.find(k => ASSET[k]); }
+  note(key) { this.missing[key] = (this.missing[key] || 0) + 1; return false; }
+  // Collision-only disc: no mesh, no draw call, just somewhere the player cannot
+  // walk. Emberreach lines its lava with these.
+  barrier(x, z, r) {
+    if (Math.abs(x) > this.worldSize + 8 || Math.abs(z) > this.worldSize + 8) return false;
+    this.barriers.push({ x: +x.toFixed(1), z: +z.toFixed(1), r: +r.toFixed(1) });
+    this.obstacles.push({ x, z, r });                 // also keeps props out of the lava
+    this.counts.barriers = (this.counts.barriers || 0) + 1;
+    return true;
+  }
+  // A run of barriers along x = fn(z), skipped near the fords so a crossing stays open
+  barrierCurve(fn, z0, z1, { step = 3, r = 3, fords = [], gap = 4.5 } = {}) {
+    for (let z = z0; z <= z1; z += step) {
+      if (fords.some(f => Math.abs(z - f) < gap)) continue;
+      this.barrier(fn(z), z, r);
+    }
   }
   // Stream ribbon along x = fn(z), split into segments around fords (z values) so the
   // road stays dry; the game builds a feathered triangle strip from the points
@@ -172,14 +204,17 @@ export class MapBuilder {
     this.counts['decal:' + key] = (this.counts['decal:' + key] || 0) + 1;
     return true;
   }
-  scatterDecals(key, n, region, { density = null, scale = [1, 1], tries = 4 } = {}) {
+  // `ignoreKeepOut` matters for ground marks inside a district: scorch under the
+  // warcamp and slag round the forge are exactly what the keep-out exists to
+  // protect, and a decal has no collision to conflict with anyway.
+  scatterDecals(key, n, region, { density = null, scale = [1, 1], tries = 4, ignoreKeepOut = false } = {}) {
     let placed = 0;
     for (let i = 0; i < n * tries && placed < n; i++) {
       let x, z;
       if (region.r != null) { const a = this.rnd.angle(), d = Math.sqrt(this.rnd()) * region.r; x = region.x + Math.cos(a) * d; z = region.z + Math.sin(a) * d; }
       else { x = this.rnd.range(region.x0, region.x1); z = this.rnd.range(region.z0, region.z1); }
       if (density && this.rnd() > density(x, z)) continue;
-      if (!this.isClear(x, z, 0.4)) continue;
+      if (!this.isClear(x, z, 0.4, { ignoreKeepOut, ignoreRoads: ignoreKeepOut })) continue;
       if (this.decal(key, x, z, { scale: this.rnd.range(scale[0], scale[1]) })) placed++;
     }
     return placed;
@@ -295,7 +330,11 @@ export class MapBuilder {
   toJSON({ omit = [] } = {}) {
     const objects = omit.length ? this.objects.filter(o => !omit.includes(o.key)) : this.objects;
     return { version: 3, gridSnap: 2, worldSize: this.worldSize, spawnX: this.spawnX, spawnZ: this.spawnZ, enemySpawnDistance: this.enemySpawnDistance,
-             objects, decals: this.decals, tufts: this.tufts, shafts: this.shafts, streams: this.streams };
+             objects, decals: this.decals, tufts: this.tufts, shafts: this.shafts, streams: this.streams, barriers: this.barriers };
   }
   summary() { return Object.entries(this.counts).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k}:${v}`).join(' '); }
+  missingSummary() {
+    const e = Object.entries(this.missing).sort((a, b) => b[1] - a[1]);
+    return e.length ? `not yet registered (${e.length}): ` + e.map(([k, v]) => `${k}×${v}`).join(' ') : 'every asset the map asks for is registered';
+  }
 }

@@ -1,0 +1,21 @@
+{base_prompt}
+
+{asset_description}
+
+Completely dead, burnt, leafless tree.
+
+Entire trunk, roots and bare branches visible from base to tip.
+
+Blackened charred bark, split and flaking, with pale grey ash-coloured wood showing through the cracks.
+
+Twisted, gnarled, clawing branch silhouette. No leaves, no foliage, no canopy, no green anywhere.
+
+Chunky readable branch masses rather than thousands of fine twigs.
+
+No surrounding grass. No ground. No forest. Single isolated tree.
+
+No fire, no flames, no smoke, no embers.
+
+Designed as a performant video game environment prop.
+
+{extra_details}

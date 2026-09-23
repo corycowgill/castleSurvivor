@@ -82,7 +82,9 @@ async function openGame(headed) {
   page.on('console', m => { if (m.type() === 'error' && !/404/.test(m.text())) errors.push('console.error: ' + m.text()); });
   const t0 = Date.now();
   await page.goto(`http://127.0.0.1:${port}/index.html?debug`, { waitUntil: 'domcontentloaded' });
-  await page.waitForFunction(() => window.__cs, { timeout: 420000 });
+  // 420 s is ample on an idle machine, but a cold SwiftShader boot while the
+  // AssetFactory has the CPU takes ~8 minutes. --boot-timeout overrides it.
+  await page.waitForFunction(() => window.__cs, { timeout: parseInt(opt('boot-timeout', '420'), 10) * 1000 });
   console.log(`loaded in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
   return { browser, page, errors, close: async () => { await browser.close(); srv.close(); } };
 }

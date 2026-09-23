@@ -1,0 +1,19 @@
+{base_prompt}
+
+{asset_description}
+
+Volcanic terrain feature from a stylized fantasy game.
+
+Near-black basalt and cooled lava rock with a rough, crusty, broken surface.
+
+Deep cracks and fissures with a warm orange glow deep inside them, glowing from within the rock rather than lighting the surroundings.
+
+Dusted with pale grey volcanic ash in the crevices and along the upper surfaces.
+
+Chunky faceted shapes with a bold readable silhouette, hand-painted game texture, strong value contrast between black rock, pale ash and glowing orange.
+
+Solid opaque rock, not translucent, not glass.
+
+No fire, no flames, no smoke plume, no particles, no lava pool underneath.
+
+{extra_details}

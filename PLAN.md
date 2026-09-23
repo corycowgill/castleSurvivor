@@ -269,7 +269,109 @@ Three decisions, all taken deliberately:
 - [ ] 25.6 Not done, and worth knowing: run-wide Forge effects (magnet range, reroll and banish charges, the starting weapon) still come from player 1's profile via `applyForgeUpgrades`, because they are properties of the run rather than of a knight. If a companion buys Fate's Favor expecting their own extra reroll, they will not get it
 
 
+## Phase 26 - Emberreach, the ogre homeland (2026-09-23)
+A third battlefield, and the first one built end to end through the asset pipeline
+rather than out of props we already had. Full design in `NEW-LEVEL-PLAN.md`.
+
+- [x] 26.1 **Pipeline extended for a new art direction.** Two new prompt templates,
+  `VOLCANIC` (basalt, cooled lava, ash, glowing fissures) and `OGRE` (crude, oversized,
+  bone and hide and black iron), plus `DEADTREE` for the burnt woods; two new catalogue
+  categories (`volcanic`, `ogre_camp`) wired through `run_pipeline.py`'s `CATEGORY_DIRS`
+  and `add-assets.mjs`'s `CATEGORY_MAP`. 28 new catalogue entries as batches 9 and 10
+  (`AssetFactory/scripts/add-emberreach-assets.mjs`, idempotent so a prompt can be
+  edited and the asset re-run)
+- [x] 26.2 **Ground art, first try but for two.** Six seamless 1024 textures (`ash`,
+  `basalt`, `cinder`, `lavaCrust`, `sulfur`, `lavaFlow`), five decals (`scorch`,
+  `emberCrack`, `ashDrift`, `sulfurStain`, `slag`) and two dead tuft sprites
+  (`ashTuft`, `cinderTuft`) through `gen-textures.mjs`. `cinder` came back as glowing
+  rubble and `scorch` as a pale crater - both wanted the word "matte" and an explicit
+  "extremely dark against the white background", since `alphaFromWhite` turns a light
+  centre transparent
+- [x] 26.3 **`tools/char-glb.mjs` - twelve props for free.** A charred/basalt re-grade
+  of GLBs we already ship, written out under new keys (`char_dead_tree_01`,
+  `char_pine_01`, `basalt_boulder_01`, ...). No GPU, a second each, and automatically
+  consistent with the rest of the art because it *is* the rest of the art. The grade
+  lands luminance in a band rather than multiplying toward black: a black tree on
+  black ground is invisible from this camera. Foliage needed its own `charFoliage`
+  band because deep green starts too dark for the `char` one. Registry entries go to
+  `AssetFactory/catalog/charred.json` and are merged into `assets-extra.js` by
+  `add-assets.mjs`, so `add-assets` stays the single source of truth for the game
+- [x] 26.4 **Engine, all additive.** (1) `MAPS.emberreach`. (2) `look.emitters`, a
+  table of prop key to light, replacing the two hard-coded keys - Emberreach names
+  seven (braziers, cauldrons, forges, vents, glowing rock), and Kingsfield and
+  Darkwood get the same table synthesised from their existing `look.lantern`/`look.forge`
+  so their behaviour is byte-identical. (3) `terrain.flow: 'lava'` swaps the stream
+  ribbon for an unlit material driven past 1.0 so the molten core blooms through the
+  tone mapper; lava creeps (scroll 0.012 against water's 0.05) and stretches its UV
+  over 16 units instead of 6, which killed a chevron artifact. (4) `terrain.tufts`
+  makes the grass sprite set per-map. (5) `mapData.barriers` - collision-only discs,
+  no mesh - make the lava impassable. (6) `vfx.ambientEmbers` (rising sparks, falling
+  ash), chosen by `look.ambientParticles`
+- [x] 26.5 **`tools/generate-emberreach.mjs`.** 1,708 objects, 658 obstacles, 115 lava
+  barriers, 330 decals, 4,200 dead tufts, 6 lava segments, 26 heat plumes. Two lava
+  rivers off the cone crossed at two basalt causeways; the warcamp between them (huts,
+  cauldron, cages, butcher blocks, stake wall, all breakable - the loot district); the
+  black gate and ogre keep north-east; the ash barrens west, deliberately sparse, as
+  the open fighting room; the obsidian field east; the slagworks south-west. New
+  `MapBuilder` methods `has`/`pick`/`note` let the generator name the asset it wants
+  and the stand-in it will accept, so the map builds and plays at any point in the
+  asset run and fills in as batches land
+- [x] 26.6 **Six look fixes, each from a capture.** Nothing here was predictable from
+  the code; every one came from looking at a frame.
+  1. **One orange hue end to end.** A warm key, a warm ambient and a grade with `gain`
+     `[1.10, 0.98, 0.90]` multiplied red across everything, and the pale ash read as
+     mud. Warmth belongs to the fires and the lava, not the fill: key `0xffd9bc`,
+     ambient `0x5d5560`, `gain` `[1.04, 1.0, 0.97]`
+  2. **The lava chevroned.** The ribbon UV repeats every 6 world units, which is right
+     for water ripples and turns lava's swirls into a herringbone. 16 for lava
+  3. **The warcamp was a box drawn on the ground.** A `paintRect` apron leaves a hard
+     straight edge that is unmistakable from the air. Overlapping circles now, and the
+     palisade is jittered and gapped rather than a perfect line of identical posts
+  4. **Sulphur was a biome.** `(heat - 0.60)` put it over ~40% of the map, at which
+     coverage its chunky yellow texture tiled into a visible cross-hatch. `(heat -
+     0.80) * 3.2` plus explicit vent aprons, and `layerScale` 1.2 -> 0.65 so the
+     features are larger than the repeat
+  5. **No conifers.** The burnt pines still read as living trees and filled the frame -
+     wrong for a lava map however they are graded. Gone entirely (`char_pine_01`
+     deleted). Only one standing-dead mesh passed validation, so the variety comes from
+     VALUE: the same tree sooted black, scorched grey and ash-bleached. They scatter in
+     one interleaved pass, because one scatter per variant let the first take every
+     good spot (81 / 19 / 8 out of 90 each)
+  6. **Ash read as snow.** The bleached tree at floor 0.30 / range 0.52 rendered bone
+     white, and 90 bright `ashDrift` decals finished the job. Band pulled to 0.19 /
+     0.40 with a warm tint, drifts to 40 and smaller
+- [x] 26.6b Regression: `smoke` clean on all three knights with no JS errors, and
+  Kingsfield and Darkwood re-captured overhead - lantern and forge glows intact, so the
+  `look.emitters` refactor is behaviour-preserving. `images/maps/emberreach.webp` cut
+- [ ] 26.7 **The asset run - STOPPED, resumable.** Batches 5 (war debris, outstanding
+  since 17.4), 9 and 10: 42 assets at ~10 min each. What actually happened:
+  - Batch 5 produced `combat_spikes_01` and `combat_broken_cart_01` and then
+    `combat_burned_cart_01`. **Eleven of its fourteen were skipped** because a browser
+    harness run starved ComfyUI's 120 s SD step; the pipeline timed out, resubmitted,
+    and fed its own queue backlog. `batch_runner.py` skips permanently after two
+    failures, which is the right default and was the wrong outcome here
+  - **Batches 9 and 10 never started.** None of the 28 Emberreach-specific meshes
+    (volcanic terrain, ogre camp, hero landmarks) exist yet. The map plays on
+    stand-ins - see 26.5 - and fills in as they land
+  - The run was killed by the harness's low-memory reaper: 21 MB free of 16 GB, 35 GB
+    committed. ComfyUI holding SDXL and Trellis-4B is ~4.8 GB of that on a 16 GB box,
+    so this machine can run the pipeline **or** a browser, never both
+  - Two fixes already in: the SD wait is 120 s -> 360 s (`run_pipeline.py`) so a queue
+    backlog cannot cascade, and `tools/playtest.mjs --boot-timeout` exists because a
+    cold SwiftShader boot under load takes ~8 min against the old 420 s ceiling
+  - **To resume**, with nothing else running: `tools/run-emberreach-assets.sh` (edit
+    the `for B in 5 9 10` list to taste), then `tools/rerun-skipped.sh` for the eleven.
+    After each batch: `node tools/validate-glb.mjs` -> `node tools/add-assets.mjs` ->
+    `node tools/generate-emberreach.mjs`
+  - Standing rule: **never run the harness while the pipeline runs**
+- [ ] 26.8 Thumbnail (`npm run overhead` then `npm run thumbs`), `npm run smoke`, a
+  balance batch on the new enemy mix, and the readability pass Darkwood needed
+  (PLAN 18.4) if the ogres vanish against the basalt. All of it needs the machine to
+  itself. The only verification done so far is the overhead capture that produced 26.6;
+  26.6's own fixes are **not yet seen rendered**
+
 ## Changelog
+- 2026-09-23 - Phase 26: Emberreach, a volcanic ogre-homeland map built end to end through the asset pipeline. New VOLCANIC/OGRE prompt templates, 6 ground textures, 12 free charred prop variants, per-map light emitters, impassable lava ribbons, and tools/generate-emberreach.mjs. Asset batches 5/9/10 running.
 - 2026-09-23 - Phase 25: per-knight profiles. Gold and Forge ranks are per knight, unlocks and leaderboards stay shared, and a co-op run pays every knight in full. v1 saves migrate by copying the old wallet to all three.
 - 2026-09-23 - Phase 24: co-op legibility - named companion HP rows, the level-up picker moved bottom-centre and attributed to a knight, and on-screen revive instructions. 18.1b audio signed off.
 - 2026-09-23 - Build number on the title screen (bottom-right). tools/stamp-build.mjs rewrites the BUILD constant in index.html and .githooks/pre-commit runs it on every commit, so the number is the commit count and matches git rev-list --count. A fresh clone needs git config core.hooksPath .githooks once.

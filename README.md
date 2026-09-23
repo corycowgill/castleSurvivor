@@ -20,7 +20,7 @@ If you have played Vampire Survivors or Deep Rock Galactic: Survivor, you alread
 
 The three knights are genuinely different. Dad is the sturdy generalist with a broadsword and a shield-wall passive. Brennan trades health for a piercing spear thrust and a free reroll. Parker is a wizard — an arcane staff that outranges everything at 14–18 units, +25% crit, and the lowest health in the game.
 
-**Two battlefields.** Kingsfield is a castle town of farms, lantern-lit streets and curtain walls. Darkwood is a pine forest under a cold moon where wolves and bats hunt and the trees hem you in.
+**Three battlefields.** Kingsfield is a castle town of farms, lantern-lit streets and curtain walls. Darkwood is a pine forest under a cold moon where wolves and bats hunt and the trees hem you in. Emberreach is the ogre homeland: a volcanic basin cut in two by impassable rivers of lava, crossed at two basalt causeways, with the ogres' warcamp burning between them.
 
 **Six Ogre Levels** ratchet difficulty across runs, and a Forge spends gold on permanent upgrades between them.
 
@@ -49,7 +49,7 @@ Deliberately plain: **no framework, no bundler, no build step.** ES modules and 
 index.html     ~10,000 lines — the whole game: state, systems, UI, render loop
 vfx.js          ~4,700 lines — instanced-quad particle engine
 assets-extra.js              — generated asset registry
-map.json / map.darkwood.json — generated level data
+map.json / map.darkwood.json / map.emberreach.json — generated level data
 Game3DAssets/                — 139 GLB models
 audio/                       — 30 SFX + music (synth fallback in audio/synth/)
 images/                      — ground, decals, sprites, icons

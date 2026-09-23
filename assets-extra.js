@@ -4,6 +4,90 @@
 // editor.html (palette). Regenerate rather than hand-edit.
 export const EXTRA_ASSETS = [
   {
+    "key": "basalt_boulder_01",
+    "name": "Basalt Boulder",
+    "file": "basalt_boulder_01.glb",
+    "category": "nature",
+    "defaultScale": 3.2,
+    "obstacle": true,
+    "radius": 1.7,
+    "breakable": false,
+    "icon": "🌿",
+    "charredFrom": "boulder"
+  },
+  {
+    "key": "basalt_cluster_01",
+    "name": "Basalt Rubble",
+    "file": "basalt_cluster_01.glb",
+    "category": "nature",
+    "defaultScale": 1.5,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🌿",
+    "charredFrom": "nature_rock_cluster_02"
+  },
+  {
+    "key": "basalt_small_01",
+    "name": "Basalt Rock",
+    "file": "basalt_small_01.glb",
+    "category": "nature",
+    "defaultScale": 0.6,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🌿",
+    "charredFrom": "nature_rock_small_01"
+  },
+  {
+    "key": "basalt_small_02",
+    "name": "Basalt Rock (B)",
+    "file": "basalt_small_02.glb",
+    "category": "nature",
+    "defaultScale": 0.75,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🌿",
+    "charredFrom": "nature_rock_small_02"
+  },
+  {
+    "key": "char_bush_01",
+    "name": "Dead Scorched Bush",
+    "file": "char_bush_01.glb",
+    "category": "nature",
+    "defaultScale": 2.25,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🌿",
+    "charredFrom": "nature_bush_03"
+  },
+  {
+    "key": "char_fallen_log_01",
+    "name": "Charred Fallen Log",
+    "file": "char_fallen_log_01.glb",
+    "category": "nature",
+    "defaultScale": 0.9,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🌿",
+    "charredFrom": "nature_fallen_log_01"
+  },
+  {
+    "key": "char_shrub_01",
+    "name": "Burnt Scrub",
+    "file": "char_shrub_01.glb",
+    "category": "nature",
+    "defaultScale": 2.6,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🌿",
+    "charredFrom": "shrubbery"
+  },
+  {
     "key": "nature_bush_03",
     "name": "Bush (Variant C)",
     "file": "nature_bush_03.glb",
@@ -81,6 +165,42 @@ export const EXTRA_ASSETS = [
     "icon": "🌿"
   },
   {
+    "key": "char_barricade_01",
+    "name": "Burnt Barricade",
+    "file": "char_barricade_01.glb",
+    "category": "props",
+    "defaultScale": 2.25,
+    "obstacle": true,
+    "radius": 1.1,
+    "breakable": true,
+    "icon": "📦",
+    "charredFrom": "combat_barricade_01"
+  },
+  {
+    "key": "char_logs_01",
+    "name": "Charred Log Stack",
+    "file": "char_logs_01.glb",
+    "category": "props",
+    "defaultScale": 1.2,
+    "obstacle": true,
+    "radius": 0.8,
+    "breakable": false,
+    "icon": "📦",
+    "charredFrom": "prop_logs_02"
+  },
+  {
+    "key": "char_stump_01",
+    "name": "Charred Stump",
+    "file": "char_stump_01.glb",
+    "category": "props",
+    "defaultScale": 0.9,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "📦",
+    "charredFrom": "prop_tree_stump_02"
+  },
+  {
     "key": "combat_barricade_01",
     "name": "Wooden Barricade",
     "file": "combat_barricade_01.glb",
@@ -89,6 +209,17 @@ export const EXTRA_ASSETS = [
     "obstacle": true,
     "radius": 1.1,
     "breakable": true,
+    "icon": "📦"
+  },
+  {
+    "key": "combat_broken_cart_01",
+    "name": "Broken Cart",
+    "file": "combat_broken_cart_01.glb",
+    "category": "props",
+    "defaultScale": 1.8,
+    "obstacle": true,
+    "radius": 0.9,
+    "breakable": false,
     "icon": "📦"
   },
   {
@@ -310,6 +441,42 @@ export const EXTRA_ASSETS = [
     "radius": 0,
     "breakable": true,
     "icon": "📦"
+  },
+  {
+    "key": "char_dead_tree_01",
+    "name": "Charred Dead Tree",
+    "file": "char_dead_tree_01.glb",
+    "category": "tree",
+    "defaultScale": 7.8,
+    "obstacle": true,
+    "radius": 3.9,
+    "breakable": false,
+    "icon": "🌳",
+    "charredFrom": "nature_dead_tree_03"
+  },
+  {
+    "key": "char_dead_tree_02",
+    "name": "Ashen Dead Tree",
+    "file": "char_dead_tree_02.glb",
+    "category": "tree",
+    "defaultScale": 7.8,
+    "obstacle": true,
+    "radius": 3.9,
+    "breakable": false,
+    "icon": "🌳",
+    "charredFrom": "nature_dead_tree_03"
+  },
+  {
+    "key": "char_dead_tree_03",
+    "name": "Scorched Dead Tree",
+    "file": "char_dead_tree_03.glb",
+    "category": "tree",
+    "defaultScale": 7.8,
+    "obstacle": true,
+    "radius": 3.9,
+    "breakable": false,
+    "icon": "🌳",
+    "charredFrom": "nature_dead_tree_03"
   },
   {
     "key": "nature_dead_tree_03",

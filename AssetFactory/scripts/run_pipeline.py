@@ -77,6 +77,8 @@ CATEGORY_DIRS = {
     "combat": "combat",
     "terrain": "terrain",
     "landmarks": "landmarks",
+    "volcanic": "volcanic",
+    "ogre_camp": "ogre",
 }
 
 # ═══════════════════════════════════════════════════════
@@ -287,7 +289,11 @@ def generate_sd_image(asset, attempt=0):
         print(f"    Submit failed: {e}")
         return None
 
-    ok, result = wait_for_completion(prompt_id, timeout=120, label=asset_id)
+    # 120 s was enough when this script owned the machine, but a ComfyUI queue is
+    # shared: a few prompts ahead of ours (a retry, a texture job, a second
+    # runner) push a 22 s generation past the deadline, we time out, we resubmit,
+    # and the backlog grows. 360 s waits out a realistic queue instead of feeding it.
+    ok, result = wait_for_completion(prompt_id, timeout=360, label=asset_id)
     print()  # Clear the waiting line
 
     if not ok:

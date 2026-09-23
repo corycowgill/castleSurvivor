@@ -4404,6 +4404,52 @@ const manager = {
     }
   },
 
+  // ─── AMBIENT EMBERS (Emberreach) ───
+  // Rising sparks off the hot ground, plus a little grey ash falling through them.
+  // The embers go up and the ash comes down, which reads as heat without any
+  // extra system: the same two particle groups the other maps already use.
+  ambientEmbers(playerPos) {
+    if (!quality.envParticles) return;
+    const hot = getGroup('softCircle', THREE.AdditiveBlending);
+    const count = Math.ceil(3 * quality.particleMul);
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 4 + Math.random() * 18;
+      const bright = Math.random();
+      hot.emit({
+        x: playerPos.x + Math.cos(angle) * dist,
+        y: 0.15 + Math.random() * 1.2,
+        z: playerPos.z + Math.sin(angle) * dist,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: 0.7 + Math.random() * 1.1,          // embers rise
+        vz: (Math.random() - 0.5) * 0.4,
+        color: bright > 0.7 ? 0xffd070 : bright > 0.3 ? 0xff9030 : 0xff5518,
+        sizeStart: 0.05 + Math.random() * 0.07, sizeEnd: 0.01,
+        life: 1.6 + Math.random() * 2.2,
+        opacityStart: 0.55 + Math.random() * 0.35, opacityEnd: 0,
+        drag: 0.8,
+      });
+    }
+    // A thinner fall of ash over the top
+    const ash = getGroup('smoke', THREE.NormalBlending);
+    for (let i = 0; i < Math.ceil(quality.particleMul); i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 6 + Math.random() * 16;
+      ash.emit({
+        x: playerPos.x + Math.cos(angle) * dist,
+        y: 3 + Math.random() * 4,
+        z: playerPos.z + Math.sin(angle) * dist,
+        vx: 0.4 + Math.random() * 0.4, vy: -0.25 - Math.random() * 0.2, vz: (Math.random() - 0.5) * 0.3,
+        color: 0x9a9088,
+        sizeStart: 0.05 + Math.random() * 0.07, sizeEnd: 0.03,
+        life: 3 + Math.random() * 3,
+        opacityStart: 0.22, opacityEnd: 0,
+        drag: 0.3,
+        rotSpeed: (Math.random() - 0.5) * 2,
+      });
+    }
+  },
+
   // ─── ELITE ENEMY AURA (call per-frame for living elites) ───
   eliteAura(enemy, dt) {
     if (!enemy.mesh || enemy.isDying) return;
