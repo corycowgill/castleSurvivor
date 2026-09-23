@@ -2894,8 +2894,6 @@ const MAPS = {
     // faint ground disc under enemies that have no priority ring, so wolves,
     // bats and rats still read against the dark ground away from the lanterns
     // (i 0.18 renders these dark models as flat pale silhouettes; 0.07 keeps the shading)
-    enemyTint: { hex: 0x9fc0ff, i: 0.07 },
-    enemyDisc: { hex: 0x2a4a90, opacity: 0.35, scale: 0.7 },
   },
 };
 // Shared time uniform for the animated materials (water scroll, grass sway)
@@ -3881,35 +3879,44 @@ function playPlayerAnim(name, loop = true) {
 // preset in WEAPON_ATTACH. Adding an enemy is a row here plus, if it needs one,
 // a behaviour branch in updateEnemies.
 const ENEMY_TYPES = {
-  goblin:     { id: 'goblin',     model: 'goblin',     scale: 2.8, hp: 14, speed: 4.5, speedW: 0.12, dmg: 4,  dmgW: 1.0,  xp: 2, score: 20, range: 1.8, cd: 1.2, radius: 0.5, weapon: 'dagger', canElite: true,  tint: null, colorMul: 0.55 },
-  archer:     { id: 'archer',     model: 'goblinArcher', scale: 2.6, hp: 16, speed: 4.0, speedW: 0.08, dmg: 4,  dmgW: 0.5,  xp: 3, score: 25, range: 11,  cd: 3.0, radius: 0.5, weapon: null,     canElite: false, tint: null, colorMul: 0.55 },
-  rat:        { id: 'rat',        model: 'rat',        scale: 1.5, hp: 6,  speed: 8.5, speedW: 0.3,  dmg: 2,  dmgW: 0.3,  xp: 1, score: 8,  range: 1.2, cd: 0.8, radius: 0.3, weapon: null,     canElite: false, tint: null },
-  wolf:       { id: 'wolf',       model: 'wolf',       scale: 2.2, hp: 12, speed: 8.0, speedW: 0.25, dmg: 4,  dmgW: 0.5,  xp: 1, score: 15, range: 1.5, cd: 0.7, radius: 0.5, weapon: null,     canElite: false, tint: { hex: 0x556677, i: 0.15 } },
-  bat:        { id: 'bat',        model: 'bat',        scale: 1.8, hp: 8,  speed: 6.5, speedW: 0.2,  dmg: 3,  dmgW: 0.4,  xp: 1, score: 12, range: 1.5, cd: 0.8, radius: 0.5, weapon: null,     canElite: false, tint: { hex: 0x442266, i: 0.2 } },
-  goblinBomb: { id: 'goblinBomb', model: 'goblinBomb', scale: 3.2, hp: 30, speed: 3.5, speedW: 0.08, dmg: 15, dmgW: 2.0,  xp: 4, score: 40, range: 6.0, cd: 3.0, radius: 0.6, weapon: null,     canElite: false, tint: { hex: 0xff4400, i: 0.15 }, marker: 0xff7a1a },
-  ogre:       { id: 'ogre',       model: 'ogre',       scale: 4.0, hp: 60, speed: 3.0, speedW: 0.1,  dmg: 10, dmgW: 2.0,  xp: 5, score: 50, range: 2.5, cd: 2.0, radius: 0.8, weapon: 'club',   canElite: true,  tint: null },
+  goblin:     { id: 'goblin',     model: 'goblin',     scale: 2.8, hp: 14, speed: 4.5, speedW: 0.12, dmg: 4,  dmgW: 1.0,  xp: 2, score: 20, range: 1.8, cd: 1.2, radius: 0.5, weapon: 'dagger', canElite: true, colorMul: 0.55 },
+  archer:     { id: 'archer',     model: 'goblinArcher', scale: 2.6, hp: 16, speed: 4.0, speedW: 0.08, dmg: 4,  dmgW: 0.5,  xp: 3, score: 25, range: 11,  cd: 3.0, radius: 0.5, weapon: null,     canElite: false, colorMul: 0.55 },
+  rat:        { id: 'rat',        model: 'rat',        scale: 1.5, hp: 6,  speed: 8.5, speedW: 0.3,  dmg: 2,  dmgW: 0.3,  xp: 1, score: 8,  range: 1.2, cd: 0.8, radius: 0.3, weapon: null,     canElite: false },
+  wolf:       { id: 'wolf',       model: 'wolf',       scale: 2.2, hp: 12, speed: 8.0, speedW: 0.25, dmg: 4,  dmgW: 0.5,  xp: 1, score: 15, range: 1.5, cd: 0.7, radius: 0.5, weapon: null,     canElite: false },
+  bat:        { id: 'bat',        model: 'bat',        scale: 1.8, hp: 8,  speed: 6.5, speedW: 0.2,  dmg: 3,  dmgW: 0.4,  xp: 1, score: 12, range: 1.5, cd: 0.8, radius: 0.5, weapon: null,     canElite: false },
+  goblinBomb: { id: 'goblinBomb', model: 'goblinBomb', scale: 3.2, hp: 30, speed: 3.5, speedW: 0.08, dmg: 15, dmgW: 2.0,  xp: 4, score: 40, range: 6.0, cd: 3.0, radius: 0.6, weapon: null,     canElite: false },
+  ogre:       { id: 'ogre',       model: 'ogre',       scale: 4.0, hp: 60, speed: 3.0, speedW: 0.1,  dmg: 10, dmgW: 2.0,  xp: 5, score: 50, range: 2.5, cd: 2.0, radius: 0.8, weapon: 'club',   canElite: true },
   // Hangs back like an archer; every `cd` seconds heals every foe within 6 units. A priority target.
-  shaman:     { id: 'shaman',     model: 'ogreWizard', scale: 3.5, hp: 22, speed: 3.8, speedW: 0.08, dmg: 3,  dmgW: 0.6,  xp: 5, score: 45, range: 12,  cd: 4.0, radius: 0.5, weapon: null,     canElite: false, tint: { hex: 0x8833cc, i: 0.35 }, marker: 0xb06cff },
+  shaman:     { id: 'shaman',     model: 'ogreWizard', scale: 3.5, hp: 22, speed: 3.8, speedW: 0.08, dmg: 3,  dmgW: 0.6,  xp: 5, score: 45, range: 12,  cd: 4.0, radius: 0.5, weapon: null,     canElite: false },
 };
 // Ground rings under priority targets: readable in a crowd at any distance,
 // which a tint on a 3D silhouette is not. Shared geometry, one material per colour.
 const _markerGeo = new THREE.RingGeometry(0.75, 1.05, 28);
 const _markerMats = {};
-function markerRing(colorHex, worldScale, opacity = 0.6) {
-  const key = colorHex + ':' + opacity;
-  let mat = _markerMats[key];
-  if (!mat) {
-    // No depth test: the ring must read through grass and through the crowd,
-    // the same way the elite HP bars do
-    mat = new THREE.MeshBasicMaterial({ color: colorHex, transparent: true, opacity, depthWrite: false, depthTest: false, side: THREE.DoubleSide });
-    _markerMats[key] = mat;
-  }
-  const m = new THREE.Mesh(_markerGeo, mat);
-  m.rotation.x = -Math.PI / 2;
-  m.renderOrder = 2;
-  m.scale.setScalar(worldScale);
-  return m;
+// Which enemies get a threat aura, and in what colour. This replaces the old
+// ground rings and emissive recolouring: the model keeps its own materials and
+// the danger is signalled by particles instead.
+//   elite      bright green  -- the "overpowered" tell the player must learn
+//   ogre       dim green     -- a lesser bruiser, same language, quieter
+//   shaman     violet        -- heals the pack, worth breaking off for
+//   goblinBomb amber         -- about to detonate, a survival warning
+// Ordinary goblins, rats, wolves, bats and archers stay unmarked.
+const ENEMY_AURA = {
+  elite:      { hue: 0x2bff6b, mul: 1.45 },
+  speedGoblin:{ hue: 0x00c8ff, mul: 1.0 },
+  ogre:       { hue: 0x2bcc66, mul: 0.75 },
+  shaman:     { hue: 0x9933ff, mul: 1.1 },
+  goblinBomb: { hue: 0xff6a00, mul: 1.2 },
+};
+function enemyAuraHue(enemy, def, isElite, isSpeedGoblin) {
+  const a = isElite ? ENEMY_AURA.elite
+    : isSpeedGoblin ? ENEMY_AURA.speedGoblin
+    : ENEMY_AURA[def.id];
+  if (!a) return;
+  enemy._auraHue = a.hue;
+  enemy._auraMul = a.mul;
 }
+
 const WEAPON_ATTACH = {
   club:   { pos: [0, 0.065, 0.260],       rot: [-180, -95, -90],  scale: 0.55, asset: 'club' },
   dagger: { pos: [-0.025, 0.010, 0.075],  rot: [-180, -80, -100], scale: 0.25, asset: 'dagger' },
@@ -4064,34 +4071,12 @@ function spawnEnemy(type, fixedAngle, opts) {
     mesh.scale.multiplyScalar(1.15);
   }
 
-  // Speed goblin tint
-  if (isSpeedGoblin) {
-    for (const mat of _materials) {
-      if (mat.emissive) { mat.emissive.setHex(0x2288ff); mat.emissiveIntensity = 0.2; }
-    }
-    mesh.scale.multiplyScalar(0.85);
-  }
+  // Speed goblins are smaller; their speed is the tell, not a colour.
+  if (isSpeedGoblin) mesh.scale.multiplyScalar(0.85);
 
-  // Per-type emissive tint so silhouettes read at a distance
-  if (def.tint) {
-    for (const mat of _materials) {
-      if (mat.emissive) { mat.emissive.setHex(def.tint.hex); mat.emissiveIntensity = def.tint.i; }
-    }
-  }
-  // Per-map rim tint (Darkwood moonlight) added on top of the type tint; elites
-  // and speed goblins keep their own colour, bosses do not pass through here
-  const mapTint = MAPS[loadedMap] && MAPS[loadedMap].enemyTint;
-  if (mapTint && !isElite && !isSpeedGoblin) {
-    const rim = new THREE.Color(mapTint.hex).multiplyScalar(mapTint.i);
-    for (const mat of _materials) {
-      if (!mat.emissive) continue;
-      const i0 = mat.emissiveIntensity || 0;
-      const sum = mat.emissive.clone().multiplyScalar(i0).add(rim);
-      const iSum = i0 + mapTint.i;
-      mat.emissive.copy(sum.multiplyScalar(1 / iSum));
-      mat.emissiveIntensity = iSum;
-    }
-  }
+  // Enemies keep their own colours. Threat is signalled with VFX instead --
+  // see the eliteAura call in updateEnemies -- because recolouring the models
+  // washed them out and made a goblin read as a lamp rather than a goblin.
 
   // Store original emissive after all tinting for attack telegraph
   for (const mat of _materials) {
@@ -4143,23 +4128,9 @@ function spawnEnemy(type, fixedAngle, opts) {
     eliteAbilityCD: isElite ? (isOgre ? 5.0 : 6.0) : 0,
   };
 
-  // Priority-target ring (elites gold; archers, shamans and bombers their own colour).
-  // The ring is a child of the mesh, so it is scaled back to world size and
-  // pinned near the ground regardless of the model's scale or foot offset.
-  const markerColor = isElite ? 0xffaa22 : isSpeedGoblin ? 0x33aaff : def.marker; // speed goblins: the blue tint alone is invisible at distance
-  if (markerColor) {
-    const ring = markerRing(markerColor, (isElite ? 1.15 : 1.0) / mesh.scale.x);
-    ring.position.y = (-mesh.position.y + 0.12) / mesh.scale.x;
-    mesh.add(ring);
-  } else if (MAPS[loadedMap] && MAPS[loadedMap].enemyDisc) {
-    // Map-wide faint disc (Darkwood) for enemies that have no priority ring;
-    // smaller and dimmer than the rings so it never reads as a priority target
-    const D = MAPS[loadedMap].enemyDisc;
-    const disc = markerRing(D.hex, D.scale / mesh.scale.x, D.opacity);
-    disc.position.y = (-mesh.position.y + 0.1) / mesh.scale.x;
-    disc.renderOrder = 1;
-    mesh.add(disc);
-  }
+  // Which enemies announce themselves, and in what colour. Drives the sparkle
+  // aura in updateEnemies; no ground rings and no recolouring of the model.
+  enemyAuraHue(enemy, def, isElite, isSpeedGoblin);
 
   // Add health bar sprite for elites and ogres
   if (isElite || isOgre) {
@@ -6119,6 +6090,13 @@ function updateEnemies(dt) {
       enemy.mesh.position.x += enemy.knockback.dx * kbSpeed * dt;
       enemy.mesh.position.z += enemy.knockback.dz * kbSpeed * dt;
       continue; // skip normal movement during knockback
+    }
+
+    // Threat aura. Distance-gated so a screen full of elites does not drown the
+    // particle budget; eDist is already the squared distance to the target.
+    if (enemy._auraHue && !enemy.isDying && _renderEnabled && eDist < 2600) {
+      vfx.eliteAura(enemy.mesh.position, (enemy.radius || 0.5) * 1.6 * enemy._auraMul,
+                    dt, 2.2 * enemy._auraMul, enemy._auraHue);
     }
 
     // Move toward player

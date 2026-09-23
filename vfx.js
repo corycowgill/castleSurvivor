@@ -3888,6 +3888,40 @@ const manager = {
     }
   },
 
+  // Elite / dangerous enemy marker. Replaces the old ground rings and emissive
+  // recolouring, which washed the models out and made a goblin read as a lamp.
+  // Instead the threat announces itself with motion: green sparks rising off the
+  // silhouette, so the model keeps its own colours and still draws the eye.
+  eliteAura(position, radius, dt, height = 2.0, hue = 0x66ff88) {
+    // Deliberately NOT gated on quality.envParticles. This marks which enemy
+    // will kill you, so it is gameplay readability rather than ambience -- it
+    // thins out on low-end machines but must never disappear entirely.
+    // Stateless emission, same approach as burningGround: several elites can
+    // sparkle at once without sharing one accumulator.
+    const want = 34 * Math.max(0.5, quality.particleMul) * dt;
+    let n = Math.floor(want);
+    if (Math.random() < want - n) n++;
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * 6.283;
+      const r = Math.sqrt(Math.random()) * radius;
+      getGroup('star', THREE.AdditiveBlending).emit({
+        x: position.x + Math.cos(a) * r,
+        y: position.y + Math.random() * height * 0.55,
+        z: position.z + Math.sin(a) * r,
+        vx: Math.cos(a) * 0.3, vy: 1.3 + Math.random() * 1.1, vz: Math.sin(a) * 0.3,
+        color: hue, colorEnd: 0x0a5522,
+        sizeStart: 0.30 + Math.random() * 0.22, sizeEnd: 0.03,
+        life: 0.8 + Math.random() * 0.5,
+        opacityStart: 0.8, opacityEnd: 0,
+        turbulence: 0.7, drag: 1.4,
+        spin: (Math.random() - 0.5) * 6,
+      });
+    }
+    // No ground disc here on purpose. A soft circle big enough to read from the
+    // gameplay camera renders as a glowing donut -- i.e. exactly the ground ring
+    // this replaced. The sparks alone carry the signal.
+  },
+
   // ─── ENVIRONMENT ───
   torchFlame(pos) {
     preset_fire(pos, 3);
