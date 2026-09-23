@@ -140,8 +140,9 @@ srv.listen(0, '127.0.0.1', async () => {
 
   check('party has 3 players', r.partySize === 3, `${r.partySize}`);
   check('devices are primary/pad/keyboard', r.devices.join(',') === 'primary,pad,kb', r.devices.join(','));
-  check('per-character max HP applied', r.maxHp[0] === 115 && r.maxHp[1] === 110 && r.maxHp[2] === 100, r.maxHp.join('/'));
-  check('per-character primary weapon', r.primaries.join(',') === 'sword,spear,quickblade', r.primaries.join(','));
+  // Parker is the glass-cannon wizard: 100 base minus 15 from Arcane Focus.
+  check('per-character max HP applied', r.maxHp[0] === 115 && r.maxHp[1] === 110 && r.maxHp[2] === 85, r.maxHp.join('/'));
+  check('per-character primary weapon', r.primaries.join(',') === 'sword,spear,staff', r.primaries.join(','));
   check('pad moves ONLY P2', r.padMoved[1] > 5 && r.padMoved[0] < 1 && r.padMoved[2] < 1, r.padMoved.join('/'));
   check('arrows move ONLY P3', r.kbMoved[2] > 5 && r.kbMoved[0] < 1 && r.kbMoved[1] < 1, r.kbMoved.join('/'));
   check('WASD moves ONLY P1', r.wasdMoved[0] > 5 && r.wasdMoved[1] < 1 && r.wasdMoved[2] < 1, r.wasdMoved.join('/'));

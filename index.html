@@ -54,7 +54,7 @@ canvas { display: block; }
 /* ─── START SCREEN ─── */
 #start-screen {
   position: fixed; inset: 0;
-  background: url('castleSurvivorTitleScreen.png') center center / cover no-repeat;
+  background: url('castleBackgroundTitle.png') center center / cover no-repeat;
   display: none; flex-direction: column; align-items: center;
   z-index: 999; color: #c9a253;
   overflow-y: auto;
@@ -1138,7 +1138,7 @@ body.picking-coop #level-up-screen .divider { margin: 4px 0 8px; }
       <div class="char-card" data-char="parker">
         <canvas id="preview-parker" width="360" height="360"></canvas>
         <div class="char-name">Parker</div>
-        <div class="char-title">The Chivalrous</div>
+        <div class="char-title">The Arcane</div>
       </div>
     </div>
     <div id="char-bio-area">The leader of the kingdom's knights, sworn to protect the realm with his wisdom and leadership.
@@ -1385,21 +1385,22 @@ const MAGNET_SPEED = 12;
 // Each knight has a different primary (melee) weapon; the other slots are
 // filled from level-ups. Limiting slots is what turns picks into a build.
 const MAX_WEAPON_SLOTS = 4;
-const CHARACTER_PRIMARY = { dad: 'sword', brennan: 'spear', parker: 'quickblade' };
+const CHARACTER_PRIMARY = { dad: 'sword', brennan: 'spear', parker: 'staff' };
 const PRIMARY_WEAPONS = new Set(['sword', 'spear', 'quickblade']);
 const WEAPON_NAMES = {
-  sword: 'Sword', spear: 'Spear', quickblade: 'Quickblade',
+  sword: 'Sword', spear: 'Spear', quickblade: 'Quickblade', staff: 'Arcane Staff',
   dagger: 'Throwing Daggers', holyAura: 'Holy Aura', arrowVolley: 'Arrow Volley', orbitalBomb: 'Arcane Bomb',
   wardShields: 'Warding Shields', stormCall: 'Storm Call', emberTrail: 'Trail of Embers',
 };
 const WEAPON_ICONS = {
-  sword: '⚔', spear: '🔱', quickblade: '⚡', dagger: '🗡', holyAura: '✦', arrowVolley: '🏹', orbitalBomb: '💣',
+  sword: '⚔', spear: '🔱', quickblade: '⚡', staff: '🪄', dagger: '🗡', holyAura: '✦', arrowVolley: '🏹', orbitalBomb: '💣',
   wardShields: '🛡', stormCall: '🌩', emberTrail: '🔥',
 };
 const playerWeapons = {
   sword: { owned: true, level: 1 },
   spear: { owned: false, level: 0 },
   quickblade: { owned: false, level: 0 },
+  staff: { owned: false, level: 0 },
   dagger: { owned: false, level: 0 },
   holyAura: { owned: false, level: 0 },
   arrowVolley: { owned: false, level: 0 },
@@ -1437,6 +1438,18 @@ const WEAPON_STATS = {
     evo: { dmgMul: 2, cdMul: 0.85, range: 1.5, halfAngle: 0.6, cleave: 99, knockback: 2.5, style: 'dragon' },
   },
   // Parker — fast, light. Low damage, high tempo, and his dash cuts through foes.
+  // Parker's wizard primary. A ranged bolt rather than a melee arc, so the third
+  // knight plays differently from the two swordsmen: high single-target damage,
+  // long reach, but nothing to fall back on when a crowd closes in.
+  staff: {
+    damage:   [0, 16, 23, 32, 43, 58],
+    cooldown: [0, 0.95, 0.85, 0.75, 0.66, 0.56],
+    range:    [0, 14, 15, 16, 17, 18],
+    speed:    34,
+    pierce:   [0, 0, 0, 1, 1, 2],
+    shape: 'bolt', knockback: 0.3, style: 'arcane',
+    evo: { dmgMul: 1.6, cdMul: 0.7, range: 3, pierceBonus: 2, style: 'arcane' },
+  },
   quickblade: {
     damage:   [0, 12, 17, 23, 30, 40],
     cooldown: [0, 0.7, 0.62, 0.55, 0.48, 0.4],
@@ -1581,9 +1594,10 @@ const CHARACTER_PASSIVES = {
     apply: (ps) => { ps.attackRange += 1.0; ps.critChance += 0.10; ps.maxHp += 10; ps.hp += 10; rerollCharges += 1; },
   },
   parker: {
-    name: 'Swift Guardian',
-    desc: 'Quickblade primary, +1.5 Speed, +1 Armor, dashes cut through foes',
-    apply: (ps) => { ps.speed += 1.5; ps.armor += 1; ps._dashCDBonus = 0.5; ps.dashStrike = true; },
+    name: 'Arcane Focus',
+    desc: 'Arcane Staff primary, +25% Crit, +0.5 Speed, but -15 Max HP and no armour',
+    // Glass cannon: he outranges everything and hits hardest, and dies fastest.
+    apply: (ps) => { ps.critChance += 0.25; ps.speed += 0.5; ps.maxHp -= 15; ps.hp -= 15; ps._dashCDBonus = 0.5; },
   },
 };
 function getDashCooldown(p) {
@@ -2237,11 +2251,11 @@ const assetList = [
   { key: 'knightAnims', file: 'knightWithAnimations.glb' },
   { key: 'charDad', file: 'dadwrig.glb', keepBuffer: true },
   { key: 'charBrennan', file: 'brennwrig.glb', keepBuffer: true },
-  { key: 'charParker', file: 'parkerwrig.glb', keepBuffer: true },
+  { key: 'charParker', file: 'parkerWizardAnimated.glb', keepBuffer: true },
   // Static character previews for select screen
   { key: 'charDadPreview', file: 'dadKnightFinal.glb' },
   { key: 'charBrennanPreview', file: 'brennanKingtFinal.glb' },
-  { key: 'charParkerPreview', file: 'parkerKnightFinal.glb' },
+  { key: 'charParkerPreview', file: 'parkerWizardAnimated.glb' },
   { key: 'goblin', file: 'goblineWithAnimations.glb', keepBuffer: true },
   { key: 'ogre', file: 'orgreWithAnimations.glb', keepBuffer: true },
   { key: 'wolf', file: 'wolfWithAnimation.glb', keepBuffer: true },
@@ -2293,6 +2307,7 @@ const assetList = [
   { key: 'arrow', file: 'arros.glb' },
   { key: 'spear', file: 'spearWeapon.glb' },
   { key: 'shield', file: 'shieldModel.glb' },
+  { key: 'wizardStaff', file: 'wizardStaff.glb' },
 ];
 
 let loadedCount = 0;
@@ -2363,10 +2378,10 @@ const obstacles = [];
 const ASSET_FILE_MAP = {
   charDad: 'dadwrig.glb',
   charBrennan: 'brennwrig.glb',
-  charParker: 'parkerwrig.glb',
+  charParker: 'parkerWizardAnimated.glb',
   charDadPreview: 'dadKnightFinal.glb',
   charBrennanPreview: 'brennanKingtFinal.glb',
-  charParkerPreview: 'parkerKnightFinal.glb',
+  charParkerPreview: 'parkerWizardAnimated.glb',
   humanCastle: 'HumanCastle.glb',
   ogreCastle: 'OrgreCastle.glb',
   house: 'peasntHouse1WithMesh_00001_.glb',
@@ -3691,7 +3706,14 @@ async function createPlayer(index = 0) {
   });
   if (handBoneR) {
     const DEG = Math.PI / 180;
-    if (p.character === 'brennan' && assets.spear) {
+    if (p.character === 'parker' && assets.wizardStaff) {
+      const staff = assets.wizardStaff.scene.clone();
+      staff.position.set(-0.010, 0.050, 0.170);
+      staff.rotation.set(-272 * DEG, -59 * DEG, 3 * DEG);
+      staff.scale.setScalar(0.94);
+      staff.traverse(c => { if (c.isMesh) { c.castShadow = true; } });
+      handBoneR.add(staff);
+    } else if (p.character === 'brennan' && assets.spear) {
       const spear = assets.spear.scene.clone();
       spear.position.set(-0.010, 0.050, 0.170);
       spear.rotation.set(-272 * DEG, -59 * DEG, 3 * DEG);
@@ -3709,7 +3731,7 @@ async function createPlayer(index = 0) {
   }
 
   // Attach shield to left hand (Dad & Parker)
-  if ((p.character === 'dad' || p.character === 'parker') && assets.shield) {
+  if (p.character === 'dad' && assets.shield) {
     let handBoneL = null;
     p.mesh.traverse(c => {
       if (c.isBone && c.name === 'hand_l') handBoneL = c;
@@ -3741,7 +3763,7 @@ async function createPlayer(index = 0) {
     playerMesh = p.mesh; playerMixer = p.mixer; _heroRing = p.ring;
     currentPlayerAnim = '';
   }
-  playPlayerAnimFor(p, 'Idle_A', true);
+  playPlayerAnimFor(p, p.character === 'parker' ? 'Spell_Simple_Idle' : 'Idle_A', true);
   if (index === 0) adoptLegacyIntoPlayer0();
 }
 
@@ -3774,7 +3796,7 @@ async function joinPlayer(character = 'brennan', device = null) {
   const passive = CHARACTER_PASSIVES[p.character];
   if (passive) passive.apply(p.state);
   applyForgeStatsTo(p.state);
-  p.state.primaryWeapon = p.character === 'brennan' ? 'spear' : p.character === 'parker' ? 'quickblade' : 'sword';
+  p.state.primaryWeapon = CHARACTER_PRIMARY[p.character] || 'sword';
   p.weapons[p.state.primaryWeapon].owned = true;
   p.weapons[p.state.primaryWeapon].level = Math.max(1, p.weapons[p.state.primaryWeapon].level);
   return p;
@@ -5412,6 +5434,21 @@ function updatePlayer(p, dt) {
     if (closestEnemy) {
       _tv1.subVectors(closestEnemy.mesh.position, pmesh.position);
       pmesh.rotation.y = Math.atan2(_tv1.x, _tv1.z);
+
+      // Ranged primary (the wizard's staff): cast a bolt at the target instead
+      // of swinging. Returns early -- none of the arc/cleave logic applies.
+      if (pStats.shape === 'bolt') {
+        AudioSystem.play('swordSwing', { volume: 0.45, pitch: 1.5 + Math.random() * 0.2 });
+        playPlayerAnimFor(p, 'Spell_Simple_Shoot', false);
+        ps.isAttacking = true;
+        ps._atkResetTimer = Math.min(0.7, pCD * 0.9);
+        _tv1.normalize();
+        const boltPierce = (pStats.pierce ? pStats.pierce[pLvl] : 0) + (pEvo && evo.pierceBonus ? evo.pierceBonus : 0);
+        const origin = _tv2.copy(pmesh.position); origin.y += 1.6;
+        spawnProjectile('dagger', origin, _tv1, pDmg, pStats.speed, pRange + 6, boltPierce);
+        ps.attackTimer = pCD;
+        return;
+      }
 
       AudioSystem.play('swordSwing', { volume: 0.6, pitch: (primary === 'quickblade' ? 1.15 : primary === 'spear' ? 0.8 : 0.9) + Math.random() * 0.2 });
       playPlayerAnimFor(p, 'Sword_Attack', false);
@@ -9779,7 +9816,7 @@ function pauseCharacterPreviews() {
 const CHARACTER_BIOS = {
   dad: "The leader of the kingdom's knights, sworn to protect the realm with his wisdom and leadership.",
   brennan: "An honor bound knight who takes his sworn oath to protect the kingdom seriously. A rational and critical thinker, he often outwits his opponents with his intellect and raw power.",
-  parker: "A charismatic knight, known throughout the kingdom for his chivalry and honor. He always has a witty comment and is friend to all."
+  parker: "Once a knight, now sworn to the arcane. He traded shield and blade for a staff and the old words, and strikes from further than any sword can reach — so long as nothing reaches him first."
 };
 document.querySelectorAll('.char-card').forEach(card => {
   card.addEventListener('click', () => {
@@ -10401,7 +10438,7 @@ init().then(() => {
     window.__cs = {
       state, enemies, pickups, playerWeapons, upgradeRanks, runStats, keys, weaponTimers,
       UPGRADES, WEAPON_STATS, MAPS, OGRE_LEVELS, FINAL_WAVE,
-      players, nearestPlayer, alivePlayers, joinPlayer, makePlayer, createPlayer, partyFocus, AudioSystem,
+      players, nearestPlayer, alivePlayers, joinPlayer, makePlayer, createPlayer, partyFocus, AudioSystem, projectiles, CHARACTER_PRIMARY,
       gamepadStates, padSlot, readInput, gainXP, partyXpToNext, coopPending, updateCoopJoin, renderCoopRoster, pollGamepad, damagePlayer, triggerPlayerDeath,
       partySpawnMul, partyHpMul, partyBossHpMul, partyMaxEnemies,
       get primaryPadIndex() { return primaryPadIndex; },
