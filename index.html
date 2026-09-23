@@ -470,18 +470,41 @@ canvas { display: block; }
   display: none; flex-direction: column; align-items: center; justify-content: center;
   z-index: 500;
 }
-/* Co-op: the fight keeps running, so the card picker becomes a compact panel
-   pinned to the left instead of a full-screen blackout. */
+/* Co-op: the fight keeps running, so the card picker is a panel rather than a
+   full-screen blackout. It used to be pinned bottom-LEFT, where it read as a
+   separate window that had opened over the game and said nothing about whose it
+   was. It is now centred along the bottom, carries the picking knight's colour
+   on its frame, and names both the knight and the keys -- on a shared screen the
+   first question is always "is this mine?". */
 body.picking-coop #level-up-screen {
-  inset: auto auto 12px 12px;
-  width: 440px; max-height: 62vh; overflow-y: auto;
-  background: linear-gradient(180deg, rgba(30,15,5,0.96), rgba(10,5,2,0.97));
-  border: 2px solid #5a3a1a; border-radius: 8px;
-  box-shadow: 0 8px 28px rgba(0,0,0,0.7);
-  padding: 10px 14px 14px; align-items: stretch; justify-content: flex-start;
+  inset: auto 0 14px 0; margin: 0 auto;
+  width: min(560px, 94vw); max-height: 56vh; overflow-y: auto;
+  background: linear-gradient(180deg, rgba(30,15,5,0.97), rgba(10,5,2,0.98));
+  border: 2px solid var(--pick-tint, #5a3a1a); border-radius: 8px;
+  box-shadow: 0 8px 34px rgba(0,0,0,0.8), 0 0 0 1px rgba(0,0,0,0.6),
+              0 0 26px -6px var(--pick-tint, transparent);
+  padding: 10px 14px 12px; align-items: stretch; justify-content: flex-start;
 }
-body.picking-coop #level-up-screen h2 { font-size: 24px; margin-bottom: 4px; }
-body.picking-coop #level-up-screen .divider { margin: 4px 0 8px; }
+body.picking-coop #level-up-screen h2 { font-size: 22px; margin-bottom: 2px; }
+body.picking-coop #level-up-screen .divider { margin: 3px 0 7px; }
+body.picking-coop .upgrade-btn { width: auto; margin: 4px 0; padding: 9px 14px; }
+/* Who is picking, and with what. */
+#pick-owner {
+  display: none; font-family: 'Cinzel', serif; font-size: 13px; font-weight: 700;
+  letter-spacing: 1.5px; text-align: center; color: var(--pick-tint, #c9a253);
+}
+body.picking-coop #pick-owner { display: block; }
+#pick-hint {
+  display: none; font-family: 'MedievalSharp', cursive; font-size: 12px;
+  text-align: center; color: #9a8258; margin-top: 6px;
+}
+body.picking-coop #pick-hint { display: block; }
+/* Everyone else needs to know why a panel appeared and that they can keep
+   fighting through it. */
+#pick-waiting {
+  top: 126px; font-size: 13px; display: none; z-index: 310;
+  color: var(--pick-tint, #c9a253); border-color: var(--pick-tint, rgba(201,162,83,0.28));
+}
 #level-up-screen h2 {
   font-family: 'Cinzel Decorative', serif; font-size: 46px; font-weight: 900;
   color: #c9a253; letter-spacing: 3px; margin-bottom: 10px;
@@ -1086,18 +1109,49 @@ body.picking-coop #level-up-screen .divider { margin: 4px 0 8px; }
   margin-top: 10px; letter-spacing: 1px; text-align: center;
 }
 
-/* ─── CO-OP HUD (companion health) ─── */
-#coop-hud { margin-top: 5px; display: flex; flex-direction: column; gap: 3px; }
-.coop-hp-row { display: grid; grid-template-columns: 26px 1fr auto; gap: 6px; align-items: center; }
-.coop-hp-who { font-family: 'Cinzel', serif; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
+/* ─── CO-OP HUD (companion health) ───
+   Companions used to get an 8px bar labelled "P2" tucked under player 1's panel,
+   which read as no health bar at all -- the first co-op report was literally
+   "there is no health for the second player". Each knight now gets a row the
+   size of a real HUD element, named, in its own ring colour. */
+#coop-hud { margin-top: 7px; display: flex; flex-direction: column; gap: 5px; }
+.coop-hp-row {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 7px; align-items: center;
+  padding: 3px 5px; border-radius: 4px;
+  background: rgba(0,0,0,0.35); border-left: 3px solid var(--tint, #fff);
+}
+.coop-hp-who {
+  font-family: 'Cinzel', serif; font-size: 12px; font-weight: 700; letter-spacing: 1px;
+  min-width: 74px;
+}
 .coop-hp-outer {
-  height: 8px; background: rgba(0,0,0,0.55);
+  height: 14px; background: rgba(0,0,0,0.6);
   border: 1px solid #3a2510; border-radius: 3px; overflow: hidden;
 }
 .coop-hp-inner { height: 100%; transition: width 0.15s; }
-.coop-hp-text { font-family: 'MedievalSharp', cursive; font-size: 10px; color: #8a7040; min-width: 54px; text-align: right; }
-.coop-hp-row.is-down { opacity: 0.45; }
-.coop-hp-row.is-down .coop-hp-text { color: #b05050; }
+.coop-hp-text {
+  font-family: 'MedievalSharp', cursive; font-size: 12px; color: #c0a878;
+  min-width: 70px; text-align: right;
+}
+/* Down is a state you must be able to read at a glance from across the room. */
+.coop-hp-row.is-down { background: rgba(70,10,10,0.45); border-left-color: #d04040; }
+.coop-hp-row.is-down .coop-hp-who { color: #ff9a9a !important; }
+.coop-hp-row.is-down .coop-hp-text { color: #ff8080; }
+.coop-hp-row.is-down .coop-hp-inner { background: #d04040 !important; }
+.coop-hp-row.is-reviving { background: rgba(20,60,20,0.45); border-left-color: #6ad06a; }
+.coop-hp-row.is-reviving .coop-hp-inner { background: #6ad06a !important; }
+
+/* ─── REVIVE BANNER ───
+   Revive is proximity-only: stand within REVIVE_RANGE of a downed knight for
+   REVIVE_SECONDS. There is no button to press, which is right for kids but
+   impossible to guess, so it has to be said on screen. */
+#revive-banner {
+  top: 92px; font-size: 17px; display: none; z-index: 320;
+  background: rgba(60,6,6,0.82); border-color: rgba(255,120,120,0.55);
+  color: #ffd9d9; padding: 6px 20px;
+}
+#revive-banner.reviving { background: rgba(10,50,10,0.82); border-color: rgba(140,240,140,0.6); color: #dcffdc; }
+#revive-banner .rb-sub { display: block; font-size: 12px; letter-spacing: 1px; opacity: 0.85; margin-top: 2px; }
 
 /* ─── CO-OP JOIN ROSTER ─── */
 #coop-roster { margin: 6px 0 2px; text-align: center; }
@@ -1460,6 +1514,7 @@ body.picking-coop #level-up-screen .divider { margin: 4px 0 8px; }
 </div>
 
 <div id="level-up-screen">
+  <div id="pick-owner"></div>
   <h2>LEVEL UP</h2>
   <div class="divider"></div>
   <div id="upgrade-options"></div>
@@ -1469,6 +1524,7 @@ body.picking-coop #level-up-screen .divider { margin: 4px 0 8px; }
     <button id="skip-btn" class="lu-action">SKIP</button>
   </div>
   <div class="menu-hint">1 / 2 / 3 or D-Pad + A to choose &bull; R / X reroll &bull; B / Y banish &bull; Esc skip</div>
+  <div id="pick-hint"></div>
 </div>
 
 <div id="pause-screen">
@@ -1518,6 +1574,8 @@ body.picking-coop #level-up-screen .divider { margin: 4px 0 8px; }
   <div id="touch-pause-btn">&#x2759;&#x2759;</div>
 </div>
 <div id="wave-announce" class="hud-strip"></div>
+<div id="revive-banner" class="hud-strip"></div>
+<div id="pick-waiting" class="hud-strip"></div>
 
 <script type="importmap">
 {
@@ -1544,7 +1602,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 // shipped in. `number` is the commit count this change will produce. Do not
 // hand-edit: the stamper matches the two marker lines exactly.
 /* BUILD:START */
-const BUILD = { number: 38, date: '2026-09-23' };
+const BUILD = { number: 39, date: '2026-09-23' };
 /* BUILD:END */
 for (const el of document.querySelectorAll('.build-badge')) el.textContent = `BUILD ${BUILD.number}`;
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -2399,9 +2457,46 @@ function triggerPlayerDeath(p) {
   players[0].state._gameOverTimer = 2.5;
 }
 
+// On-screen rescue instructions. Revive is proximity-only -- there is no button
+// to press -- which is the right call for kids but impossible to guess, so the
+// banner has to spell out the whole mechanic: who is down, what to do, and how
+// long there is to do it. It names the knight rather than the slot, because that
+// is what the person holding the pad identifies with.
+let _reviveBannerEl = null;
+function updateReviveBanner() {
+  if (!_reviveBannerEl) _reviveBannerEl = document.getElementById('revive-banner');
+  const el = _reviveBannerEl;
+  if (!el) return;
+  if (players.length < 2 || !state.started) { el.style.display = 'none'; return; }
+
+  let downed = null, best = -1;
+  for (const p of players) {
+    if (!p.state.isDead || p.state.bledOut) continue;
+    // If more than one is down, show whoever is closest to being saved.
+    const prog = p.state.reviveProgress || 0;
+    if (prog > best) { best = prog; downed = p; }
+  }
+  if (!downed) { el.style.display = 'none'; return; }
+
+  const ps = downed.state;
+  const nm = (CHARACTER_NAMES[downed.character] || `P${downed.index + 1}`).toUpperCase();
+  const reviving = (ps.reviveProgress || 0) > 0;
+  el.classList.toggle('reviving', reviving);
+  if (reviving) {
+    const pct = Math.round(Math.min(1, ps.reviveProgress / REVIVE_SECONDS) * 100);
+    el.innerHTML = `REVIVING ${nm}\u2026 ${pct}%`
+      + `<span class="rb-sub">KEEP STANDING CLOSE</span>`;
+  } else {
+    el.innerHTML = `${nm} IS DOWN \u2014 ${Math.max(0, Math.ceil(ps.bleedOut || 0))}s`
+      + `<span class="rb-sub">RUN TO THEM AND STAND CLOSE \u2014 NO BUTTON NEEDED</span>`;
+  }
+  el.style.display = 'block';
+}
+
 // Revive: a standing knight near a downed one fills a timer; break contact and
 // it decays. Bleeding out makes the down permanent for the rest of the run.
 function updateDownedPlayers(dt) {
+  updateReviveBanner();
   if (players.length < 2) return;
   for (const p of players) {
     const ps = p.state;
@@ -7584,6 +7679,8 @@ function presentNextLevelUp() {
 function closeUpgradeScreen() {
   document.getElementById('level-up-screen').style.display = 'none';
   document.body.classList.remove('picking-coop');
+  const _waitEl = document.getElementById('pick-waiting');
+  if (_waitEl) _waitEl.style.display = 'none';
   _upgradeScreenOpen = false;
   _pickingPlayer = null;
   // _lastPickerIndex deliberately survives here: it is what makes the next
@@ -8104,13 +8201,42 @@ function showLevelUp(isChest) {
   const heading = screen.querySelector('h2');
   const still = players.reduce((n, p) => n + (p.pendingPicks || 0), 0);
   const queued = still > 0 ? ` <span style="font-size:20px;color:#8a7040">(+${still} more)</span>` : '';
-  const who = coop && _pickingPlayer ? `P${_pickingPlayer.index + 1} ` : '';
-  heading.innerHTML = who + (isChest ? 'TREASURE!' : 'LEVEL UP') + queued;
+  heading.innerHTML = (isChest ? 'TREASURE!' : 'LEVEL UP') + queued;
   heading.style.color = isChest ? '#e8c860' : '#c9a253';
+  // Whose pick this is, in that knight's ring colour, plus the device they hold.
+  // Everyone else gets a line telling them to keep fighting.
+  const ownerEl = document.getElementById('pick-owner');
+  const hintEl = document.getElementById('pick-hint');
+  const waitEl = document.getElementById('pick-waiting');
+  if (coop && _pickingPlayer) {
+    const idx = _pickingPlayer.index;
+    const tint = _COOP_HUD_TINT[idx] || '#c9a253';
+    const nm = (CHARACTER_NAMES[_pickingPlayer.character] || `Player ${idx + 1}`).toUpperCase();
+    screen.style.setProperty('--pick-tint', tint);
+    ownerEl.textContent = `P${idx + 1} \u2014 ${nm}`;
+    hintEl.textContent = `${describePickDevice(_pickingPlayer)} \u00b7 everyone else keeps fighting`;
+    if (waitEl) {
+      waitEl.style.setProperty('--pick-tint', tint);
+      waitEl.textContent = `${nm} IS CHOOSING AN UPGRADE`;
+      waitEl.style.display = 'block';
+    }
+  } else if (waitEl) {
+    waitEl.style.display = 'none';
+  }
   options.innerHTML = '';
   screen.style.display = 'flex';
 
   populateUpgradeChoices(isChest ? 2 : 3, screen, options, isChest);
+}
+
+// What the picking knight should physically press. A shared screen with a pad,
+// the arrows and WASD in play at once makes "press 1/2/3" useless on its own.
+function describePickDevice(p) {
+  if (!p) return 'Pick a card';
+  if (p.index === 0) return 'Keys 1 / 2 / 3, or D-Pad + A on your pad';
+  if (p.device && p.device.type === 'kb') return 'Arrow keys to choose, Right Shift to confirm';
+  if (p.padIndex != null) return `Pad ${p.padIndex + 1}: D-Pad to choose, A to confirm`;
+  return 'Keys 1 / 2 / 3, or D-Pad + A on your pad';
 }
 
 // The run-defining picks. Fortune's Favor promises "rarer upgrades", so luck
@@ -8309,6 +8435,7 @@ function _setStyle(el, key, prop, val) { if (_hudPrev[key] !== val) { _hudPrev[k
 // Companion health rows. Player 1 keeps the full bar above; the others get a
 // compact row each in their ring colour so they can read their own HP.
 const _COOP_HUD_TINT = ['#e8c860', '#7ec8ff', '#8fe08f'];
+const CHARACTER_NAMES = { dad: 'Dad', brennan: 'Brennan', parker: 'Parker' };
 let _coopHudBuiltFor = -1;
 function updateCoopHud() {
   const el = document.getElementById('coop-hud');
@@ -8322,8 +8449,13 @@ function updateCoopHud() {
     let html = '';
     for (let i = 1; i < players.length; i++) {
       const tint = _COOP_HUD_TINT[i] || '#ffffff';
-      html += `<div class="coop-hp-row" id="coop-hp-${i}">`
-        + `<div class="coop-hp-who" style="color:${tint}">P${i + 1}</div>`
+      // The knight's name, not just "P2" -- on a shared screen you look for the
+      // character you are playing, not a slot number.
+      // Name when we know it; the slot number alone otherwise -- never "P2 P2".
+      const nm = CHARACTER_NAMES[players[i].character];
+      const label = nm ? `P${i + 1} ${nm.toUpperCase()}` : `PLAYER ${i + 1}`;
+      html += `<div class="coop-hp-row" id="coop-hp-${i}" style="--tint:${tint}">`
+        + `<div class="coop-hp-who" style="color:${tint}">${label}</div>`
         + `<div class="coop-hp-outer"><div class="coop-hp-inner" id="coop-hp-bar-${i}" style="background:${tint}"></div></div>`
         + `<div class="coop-hp-text" id="coop-hp-txt-${i}"></div></div>`;
     }
@@ -8336,6 +8468,10 @@ function updateCoopHud() {
     const txt = document.getElementById(`coop-hp-txt-${i}`);
     const row = document.getElementById(`coop-hp-${i}`);
     if (!bar || !txt) continue;
+    if (row) {
+      row.classList.toggle('is-down', !!ps.isDead && !ps.bledOut);
+      row.classList.toggle('is-reviving', !!ps.isDead && (ps.reviveProgress || 0) > 0);
+    }
     if (ps.isDead) {
       // While down the bar shows rescue progress, or bleed-out if nobody is near.
       const rev = (ps.reviveProgress || 0) / REVIVE_SECONDS;
