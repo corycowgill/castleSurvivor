@@ -1067,7 +1067,20 @@ body.picking-coop #level-up-screen .divider { margin: 4px 0 8px; }
    and the flex centering defeated the start screen's own scroll. This compacts
    the layout so everything fits, keeps the screen genuinely scrollable as a
    fallback, and pins the button so it can never be lost off-screen again. */
-@media (max-height: 1000px), (pointer: coarse) {
+/* Pinning the button helps ANY short window, desktop included -- at 1080p
+   maximised the viewport is ~955px and the button sat below the fold there
+   too. This part is deliberately broad. */
+@media (max-height: 1000px) {
+  #start-screen { padding-bottom: 88px; }
+  #start-btn {
+    position: fixed; left: 50%; transform: translateX(-50%);
+    bottom: 14px; z-index: 1002; min-width: 220px;
+  }
+}
+
+/* The aggressive shrink is for phones only. Keyed on width, not height:
+   max-height alone caught 1920x955 desktops and shrank their cards to 132px. */
+@media (max-width: 900px), (pointer: coarse) and (max-height: 820px) {
   #start-screen {
     justify-content: flex-start;
     padding-bottom: 92px;              /* room for the pinned button */
@@ -1092,11 +1105,6 @@ body.picking-coop #level-up-screen .divider { margin: 4px 0 8px; }
   #coop-hint { font-size: 9px; line-height: 1.35; }
   #start-gold { font-size: 12px; margin: 2px 0; }
 
-  /* Always reachable, whatever the content height does. */
-  #start-btn {
-    position: fixed; left: 50%; transform: translateX(-50%);
-    bottom: 14px; z-index: 1002; min-width: 220px;
-  }
   /* The secondary menu ran off both edges at 430px wide. */
   .menu-row {
     margin-bottom: 6px; flex-wrap: wrap; justify-content: center;
