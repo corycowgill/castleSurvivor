@@ -14,7 +14,8 @@
  */
 import { NodeIO } from '@gltf-transform/core';
 import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
-import { dedup, textureCompress, prune, draco } from '@gltf-transform/functions';
+import { dedup, textureCompress, prune, draco, simplify, weld } from '@gltf-transform/functions';
+import { MeshoptSimplifier } from 'meshoptimizer';
 import sharp from 'sharp';
 import draco3d from 'draco3dgltf';
 import fs from 'fs';
@@ -73,11 +74,12 @@ async function main() {
 
   const names = flag('all')
     ? scan().map(m => m.name)
-    : args.filter(a => !a.startsWith('--') && args[args.indexOf(a) - 1] !== '--res');
+    : args.filter((a, i) => !a.startsWith('--') && !['--res', '--simplify'].includes(args[i - 1]));
 
   if (!names.length) { console.error('Nothing to do. Use --check, --all, or name models.'); process.exit(1); }
 
   const res = parseInt(opt('res', '1024'), 10);
+  const ratio = parseFloat(opt('simplify', '0'));
   const dry = flag('dry');
   fs.mkdirSync(BACKUP, { recursive: true });
 
@@ -97,12 +99,17 @@ async function main() {
     const inSize = fs.statSync(backup).size;
     // Always read the pristine original so re-runs don't stack lossy passes.
     const doc = await io.read(backup);
-    await doc.transform(
-      prune(),
-      dedup(),
-      textureCompress({ encoder: sharp, targetFormat: 'webp', resize: [res, res] }),
-      draco(),
-    );
+    const steps = [prune(), dedup()];
+    if (ratio > 0 && ratio < 1) {
+      // weld first: Trellis meshes carry split vertices that stop the simplifier
+      // collapsing anything. error is generous because these are viewed from a
+      // top-down gameplay camera, not inspected up close.
+      steps.push(weld({ tolerance: 0.0001 }));
+      steps.push(simplify({ simplifier: MeshoptSimplifier, ratio, error: 0.01 }));
+    }
+    steps.push(textureCompress({ encoder: sharp, targetFormat: 'webp', resize: [res, res] }));
+    steps.push(draco());
+    await doc.transform(...steps);
 
     const out = dry ? path.join(BACKUP, '_dry_' + name + '.glb') : file;
     await io.write(out, doc);
