@@ -3888,6 +3888,56 @@ const manager = {
     }
   },
 
+  // Damage feedback on an enemy, replacing the old full-model red recolour.
+  // A burst of sparks at the point of impact plus a brief flash reads as a hit
+  // without repainting the creature, which turned every wounded goblin scarlet.
+  enemyHit(position, crit = false, scale = 1) {
+    const n = Math.round((crit ? 10 : 6) * Math.max(0.4, quality.particleMul));
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * 6.283;
+      const up = 0.4 + Math.random() * 0.9;
+      getGroup('spark', THREE.AdditiveBlending).emit({
+        x: position.x + (Math.random() - 0.5) * 0.3 * scale,
+        y: position.y + 0.8 + (Math.random() - 0.5) * 0.5 * scale,
+        z: position.z + (Math.random() - 0.5) * 0.3 * scale,
+        vx: Math.cos(a) * (2.2 + Math.random() * 2.4),
+        vy: up * 2.6,
+        vz: Math.sin(a) * (2.2 + Math.random() * 2.4),
+        color: crit ? 0xffdd66 : 0xffffff, colorEnd: crit ? 0xff6600 : 0xaa3322,
+        sizeStart: (crit ? 0.26 : 0.18) * scale, sizeEnd: 0.01,
+        life: 0.18 + Math.random() * 0.14,
+        opacityStart: 1, opacityEnd: 0,
+        gravity: -7, drag: 2.2,
+      });
+    }
+    spawnImpactFlash(
+      { x: position.x, y: position.y + 0.9, z: position.z },
+      crit ? 0xffcc44 : 0xffffff,
+      (crit ? 1.5 : 1.0) * scale, crit ? 0.11 : 0.07);
+  },
+
+  // Persistent "this one is enraged / shielded" marker, again as VFX rather
+  // than repainting the model. Hotter and faster than the elite sparkle.
+  enemyEnraged(position, radius, dt, hue = 0xff3a10) {
+    const want = 30 * Math.max(0.5, quality.particleMul) * dt;
+    let n = Math.floor(want);
+    if (Math.random() < want - n) n++;
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * 6.283;
+      const r = Math.sqrt(Math.random()) * radius;
+      getGroup('flame', THREE.AdditiveBlending).emit({
+        x: position.x + Math.cos(a) * r, y: position.y + 0.2 + Math.random() * 1.2,
+        z: position.z + Math.sin(a) * r,
+        vy: 2.2 + Math.random() * 1.6,
+        color: hue, colorEnd: 0x551100,
+        sizeStart: 0.34 + Math.random() * 0.26, sizeEnd: 0.03,
+        life: 0.4 + Math.random() * 0.25,
+        opacityStart: 0.8, opacityEnd: 0,
+        turbulence: 1.4, drag: 1.1,
+      });
+    }
+  },
+
   // Elite / dangerous enemy marker. Replaces the old ground rings and emissive
   // recolouring, which washed the models out and made a goblin read as a lamp.
   // Instead the threat announces itself with motion: green sparks rising off the

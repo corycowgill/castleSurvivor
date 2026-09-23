@@ -1756,12 +1756,13 @@ let _streakDisplayEl = null;
 function getStreakDisplay() { return _streakDisplayEl || (_streakDisplayEl = document.getElementById('streak-display')); }
 let _comboDisplayEl = null;
 function getComboDisplay() { return _comboDisplayEl || (_comboDisplayEl = document.getElementById('combo-display')); }
-function setHitFlash(enemy, duration) {
+// Damage feedback is VFX only. This used to repaint every material on the
+// creature bright red, which made a wounded goblin read as a different,
+// scarlet creature rather than a goblin that had just been hit.
+function setHitFlash(enemy, duration, crit) {
   enemy.hitFlash = duration;
-  const mats = enemy._materials;
-  if (mats) for (let m = 0; m < mats.length; m++) {
-    const mat = mats[m];
-    if (mat.emissive) { mat.emissive.setHex(0xff3333); mat.emissiveIntensity = 0.5; }
+  if (_renderEnabled && enemy.mesh) {
+    vfx.enemyHit(enemy.mesh.position, !!crit, Math.max(0.8, (enemy.radius || 0.5) * 1.8));
   }
 }
 function restoreEmissive(enemy) {
@@ -4326,8 +4327,6 @@ function spawnDragonOgreBoss(wave, isFinal = false) {
     if (c.isMesh) {
       c.castShadow = true;
       c.material = c.material.clone();
-      c.material.emissive = new THREE.Color(isFinal ? 0xffaa00 : 0xff4400);
-      c.material.emissiveIntensity = isFinal ? 0.35 : 0.25;
     }
   });
   scene.add(mesh);
@@ -4471,7 +4470,6 @@ function updateBossPattern(enemy, dt, dist, dir) {
     const mats = enemy._materials;
     for (let m = 0; m < mats.length; m++) {
       const mat = mats[m];
-      if (mat.emissive) { mat.emissive.setHex(pulse ? 0xff6600 : (mat._origEmissive || 0)); mat.emissiveIntensity = pulse ? 0.8 : (mat._origEmissiveI || 0); }
     }
     if (p.t >= p.dur) { p.phase = 'active'; p.t = 0; restoreEmissive(enemy); executePattern(enemy, p, dist); }
     return true;
@@ -5586,7 +5584,7 @@ function applyDamage(enemy, amount, opts) {
   runStats.totalDamageDealt += dmg;
   runStats.damageBySource[source] = (runStats.damageBySource[source] || 0) + dmg;
   const flash = opts.flash != null ? opts.flash : 0.12;
-  setHitFlash(enemy, _lastHitCrit ? flash * 1.6 : flash);
+  setHitFlash(enemy, _lastHitCrit ? flash * 1.6 : flash, _lastHitCrit);
   if (enemy.hpBarSprite) updateHPBarSprite(enemy.hpBarSprite, Math.max(0, enemy.hp / enemy.maxHp));
   spawnDamageNumber(enemy.mesh.position, dmg, _lastHitCrit ? (opts.critColor || '#ff4444') : (opts.color || '#c9a253'));
   if (_lastHitCrit) {
@@ -5892,7 +5890,7 @@ function updateEnemies(dt) {
       if (phase > (enemy._guardPhase || 0)) {
         enemy._guardPhase = phase;
         enemy._invulnUntil = state.time + 8;
-        for (const mat of enemy._materials) if (mat.emissive) { mat.emissive.setHex(0xffffff); mat.emissiveIntensity = 0.9; mat._origEmissive = 0xffaa00; mat._origEmissiveI = 0.35; }
+        enemy._enragedHue = 0xffd23a;   // guard phase reads through the aura
         vfx.runeCircle(enemy.mesh.position, { color: 0xffcc33, radius: 7, duration: 8, sweep: 0.15, peakOpacity: 1.0 });
         vfx.bossEntrance(enemy.mesh.position, true);
         spawnFormation(phase === 1 ? 'ogreWall' : 'coven', 0.5);
@@ -5934,9 +5932,7 @@ function updateEnemies(dt) {
         enemy.damage = enemy.baseDamage * 1.5;
         enemy.attackCooldown = enemy.baseAttackCooldown * 0.6;
         if (enemy.isDragonOgre) { enemy.boulderAoeRadius = 6.5; }
-        for (const mat of enemy._materials) {
-          if (mat.emissive) { mat.emissive.setHex(0xff2200); mat.emissiveIntensity = 0.6; mat._origEmissive = 0xff2200; mat._origEmissiveI = 0.6; }
-        }
+        enemy._enragedHue = 0xff2a08;   // VFX aura, not a recolour
         triggerShake(0.8, 0.5);
         vfx.bossEntrance(enemy.mesh.position, enemy.isDragonOgre);
         const announce = getWaveAnnounce();
@@ -5949,9 +5945,7 @@ function updateEnemies(dt) {
         enemy.damage = enemy.baseDamage * 1.25;
         enemy.attackCooldown = enemy.baseAttackCooldown * 0.8;
         if (enemy.isDragonOgre) { enemy.boulderAoeRadius = 5.5; }
-        for (const mat of enemy._materials) {
-          if (mat.emissive) { mat.emissive.setHex(0xff6600); mat.emissiveIntensity = 0.4; mat._origEmissive = 0xff6600; mat._origEmissiveI = 0.4; }
-        }
+        enemy._enragedHue = 0xff7a10;   // VFX aura, not a recolour
         triggerShake(0.6, 0.4);
         const announce = getWaveAnnounce();
         announce.textContent = `${enemy.bossName} IS ENRAGED!`;
@@ -6094,9 +6088,15 @@ function updateEnemies(dt) {
 
     // Threat aura. Distance-gated so a screen full of elites does not drown the
     // particle budget; eDist is already the squared distance to the target.
-    if (enemy._auraHue && !enemy.isDying && _renderEnabled && eDist < 2600) {
-      vfx.eliteAura(enemy.mesh.position, (enemy.radius || 0.5) * 1.6 * enemy._auraMul,
-                    dt, 2.2 * enemy._auraMul, enemy._auraHue);
+    if (!enemy.isDying && _renderEnabled && eDist < 2600) {
+      if (enemy._auraHue) {
+        vfx.eliteAura(enemy.mesh.position, (enemy.radius || 0.5) * 1.6 * enemy._auraMul,
+                      dt, 2.2 * enemy._auraMul, enemy._auraHue);
+      }
+      // Enraged / guarding bosses burn on top of whatever else they carry.
+      if (enemy._enragedHue) {
+        vfx.enemyEnraged(enemy.mesh.position, (enemy.radius || 0.8) * 1.5, dt, enemy._enragedHue);
+      }
     }
 
     // Move toward player
@@ -6117,7 +6117,6 @@ function updateEnemies(dt) {
       const wMats = enemy._materials;
       for (let m = 0; m < wMats.length; m++) {
         const mat = wMats[m];
-        if (mat.emissive) { mat.emissive.setHex(pulse ? 0xff2200 : (mat._origEmissive || 0)); mat.emissiveIntensity = pulse ? 0.7 : (mat._origEmissiveI || 0); }
       }
       if (enemy.windupTimer <= 0) {
         restoreEmissive(enemy);
@@ -6202,7 +6201,6 @@ function updateEnemies(dt) {
         const aMats = enemy._materials;
         for (let m = 0; m < aMats.length; m++) {
           const mat = aMats[m];
-          if (mat.emissive) { mat.emissive.setHex(pulse ? 0xffe066 : (mat._origEmissive || 0)); mat.emissiveIntensity = pulse ? 0.9 : (mat._origEmissiveI || 0); }
         }
         if (enemy.arrowReleaseTimer <= 0) { restoreEmissive(enemy); fireEnemyArrow(enemy); }
       }
@@ -6309,18 +6307,12 @@ function updateEnemies(dt) {
         }
         enemy.bombFuseTimer -= dt;
         enemy.bombFlashTimer += dt;
-        // Flash increasingly fast as fuse burns down
-        const flashSpeed = 4 + (1.5 - enemy.bombFuseTimer) * 12; // starts slow, gets frantic
-        const flashOn = Math.sin(enemy.bombFlashTimer * flashSpeed) > 0;
-        const mats = enemy._materials;
-        if (mats) {
-          for (let m = 0; m < mats.length; m++) {
-            const mat = mats[m];
-            if (mat.emissive) {
-              mat.emissive.setHex(flashOn ? 0xff2200 : 0xff8800);
-              mat.emissiveIntensity = flashOn ? 1.0 : 0.3;
-            }
-          }
+        // Fuse telegraph: the aura burns faster and hotter as it runs down,
+        // rather than strobing the model between two shades of orange.
+        const fuse = Math.max(0, Math.min(1, 1 - enemy.bombFuseTimer / 1.5));
+        if (_renderEnabled && enemy.mesh) {
+          vfx.enemyEnraged(enemy.mesh.position, (enemy.radius || 0.6) * (1.2 + fuse * 1.3),
+                           dt * (1 + fuse * 3), fuse > 0.66 ? 0xffdd33 : 0xff6a00);
         }
         // DETONATE
         if (enemy.bombFuseTimer <= 0) {
@@ -7161,11 +7153,8 @@ function updateWaves(dt) {
       // used to apply a second, stacking enrage at 30% — a desperate boss ended
       // up at 2.4x speed. Only the visual pulse remains here.
       if (currentBoss.enragePhase > 0 && currentBoss.hitFlash <= 0) {
-        const base = currentBoss.enragePhase === 2 ? 0.6 : 0.4;
-        const pulse = base + Math.sin(state.time * 6) * 0.15;
-        for (const mat of currentBoss._materials) {
-          if (mat.emissive) mat.emissiveIntensity = pulse;
-        }
+        // Enrage reads through currentBoss._enragedHue in updateEnemies; the
+        // model itself is never recoloured.
       }
     }
   }
