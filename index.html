@@ -719,17 +719,51 @@ body.picking-coop #level-up-screen .divider { margin: 4px 0 8px; }
   pointer-events: none; display: none;
   transform: translate(-50%, -50%);
 }
+/* The minimap on touch is 110px at bottom:10/right:10, so it occupies the
+   bottom-right corner up to 120px from the bottom. The dash button used to sit
+   at bottom:80 and overlapped it by 64x40px -- it covered the map, and a thumb
+   aiming at the map's corner hit the button instead. It now clears the minimap
+   entirely, and the target grew 64 -> 76px: a miss lands on the full-screen
+   stick zone, which does nothing while the stick is already held, and reads
+   exactly like a dead button. */
 #touch-dash-btn {
-  position: fixed; right: 24px; bottom: 80px; width: 64px; height: 64px;
+  position: fixed; right: 18px; bottom: 136px; width: 76px; height: 76px;
   border-radius: 50%; z-index: 200; touch-action: none;
   background: radial-gradient(circle, rgba(30,15,5,0.85), rgba(15,8,2,0.9));
   border: 2px solid rgba(201,162,83,0.5);
   display: flex; align-items: center; justify-content: center;
-  font-family: 'Cinzel', serif; font-size: 12px; font-weight: 700;
+  font-family: 'Cinzel', serif; font-size: 13px; font-weight: 700;
   color: #c9a253; text-shadow: 0 1px 2px rgba(0,0,0,0.8);
   -webkit-tap-highlight-color: transparent;
 }
-#touch-dash-btn.on-cd { opacity: 0.4; border-color: rgba(90,58,26,0.5); }
+/* Pressed state. Without it there is no confirmation the tap landed, so a dash
+   refused for any reason is indistinguishable from a button that did nothing. */
+#touch-dash-btn.pressed {
+  background: radial-gradient(circle, rgba(90,60,20,0.95), rgba(40,22,6,0.95));
+  border-color: rgba(233,200,96,0.95); color: #ffe9a8;
+  transform: scale(0.93);
+}
+/* Cooldown is up to 2.5 s. A flat 0.4 opacity on a dark button over dark ground
+   was easy to miss, so the remaining time is drawn as a sweep around the rim. */
+#touch-dash-btn.on-cd { border-color: rgba(90,58,26,0.6); color: rgba(201,162,83,0.45); }
+#touch-dash-btn::after {
+  content: ''; position: absolute; inset: -2px; border-radius: 50%;
+  background: conic-gradient(rgba(201,162,83,0.55) var(--cd, 0deg), transparent 0deg);
+  -webkit-mask: radial-gradient(circle, transparent 60%, #000 62%);
+  mask: radial-gradient(circle, transparent 60%, #000 62%);
+  opacity: 0; pointer-events: none;
+}
+#touch-dash-btn.on-cd::after { opacity: 1; }
+/* Live input readout for ?touchdebug. iOS Safari has no devtools, so when a
+   control misbehaves on a real phone the only way to see why is to put the
+   state on the screen. */
+#touch-debug {
+  position: fixed; top: 56px; left: 8px; z-index: 400;
+  font: 11px/1.45 ui-monospace, Menlo, Consolas, monospace;
+  color: #9ef; background: rgba(0,0,0,0.72); padding: 6px 8px;
+  border: 1px solid rgba(120,200,255,0.35); border-radius: 4px;
+  white-space: pre; pointer-events: none; max-width: 62vw;
+}
 #touch-pause-btn {
   position: fixed; top: 12px; right: 12px; width: 40px; height: 40px;
   border-radius: 8px; z-index: 200; touch-action: none;
@@ -1510,7 +1544,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 // shipped in. `number` is the commit count this change will produce. Do not
 // hand-edit: the stamper matches the two marker lines exactly.
 /* BUILD:START */
-const BUILD = { number: 37, date: '2026-09-23' };
+const BUILD = { number: 38, date: '2026-09-23' };
 /* BUILD:END */
 for (const el of document.querySelectorAll('.build-badge')) el.textContent = `BUILD ${BUILD.number}`;
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -5527,6 +5561,7 @@ function updatePlayer(p, dt) {
   if (dashInput && moving && ps.dashCooldown <= 0 && !ps.isDashing) {
     ps.isDashing = true;
     ps.dashCooldown = dashCD;
+    ps.dashCooldownMax = dashCD;   // so the touch button can draw the sweep
     ps.dashTimer = 0.15;
     ps.iframes = hasRelic('windwalker', p) ? 0.4 : 0.2; // brief i-frames during dash
     ps._dashId = (ps._dashId || 0) + 1;
@@ -8386,9 +8421,14 @@ function updateHUD() {
       _hudEls.dashFill.style.height = `${(1 - p.dashCooldown / dashCD) * 100}%`;
     }
   }
-  // Touch dash button cooldown
+  // Touch dash button cooldown: dim it and sweep the rim as it refills.
   if (_isTouch && _hudEls.touchDash) {
-    _hudEls.touchDash.classList.toggle('on-cd', p.dashCooldown > 0);
+    const onCd = p.dashCooldown > 0;
+    _hudEls.touchDash.classList.toggle('on-cd', onCd);
+    if (onCd) {
+      const max = p.dashCooldownMax || getDashCooldown();
+      _hudEls.touchDash.style.setProperty('--cd', `${(1 - p.dashCooldown / max) * 360}deg`);
+    }
   }
 
   // Update weapon HUD — only rebuild DOM if content changed
@@ -10106,11 +10146,16 @@ if (_isTouch) document.body.classList.add('touch-active');
     base.style.display = 'none';
     knob.style.display = 'none';
   }
-  function dashStart(id) { touchState.dash = true; touchState.dashId = id; }
+  function dashStart(id) {
+    touchState.dash = true;
+    touchState.dashId = id;
+    dashBtn.classList.add('pressed');
+  }
   function dashEnd(id) {
     if (id !== touchState.dashId) return;
     touchState.dash = false;
     touchState.dashId = -1;
+    dashBtn.classList.remove('pressed');
   }
 
   if (USE_TOUCH_EVENTS) {
@@ -10133,8 +10178,8 @@ if (_isTouch) document.body.classList.add('touch-active');
       const t = find(e.changedTouches, touchState.stickId);
       if (t) stickEnd(t.identifier);
     };
-    zone.addEventListener('touchend', endT);
-    zone.addEventListener('touchcancel', endT);
+    window.addEventListener('touchend', endT);
+    window.addEventListener('touchcancel', endT);
 
     dashBtn.addEventListener('touchstart', (e) => {
       e.preventDefault();
@@ -10145,8 +10190,11 @@ if (_isTouch) document.body.classList.add('touch-active');
       const t = find(e.changedTouches, touchState.dashId);
       if (t) dashEnd(t.identifier);
     };
-    dashBtn.addEventListener('touchend', endD);
-    dashBtn.addEventListener('touchcancel', endD);
+    // On window, not the button: iOS can deliver the end of a touch elsewhere
+    // (a system gesture, the app backgrounding), and a missed touchend leaves
+    // dash stuck on. Same for the stick below.
+    window.addEventListener('touchend', endD);
+    window.addEventListener('touchcancel', endD);
 
     pauseBtn.addEventListener('touchstart', (e) => { e.preventDefault(); togglePause(); }, { passive: false });
   } else {
@@ -10171,6 +10219,37 @@ if (_isTouch) document.body.classList.add('touch-active');
   }
 
   document.addEventListener('touchmove', (e) => { if (e.target.closest('#touch-controls')) e.preventDefault(); }, { passive: false });
+
+  // ?touchdebug — live input state on screen. The two-thumb case (hold the
+  // stick, tap DASH) passes in Chrome device emulation but has been reported
+  // dead on a real iPhone, and there is no way to attach a debugger to one.
+  // This shows whether the tap is reaching the button at all, which separates
+  // "the button never fires" from "the dash was refused" (cooldown, or not
+  // moving -- a dash needs a direction and does nothing while you stand still).
+  if (new URLSearchParams(location.search).has('touchdebug')) {
+    const el = document.createElement('div');
+    el.id = 'touch-debug';
+    document.body.appendChild(el);
+    let events = [];
+    const log = (name) => (e) => {
+      events.push(`${name}:${e.changedTouches ? e.changedTouches.length : 1}@${Math.round(performance.now() % 100000)}`);
+      if (events.length > 4) events.shift();
+    };
+    for (const n of ['touchstart', 'touchend', 'touchcancel'])
+      window.addEventListener(n, log(n), { capture: true, passive: true });
+    dashBtn.addEventListener('touchstart', log('DASH-hit'), { capture: true, passive: true });
+
+    const tick = () => {
+      const ps = players[0] && players[0].state;
+      el.textContent =
+        `stick  id=${touchState.stickId} x=${touchState.stickX.toFixed(2)} y=${touchState.stickY.toFixed(2)}\n` +
+        `dash   held=${touchState.dash} id=${touchState.dashId}\n` +
+        `player moving=${ps ? !!ps._moving : '-'} cd=${ps ? ps.dashCooldown.toFixed(2) : '-'} dashing=${ps ? !!ps.isDashing : '-'}\n` +
+        `events ${events.join(' ') || '(none)'}`;
+      requestAnimationFrame(tick);
+    };
+    tick();
+  }
 })();
 
 // ─── CHARACTER PREVIEW RENDERERS ───
@@ -10972,7 +11051,7 @@ init().then(() => {
       openAudit, closeAudit, collectAudit, renderAudit,
       setLowQuality, applyQualityMode, detectMobile,
       get lowQuality() { return LOW_QUALITY; },
-      gamepadStates, padSlot, readInput, gainXP, partyXpToNext, coopPending, updateCoopJoin, renderCoopRoster, pollGamepad, damagePlayer, triggerPlayerDeath,
+      gamepadStates, padSlot, readInput, touchState, gainXP, partyXpToNext, coopPending, updateCoopJoin, renderCoopRoster, pollGamepad, damagePlayer, triggerPlayerDeath,
       partySpawnMul, partyHpMul, partyBossHpMul, partyMaxEnemies,
       get primaryPadIndex() { return primaryPadIndex; },
       get playerMesh() { return playerMesh; },
