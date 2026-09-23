@@ -1,0 +1,23 @@
+#!/bin/sh
+# Stamp the build number into index.html and include it in this commit.
+#
+# Lives in the repo rather than .git/hooks so it is version-controlled. It is
+# wired up with:
+#
+#   git config core.hooksPath .githooks
+#
+# which a fresh clone has to run once. Without it the hook simply never runs and
+# the build number stops advancing -- nothing breaks.
+#
+# Amends and rebases re-run this, which is correct: the number tracks the commit
+# count the tree will have, so a reworded commit keeps its number and a new one
+# gets the next.
+set -e
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "pre-commit: node not found, skipping build stamp" >&2
+  exit 0
+fi
+
+node tools/stamp-build.mjs
+git add index.html

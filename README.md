@@ -18,7 +18,7 @@ If you have played Vampire Survivors or Deep Rock Galactic: Survivor, you alread
 - **Three relic slots** for conditional passives — a revive, lifesteal, damage that scales with the size of the crowd.
 - **Evolutions** need a weapon at level 5 *and* a matching stat pick. Excalibur, Meteor Shower, Armageddon, Inferno Wake.
 
-The three knights are genuinely different. Dad is the sturdy generalist with a broadsword and a shield-wall passive. Brennan trades health for a piercing spear thrust and a free reroll. Parker is fast and fragile with a quickblade and a dash strike.
+The three knights are genuinely different. Dad is the sturdy generalist with a broadsword and a shield-wall passive. Brennan trades health for a piercing spear thrust and a free reroll. Parker is a wizard — an arcane staff that outranges everything at 14–18 units, +25% crit, and the lowest health in the game.
 
 **Two battlefields.** Kingsfield is a castle town of farms, lantern-lit streets and curtain walls. Darkwood is a pine forest under a cold moon where wolves and bats hunt and the trees hem you in.
 
@@ -91,17 +91,29 @@ Opening `index.html` directly works too, though a server is better — ES module
 
 `npm install` is only needed for the tooling (the playtest harness and asset scripts). The game itself has no runtime dependencies beyond the Three.js CDN import.
 
+**One-time, if you are going to commit:**
+
+```bash
+git config core.hooksPath .githooks
+```
+
+That wires up `.githooks/pre-commit`, which stamps the build number into `index.html` before each commit so the title screen always shows the build it shipped in (bottom-right, `BUILD 37`). The number is the commit count, so it matches `git rev-list --count <sha>`. Skipping this breaks nothing — the number just stops advancing. `node tools/stamp-build.mjs --check` prints what would be written without touching the file.
+
 **Deployment** is any static host. No build command; publish directory is the repository root.
 
 ---
 
 ## Project docs
 
-- **`PLAN.md`** — the quality roadmap, 18 phases of tracked work
-- **`COOP-PLAN.md`** — design plan for 1–3 player local and online co-op, in progress
+- **`PLAN.md`** — the quality roadmap, 23 phases of tracked work
+- **`COOP-PLAN.md`** — design plan for 1–3 player local and online co-op. Local co-op shipped; the online phases are deferred
 - **`ASSETS.md`** — the asset catalogue
 - **`tools/reports/`** — press-style reviews used to drive the roadmap, plus balance and profiling logs
 
 ## Status
 
-Playable start to finish and reviewed at 7.5/10 against the Vampire Survivors bar. Known gaps: the content pool thins out after about ten runs, a wave-5 boss spike ends a lot of early runs, and enemy models render darker than intended because a brightness multiplier survives the lighting fix. Local co-op is partially built — the player array and multi-knight spawning are in; input, camera and HUD are not.
+Playable start to finish and reviewed at 7/10 against the Vampire Survivors bar.
+
+**Local co-op is done** — 1–3 knights on one screen, per-device input, party camera, downed-and-revive, shared XP, verified 19/19 by `tools/coop-verify.mjs`. Touch controls and a low-quality mode make it playable on a phone.
+
+Known gaps: the content pool still thins out after about ten runs (PLAN 18.5), 3-player difficulty scaling was reasoned out but never measured (19.5), and a wave-5 boss spike ends a lot of early runs.

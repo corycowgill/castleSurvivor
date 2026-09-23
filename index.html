@@ -13,6 +13,28 @@ body { overflow: hidden; background: #000; font-family: 'Cinzel', 'Georgia', ser
 canvas { display: block; }
 
 /* ─── LOADING SCREEN ─── */
+/* Build stamp, bottom-right of the loading and title screens. A descendant of
+   each screen, so it appears and disappears with them without any JS. The
+   numbers are written into the BUILD constant below by tools/stamp-build.mjs,
+   which .githooks/pre-commit runs on every commit -- the point is being able to
+   read the build off a screenshot or a phone photo. */
+/* Selector carries the parent id: #start-screen > * sets position:relative and
+   would otherwise out-specify a bare .build-badge and drop it into the flex
+   column at the top of the screen. */
+#loading-screen .build-badge, #start-screen .build-badge {
+  position: fixed; right: 10px; bottom: 8px; z-index: 2;
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 11px; letter-spacing: 0.08em;
+  color: #c9a253; opacity: 0.45;
+  pointer-events: none; -webkit-user-select: none; user-select: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+}
+/* BEGIN QUEST is pinned bottom-centre with a 220px min-width, so a small
+   right-anchored stamp clears it even at 430px. */
+@media (max-width: 900px), (pointer: coarse) and (max-height: 820px) {
+  #loading-screen .build-badge, #start-screen .build-badge { font-size: 10px; right: 6px; bottom: 5px; }
+}
+
 #loading-screen {
   position: fixed; inset: 0;
   background: url('castleBackgroundTitle.png') center center / cover no-repeat;
@@ -1217,9 +1239,11 @@ body.picking-coop #level-up-screen .divider { margin: 4px 0 8px; }
   <div id="load-text">Preparing the realm...</div>
   <div id="loading-quote"></div>
   <div id="loading-quote-attr"></div>
+  <div class="build-badge"></div>
 </div>
 
 <div id="start-screen">
+  <div class="build-badge"></div>
   <h1>Castle Survivor</h1>
   <h2>Defend Your Kingdom</h2>
   <div class="divider"></div>
@@ -1479,6 +1503,16 @@ import { createVFXSystem } from './vfx.js';
 import { EXTRA_ASSETS } from './assets-extra.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+
+// ─── BUILD STAMP ───
+// Rewritten in place by tools/stamp-build.mjs, which .githooks/pre-commit runs
+// before every commit, so the number on screen always identifies the commit it
+// shipped in. `number` is the commit count this change will produce. Do not
+// hand-edit: the stamper matches the two marker lines exactly.
+/* BUILD:START */
+const BUILD = { number: 37, date: '2026-09-23' };
+/* BUILD:END */
+for (const el of document.querySelectorAll('.build-badge')) el.textContent = `BUILD ${BUILD.number}`;
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
