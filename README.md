@@ -1,6 +1,6 @@
 # Castle Survivor
 
-A browser-based survivors-like built in Three.js. Three knights — Dad, Brennan and Parker — hold a medieval kingdom against twenty waves of goblins, wolves and ogres.
+A browser-based survivors-like built in Three.js. Three knights — Dad and the boys — hold a medieval kingdom against twenty waves of goblins, wolves and ogres.
 
 It is a family project: the three playable knights are a father and his two sons.
 
