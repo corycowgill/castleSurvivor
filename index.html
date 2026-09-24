@@ -125,6 +125,16 @@ canvas { display: block; }
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 .char-card:hover { border-color: #b8923e; }
+/* Who has this knight. The one thing the select screen never said out loud. */
+.char-card { position: relative; }
+.char-owner {
+  position: absolute; top: 6px; right: 6px; display: none;
+  padding: 1px 7px; border-radius: 9px;
+  font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  color: #1a0f04; background: #c9a253; box-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+/* A companion's knight: still clickable (it swaps), just not player 1's. */
+.char-card.taken { border-color: #6b5a2e; opacity: 0.92; }
 .char-card.selected {
   border-color: #e8c860;
   box-shadow: 0 0 20px rgba(232,200,96,0.25), 0 4px 20px rgba(0,0,0,0.6);
@@ -470,41 +480,29 @@ canvas { display: block; }
   display: none; flex-direction: column; align-items: center; justify-content: center;
   z-index: 500;
 }
-/* Co-op: the fight keeps running, so the card picker is a panel rather than a
-   full-screen blackout. It used to be pinned bottom-LEFT, where it read as a
-   separate window that had opened over the game and said nothing about whose it
-   was. It is now centred along the bottom, carries the picking knight's colour
-   on its frame, and names both the knight and the keys -- on a shared screen the
-   first question is always "is this mine?". */
-body.picking-coop #level-up-screen {
-  inset: auto 0 14px 0; margin: 0 auto;
-  width: min(560px, 94vw); max-height: 56vh; overflow-y: auto;
-  background: linear-gradient(180deg, rgba(30,15,5,0.97), rgba(10,5,2,0.98));
-  border: 2px solid var(--pick-tint, #5a3a1a); border-radius: 8px;
-  box-shadow: 0 8px 34px rgba(0,0,0,0.8), 0 0 0 1px rgba(0,0,0,0.6),
-              0 0 26px -6px var(--pick-tint, transparent);
-  padding: 10px 14px 12px; align-items: stretch; justify-content: flex-start;
+/* Co-op: the screen is modal for everyone, but it is ONE knight's pick. The
+   panel wears that knight's colour and names them above the cards, because on a
+   shared screen the first question is always "is this mine?". */
+body.coop-pick #level-up-screen {
+  background: radial-gradient(ellipse at center, rgba(30,15,5,0.94) 0%, rgba(0,0,0,0.97) 100%);
+  box-shadow: inset 0 0 0 3px var(--pick-tint, transparent),
+              inset 0 0 90px -30px var(--pick-tint, transparent);
 }
-body.picking-coop #level-up-screen h2 { font-size: 22px; margin-bottom: 2px; }
-body.picking-coop #level-up-screen .divider { margin: 3px 0 7px; }
-body.picking-coop .upgrade-btn { width: auto; margin: 4px 0; padding: 9px 14px; }
+body.coop-pick .upgrade-btn { border-color: var(--pick-tint, #5a3a1a); }
 /* Who is picking, and with what. */
 #pick-owner {
-  display: none; font-family: 'Cinzel', serif; font-size: 13px; font-weight: 700;
-  letter-spacing: 1.5px; text-align: center; color: var(--pick-tint, #c9a253);
+  display: none; font-family: 'Cinzel', serif; font-size: 17px; font-weight: 700;
+  letter-spacing: 2.5px; text-align: center; margin-bottom: 6px;
+  color: var(--pick-tint, #c9a253); text-shadow: 0 0 18px var(--pick-tint, transparent);
 }
-body.picking-coop #pick-owner { display: block; }
+body.coop-pick #pick-owner { display: block; }
 #pick-hint {
-  display: none; font-family: 'MedievalSharp', cursive; font-size: 12px;
+  display: none; font-family: 'MedievalSharp', cursive; font-size: 13px;
   text-align: center; color: #9a8258; margin-top: 6px;
 }
-body.picking-coop #pick-hint { display: block; }
-/* Everyone else needs to know why a panel appeared and that they can keep
-   fighting through it. */
-#pick-waiting {
-  top: 126px; font-size: 13px; display: none; z-index: 310;
-  color: var(--pick-tint, #c9a253); border-color: var(--pick-tint, rgba(201,162,83,0.28));
-}
+body.coop-pick #pick-hint { display: block; }
+/* With one knight picking, the generic key legend is a lie for the other two. */
+body.coop-pick #level-up-screen .menu-hint { display: none; }
 #level-up-screen h2 {
   font-family: 'Cinzel Decorative', serif; font-size: 46px; font-weight: 900;
   color: #c9a253; letter-spacing: 3px; margin-bottom: 10px;
@@ -603,9 +601,16 @@ body.picking-coop #pick-hint { display: block; }
   font-family: 'MedievalSharp', cursive; color: #b0a060;
   font-size: 17px; line-height: 1.9; margin-bottom: 24px; text-align: center;
   display: grid; grid-template-columns: auto auto; gap: 2px 24px;
+  /* Three knights' builds do not fit on one screen; the buttons must stay put. */
+  max-height: 62vh; overflow-y: auto; padding-right: 4px;
 }
 #pause-stats span:nth-child(odd) { text-align: right; color: #8a7040; }
 #pause-stats span:nth-child(even) { text-align: left; color: #d4c080; }
+/* Explicit column roles. A full-width section header is still a grid child, so
+   it flips the odd/even parity for everything after it -- with three loadout
+   blocks the key/value columns swapped sides halfway down. */
+#pause-stats span.ps-k { text-align: right; color: #8a7040; }
+#pause-stats span.ps-v { text-align: left; color: #d4c080; }
 #resume-btn {
   padding: 12px 50px; font-size: 20px; cursor: pointer;
   font-family: 'Cinzel', serif; font-weight: 700; letter-spacing: 2px;
@@ -1114,9 +1119,32 @@ body.picking-coop #pick-hint { display: block; }
    which read as no health bar at all -- the first co-op report was literally
    "there is no health for the second player". Each knight now gets a row the
    size of a real HUD element, named, in its own ring colour. */
-#coop-hud { margin-top: 7px; display: flex; flex-direction: column; gap: 5px; }
+#coop-hud { margin-top: 7px; display: flex; flex-direction: column; gap: 5px; max-width: 300px; }
+/* A companion's loadout, in the same icons player 1 reads off the weapon HUD:
+   "what has my brother actually got?" is the second question after "is he alive?" */
+.coop-kit {
+  grid-column: 1 / -1; display: flex; align-items: center; gap: 4px;
+  flex-wrap: wrap; margin: 2px 0 1px 2px;
+}
+.coop-kit:empty { display: none; }
+.coop-wpn, .coop-rel {
+  position: relative; flex: 0 0 auto; width: 22px; height: 22px; border-radius: 3px;
+  border: 1px solid #5a3a1a; background: linear-gradient(180deg, rgba(48,28,10,0.95), rgba(22,12,4,0.95));
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 12px; line-height: 1; color: #c9a253;
+}
+.coop-wpn.evolved { border-color: #ffdd00; box-shadow: 0 0 6px rgba(255,220,0,0.35); }
+.coop-rel { border-color: #2f5f5a; color: #5fd3c7; }
+.coop-rel.spent { opacity: 0.35; }
+.coop-wpn img, .coop-rel img { width: 100%; height: 100%; object-fit: contain; filter: brightness(1.15) saturate(1.1); }
+.coop-wpn b {
+  position: absolute; right: -2px; bottom: -4px;
+  font-family: 'Cinzel', serif; font-size: 9px; font-weight: 700; color: #e8d090;
+  text-shadow: 0 0 3px #000, 0 1px 2px #000;
+}
+.coop-kit-sep { width: 1px; height: 13px; background: rgba(201,162,83,0.3); margin: 0 2px; }
 .coop-hp-row {
-  display: grid; grid-template-columns: auto 1fr auto; gap: 7px; align-items: center;
+  display: grid; grid-template-columns: auto 1fr auto; gap: 2px 7px; align-items: center;
   padding: 3px 5px; border-radius: 4px;
   background: rgba(0,0,0,0.35); border-left: 3px solid var(--tint, #fff);
 }
@@ -1159,13 +1187,17 @@ body.picking-coop #pick-hint { display: block; }
   font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 3px;
   color: #8a6a3a; text-transform: uppercase; margin-bottom: 5px;
 }
-#coop-slots { display: flex; gap: 10px; justify-content: center; }
+#coop-slots { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
 .coop-slot {
   min-width: 128px; padding: 6px 12px; border-radius: 5px;
   border: 1px solid #4a3418; background: rgba(20,10,2,0.6);
   font-family: 'Cinzel', serif; font-size: 12px; color: #6d5637;
+  cursor: pointer; text-align: center; transition: border-color 0.15s, transform 0.1s;
 }
-.coop-slot.joined { border-color: #c9a253; background: linear-gradient(180deg, rgba(45,26,8,0.9), rgba(20,10,2,0.9)); }
+.coop-slot:hover, .coop-slot.gp-focus { border-color: var(--slot-tint, #c9a253); transform: translateY(-1px); }
+.coop-slot.joined { border-color: var(--slot-tint, #c9a253); background: linear-gradient(180deg, rgba(45,26,8,0.9), rgba(20,10,2,0.9)); }
+.cs-swap { font-family: 'MedievalSharp', cursive; font-size: 10px; color: #5f4a2a; margin-top: 2px; }
+.coop-slot:hover .cs-swap { color: var(--slot-tint, #c9a253); }
 .coop-slot .cs-who { font-weight: 700; letter-spacing: 1px; }
 .coop-slot.joined .cs-who { color: #e8c860; }
 .coop-slot .cs-knight { font-family: 'MedievalSharp', cursive; font-size: 12px; color: #8a7040; }
@@ -1581,7 +1613,6 @@ body.picking-coop #pick-hint { display: block; }
 </div>
 <div id="wave-announce" class="hud-strip"></div>
 <div id="revive-banner" class="hud-strip"></div>
-<div id="pick-waiting" class="hud-strip"></div>
 
 <script type="importmap">
 {
@@ -1608,7 +1639,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 // shipped in. `number` is the commit count this change will produce. Do not
 // hand-edit: the stamper matches the two marker lines exactly.
 /* BUILD:START */
-const BUILD = { number: 41, date: '2026-09-23' };
+const BUILD = { number: 42, date: '2026-09-24' };
 /* BUILD:END */
 for (const el of document.querySelectorAll('.build-badge')) el.textContent = `BUILD ${BUILD.number}`;
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -1642,7 +1673,9 @@ const WEAPON_ICONS = {
   sword: '⚔', spear: '🔱', quickblade: '⚡', staff: '🪄', dagger: '🗡', holyAura: '✦', arrowVolley: '🏹', orbitalBomb: '💣',
   wardShields: '🛡', stormCall: '🌩', emberTrail: '🔥',
 };
-const playerWeapons = {
+// Re-pointed while a level-up card is on screen, so the picking knight's own
+// weapons are the ones read and levelled. See beginPickContext().
+let playerWeapons = {
   sword: { owned: true, level: 1 },
   spear: { owned: false, level: 0 },
   quickblade: { owned: false, level: 0 },
@@ -1852,7 +1885,8 @@ const CHARACTER_PASSIVES = {
     // +10 HP (critic 2026-09-20b #2): with 100 HP and no armour he lost 6 of 10 bot runs before wave 8
     // +1 reroll (18.2): his early game is the most card-dependent; a free reroll per run softens the RNG.
     // apply() runs from clearRun() after rerollCharges is zeroed, before the Forge rerolls are added.
-    apply: (ps) => { ps.attackRange += 1.0; ps.critChance += 0.10; ps.maxHp += 10; ps.hp += 10; rerollCharges += 1; },
+    // `pl` is the knight it belongs to: without it a companion Brennan handed his reroll to player 1.
+    apply: (ps, pl) => { ps.attackRange += 1.0; ps.critChance += 0.10; ps.maxHp += 10; ps.hp += 10; addRerolls(pl, 1); },
   },
   parker: {
     name: 'Arcane Focus',
@@ -1861,6 +1895,13 @@ const CHARACTER_PASSIVES = {
     apply: (ps) => { ps.critChance += 0.25; ps.speed += 0.5; ps.maxHp -= 15; ps.hp -= 15; ps._dashCDBonus = 0.5; },
   },
 };
+// Player 1's charges live in the `rerollCharges` global (everything unconverted
+// reads that name); companions carry their own. One helper so a grant never has
+// to know the difference -- and never silently lands on player 1.
+function addRerolls(pl, n = 1) {
+  if (!pl || pl.index === 0) rerollCharges += n;
+  else pl.rerollCharges = (pl.rerollCharges || 0) + n;
+}
 function getDashCooldown(p) {
   const pl = p || players[0];
   let cd = 2.5 - (pl.state._dashCDBonus || 0);
@@ -1992,16 +2033,19 @@ function disposeEnemy(enemy) {
 }
 // Timed buff system — replaces setTimeout for stat buffs (survives reset correctly)
 const _activeBuffs = [];
-function addBuff(stat, amount, duration, onExpire) {
-  state.player[stat] += amount;
-  _activeBuffs.push({ stat, amount, remaining: duration, onExpire: onExpire || null });
+function addBuff(stat, amount, duration, onExpire, ps) {
+  const sheet = ps || state.player;
+  sheet[stat] += amount;
+  _activeBuffs.push({ stat, amount, remaining: duration, onExpire: onExpire || null, sheet });
 }
 function updateBuffs(dt) {
   for (let i = _activeBuffs.length - 1; i >= 0; i--) {
-    _activeBuffs[i].remaining -= dt;
-    if (_activeBuffs[i].remaining <= 0) {
-      state.player[_activeBuffs[i].stat] -= _activeBuffs[i].amount;
-      if (_activeBuffs[i].onExpire) _activeBuffs[i].onExpire();
+    const b = _activeBuffs[i];
+    b.remaining -= dt;
+    if (b.remaining <= 0) {
+      // Take it off the sheet it was added to, not always player 1's.
+      (b.sheet || state.player)[b.stat] -= b.amount;
+      if (b.onExpire) b.onExpire();
       swapRemove(_activeBuffs, i);
     }
   }
@@ -2143,7 +2187,7 @@ function applySeparation() {
 }
 
 function luckyRoll(baseChance) {
-  return Math.random() < baseChance * (1 + (state.player.luck || 0));
+  return Math.random() < baseChance * (1 + partyLuck());
 }
 
 // ─── RUN STATS ───
@@ -3877,14 +3921,20 @@ function resetBreakables() {
   _obstacleTimer = 1; // force the nearby-obstacle cache to rebuild
 }
 function updateBreakables() {
-  if (!playerMesh || state.player.isDead) return;
-  const px = playerMesh.position.x, pz = playerMesh.position.z;
+  const live = alivePlayers();
+  if (!live.length) return;
   for (let i = 0; i < breakables.length; i++) {
     const b = breakables[i];
     if (b.broken) continue;
-    const dx = px - b.x, dz = pz - b.z;
     const reach = (b.obstacle ? b.obstacle.radius : 1.2) + 0.7;
-    if (dx * dx + dz * dz > reach * reach) continue;
+    // Whichever knight walks into it breaks it. This tested player 1 only, so a
+    // companion could stand on a barrel all day and nothing happened.
+    let touched = false;
+    for (const pl of live) {
+      const dx = pl.mesh.position.x - b.x, dz = pl.mesh.position.z - b.z;
+      if (dx * dx + dz * dz <= reach * reach) { touched = true; break; }
+    }
+    if (!touched) continue;
     b.broken = true;
     b.mesh.visible = false;
     if (b.obstacle) { b.obstacle.disabled = true; _obstacleTimer = 1; }
@@ -3943,9 +3993,11 @@ function makePlayerState() {
   };
 }
 function makeWeaponTable() {
+  // Nothing is owned by default: joinPlayer grants the knight's own primary.
+  // A hard-coded sword here gave Parker a blade he never asked for, offered him
+  // Tempered Blade cards for it, and spent one of his four weapon slots.
   const t = {};
   for (const k in playerWeapons) t[k] = { owned: false, level: 0 };
-  t.sword = { owned: true, level: 1 };
   return t;
 }
 function makePlayer(index) {
@@ -3957,7 +4009,13 @@ function makePlayer(index) {
     weaponTimers: index === 0 ? weaponTimers : { dagger: 0, holyAura: 0, arrowVolley: 0, orbitalBomb: 0, stormCall: 0 },
     mesh: null, mixer: null, anims: index === 0 ? playerAnims : {}, currentAnim: '',
     ring: null,
+    // Every knight keeps their own upgrade book. Sharing these was why a
+    // companion's card picks landed on player 1's sheet: the level-up screen
+    // reads and writes the globals, which are player 1's.
+    ranks: {}, banished: new Set(), synergies: new Set(),
+    picks: [],
     rerollCharges: 0,
+    banishCharges: 1,
     // Which device drives this player; assigned at join (Phase B).
     input: index === 0 ? 'primary' : null,
   };
@@ -3978,6 +4036,9 @@ function adoptLegacyIntoPlayer0() {
   p.character = selectedCharacter;
   p.weapons = playerWeapons;
   p.state = state.player;
+  p.ranks = upgradeRanks;
+  p.banished = banishedUpgrades;
+  p.synergies = _activeSynergies;
 }
 
 // Party-size difficulty scaling. Three knights is roughly three times the DPS
@@ -3993,6 +4054,26 @@ function partyHpMul() { return 1 + PARTY_SCALE.hp * (partyCount() - 1); }
 function partyBossHpMul() { return 1 + PARTY_SCALE.bossHp * (partyCount() - 1); }
 // The on-screen cap has to rise too, or the extra spawns just hit the ceiling.
 function partyMaxEnemies() { return Math.round(MAX_ENEMIES * (1 + PARTY_SCALE.cap * (partyCount() - 1))); }
+
+// Run rewards -- streaks, combos, kill milestones -- belong to the party, so
+// they land on every knight who is still standing.
+function partyBuff(stat, amount, duration) {
+  for (const pl of alivePlayers()) addBuff(stat, amount, duration, null, pl.state);
+}
+function partyHeal(frac, label) {
+  for (const pl of alivePlayers()) {
+    const ps = pl.state;
+    ps.hp = Math.min(ps.maxHp, ps.hp + ps.maxHp * frac);
+    if (label) spawnDamageNumber(pl.mesh.position, label, '#44ff44');
+  }
+}
+
+// Drops are party-wide, so the luckiest knight sets the odds.
+function partyLuck() {
+  let best = 0;
+  for (const p of players) { const l = p.state.luck || 0; if (l > best) best = l; }
+  return best;
+}
 
 function alivePlayers() {
   const out = [];
@@ -4043,6 +4124,18 @@ function partyFocus() {
 }
 // Enemy AI targets whoever is closest rather than a fixed knight. Falls back to
 // players[0] so a call during a frame where everyone is down still gets a target.
+// Like nearestPlayer, but null rather than a dead fallback when nobody is up.
+function nearestLivePlayer(x, z) {
+  let best = null, bestD = Infinity;
+  for (const p of players) {
+    if (!p.mesh || p.state.isDead) continue;
+    const dx = p.mesh.position.x - x, dz = p.mesh.position.z - z;
+    const d = dx * dx + dz * dz;
+    if (d < bestD) { bestD = d; best = p; }
+  }
+  return best;
+}
+
 function nearestPlayer(x, z) {
   let best = null, bestD = Infinity;
   for (const p of players) {
@@ -4052,6 +4145,48 @@ function nearestPlayer(x, z) {
     if (d < bestD) { bestD = d; best = p; }
   }
   return best || players[0];
+}
+
+// ─── WHAT EACH KNIGHT CARRIES ───
+// One definition, used by createPlayer AND by the title-screen previews. These
+// were two hand-copied blocks and they had drifted: the preview handed Parker a
+// sword and a shield, while in the game he carries the wizard staff and nothing
+// in his off hand. `shadows` is off for the previews, which render to their own
+// little canvas with no shadow map.
+const CHARACTER_GEAR = {
+  dad:     { hand: 'sword',       offHand: 'shield' },
+  brennan: { hand: 'spear' },
+  parker:  { hand: 'wizardStaff' },
+};
+// Pose per asset, not per character: the staff and the spear are held alike.
+const GEAR_POSE = {
+  sword:       { pos: [0.005, 0.065, 0.260], rot: [-180, -95, -90], scale: 0.55 },
+  spear:       { pos: [-0.010, 0.050, 0.170], rot: [-272, -59, 3], scale: 0.94 },
+  wizardStaff: { pos: [-0.010, 0.050, 0.170], rot: [-272, -59, 3], scale: 0.94 },
+  shield:      { pos: [-0.035, -0.065, 0.130], rot: [-272, -101, -68], scale: 0.48 },
+};
+function _attachGear(bone, assetKey, shadows) {
+  const src = assets[assetKey];
+  const pose = GEAR_POSE[assetKey];
+  if (!bone || !src || !pose) return;
+  const DEG = Math.PI / 180;
+  const m = src.scene.clone();
+  m.position.set(pose.pos[0], pose.pos[1], pose.pos[2]);
+  m.rotation.set(pose.rot[0] * DEG, pose.rot[1] * DEG, pose.rot[2] * DEG);
+  m.scale.setScalar(pose.scale);
+  if (shadows) m.traverse(c => { if (c.isMesh) c.castShadow = true; });
+  bone.add(m);
+}
+function attachCharacterGear(model, charId, shadows = true) {
+  const gear = CHARACTER_GEAR[charId] || CHARACTER_GEAR.dad;
+  let handR = null, handL = null;
+  model.traverse(c => {
+    if (!c.isBone) return;
+    if (c.name === 'hand_r') handR = c;
+    else if (c.name === 'hand_l') handL = c;
+  });
+  _attachGear(handR, gear.hand, shadows);
+  if (gear.offHand) _attachGear(handL, gear.offHand, shadows);
 }
 
 // Parse a fresh player character model from stored buffer
@@ -4157,54 +4292,9 @@ async function createPlayer(index = 0) {
     p.anims[clip.name] = p.mixer.clipAction(clip);
   }
 
-  // Attach weapon to right hand bone
-  let handBoneR = null;
-  p.mesh.traverse(c => {
-    if (c.isBone && c.name === 'hand_r') handBoneR = c;
-  });
-  if (handBoneR) {
-    const DEG = Math.PI / 180;
-    if (p.character === 'parker' && assets.wizardStaff) {
-      const staff = assets.wizardStaff.scene.clone();
-      staff.position.set(-0.010, 0.050, 0.170);
-      staff.rotation.set(-272 * DEG, -59 * DEG, 3 * DEG);
-      staff.scale.setScalar(0.94);
-      staff.traverse(c => { if (c.isMesh) { c.castShadow = true; } });
-      handBoneR.add(staff);
-    } else if (p.character === 'brennan' && assets.spear) {
-      const spear = assets.spear.scene.clone();
-      spear.position.set(-0.010, 0.050, 0.170);
-      spear.rotation.set(-272 * DEG, -59 * DEG, 3 * DEG);
-      spear.scale.setScalar(0.94);
-      spear.traverse(c => { if (c.isMesh) { c.castShadow = true; } });
-      handBoneR.add(spear);
-    } else if (assets.sword) {
-      const sword = assets.sword.scene.clone();
-      sword.position.set(0.005, 0.065, 0.260);
-      sword.rotation.set(-180 * DEG, -95 * DEG, -90 * DEG);
-      sword.scale.setScalar(0.55);
-      sword.traverse(c => { if (c.isMesh) { c.castShadow = true; } });
-      handBoneR.add(sword);
-    }
-  }
-
-  // Attach shield to left hand (Dad & Parker)
-  if (p.character === 'dad' && assets.shield) {
-    let handBoneL = null;
-    p.mesh.traverse(c => {
-      if (c.isBone && c.name === 'hand_l') handBoneL = c;
-    });
-    if (handBoneL) {
-      const DEG = Math.PI / 180;
-      const shield = assets.shield.scene.clone();
-      const shieldZ = p.character === 'dad' ? 0.130 : 0.065;
-      shield.position.set(-0.035, -0.065, shieldZ);
-      shield.rotation.set(-272 * DEG, -101 * DEG, -68 * DEG);
-      shield.scale.setScalar(0.48);
-      shield.traverse(c => { if (c.isMesh) { c.castShadow = true; } });
-      handBoneL.add(shield);
-    }
-  }
+  // Weapon and shield. Shared with the title-screen preview so the card and the
+  // knight you play can never disagree again.
+  attachCharacterGear(p.mesh, p.character, true);
 
   // Stats (passive + Forge ranks) are applied by clearRun(), never here:
   // createPlayer runs at init AND on Begin Quest, and used to apply the passive
@@ -4239,6 +4329,11 @@ async function joinPlayer(character = 'brennan', device = null) {
   p.device = typeof device === 'number' ? { type: 'pad', index: device }
     : device || { type: 'pad', index };
   p.padIndex = p.device.type === 'pad' ? p.device.index : null;
+  // Arm the knight BEFORE they are in players[], so no frame of the await below
+  // ticks a player whose primary is still at level 0 (cooldown 0, damage 0).
+  p.state.primaryWeapon = CHARACTER_PRIMARY[p.character] || 'sword';
+  p.weapons[p.state.primaryWeapon].owned = true;
+  p.weapons[p.state.primaryWeapon].level = Math.max(1, p.weapons[p.state.primaryWeapon].level);
   players[index] = p;
   await createPlayer(index);
   // The shared XP curve scales with party size, so rescale it now that the
@@ -4252,11 +4347,8 @@ async function joinPlayer(character = 'brennan', device = null) {
   // Joined knights get their character's passive and the Forge's flat stat
   // ranks, which clearRun() only ever applied to player 0.
   const passive = CHARACTER_PASSIVES[p.character];
-  if (passive) passive.apply(p.state);
+  if (passive) passive.apply(p.state, p);
   applyForgeStatsTo(p.state, p);   // each knight gets the upgrades THEY paid for
-  p.state.primaryWeapon = CHARACTER_PRIMARY[p.character] || 'sword';
-  p.weapons[p.state.primaryWeapon].owned = true;
-  p.weapons[p.state.primaryWeapon].level = Math.max(1, p.weapons[p.state.primaryWeapon].level);
   return p;
 }
 
@@ -4276,12 +4368,15 @@ function resetPartyToSolo() {
       });
     }
     if (p.ring) scene.remove(p.ring);
+    // A departing knight takes their ring of shields with them.
+    while (p.shields && p.shields.length) scene.remove(p.shields.pop());
     players.length = i;
   }
 }
 
-// The per-player slice of the Forge ranks. Run-wide effects (magnet range,
-// reroll and banish charges) stay global and are applied by applyForgeUpgrades.
+// The per-player slice of the Forge ranks. Magnet range is deliberately still
+// run-wide (pickups fly to the whole party); rerolls, banishes and the bonus
+// starting weapon are per knight, from the Forge THEY paid into.
 function applyForgeStatsTo(ps, who) {
   const meta = loadMeta(who);
   for (const upg of FORGE_UPGRADES) {
@@ -4294,6 +4389,13 @@ function applyForgeStatsTo(ps, who) {
     else if (upg.stat === 'armor') ps.armor += v;
     else if (upg.stat === 'critChance') ps.critChance += v;
     else if (upg.stat === 'regen') ps.regen += v;
+    // Rerolls, banishes and the bonus starting weapon live on the player rather
+    // than the stat sheet, so applyForgeUpgrades() granted them to player 1 only.
+    else if (upg.stat === 'rerolls' && who) who.rerollCharges = (who.rerollCharges || 0) + v;
+    else if (upg.stat === 'banish' && who) who.banishCharges = (who.banishCharges || 0) + v;
+    else if (upg.stat === 'startWeapon' && who && who.weapons[upg.weapon] && !who.weapons[upg.weapon].owned) {
+      who.weapons[upg.weapon].owned = true; who.weapons[upg.weapon].level = 1;
+    }
   }
 }
 
@@ -4864,10 +4966,14 @@ const enemyProjectiles = [];
 const _enemyProjPool = [];
 const _enemyArrowMat = new THREE.MeshBasicMaterial({ color: 0x3a2214 });
 function fireEnemyArrow(enemy) {
-  if (enemy.isDying || !playerMesh || state.player.isDead) return;
+  // Aim at the knight this archer is tracking. Aiming at playerMesh meant every
+  // arrow in a three-player run flew at player 1, whoever the archer chased.
+  const tgt = enemy.target || nearestPlayer(enemy.mesh.position.x, enemy.mesh.position.z);
+  const aimMesh = tgt && !tgt.state.isDead ? tgt.mesh : null;
+  if (enemy.isDying || !aimMesh) return;
   let mesh = _enemyProjPool.pop();
   if (!mesh) mesh = new THREE.Mesh(_sharedArrowGeo, _enemyArrowMat);
-  const dx0 = playerMesh.position.x - enemy.mesh.position.x;
+  const dx0 = aimMesh.position.x - enemy.mesh.position.x;
   const dz0 = playerMesh.position.z - enemy.mesh.position.z;
   const d = Math.sqrt(dx0 * dx0 + dz0 * dz0) || 1;
   mesh.position.set(enemy.mesh.position.x, 1.2, enemy.mesh.position.z);
@@ -4890,8 +4996,9 @@ function updateEnemyProjectiles(dt) {
     p.mesh.position.x += p.dx * p.speed * dt;
     p.mesh.position.z += p.dz * p.speed * dt;
     p.life -= dt;
-    if (!state.player.isDead && distSqXZ(p.mesh.position, playerMesh.position) < hitR2) {
-      damagePlayer(p.damage, p.mesh.position, { color: '#cc8844', shake: 0.25, flash: 0.45, by: 'archer arrow' });
+    const struck = playerAt(p.mesh.position, 0.9);
+    if (struck) {
+      damagePlayer(p.damage, p.mesh.position, { color: '#cc8844', shake: 0.25, flash: 0.45, by: 'archer arrow', target: struck });
       _recycleEnemyArrow(i);
       continue;
     }
@@ -4942,9 +5049,10 @@ function updateBossPattern(enemy, dt, dist, dir) {
     resolveObstacles(nx, nz, 1.5);
     enemy.mesh.position.x = _colOut.x;
     enemy.mesh.position.z = _colOut.z;
-    if (!p.hitPlayer && distSqXZ(enemy.mesh.position, playerMesh.position) < 2.6 * 2.6) {
+    if (!p.hitPlayer && playerAt(enemy.mesh.position, 2.6)) {
       p.hitPlayer = true;
-      damagePlayer(enemy.damage * 1.3, enemy.mesh.position, { shake: 0.7, flash: 0.8, iframes: 0.5, by: 'boss charge' });
+      damagePlayersInRadius(enemy.mesh.position, 2.6, enemy.damage * 1.3,
+        { shake: 0.7, flash: 0.8, iframes: 0.5, by: 'boss charge', falloff: false });
     }
     if (p.t > 0.75) endPattern(enemy);
     return true;
@@ -4993,9 +5101,8 @@ function executePattern(enemy, p, dist) {
     vfx.groundSlam(pos, p.radius);
     triggerShake(0.7, 0.4);
     AudioSystem.play('swordSwing', { volume: 0.9, pitch: 0.35 });
-    if (distSqXZ(playerMesh.position, pos) < p.radius * p.radius) {
-      damagePlayer(enemy.damage * 1.2, pos, { shake: 0.6, flash: 0.7, iframes: 0.5, by: 'boss ' + p.name });
-    }
+    damagePlayersInRadius(pos, p.radius, enemy.damage * 1.2,
+      { shake: 0.6, flash: 0.7, iframes: 0.5, by: 'boss ' + p.name, falloff: false });
   } else if (p.name === 'summon') {
     const n = 4 + Math.floor(state.wave / 5);
     for (let i = 0; i < n; i++) queueSpawn(i % 3 === 0 ? 'ogre' : 'goblin', i * 0.12, null, { at: pos });
@@ -5143,14 +5250,10 @@ function updateBossBoulders(dt) {
 
     // Impact
     if (t >= 1.0) {
-      // AoE damage to player
-      const distToPlayerSq = distSq(playerMesh.position, b.targetPos);
-      const aoeRadiusSq = b.aoeRadius * b.aoeRadius;
-      if (distToPlayerSq < aoeRadiusSq) {
-        const falloff = 1 - Math.sqrt(distToPlayerSq) / b.aoeRadius;
-        // Long i-frames: a volley must not land three boulders on one player
-        damagePlayer(b.damage * falloff, b.targetPos, { iframes: 0.6, color: '#ff4400', volume: 0.6, pitch: 0.7, flash: 0.8, shake: 0.5, by: 'boulder' });
-      }
+      // AoE damage to every knight in the crater.
+      // Long i-frames: a volley must not land three boulders on one player
+      damagePlayersInRadius(b.targetPos, b.aoeRadius, b.damage,
+        { iframes: 0.6, color: '#ff4400', volume: 0.6, pitch: 0.7, flash: 0.8, shake: 0.5, by: 'boulder' });
 
       // AoE damage to nearby enemies (friendly fire!)
       const innerAoeRadiusSq = (b.aoeRadius * 0.6) * (b.aoeRadius * 0.6);
@@ -5296,7 +5399,9 @@ function mergeFarCoins(minDist) {
   for (let i = pickups.length - 1; i >= 0; i--) {
     const p = pickups[i];
     if (p.type !== 'coin' || p._vacuumed) continue;
-    if (distSqXZ(p.mesh.position, playerMesh.position) < minSq) continue;
+    // Far from EVERY knight, not just player 1.
+    const near = nearestLivePlayer(p.mesh.position.x, p.mesh.position.z);
+    if (!near || distSqXZ(p.mesh.position, near.mesh.position) < minSq) continue;
     if (!first) { first = p; sum = p.value; cx = p.mesh.position.x; cz = p.mesh.position.z; n = 1; continue; }
     sum += p.value; cx += p.mesh.position.x; cz += p.mesh.position.z; n++;
     scene.remove(p.mesh);
@@ -5322,7 +5427,7 @@ function spawnWorldPowerup(forcedType, atX, atZ) {
   let type = forcedType;
   if (!type) {
     const types = ['chest', 'healthPowerup', 'speedPowerup'];
-    const chestWeight = 0.3 * (1 + (state.player.luck || 0));
+    const chestWeight = 0.3 * (1 + partyLuck());
     const weights = [chestWeight, 0.4, 0.3];
     let roll = Math.random();
     type = types[0];
@@ -5376,33 +5481,40 @@ function updateWorldPowerups(dt) {
       pw.mesh.visible = Math.sin(pw.lifetime * 8) > 0;
     }
 
-    // Check player collection
-    if (playerMesh && !state.player.isDead) {
-      if (distSqXZ(playerMesh.position, pw.mesh.position) < 6.25) {
-        if (pw.type === 'chest') {
-          state.score += 100;
-          spawnDamageNumber(pw.mesh.position, 'TREASURE!', '#e8c860');
-          AudioSystem.play('coinPickup', { volume: 0.7, pitch: 0.8 });
-          triggerShake(0.2, 0.15);
-          vfx.collectEffect(pw.mesh.position, 'chest');
-          showLevelUp(true);
-        } else if (pw.type === 'healthPowerup') {
-          state.player.hp = Math.min(state.player.maxHp, state.player.hp + state.player.maxHp * 0.15);
-          spawnDamageNumber(pw.mesh.position, '+15% HP', '#44cc44');
-          AudioSystem.play('foodPickup', { volume: 0.6, pitch: 1.2 });
-          vfx.collectEffect(pw.mesh.position, 'health');
-        } else if (pw.type === 'speedPowerup') {
-          // Temporary speed boost (15 seconds)
-          spawnDamageNumber(pw.mesh.position, 'HASTE!', '#44aaee');
-          AudioSystem.play('levelUp', { volume: 0.4, pitch: 1.5 });
-          vfx.collectEffect(pw.mesh.position, 'speed');
-          vfx.movementSpeedBoost(playerMesh);
-          addBuff('speed', 3, 10, () => vfx.removeBoost(playerMesh, 'speed'));
-        }
-        scene.remove(pw.mesh);
-        swapRemove(worldPowerups, i);
-        continue;
+    // Check player collection. Whoever walks over it gets it: a chest queues a
+    // card for THAT knight, and the health and haste land on their sheet. It
+    // used to test player 1 only, so a companion could stand on a chest all day.
+    let taker = null;
+    for (const pl of players) {
+      if (!pl.mesh || pl.state.isDead) continue;
+      if (distSqXZ(pl.mesh.position, pw.mesh.position) < 6.25) { taker = pl; break; }
+    }
+    if (taker) {
+      const ts = taker.state;
+      if (pw.type === 'chest') {
+        state.score += 100;
+        spawnDamageNumber(pw.mesh.position, 'TREASURE!', '#e8c860');
+        AudioSystem.play('coinPickup', { volume: 0.7, pitch: 0.8 });
+        triggerShake(0.2, 0.15);
+        vfx.collectEffect(pw.mesh.position, 'chest');
+        queuePick(taker, 'chest');
+        if (!_upgradeScreenOpen && _victoryTimer <= 0) presentNextLevelUp();
+      } else if (pw.type === 'healthPowerup') {
+        ts.hp = Math.min(ts.maxHp, ts.hp + ts.maxHp * 0.15);
+        spawnDamageNumber(pw.mesh.position, '+15% HP', '#44cc44');
+        AudioSystem.play('foodPickup', { volume: 0.6, pitch: 1.2 });
+        vfx.collectEffect(pw.mesh.position, 'health');
+      } else if (pw.type === 'speedPowerup') {
+        // Temporary speed boost (15 seconds)
+        spawnDamageNumber(pw.mesh.position, 'HASTE!', '#44aaee');
+        AudioSystem.play('levelUp', { volume: 0.4, pitch: 1.5 });
+        vfx.collectEffect(pw.mesh.position, 'speed');
+        vfx.movementSpeedBoost(taker.mesh);
+        addBuff('speed', 3, 10, () => vfx.removeBoost(taker.mesh, 'speed'), ts);
       }
+      scene.remove(pw.mesh);
+      swapRemove(worldPowerups, i);
+      continue;
     }
 
     if (pw.lifetime <= 0) {
@@ -5605,15 +5717,16 @@ function applyStreakReward(milestone) {
   announce.style.opacity = '1';
   triggerShake(0.4, 0.25);
   setTimeout(() => { announce.style.opacity = '0'; announce.style.color = ''; }, 2000);
+  // The streak is the party's, so the reward is too. These all landed on player
+  // 1 alone, which made a milestone worth a third as much in a trio.
   if (milestone.reward === 'speed') {
-    addBuff('speed', 2, 10);
+    partyBuff('speed', 2, 10);
   } else if (milestone.reward === 'damage') {
-    addBuff('damage', 8, 12);
+    partyBuff('damage', 8, 12);
   } else if (milestone.reward === 'shockwave') {
-    levelUpShockwave();
+    for (const pl of alivePlayers()) levelUpShockwave(pl);
   } else if (milestone.reward === 'heal') {
-    state.player.hp = Math.min(state.player.maxHp, state.player.hp + state.player.maxHp * 0.30);
-    spawnDamageNumber(playerMesh.position, '+30% HP', '#44ff44');
+    partyHeal(0.30, '+30% HP');
   }
 }
 function breakStreak() {
@@ -5846,7 +5959,7 @@ function updatePlayer(p, dt) {
       if (enemy.isDying || enemy._dashHitId === dashId) continue;
       if (distSqXZ(pmesh.position, enemy.mesh.position) < dashR2) {
         enemy._dashHitId = dashId;
-        damageEnemy(enemy, Math.round(pDmg * 1.2), 1.2);
+        damageEnemy(enemy, Math.round(pDmg * 1.2), 1.2, p);
       }
     }
   }
@@ -5878,7 +5991,7 @@ function updatePlayer(p, dt) {
         const origin = _tv2.copy(pmesh.position); origin.y += 1.6;
         // A little overtravel past acquisition so a bolt still catches a target
         // that stepped aside, but not enough to cross the map.
-        spawnProjectile('dagger', origin, _tv1, pDmg, pStats.speed, pRange + 4, boltPierce);
+        spawnProjectile('dagger', origin, _tv1, pDmg, pStats.speed, pRange + 4, boltPierce, p);
         ps.attackTimer = pCD;
         return;
       }
@@ -5920,7 +6033,7 @@ function updatePlayer(p, dt) {
         if (h >= fullTargets + spillTargets) break;
         hitCount++;
         const full = h < fullTargets;
-        damageEnemy(_meleeHits[h].enemy, full ? pDmg : Math.round(pDmg * 0.5), pKb);
+        damageEnemy(_meleeHits[h].enemy, full ? pDmg : Math.round(pDmg * 0.5), pKb, p);
       }
       if (pEvo && evo.heal && hitCount > 0) {
         ps.hp = Math.min(ps.maxHp, ps.hp + Math.min(hitCount, 3));
@@ -6029,19 +6142,25 @@ function applyDamage(enemy, amount, opts) {
     return 0;
   }
   const source = opts.source || 'other';
+  // Whose hit this is. Crit, relics and the berserker/wolfsbane/hooves checks all
+  // read the swinging knight's sheet: before this they read player 1's, so a
+  // companion's every blow rolled P1's crit chance and rode P1's relics.
+  // `by` defaults to player 1 for enemy-sourced damage and unconverted callers.
+  const by = opts.by || players[0];
+  const bs = by.state;
   let dmg = amount * (1 + MASTERY_BONUS_PER_RANK * (_masteryRanks[source] || 0));
   _lastHitCrit = false;
-  if (opts.canCrit && Math.random() < state.player.critChance) {
+  if (opts.canCrit && Math.random() < bs.critChance) {
     _lastHitCrit = true;
-    dmg = Math.round(dmg * state.player.critMultiplier);
+    dmg = Math.round(dmg * bs.critMultiplier);
   }
   // Relics (player-sourced damage only)
-  const rel = state.player.relics;
+  const rel = bs.relics;
   if (rel && source !== 'friendlyFire') {
     if (rel.hunter && enemy.hp / enemy.maxHp < 0.25) dmg *= 1.4;
-    if (rel.berserker && state.player.hp < state.player.maxHp * 0.5) dmg *= 1.3;
-    if (rel.wolfsbane) dmg *= 1 + Math.min(0.6, Math.floor(state.player._crowdCount / 10) * 0.15);
-    if (rel.hooves && state.player._moving) dmg *= 1.1;
+    if (rel.berserker && bs.hp < bs.maxHp * 0.5) dmg *= 1.3;
+    if (rel.wolfsbane) dmg *= 1 + Math.min(0.6, Math.floor(bs._crowdCount / 10) * 0.15);
+    if (rel.hooves && bs._moving) dmg *= 1.1;
   }
   dmg = Math.max(1, Math.round(dmg));
   enemy.hp -= dmg;
@@ -6061,7 +6180,7 @@ function applyDamage(enemy, amount, opts) {
       for (let i = 0; i < near.length; i++) {
         const o = near[i];
         if (o === enemy || o.isDying || distSqXZ(o.mesh.position, enemy.mesh.position) > 2.5 * 2.5) continue;
-        applyDamage(o, burst, { source, color: '#ff6a6a', flash: 0.08, noRelicBurst: true });
+        applyDamage(o, burst, { source, by, color: '#ff6a6a', flash: 0.08, noRelicBurst: true });
       }
       vfx.bloodImpact(enemy.mesh.position, _kbDir.set(0, 1, 0), 1.5);
     }
@@ -6070,7 +6189,7 @@ function applyDamage(enemy, amount, opts) {
   // ogres shrug most of it off: heavy enemies must be able to reach you.
   const kbResist = enemy.isBoss ? 0 : enemy.type === 'ogre' ? 0.3 : 1;
   if (opts.knockback > 0 && kbResist > 0) {
-    const from = opts.kbFrom || playerMesh.position;
+    const from = opts.kbFrom || (by.mesh ? by.mesh.position : playerMesh.position);
     _kbDir.subVectors(enemy.mesh.position, from);
     _kbDir.y = 0;
     if (_kbDir.lengthSq() > 0.0001) _kbDir.normalize(); else _kbDir.set(1, 0, 0);
@@ -6081,7 +6200,7 @@ function applyDamage(enemy, amount, opts) {
     enemy.knockback.timer = opts.kbTimer || 0.15;
   }
   if (enemy.hp <= 0) {
-    killEnemy(enemy, source);
+    killEnemy(enemy, source, by);
   } else if (opts.hitReaction) {
     const hitAnim = enemyHitAnim(enemy);
     if (hitAnim && enemy.anims[hitAnim]) {
@@ -6092,7 +6211,7 @@ function applyDamage(enemy, amount, opts) {
   return dmg;
 }
 
-function killEnemy(enemy, source) {
+function killEnemy(enemy, source, by) {
   if (enemy.isDying) return;
   enemy.isDying = true;
   enemy.deathTimer = 2.0;
@@ -6119,12 +6238,14 @@ function killEnemy(enemy, source) {
   runStats.killsBySource[source] = (runStats.killsBySource[source] || 0) + 1;
   if (enemy.isBoss) {
     runStats.bossesKilled++;
-    rerollCharges++;
+    // A boss is a party kill, so every knight banks the reroll -- each of them
+    // has their own card to spend it on.
+    for (const pl of players) addRerolls(pl, 1);
     spawnDamageNumber(pos, '+1 Reroll', '#aa88dd');
     triggerShake(enemy.isDragonOgre ? 0.9 : 0.6, 0.5);
   }
   if (enemy.isElite) runStats.elitesKilled++;
-  registerKill();
+  registerKill(by);
   dropLoot(enemy);
   if (enemy.isFinalBoss) triggerVictory();
 }
@@ -6134,7 +6255,7 @@ let _victoryTimer = 0;
 function triggerVictory() {
   if (_victoryTimer > 0 || state.gameOver) return;
   _victoryTimer = 3.5;
-  state.player.iframes = 99; // nothing can hurt the champion now
+  for (const pl of players) pl.state.iframes = 99; // nothing can hurt the champions now
   _deathSlowMo = 1.5;        // same slow-motion beat as death, in a better mood
   triggerShake(1.0, 0.8);
   AudioSystem.play('levelUp', { volume: 1.0, pitch: 0.6 });
@@ -6191,7 +6312,8 @@ function dropLoot(enemy) {
 // or a dash). `fromPos` drives the screen-edge direction indicator.
 // Armor is a percentage now: each point removes 4.5% of incoming damage, to a
 // 60% floor. Flat subtraction let 5 armor turn a wave-1 goblin into 1 damage.
-function armorMultiplier() { return Math.max(0.4, 1 - state.player.armor * 0.045); }
+// `ps` is the sheet being hit; defaults to player 1 for the HUD and unconverted callers.
+function armorMultiplier(ps) { return Math.max(0.4, 1 - ((ps || state.player).armor) * 0.045); }
 
 function damagePlayer(rawAmount, fromPos, opts) {
   // opts.target names the knight being hit; defaults to player 0 so the ~20
@@ -6203,7 +6325,7 @@ function damagePlayer(rawAmount, fromPos, opts) {
   if (tps.isDead) return false;
   if (tps.iframes > 0 || tps.isDashing) return false;
   const o = opts || {};
-  let mult = armorMultiplier();
+  let mult = armorMultiplier(tps);
   const rel = tps.relics;
   // Warding Runes: half damage for 1.5s after a hit, once every 8s
   if (rel && rel.runes) {
@@ -6229,7 +6351,7 @@ function damagePlayer(rawAmount, fromPos, opts) {
     triggerShake(0.6, 0.4);
     vfx.levelUp(tpMesh);
     vfx.vortex(tpMesh.position, 0xffb347, { radius: 2.5, height: 5, count: 60, duration: 0.9 });
-    levelUpShockwave();
+    levelUpShockwave(tp);
     return true;
   }
   // Short by default: a long window capped damage at ~3 hits/s no matter how
@@ -6247,20 +6369,53 @@ function damagePlayer(rawAmount, fromPos, opts) {
   return true;
 }
 
-// Thorns retaliation against an enemy that just landed a hit
-function applyThorns(enemy) {
-  if (!(state.player.thorns > 0) || enemy.isDying) return;
-  applyDamage(enemy, state.player.thorns, { source: 'thorns', color: '#aa44ff' });
-  vfx.meleeImpact(enemy.mesh.position, _tv2.subVectors(enemy.mesh.position, playerMesh.position).normalize(), 'sword');
+// Enemy area attacks land on EVERY knight standing in them. Testing players[0]
+// alone made companions immune to boulders, bomb blasts, boss slams and charges:
+// they could stand in a volley and take nothing.
+// `opts.falloff === false` keeps the damage flat across the radius.
+function damagePlayersInRadius(center, radius, amount, opts) {
+  const rSq = radius * radius;
+  let hits = 0;
+  for (const pl of players) {
+    if (!pl.mesh || pl.state.isDead) continue;
+    const dSq = distSqXZ(pl.mesh.position, center);
+    if (dSq >= rSq) continue;
+    const fall = (opts && opts.falloff === false) ? 1 : 1 - Math.sqrt(dSq) / radius;
+    if (damagePlayer(amount * fall, center, Object.assign({}, opts, { target: pl }))) hits++;
+  }
+  return hits;
+}
+// Which knight a point-blank hit actually landed on, or null if none is there.
+function playerAt(pos, radius) {
+  let best = null, bestD = radius * radius;
+  for (const pl of players) {
+    if (!pl.mesh || pl.state.isDead) continue;
+    const d = distSqXZ(pl.mesh.position, pos);
+    if (d < bestD) { bestD = d; best = pl; }
+  }
+  return best;
 }
 
-// Primary (melee) weapon hit: crits, impact VFX, sound, knockback
-function damageEnemy(enemy, amount, knockback = 0.6) {
+// Thorns retaliation against an enemy that just landed a hit. `hit` is the
+// knight it landed on: the mantle is theirs, not player 1's.
+function applyThorns(enemy, hit) {
+  const hp = hit || players[0];
+  if (!(hp.state.thorns > 0) || enemy.isDying) return;
+  applyDamage(enemy, hp.state.thorns, { source: 'thorns', by: hp, color: '#aa44ff' });
+  const from = hp.mesh ? hp.mesh.position : playerMesh.position;
+  vfx.meleeImpact(enemy.mesh.position, _tv2.subVectors(enemy.mesh.position, from).normalize(), 'sword');
+}
+
+// Primary (melee) weapon hit: crits, impact VFX, sound, knockback.
+// `by` is the knight swinging; the weapon and the hit direction are theirs.
+function damageEnemy(enemy, amount, knockback = 0.6, by) {
   if (enemy.isDying) return;
-  const primary = state.player.primaryWeapon || 'sword';
-  const hitDir = _tv2.subVectors(enemy.mesh.position, playerMesh.position).normalize();
+  const pl = by || players[0];
+  const primary = pl.state.primaryWeapon || 'sword';
+  const origin = pl.mesh ? pl.mesh.position : playerMesh.position;
+  const hitDir = _tv2.subVectors(enemy.mesh.position, origin).normalize();
   const dmg = applyDamage(enemy, amount, {
-    source: primary, canCrit: true, flash: 0.15, hitFreeze: 0.04,
+    source: primary, by: pl, canCrit: true, flash: 0.15, hitFreeze: 0.04,
     knockback, kbTimer: 0.15, hitReaction: true,
   });
   if (_lastHitCrit) {
@@ -6294,11 +6449,8 @@ function detonateBombGuy(enemy) {
   AudioSystem.play('swordSwing', { volume: 1.0, pitch: 0.3 });
 
   const bombAoeRadiusSq = aoeRadius * aoeRadius;
-  const bombDistSq = distSq(playerMesh.position, pos);
-  if (bombDistSq < bombAoeRadiusSq) {
-    const falloff = 1 - Math.sqrt(bombDistSq) / aoeRadius;
-    damagePlayer(dmg * falloff, pos, { iframes: 0.5, color: '#ff4400', volume: 0.7, pitch: 0.6, flash: 1.0, shake: 0.5, by: 'bomb goblin' });
-  }
+  damagePlayersInRadius(pos, aoeRadius, dmg,
+    { iframes: 0.5, color: '#ff4400', volume: 0.7, pitch: 0.6, flash: 1.0, shake: 0.5, by: 'bomb goblin' });
 
   // Friendly fire on everything else in the blast
   for (let i = 0; i < enemies.length; i++) {
@@ -6427,11 +6579,8 @@ function updateEnemies(dt) {
         if (enemy.type === 'ogre') {
           // Ground Slam — AOE damage + knockback around the ogre
           const slamRadius = 5;
-          const slamRadiusSq = slamRadius * slamRadius;
-          const pDistSq = distSqXZ(tgtMesh.position, ePos);
-          if (pDistSq < slamRadiusSq) {
-            damagePlayer(enemy.damage * 0.6, ePos, { iframes: 0.5, color: '#ff6600', shake: 0.5, flash: 0.4, by: 'elite ogre slam', target: enemy.target });
-          }
+          damagePlayersInRadius(ePos, slamRadius, enemy.damage * 0.6,
+            { iframes: 0.5, color: '#ff6600', shake: 0.5, flash: 0.4, by: 'elite ogre slam', falloff: false });
           vfx.groundSlam(ePos, slamRadius);
           playEnemyAnim(enemy, 'Chop_Tree', false);
           enemy._atkAnimResetTimer = 0.8;
@@ -6527,7 +6676,9 @@ function updateEnemies(dt) {
       continue;
     }
 
-    if (state.player.isDead) continue;
+    // Stand down only when the knight THIS enemy is chasing is down. Testing
+    // player 1 froze every enemy in the field the moment P1 went down.
+    if (!tgtMesh || (enemy.target && enemy.target.state.isDead)) continue;
 
     // Divine Judgement's stun — held in place, unable to move or strike.
     // Bosses resist, or the evolved aura would trivialise every boss fight.
@@ -6587,8 +6738,9 @@ function updateEnemies(dt) {
         // Lenient reach: a normal hit's knockback does not cancel a swing already
         // in motion; a crit's larger shove does. Stepping away still works.
         if (dist <= enemy.attackRange + 1.5) {
-          if (state.player.iframes > 0 || state.player.isDashing) enemy.attackTimer = enemy.attackCooldown * 0.3;
-          else if (damagePlayer(enemy.damage, enemy.mesh.position, { by: enemy.isElite ? 'elite ' + enemy.type : enemy.type, target: enemy.target })) applyThorns(enemy);
+          const tstate = (enemy.target || players[0]).state;
+          if (tstate.iframes > 0 || tstate.isDashing) enemy.attackTimer = enemy.attackCooldown * 0.3;
+          else if (damagePlayer(enemy.damage, enemy.mesh.position, { by: enemy.isElite ? 'elite ' + enemy.type : enemy.type, target: enemy.target })) applyThorns(enemy, enemy.target);
         }
       }
       continue;
@@ -6723,8 +6875,8 @@ function updateEnemies(dt) {
         if (enemy.batDiveState === 'diving') {
           enemy.mesh.position.y -= 12 * dt;
           if (enemy.mesh.position.y < 0.8 && dist < 2.5) {
-            if (damagePlayer(enemy.damage, enemy.mesh.position, { iframes: 0.15, shake: 0.25, flash: 0.3, by: 'bat' })) {
-              applyThorns(enemy);
+            if (damagePlayer(enemy.damage, enemy.mesh.position, { iframes: 0.15, shake: 0.25, flash: 0.3, by: 'bat', target: enemy.target })) {
+              applyThorns(enemy, enemy.target);
             }
             enemy.batDiveState = 'rising';
             enemy.batDiveCD = 2.0 + Math.random();
@@ -6821,10 +6973,12 @@ function updatePickups(dt) {
     pickup.mesh.position.y = 0.5 + Math.sin(pickup.bobPhase) * 0.15;
     pickup.mesh.rotation.y += dt * 2;
 
-    // Magnet pull toward player (or vacuum on level-up)
-    if (playerMesh && !state.player.isDead) {
-      const dx = playerMesh.position.x - pickup.mesh.position.x;
-      const dz = playerMesh.position.z - pickup.mesh.position.z;
+    // Magnet pull toward the NEAREST knight (or vacuum on level-up). Pulling
+    // everything toward player 1 meant a companion had to chase every coin.
+    const near = nearestLivePlayer(pickup.mesh.position.x, pickup.mesh.position.z);
+    if (near) {
+      const dx = near.mesh.position.x - pickup.mesh.position.x;
+      const dz = near.mesh.position.z - pickup.mesh.position.z;
       const dSq = dx * dx + dz * dz;
       if (pickup._vacuumed && dSq > 0.01) {
         const dist = Math.sqrt(dSq);
@@ -6910,7 +7064,7 @@ function updateWeapons(p, dt) {
         _tv2.subVectors(target.mesh.position, pmesh.position).normalize();
         const daggerDmg = Math.round((dEvo ? stats.damage[dLvl] * 1.5 : stats.damage[dLvl]) * (ps._projDmgMul || 1));
         const daggerPierce = stats.pierce[dLvl] + (dEvo ? 3 : 0);
-        spawnProjectile('dagger', pmesh.position, _tv2, daggerDmg, stats.speed * (dEvo ? 1.3 : 1), dRange, daggerPierce);
+        spawnProjectile('dagger', pmesh.position, _tv2, daggerDmg, stats.speed * (dEvo ? 1.3 : 1), dRange, daggerPierce, p);
       }
     }
   }
@@ -6932,7 +7086,7 @@ function updateWeapons(p, dt) {
         if (enemy.isDying) continue;
         if (distSq(pmesh.position, enemy.mesh.position) > _auraRadiusSq) continue;
         applyDamage(enemy, dmg, {
-          source: 'holyAura', color: haEvo ? '#fff2c4' : '#ffd98a', flash: 0.1,
+          source: 'holyAura', by: p, color: haEvo ? '#fff2c4' : '#ffd98a', flash: 0.1,
           knockback: kbAmount, kbTimer: haEvo ? 0.25 : 0.12,
         });
         // "Divine Judgement — massive radius, stuns enemies briefly"
@@ -6958,7 +7112,7 @@ function updateWeapons(p, dt) {
         for (let i = 0; i < count; i++) {
           const angle = (i / count) * Math.PI * 2;
           _arrowDir.set(Math.sin(angle), 0, Math.cos(angle));
-          spawnProjectile('arrow', pmesh.position, _arrowDir, avDmg, stats.speed, engageRange(stats.range), 1);
+          spawnProjectile('arrow', pmesh.position, _arrowDir, avDmg, stats.speed, engageRange(stats.range), 1, p);
         }
       } else {
         const baseAngle = pmesh.rotation.y;
@@ -6966,7 +7120,7 @@ function updateWeapons(p, dt) {
         for (let i = 0; i < count; i++) {
           const angle = baseAngle - totalSpread / 2 + stats.spread * i;
           _arrowDir.set(Math.sin(angle), 0, Math.cos(angle));
-          spawnProjectile('arrow', pmesh.position, _arrowDir, avDmg, stats.speed, engageRange(stats.range), 0);
+          spawnProjectile('arrow', pmesh.position, _arrowDir, avDmg, stats.speed, engageRange(stats.range), 0, p);
         }
       }
     }
@@ -6998,7 +7152,7 @@ function updateWeapons(p, dt) {
         );
         const obDmg = obEvo ? Math.round(stats.damage[obLvl] * 2) : stats.damage[obLvl];
         const obRad = (stats.radius[obLvl] + (obEvo ? 2 : 0)) * (ps._aoeMul || 1);
-        spawnOrbitalBomb(bombPos, obDmg, obRad, obEvo);
+        spawnOrbitalBomb(bombPos, obDmg, obRad, obEvo, p);
       }
     }
   }
@@ -7012,11 +7166,11 @@ function updateWeapons(p, dt) {
     const radius = (stats.radius[wsLvl] + (wsEvo ? 1.2 : 0)) * (ps._aoeMul || 1);
     const dmg = wsEvo ? Math.round(stats.damage[wsLvl] * 1.6) : stats.damage[wsLvl];
     const hitInterval = stats.cooldown[wsLvl];
-    syncWardShields(count);
-    _shieldAngle += stats.spin * (wsEvo ? 1.25 : 1) * dt;
-    for (let s = 0; s < wardShieldMeshes.length; s++) {
-      const sh = wardShieldMeshes[s];
-      const a = _shieldAngle + (s / count) * Math.PI * 2;
+    const ring = syncWardShields(p, count);
+    p.shieldAngle = (p.shieldAngle || 0) + stats.spin * (wsEvo ? 1.25 : 1) * dt;
+    for (let s = 0; s < ring.length; s++) {
+      const sh = ring[s];
+      const a = p.shieldAngle + (s / count) * Math.PI * 2;
       sh.position.set(pmesh.position.x + Math.cos(a) * radius, 1.0, pmesh.position.z + Math.sin(a) * radius);
       sh.rotation.y = -a;
       // Strike anything the shield passes through
@@ -7028,7 +7182,7 @@ function updateWeapons(p, dt) {
         if (distSqXZ(sh.position, enemy.mesh.position) > r * r) continue;
         if (enemy._shieldHitTime != null && state.time - enemy._shieldHitTime < hitInterval) continue;
         enemy._shieldHitTime = state.time;
-        applyDamage(enemy, dmg, { source: 'wardShields', color: '#e8dcae', flash: 0.1, knockback: wsEvo ? 1.0 : 0.6, kbFrom: sh.position, kbTimer: 0.12 });
+        applyDamage(enemy, dmg, { source: 'wardShields', by: p, color: '#e8dcae', flash: 0.1, knockback: wsEvo ? 1.0 : 0.6, kbFrom: sh.position, kbTimer: 0.12 });
         vfx.meleeImpact(enemy.mesh.position, _tv2.subVectors(enemy.mesh.position, sh.position).normalize(), 'sword');
       }
       // Bulwark of Ages swats arrows out of the air. Swatting one raises the
@@ -7036,10 +7190,10 @@ function updateWeapons(p, dt) {
       // (the gap between six shields on the evolved orbit), so a volley that
       // arrives together is blocked whole instead of threading the gaps (18.3).
       if (wsEvo) {
-        const swatR = state.time < _shieldGuardUntil ? 2.6 : 1.2;
+        const swatR = state.time < (p.shieldGuardUntil || 0) ? 2.6 : 1.2;
         for (let i = enemyProjectiles.length - 1; i >= 0; i--) {
           if (distSqXZ(enemyProjectiles[i].mesh.position, sh.position) < swatR * swatR) {
-            _shieldGuardUntil = state.time + 0.4;
+            p.shieldGuardUntil = state.time + 0.4;
             vfx.projectileHit(enemyProjectiles[i].mesh.position, 'arrow');
             _recycleEnemyArrow(i);
           }
@@ -7072,9 +7226,9 @@ function updateWeapons(p, dt) {
         _chainHit.add(best);
         vfx.thunderStrike(best.mesh.position, scEvo);
         vfx.stunSpark(best.mesh.position);
-        applyDamage(best, dmg, { source: 'stormCall', canCrit: true, color: '#bfe6ff', flash: 0.15 });
+        applyDamage(best, dmg, { source: 'stormCall', by: p, canCrit: true, color: '#bfe6ff', flash: 0.15 });
         if (scEvo && !best.isBoss && !best.isDying) best.stunTimer = Math.max(best.stunTimer || 0, 0.4);
-        chainLightning(best, Math.round(dmg * 0.6), stats.chains[scLvl], 'stormCall', scEvo ? 0.4 : 0);
+        chainLightning(best, Math.round(dmg * 0.6), stats.chains[scLvl], 'stormCall', scEvo ? 0.4 : 0, p);
       }
       if (_chainHit.size > 0) {
         AudioSystem.play('thunder', { volume: 0.7, pitch: scEvo ? 0.85 : 1 });
@@ -7089,10 +7243,12 @@ function updateWeapons(p, dt) {
     const etEvo = pw.emberTrail.evolved;
     const stats = WEAPON_STATS.emberTrail;
     const spacing = stats.cooldown[etLvl];
-    if (_emberLastX == null) { _emberLastX = pmesh.position.x; _emberLastZ = pmesh.position.z; }
-    const mdx = pmesh.position.x - _emberLastX, mdz = pmesh.position.z - _emberLastZ;
+    // Per knight: one shared "last drop" position meant two ember-trail knights
+    // fought over it and neither laid a continuous trail.
+    if (p.emberLastX == null) { p.emberLastX = pmesh.position.x; p.emberLastZ = pmesh.position.z; }
+    const mdx = pmesh.position.x - p.emberLastX, mdz = pmesh.position.z - p.emberLastZ;
     if (mdx * mdx + mdz * mdz >= spacing * spacing) {
-      _emberLastX = pmesh.position.x; _emberLastZ = pmesh.position.z;
+      p.emberLastX = pmesh.position.x; p.emberLastZ = pmesh.position.z;
       burnPatches.push({
         pos: new THREE.Vector3(pmesh.position.x, 0, pmesh.position.z),
         radius: (stats.radius + (etEvo ? 1.0 : 0)) * (ps._aoeMul || 1),
@@ -7101,19 +7257,21 @@ function updateWeapons(p, dt) {
         tickTimer: 0,
         source: 'emberTrail',
         burst: etEvo,
+        owner: p,
       });
     }
   }
 }
 
 // ─── WARDING SHIELDS (orbiting meshes) ───
-const wardShieldMeshes = [];
-let _shieldAngle = 0;
-let _shieldGuardUntil = 0; // Bulwark of Ages: ring guard raised until this time after a swat
+// One ring PER KNIGHT. These used to be a single global array driven from inside
+// the per-player weapon update, so two knights carrying Warding Shields shared
+// one ring that snapped to whichever of them updated last.
 let _shieldScale = 0;
-function syncWardShields(count) {
-  while (wardShieldMeshes.length < count) {
-    if (!assets.shield) return;
+function syncWardShields(pl, count) {
+  const ring = pl.shields || (pl.shields = []);
+  while (ring.length < count) {
+    if (!assets.shield) return ring;
     const m = assets.shield.scene.clone();
     if (!_shieldScale) {
       const box = new THREE.Box3().setFromObject(m);
@@ -7123,12 +7281,14 @@ function syncWardShields(count) {
     m.scale.setScalar(_shieldScale);
     m.traverse(c => { if (c.isMesh) { c.castShadow = true; c.material = c.material.clone(); c.material.emissive = new THREE.Color(0x6a5a20); c.material.emissiveIntensity = 0.35; } });
     scene.add(m);
-    wardShieldMeshes.push(m);
+    ring.push(m);
   }
-  while (wardShieldMeshes.length > count) scene.remove(wardShieldMeshes.pop());
+  while (ring.length > count) scene.remove(ring.pop());
+  return ring;
 }
-function clearWardShields() { while (wardShieldMeshes.length) scene.remove(wardShieldMeshes.pop()); }
-let _emberLastX = null, _emberLastZ = null;
+function clearWardShields() {
+  for (const pl of players) { const r = pl.shields; while (r && r.length) scene.remove(r.pop()); }
+}
 
 // ─── ORBITAL BOMB ───
 const orbitalBombs = [];
@@ -7136,7 +7296,7 @@ const _bombGeo = new THREE.SphereGeometry(0.3, 8, 6);
 const _bombMatPool = [];
 const _BOMB_MAT_POOL_MAX = 20;
 
-function spawnOrbitalBomb(startPos, damage, radius, evolved = false) {
+function spawnOrbitalBomb(startPos, damage, radius, evolved = false, owner) {
   // Violet, because the upgrade calls this the Arcane Bomb — the orange fireball
   // read as a generic explosive and was easy to confuse with the ogre's boulder.
   const tint = evolved ? 0xff44cc : 0x9944ff;
@@ -7146,7 +7306,7 @@ function spawnOrbitalBomb(startPos, damage, radius, evolved = false) {
   const mesh = new THREE.Mesh(_bombGeo, mat);
   mesh.position.copy(startPos);
   scene.add(mesh);
-  orbitalBombs.push({ mesh, damage, radius, fallSpeed: 0, targetY: 0.3, timer: 0, detonated: false, evolved });
+  orbitalBombs.push({ mesh, damage, radius, fallSpeed: 0, targetY: 0.3, timer: 0, detonated: false, evolved, owner: owner || players[0] });
 }
 
 // ─── STORM KUNAI CHAIN LIGHTNING ───
@@ -7159,7 +7319,7 @@ const _chainHit = new Set();
 // `sourceId` credits the damage; `stun` (seconds) is applied to each arc target.
 // Storm Call pre-fills _chainHit with its own strike targets so bolts do not
 // arc back onto them; the dagger path clears it.
-function chainLightning(fromEnemy, damage, jumps, sourceId = 'dagger', stun = 0) {
+function chainLightning(fromEnemy, damage, jumps, sourceId = 'dagger', stun = 0, by) {
   if (sourceId === 'dagger') _chainHit.clear();
   _chainHit.add(fromEnemy);
   let source = fromEnemy;
@@ -7177,7 +7337,7 @@ function chainLightning(fromEnemy, damage, jumps, sourceId = 'dagger', stun = 0)
     _chainTo.copy(best.mesh.position); _chainTo.y += 1.0;
     vfx.lightning(_chainFrom, _chainTo);
 
-    applyDamage(best, damage, { source: sourceId, color: '#bfe6ff', flash: 0.12 });
+    applyDamage(best, damage, { source: sourceId, by, color: '#bfe6ff', flash: 0.12 });
     if (stun > 0 && !best.isBoss && !best.isDying) best.stunTimer = Math.max(best.stunTimer || 0, stun);
     source = best;
   }
@@ -7190,7 +7350,7 @@ const burnPatches = [];
 const BURN_TICK = 0.5;
 
 function updateBurnPatches(dt) {
-  const burnMul = state.player._burnMul || 1;
+  // Read per patch below: _burnMul is the lighter's synergy, not player 1's.
   for (let i = burnPatches.length - 1; i >= 0; i--) {
     const patch = burnPatches[i];
     patch.life -= dt;
@@ -7200,24 +7360,26 @@ function updateBurnPatches(dt) {
       patch.tickTimer = BURN_TICK;
       const rSq = patch.radius * patch.radius;
       const src = patch.source || 'orbitalBomb';
+      const burnMul = ((patch.owner || players[0]).state._burnMul) || 1;
       const near = queryEnemies(patch.pos.x, patch.pos.z, patch.radius + 1.5);
       for (let ei = 0; ei < near.length; ei++) {
         const enemy = near[ei];
         if (enemy.isDying) continue;
         if (distSqXZ(patch.pos, enemy.mesh.position) > rSq) continue;
-        applyDamage(enemy, patch.damage * burnMul, { source: src, color: '#ff9a2e', flash: 0.08 });
+        applyDamage(enemy, patch.damage * burnMul, { source: src, by: patch.owner, color: '#ff9a2e', flash: 0.08 });
       }
     }
     if (patch.life <= 0) {
       // Inferno Wake: the patch bursts as it gutters out
       if (patch.burst) {
+        const burnMul = ((patch.owner || players[0]).state._burnMul) || 1;
         vfx.explosion(patch.pos, 1.6);
         const br = patch.radius * 1.5, brSq = br * br;
         const near = queryEnemies(patch.pos.x, patch.pos.z, br + 1.5);
         for (let ei = 0; ei < near.length; ei++) {
           const enemy = near[ei];
           if (enemy.isDying || distSqXZ(patch.pos, enemy.mesh.position) > brSq) continue;
-          applyDamage(enemy, patch.damage * 4 * burnMul, { source: patch.source || 'orbitalBomb', color: '#ff6a2e', flash: 0.15, knockback: 0.8, kbFrom: patch.pos, kbTimer: 0.15 });
+          applyDamage(enemy, patch.damage * 4 * burnMul, { source: patch.source || 'orbitalBomb', by: patch.owner, color: '#ff6a2e', flash: 0.15, knockback: 0.8, kbFrom: patch.pos, kbTimer: 0.15 });
         }
       }
       swapRemove(burnPatches, i);
@@ -7246,6 +7408,7 @@ function updateOrbitalBombs(dt) {
             damage: Math.round(bomb.damage * 0.12),
             life: 4.0,
             tickTimer: BURN_TICK,
+            owner: bomb.owner,
           });
         }
         triggerShake(0.5, 0.22);
@@ -7258,7 +7421,7 @@ function updateOrbitalBombs(dt) {
           if (dSq >= rSq) continue;
           const falloff = 1 - Math.sqrt(dSq) / bomb.radius;
           applyDamage(enemy, bomb.damage * falloff, {
-            source: 'orbitalBomb', color: '#c084fc', flash: 0.2,
+            source: 'orbitalBomb', by: bomb.owner, color: '#c084fc', flash: 0.2,
             knockback: 2 * falloff, kbFrom: bomb.mesh.position, kbTimer: 0.2,
           });
         }
@@ -7278,7 +7441,9 @@ const _sharedDaggerGeo = new THREE.BoxGeometry(0.15, 0.15, 0.4);
 const _projPool = [];
 const _PROJ_POOL_MAX = 30;
 
-function spawnProjectile(type, origin, direction, damage, speed, maxRange, pierce) {
+// `owner` is the knight who fired it: the crit roll and the relics that scale
+// the hit are theirs, and so is the kill credit.
+function spawnProjectile(type, origin, direction, damage, speed, maxRange, pierce, owner) {
   const geo = type === 'arrow' ? _sharedArrowGeo : _sharedDaggerGeo;
   // Evolved shots are "Meteor Shower" and "Storm Kunai", so they burn and crackle
   // instead of just flying faster.
@@ -7309,6 +7474,7 @@ function spawnProjectile(type, origin, direction, damage, speed, maxRange, pierc
   projectiles.push({
     mesh, direction: direction.clone(), speed, damage,
     distTraveled: 0, maxRange, pierce, pierced: 0, type, trailType,
+    owner: owner || players[0],
   });
 }
 
@@ -7337,14 +7503,14 @@ function updateProjectiles(dt) {
       if (quickDist > hitRadius * hitRadius) continue;
       {
         const finalDmg = applyDamage(enemy, p.damage, {
-          source: p.type === 'arrow' ? 'arrowVolley' : 'dagger', canCrit: true,
+          source: p.type === 'arrow' ? 'arrowVolley' : 'dagger', canCrit: true, by: p.owner,
           color: p.type === 'arrow' ? '#ddaa44' : '#aaddff', flash: 0.1, hitFreeze: 0.03,
           knockback: 0.5, kbFrom: p.mesh.position, kbTimer: 0.1,
         });
         vfx.projectileHit(enemy.mesh.position, p.type);
         vfx.bloodImpact(enemy.mesh.position, _tv2.subVectors(enemy.mesh.position, p.mesh.position).normalize(), _lastHitCrit ? 0.8 : 0.4);
         // Storm Kunai arcs onward to nearby foes
-        if (p.trailType === 'storm') chainLightning(enemy, Math.round(finalDmg * 0.6), 2);
+        if (p.trailType === 'storm') chainLightning(enemy, Math.round(finalDmg * 0.6), 2, 'dagger', 0, p.owner);
         p.pierced++;
         if (p.pierced > p.pierce) { hitSomething = true; break; }
       }
@@ -7512,8 +7678,8 @@ function checkKillMilestones() {
   const milestone = Math.floor(state.kills / 50) * 50;
   if (milestone > 0 && milestone > runStats.milestone50) {
     runStats.milestone50 = milestone;
-    // Reward: heal + XP burst
-    state.player.hp = Math.min(state.player.maxHp, state.player.hp + state.player.maxHp * 0.05);
+    // Reward: heal + XP burst, for the whole party
+    partyHeal(0.05);
     gainXP(3 + Math.floor(milestone / 50));
     // Announce
     const announce = getWaveAnnounce();
@@ -7632,30 +7798,32 @@ const COMBO_MILESTONES = [
   { threshold: 10, name: 'FRENZY', color: '#44ccff', action: 'magnet',
     exec: () => { for (const p of pickups) p._vacuumed = true; }},
   { threshold: 20, name: 'BLOODTHIRST', color: '#ff4444', action: 'dmgBoost',
-    exec: () => { addBuff('damage', 10, 8); }},
+    exec: () => { partyBuff('damage', 10, 8); }},
   { threshold: 35, name: 'ANNIHILATION', color: '#ffdd00', action: 'shockwave',
-    exec: () => { levelUpShockwave(); }},
+    exec: () => { for (const pl of alivePlayers()) levelUpShockwave(pl); }},
   { threshold: 50, name: 'APOCALYPSE', color: '#ff00ff', action: 'all',
     exec: () => {
       for (const p of pickups) p._vacuumed = true;
-      addBuff('damage', 15, 12);
-      state.player.hp = Math.min(state.player.maxHp, state.player.hp + state.player.maxHp * 0.2);
-      spawnDamageNumber(playerMesh.position, '+20% HP', '#44ff44');
+      partyBuff('damage', 15, 12);
+      partyHeal(0.2, '+20% HP');
     }},
 ];
 let _lastComboMilestone = 0;
-let _lastLifestealTime = -1;
 
-function registerKill() {
+function registerKill(by) {
   combo.count++;
   combo.timer = combo.decay;
   if (combo.count > runStats.highestCombo) runStats.highestCombo = combo.count;
 
   // Lifesteal on kill, at most one heal every 0.3s. Unthrottled, a cleave into a
-  // rat pack was worth 30+ HP a second.
-  if (state.player.lifesteal > 0 && state.player.hp < state.player.maxHp && state.time - _lastLifestealTime >= 0.3) {
-    _lastLifestealTime = state.time;
-    state.player.hp = Math.min(state.player.maxHp, state.player.hp + state.player.lifesteal);
+  // rat pack was worth 30+ HP a second. The heal and the throttle belong to the
+  // knight who got the kill -- they used to heal player 1 off a companion's kill,
+  // and shared one global cooldown between everyone.
+  const ks = (by || players[0]).state;
+  const kp = by || players[0];
+  if (ks.lifesteal > 0 && ks.hp < ks.maxHp && state.time - (kp._lastLifesteal || -1) >= 0.3) {
+    kp._lastLifesteal = state.time;
+    ks.hp = Math.min(ks.maxHp, ks.hp + ks.lifesteal);
   }
   checkKillMilestones();
   onStreakKill();
@@ -7711,9 +7879,16 @@ function xpForLevel(level) {
 }
 
 // Level-ups queue. Gaining two levels from one boss kill used to open the pick
-// screen twice in the same frame, wiping the first set of options.
-let _pendingLevelUps = 0;
+// screen twice in the same frame, wiping the first set of options. In co-op the
+// queue holds one entry per knight per level, plus a 'chest' entry for whoever
+// walked over a treasure chest, and they are served one at a time.
 let _upgradeScreenOpen = false;
+function pendingPickCount() { let n = 0; for (const p of players) n += (p.picks ? p.picks.length : 0); return n; }
+function queuePick(p, kind = 'level') {
+  if (!p) return;
+  if (!p.picks) p.picks = [];
+  p.picks.push(kind);
+}
 
 // XP is a shared party pool (COOP-PLAN decision 2). players[0].state carries it,
 // and xpForLevel is scaled by party size so three knights level at roughly solo
@@ -7735,56 +7910,104 @@ function gainXP(amount) {
     party.xpToNext = partyXpToNext(party.level);
     // One pick each: the party levels together, each knight chooses their own card.
     for (const p of players) {
-      p.pendingPicks = (p.pendingPicks || 0) + 1;
+      queuePick(p, 'level');
       if (p !== players[0]) { p.state.level = party.level; }
       if (p.mesh) vfx.levelUpBurst(p.mesh.position);
     }
-    _pendingLevelUps++;
     triggerShake(0.2, 0.15);
   }
-  if (_pendingLevelUps > 0 && !_upgradeScreenOpen && _victoryTimer <= 0) presentNextLevelUp();
+  if (pendingPickCount() > 0 && !_upgradeScreenOpen && _victoryTimer <= 0) presentNextLevelUp();
 }
 
-// Whose card is currently on screen. In co-op the knights pick one after
-// another while the fight continues around them. Round-robin from whoever
-// picked last, so a player who banked several levels cannot make the others
-// wait through all of them.
+// Whose card is currently on screen. The game is paused while it is up and
+// exactly one knight owns it, so the other players' sticks and buttons are
+// ignored until they pick. Round-robin from whoever picked last, so a player
+// who banked several levels cannot make the others wait through all of them.
 let _pickingPlayer = null;
 let _lastPickerIndex = -1;
 function nextPlayerNeedingPick() {
   for (let i = 1; i <= players.length; i++) {
     const p = players[(_lastPickerIndex + i) % players.length];
-    if ((p.pendingPicks || 0) > 0) return p;
+    if (p.picks && p.picks.length) return p;
   }
   return null;
 }
 
+// ─── WHOSE SHEET DOES THIS CARD WRITE TO? ───
+// The upgrade table, the card text, evolutions and synergies are all written
+// against the single-player globals (state.player, playerWeapons, upgradeRanks,
+// banishedUpgrades, ...). Rather than thread a player argument through ~70
+// closures, a pick runs with those globals pointed at the knight who is picking
+// — the same aliasing players[0] already relies on. This is only safe because
+// the level-up screen pauses the simulation, so nothing else reads them while
+// the swap is live; do not open the card screen without pausing.
+// MAGNET_RANGE stays deliberately shared: pickups fly to the whole party.
+let _pickSaved = null;
+function beginPickContext(p) {
+  endPickContext();
+  if (!p) return;
+  if (p.index === 0) {
+    // Player 1 needs no swap: the globals are their sheet. Re-point the player
+    // object at them, so the alias self-heals if anything ever replaced one of
+    // these objects (clearRun, the Forge, a test) without updating players[0].
+    p.state = state.player; p.weapons = playerWeapons; p.ranks = upgradeRanks;
+    p.banished = banishedUpgrades; p.synergies = _activeSynergies;
+    return;
+  }
+  _pickSaved = {
+    p,
+    player: state.player, weapons: playerWeapons, ranks: upgradeRanks,
+    banished: banishedUpgrades, synergies: _activeSynergies, mesh: playerMesh,
+    reroll: rerollCharges, banish: banishCharges,
+  };
+  state.player = p.state;
+  playerWeapons = p.weapons;
+  upgradeRanks = p.ranks || (p.ranks = {});
+  banishedUpgrades = p.banished || (p.banished = new Set());
+  _activeSynergies = p.synergies || (p.synergies = new Set());
+  rerollCharges = p.rerollCharges || 0;
+  banishCharges = p.banishCharges || 0;
+  if (p.mesh) playerMesh = p.mesh;   // level-up burst and shockwave land on them
+}
+function endPickContext() {
+  if (!_pickSaved) return;
+  const s = _pickSaved;
+  _pickSaved = null;
+  // Charges are plain numbers, so what the picker spent has to be written back.
+  s.p.rerollCharges = rerollCharges;
+  s.p.banishCharges = banishCharges;
+  state.player = s.player; playerWeapons = s.weapons; upgradeRanks = s.ranks;
+  banishedUpgrades = s.banished; _activeSynergies = s.synergies; playerMesh = s.mesh;
+  rerollCharges = s.reroll; banishCharges = s.banish;
+}
+
 function presentNextLevelUp() {
   const p = nextPlayerNeedingPick();
-  if (!p) { _pendingLevelUps = 0; return; }
+  if (!p) { endPickContext(); return; }
+  const kind = p.picks.shift();
   _pickingPlayer = p;
   _lastPickerIndex = p.index;
-  p.pendingPicks--;
-  if (!nextPlayerNeedingPick()) _pendingLevelUps = 0;
-  showLevelUp(false);
+  beginPickContext(p);
+  showLevelUp(kind === 'chest');
 }
 
 function closeUpgradeScreen() {
   document.getElementById('level-up-screen').style.display = 'none';
-  document.body.classList.remove('picking-coop');
-  const _waitEl = document.getElementById('pick-waiting');
-  if (_waitEl) _waitEl.style.display = 'none';
+  document.body.classList.remove('coop-pick');
   _upgradeScreenOpen = false;
   _pickingPlayer = null;
+  endPickContext();
   // _lastPickerIndex deliberately survives here: it is what makes the next
   // card go to a different knight instead of back to whoever just picked.
   if (nextPlayerNeedingPick()) presentNextLevelUp();
-  else if (players.length === 1) state.paused = false;
+  else state.paused = false;
 }
 
 // Ranks taken this run, per upgrade id. Drives evolution requirements and
 // the per-upgrade rank caps.
-const upgradeRanks = {};
+// Player 1's book IS the global: everything unconverted reads these names, and
+// players[0] has held the same objects since the co-op refactor began.
+let upgradeRanks = players[0].ranks;
 function upgradeRank(id) { return upgradeRanks[id] || 0; }
 
 // ─── RELICS ───
@@ -7818,7 +8041,7 @@ function relicUpgrade(r) {
       if (r.id === 'hooves') state.player.speed *= 1.12;
       if (r.id === 'windwalker') state.player._dashCDBonus = (state.player._dashCDBonus || 0) + 1.0;
     },
-    condition: () => isRelicUnlocked(r) && !hasRelic(r.id) && relicCount() < MAX_RELICS,
+    condition: () => isRelicUnlocked(r) && !(state.player.relics && state.player.relics[r.id]) && relicCount() < MAX_RELICS,
   };
 }
 
@@ -7912,6 +8135,7 @@ const UPGRADES = [
   primaryUpgrade('sword', 'Tempered Blade', 'Thy sword grows sharper — damage, range and cleave'),
   primaryUpgrade('spear', 'Honed Spearhead', 'Thy spear thrusts deeper — damage and reach'),
   primaryUpgrade('quickblade', 'Whetted Edge', 'Thy blade dances faster — damage, tempo and cleave'),
+  primaryUpgrade('staff', 'Runed Focus', 'Thy staff burns brighter — damage, cadence and reach'),
   weaponUpgrade('dagger', 'Throwing Daggers', 'Enchanted blades that seek thy foes'),
   weaponUpgrade('holyAura', 'Holy Aura', 'A divine ring smites those who draw near'),
   weaponUpgrade('arrowVolley', 'Arrow Volley', 'Unleash a fan of arrows before thee'),
@@ -7949,7 +8173,7 @@ function upgradeCardText(upg, mul) {
 
 // Banish removes an upgrade from this run's pool; Skip closes without picking
 let banishCharges = 1;
-const banishedUpgrades = new Set();
+let banishedUpgrades = players[0].banished;
 let _banishMode = false;
 
 // ─── UNLOCKS & MASTERY (persisted in meta) ───
@@ -8235,7 +8459,7 @@ const WEAPON_SYNERGIES = [
   { weapons: ['stormCall', 'dagger'],       name: 'Thunderstrike', desc: '+10% Crit Chance',    apply: () => { state.player.critChance = Math.min(0.5, state.player.critChance + 0.10); } },
   { weapons: ['emberTrail', 'orbitalBomb'], name: 'Scorched Earth', desc: '+30% Burn Damage',   apply: () => { state.player._burnMul = (state.player._burnMul || 1) + 0.3; } },
 ];
-const _activeSynergies = new Set();
+let _activeSynergies = players[0].synergies;
 
 function checkWeaponSynergies() {
   for (const syn of WEAPON_SYNERGIES) {
@@ -8259,6 +8483,7 @@ const WEAPON_EVOLUTIONS = {
   sword:       { requires: 'damage',      evoName: 'Excalibur',        evoDesc: 'The legendary blade — 2x damage, heals 1 HP per hit' },
   spear:       { requires: 'range',       evoName: 'Dragonlance',      evoDesc: 'A wider, longer thrust — 2x damage, hurls foes back' },
   quickblade:  { requires: 'attackSpeed', evoName: 'Tempest Edge',     evoDesc: 'Blistering tempo — 1.7x damage, cleaves all, dash cooldown halved' },
+  staff:       { requires: 'critDmg',     evoName: 'Starcaller',       evoDesc: 'A bolt that will not stop — 1.6x damage, faster cadence, pierces three more' },
   dagger:      { requires: 'crit',        evoName: 'Storm Kunai',      evoDesc: 'Critical daggers that chain to 2 extra targets' },
   holyAura:    { requires: 'armor',       evoName: 'Divine Judgement',  evoDesc: 'Massive radius, stuns enemies briefly' },
   arrowVolley: { requires: 'attackSpeed', evoName: 'Meteor Shower',    evoDesc: 'Arrows rain down everywhere, double count' },
@@ -8285,6 +8510,7 @@ const EVOLUTION_COLORS = {
   sword: 0xffd257,        // Excalibur — gold
   spear: 0xff6a2e,        // Dragonlance — dragonfire
   quickblade: 0xbfe6ff,   // Tempest Edge — storm blue
+  staff: 0xb96cff,        // Starcaller — arcane violet
   dagger: 0xbfe6ff,       // Storm Kunai — lightning blue
   holyAura: 0xfff2c4,     // Divine Judgement — white-gold
   arrowVolley: 0xff8833,  // Meteor Shower — fire
@@ -8326,25 +8552,28 @@ function evolveWeapon(weaponId) {
   setTimeout(() => { announce.style.opacity = '0'; announce.style.color = ''; }, 3000);
 }
 
-function levelUpShockwave() {
+function levelUpShockwave(who) {
+  const pl = who || players[0];
+  const pm = pl.mesh || playerMesh;
+  if (!pm) return;
   const SHOCKWAVE_RADIUS = 6;
-  const SHOCKWAVE_DAMAGE = 15 + state.player.level * 3;
+  const SHOCKWAVE_DAMAGE = 15 + pl.state.level * 3;
 
   // Damage and knock back all nearby enemies
   const shockRadiusSq = SHOCKWAVE_RADIUS * SHOCKWAVE_RADIUS;
   for (let ei = 0; ei < enemies.length; ei++) {
     const enemy = enemies[ei];
     if (enemy.isDying) continue;
-    const shockDistSq = distSq(playerMesh.position, enemy.mesh.position);
+    const shockDistSq = distSq(pm.position, enemy.mesh.position);
     if (shockDistSq >= shockRadiusSq) continue;
     const falloff = 1 - Math.sqrt(shockDistSq) / SHOCKWAVE_RADIUS;
     applyDamage(enemy, SHOCKWAVE_DAMAGE * falloff, {
-      source: 'shockwave', color: '#66ccff', knockback: 3 * falloff, kbTimer: 0.25,
+      source: 'shockwave', by: pl, color: '#66ccff', knockback: 3 * falloff, kbTimer: 0.25,
     });
   }
 
   // Visual: VFX level-up burst
-  vfx.levelUp(playerMesh);
+  vfx.levelUp(pm);
   triggerShake(0.4, 0.3);
 
   // XP Vacuum — all pickups fly to player on level-up
@@ -8354,47 +8583,43 @@ function levelUpShockwave() {
 function showLevelUp(isChest) {
   if (!isChest) {
     AudioSystem.play('levelUp', { volume: 0.7 });
-    levelUpShockwave();
+    levelUpShockwave(_pickingPlayer || players[0]);
   }
-  // Solo keeps the full-screen pause it always had. In co-op the fight carries
-  // on underneath and the card panel is a corner overlay for one knight, because
-  // pausing on every level-up would stop the game roughly every 7 seconds at
-  // three players (COOP-PLAN decision 1).
+  // The card screen always pauses, co-op included. The non-blocking overlay it
+  // replaces (COOP-PLAN decision 1) aimed three sets of live inputs at one card
+  // list: whoever moved a stick drove the other knight's highlight, and everyone
+  // kept taking hits through their own pick. Pausing is also what makes the pick
+  // context safe, because nothing else reads the globals while they point at the
+  // picking knight.
   const coop = players.length > 1;
-  state.paused = !coop;
-  document.body.classList.toggle('picking-coop', coop);
+  state.paused = true;
+  document.body.classList.toggle('coop-pick', coop);
   _upgradeScreenOpen = true;
   const screen = document.getElementById('level-up-screen');
   const options = document.getElementById('upgrade-options');
   const heading = screen.querySelector('h2');
-  const still = players.reduce((n, p) => n + (p.pendingPicks || 0), 0);
+  const still = pendingPickCount();
   const queued = still > 0 ? ` <span style="font-size:20px;color:#8a7040">(+${still} more)</span>` : '';
   heading.innerHTML = (isChest ? 'TREASURE!' : 'LEVEL UP') + queued;
   heading.style.color = isChest ? '#e8c860' : '#c9a253';
-  // Whose pick this is, in that knight's ring colour, plus the device they hold.
-  // Everyone else gets a line telling them to keep fighting.
+  // Whose pick this is, in that knight's ring colour, plus the one device that
+  // can answer it. Everybody else's controller is inert until they choose.
   const ownerEl = document.getElementById('pick-owner');
   const hintEl = document.getElementById('pick-hint');
-  const waitEl = document.getElementById('pick-waiting');
   if (coop && _pickingPlayer) {
     const idx = _pickingPlayer.index;
     const tint = _COOP_HUD_TINT[idx] || '#c9a253';
     const nm = (CHARACTER_NAMES[_pickingPlayer.character] || `Player ${idx + 1}`).toUpperCase();
     screen.style.setProperty('--pick-tint', tint);
-    ownerEl.textContent = `P${idx + 1} \u2014 ${nm}`;
-    hintEl.textContent = `${describePickDevice(_pickingPlayer)} \u00b7 everyone else keeps fighting`;
-    if (waitEl) {
-      waitEl.style.setProperty('--pick-tint', tint);
-      waitEl.textContent = `${nm} IS CHOOSING AN UPGRADE`;
-      waitEl.style.display = 'block';
-    }
-  } else if (waitEl) {
-    waitEl.style.display = 'none';
+    ownerEl.textContent = `P${idx + 1} \u2014 ${nm} CHOOSES`;
+    hintEl.textContent = `${describePickDevice(_pickingPlayer)} \u00b7 every other controller is locked out`;
   }
   options.innerHTML = '';
   screen.style.display = 'flex';
 
   populateUpgradeChoices(isChest ? 2 : 3, screen, options, isChest);
+  // Put the highlight on the first card so the owner's pad has somewhere to start.
+  refreshMenu(true);
 }
 
 // What the picking knight should physically press. A shared screen with a pad,
@@ -8405,6 +8630,37 @@ function describePickDevice(p) {
   if (p.device && p.device.type === 'kb') return 'Arrow keys to choose, Right Shift to confirm';
   if (p.padIndex != null) return `Pad ${p.padIndex + 1}: D-Pad to choose, A to confirm`;
   return 'Keys 1 / 2 / 3, or D-Pad + A on your pad';
+}
+
+// ─── WHO MAY ANSWER THE CARD SCREEN ───
+// One knight owns the open card list, so every other device is ignored until it
+// closes. Without this, player 1's stick moved player 2's highlight and player
+// 1's dash button picked player 2's upgrade.
+const _DEAD_PAD = {
+  lx: 0, ly: 0, a: false, prevA: false, b: false, prevB: false, x: false, prevX: false,
+  y: false, prevY: false, start: false, prevStart: false,
+  dpadUp: false, prevDpadUp: false, dpadDown: false, prevDpadDown: false,
+  dpadLeft: false, prevDpadLeft: false, dpadRight: false, prevDpadRight: false,
+  navUp: false, prevNavUp: false, navDown: false, prevNavDown: false,
+  navLeft: false, prevNavLeft: false, navRight: false, prevNavRight: false,
+};
+// The pad slot allowed to drive the cards, or a dead slot when the owner is on
+// the keyboard. Player 1 keeps the shared first-pad state it has always used.
+function pickPadState() {
+  const p = _pickingPlayer;
+  if (!p || players.length < 2 || p.index === 0) return gamepadState;
+  if (p.padIndex != null) return gamepadStates[p.padIndex] || _DEAD_PAD;
+  return _DEAD_PAD;
+}
+// May this keyboard code act on the open card screen?
+function pickKeyAllowed(code) {
+  const p = _pickingPlayer;
+  if (!p || players.length < 2) return true;
+  if (p.index === 0) return !(keyboardCompanionActive() && code.indexOf('Arrow') === 0);
+  if (p.device && p.device.type === 'kb') {
+    return code.indexOf('Arrow') === 0 || code === 'ShiftRight' || code === 'Numpad0' || code === 'Escape';
+  }
+  return false;   // a pad companion's card cannot be answered from the keyboard
 }
 
 // The run-defining picks. Fortune's Favor promises "rarer upgrades", so luck
@@ -8625,7 +8881,8 @@ function updateCoopHud() {
       html += `<div class="coop-hp-row" id="coop-hp-${i}" style="--tint:${tint}">`
         + `<div class="coop-hp-who" style="color:${tint}">${label}</div>`
         + `<div class="coop-hp-outer"><div class="coop-hp-inner" id="coop-hp-bar-${i}" style="background:${tint}"></div></div>`
-        + `<div class="coop-hp-text" id="coop-hp-txt-${i}"></div></div>`;
+        + `<div class="coop-hp-text" id="coop-hp-txt-${i}"></div>`
+        + `<div class="coop-kit" id="coop-kit-${i}"></div></div>`;
     }
     el.innerHTML = html;
     _coopHudBuiltFor = players.length;
@@ -8653,7 +8910,40 @@ function updateCoopHud() {
       txt.textContent = `${Math.max(0, Math.ceil(ps.hp))}/${Math.round(ps.maxHp)}`;
     }
     if (row) row.classList.toggle('is-down', !!ps.isDead);
+    // The companion's own arsenal and relics, so a card they picked visibly lands
+    // on THEIR sheet. Player 1 reads the same thing off the weapon HUD below.
+    const kit = document.getElementById(`coop-kit-${i}`);
+    if (kit) {
+      const html = coopKitHtml(players[i]);
+      if (_hudPrev[`kit${i}`] !== html) { _hudPrev[`kit${i}`] = html; kit.innerHTML = html; }
+    }
   }
+}
+
+// A knight's weapons (with level, ★ when evolved) then their relics, in the same
+// art the level-up cards use. Emoji is the fallback when an icon is missing.
+function coopKitHtml(pl) {
+  let html = '';
+  for (const [wKey, w] of Object.entries(pl.weapons)) {
+    if (!w.owned) continue;
+    const evoName = w.evolved ? (WEAPON_EVOLUTIONS[wKey]?.evoName || 'Evolved') : '';
+    const title = `${WEAPON_NAMES[wKey] || wKey} Lv${w.level}${w.evolved ? ` (${evoName})` : ''}`;
+    html += `<span class="coop-wpn${w.evolved ? ' evolved' : ''}" title="${title}">`
+      + `<img src="images/upgrades/${wKey}.png" alt="" onerror="this.outerHTML='${WEAPON_ICONS[wKey] || ''}'">`
+      + `<b>${w.evolved ? '★' : w.level}</b></span>`;
+  }
+  const rel = pl.state.relics;
+  if (rel) {
+    let relHtml = '';
+    for (const r of RELICS) {
+      if (!rel[r.id]) continue;
+      const spent = r.id === 'phoenix' && pl.state._phoenixUsed;
+      relHtml += `<span class="coop-rel${spent ? ' spent' : ''}" title="${r.name}: ${r.desc}">`
+        + `<img src="images/relics/${r.id}.png" alt="" onerror="this.outerHTML='${r.icon}'"></span>`;
+    }
+    if (relHtml) html += '<span class="coop-kit-sep"></span>' + relHtml;
+  }
+  return html;
 }
 
 function updateHUD() {
@@ -9203,6 +9493,9 @@ function gameOver(victory = false) {
 // Tear down everything a run created and restore base stats. Does not start a
 // run: Begin Quest, Rise Again and Main Menu all call this first.
 function clearRun() {
+  // Point the upgrade globals back at player 1 first: everything below resets
+  // them, and a run must never start with them aliased to a departing companion.
+  endPickContext();
   // Clear enemies
   for (const e of enemies) { scene.remove(e.mesh); disposeEnemy(e); }
   enemies.length = 0;
@@ -9271,20 +9564,19 @@ function clearRun() {
   playerWeapons[primary] = { owned: true, level: 1 };
   weaponTimers.dagger = 0; weaponTimers.holyAura = 0; weaponTimers.arrowVolley = 0; weaponTimers.orbitalBomb = 0; weaponTimers.stormCall = 0;
   clearWardShields();
-  _shieldAngle = 0;
-  _shieldGuardUntil = 0;
-  _emberLastX = null; _emberLastZ = null;
+  for (const pl of players) {
+    pl.shieldAngle = 0; pl.shieldGuardUntil = 0;
+    pl.emberLastX = null; pl.emberLastZ = null; pl._lastLifesteal = -1;
+  }
   _lastComboMilestone = 0;
-  _lastLifestealTime = -1;
   rerollCharges = 0;
   banishCharges = 1;
   banishedUpgrades.clear();
   _banishMode = false;
   resetPartyToSolo();
-  _pendingLevelUps = 0;
   _pickingPlayer = null;
   _lastPickerIndex = -1;
-  for (const p of players) p.pendingPicks = 0;
+  for (const p of players) p.picks = [];
   // Shared XP curve depends on party size, so reset it for the party that is playing.
   players[0].state.xpToNext = partyXpToNext(1);
   _upgradeScreenOpen = false;
@@ -9306,7 +9598,7 @@ function clearRun() {
   MAGNET_RANGE = 6.0;
   // Re-apply character passive and forge upgrades on reset
   const resetPassive = CHARACTER_PASSIVES[selectedCharacter];
-  if (resetPassive) resetPassive.apply(state.player);
+  if (resetPassive) resetPassive.apply(state.player, players[0]);
   applyForgeUpgrades();
   refreshMasteryRanks();
   _completedMilestones.clear();
@@ -10010,6 +10302,49 @@ function coopAvailableKnights() {
   const taken = new Set([selectedCharacter, ...[...coopPending.values()].map(s => s.character)]);
   return COOP_KNIGHTS.filter(k => !taken.has(k) && !(settings.privateMode && k !== 'dad'));
 }
+function knightPool() {
+  return COOP_KNIGHTS.filter(k => !(settings.privateMode && k !== 'dad'));
+}
+// Slot keys: 'p1' for player 1, otherwise the coopPending key ('pad:2', 'kb').
+function slotCharacter(key) {
+  if (key === 'p1') return selectedCharacter;
+  const slot = coopPending.get(key);
+  return slot ? slot.character : null;
+}
+// Who currently holds a knight, or null.
+function knightHolder(k) {
+  if (selectedCharacter === k) return 'p1';
+  for (const [key, slot] of coopPending) if (slot.character === k) return key;
+  return null;
+}
+// Give `knight` to `key`, SWAPPING with whoever holds it. The old code pushed
+// the loser onto the first unclaimed knight instead, which is why a combination
+// like "P1 Parker, P2 Brennan" could not be reached: choosing Parker for P1
+// bumped P2 to Dad, and no sequence of presses got you back.
+function assignKnight(key, knight) {
+  if (!knight || (settings.privateMode && knight !== 'dad')) return false;
+  const cur = slotCharacter(key);
+  if (!cur || cur === knight) return false;
+  const holder = knightHolder(knight);
+  const put = (k, c) => {
+    if (k === 'p1') setPlayerOneCharacter(c);
+    else { const sl = coopPending.get(k); if (sl) sl.character = c; }
+  };
+  put(key, knight);
+  if (holder && holder !== key) put(holder, cur);
+  renderCoopRoster();
+  return true;
+}
+// Step a slot along the roster, wrapping. Three knights means any of them is at
+// most two presses away, in either direction.
+function cycleKnight(key, dir = 1) {
+  const pool = knightPool();
+  const i = pool.indexOf(slotCharacter(key));
+  if (i < 0 || pool.length < 2) return false;
+  const ok = assignKnight(key, pool[(i + dir + pool.length) % pool.length]);
+  if (ok) AudioSystem.play('upgradeSelect', { volume: 0.3 });
+  return ok;
+}
 
 function renderCoopRoster() {
   const wrap = document.getElementById('coop-roster');
@@ -10044,21 +10379,76 @@ function renderCoopRoster() {
       : live === 1
         ? `<b>1 controller detected</b>${which} — 2nd Xbox pad on Bluetooth? Windows allows only one; connect it by <b>USB cable</b> or use an Xbox Wireless Adapter`
         : `<b>No controllers detected</b> — click the game window, then press a button on a pad`;
-    hint.innerHTML = `<b>A</b> on a 2nd controller to join &bull; <b>Y</b> change knight &bull; <b>B</b> leave`
-      + `<br>No 2nd pad? <b>Enter</b> joins on the keyboard (arrows to move, right shift to dash)`
+    hint.innerHTML = `<b>A</b> on a 2nd controller to join &bull; <b>D-Pad \u2190 \u2192</b> or <b>Y</b> to change knight &bull; <b>B</b> to leave`
+      + `<br>No 2nd pad? <b>Enter</b> joins on the keyboard (arrows to move, right shift to dash); <b>Enter</b> again changes knight`
+      + `<br>Or just <b>click</b> any slot above to change its knight, or a card to take that knight for P1 \u2014 two knights swap rather than one losing out`
       + `<br>${padMsg}`;
   }
+  // Every joined slot is a button: click it to step that knight along the roster.
+  // Without this the only way to change a companion was Y on their own pad, so
+  // whoever held the mouse could not set the party up.
   const names = { dad: 'Dad', brennan: 'Brennan', parker: 'Parker' };
-  let html = `<div class="coop-slot joined"><div class="cs-who">P1</div><div class="cs-knight">${names[selectedCharacter] || selectedCharacter}</div><div class="cs-dev">WASD / pad</div></div>`;
+  const tint = i => _COOP_HUD_TINT[i] || '#c9a253';
+  let html = `<button class="coop-slot joined" data-slot="p1" style="--slot-tint:${tint(0)}" title="Click to change knight">`
+    + `<div class="cs-who" style="color:${tint(0)}">P1</div>`
+    + `<div class="cs-knight">${names[selectedCharacter] || selectedCharacter}</div>`
+    + `<div class="cs-dev">WASD${primaryPadIndex >= 0 ? ' / pad ' + primaryPadIndex : ''}</div>`
+    + `<div class="cs-swap">&#9664; change &#9654;</div></button>`;
   let n = 2;
-  for (const [, slot] of coopPending) {
-    const dev = slot.device && slot.device.type === 'kb' ? 'arrows' : `pad ${slot.device ? slot.device.index : '?'}`;
-    html += `<div class="coop-slot joined"><div class="cs-who">P${n++}</div><div class="cs-knight">${names[slot.character] || slot.character}</div><div class="cs-dev">${dev}</div></div>`;
+  for (const [key, slot] of coopPending) {
+    const dev = slot.device && slot.device.type === 'kb' ? 'arrows + R-Shift' : `pad ${slot.device ? slot.device.index : '?'}`;
+    html += `<button class="coop-slot joined" data-slot="${key}" style="--slot-tint:${tint(n - 1)}" title="Click to change knight">`
+      + `<div class="cs-who" style="color:${tint(n - 1)}">P${n++}</div>`
+      + `<div class="cs-knight">${names[slot.character] || slot.character}</div>`
+      + `<div class="cs-dev">${dev}</div>`
+      + `<div class="cs-swap">&#9664; change &#9654;</div></button>`;
   }
   if (n <= MAX_PLAYERS && coopAvailableKnights().length) {
-    html += `<div class="coop-slot"><div class="cs-who">P${n}</div><div class="cs-knight">A on a pad</div><div class="cs-dev">or Enter for arrows</div></div>`;
+    html += `<button class="coop-slot" data-slot="join-kb" title="Click to add a keyboard companion">`
+      + `<div class="cs-who">P${n}</div><div class="cs-knight">A on a pad</div>`
+      + `<div class="cs-dev">or click / Enter for arrows</div></button>`;
   }
   slots.innerHTML = html;
+  for (const btn of slots.querySelectorAll('.coop-slot[data-slot]')) {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.slot;
+      if (key === 'join-kb') { joinKeyboardCompanion(); return; }
+      cycleKnight(key, 1);
+    });
+  }
+  renderCardOwners();
+}
+
+// Badges on the three character cards saying who has each one. On a shared
+// screen the setup question is "which knight am I?", and nothing on this screen
+// used to answer it for anyone but player 1.
+function renderCardOwners() {
+  const owner = {};
+  owner[selectedCharacter] = 0;
+  let n = 1;
+  for (const [, slot] of coopPending) owner[slot.character] = n++;
+  document.querySelectorAll('.char-card').forEach(card => {
+    const idx = owner[card.dataset.char];
+    let b = card.querySelector('.char-owner');
+    if (!b) { b = document.createElement('div'); b.className = 'char-owner'; card.appendChild(b); }
+    if (idx == null) { b.style.display = 'none'; card.classList.remove('taken'); return; }
+    b.style.display = 'block';
+    b.textContent = `P${idx + 1}`;
+    b.style.background = _COOP_HUD_TINT[idx] || '#c9a253';
+    card.classList.toggle('taken', idx > 0);
+  });
+}
+
+// The keyboard companion, joinable by click as well as by Enter.
+function joinKeyboardCompanion() {
+  if (settings.privateMode || coopPending.has('kb')) return false;
+  if (coopPending.size + 1 >= MAX_PLAYERS) return false;
+  const free = coopAvailableKnights();
+  if (!free.length) return false;
+  coopPending.set('kb', { character: free[0], device: { type: 'kb' } });
+  AudioSystem.play('upgradeSelect', { volume: 0.4 });
+  renderCoopRoster();
+  return true;
 }
 
 // Called each frame while the title screen is up.
@@ -10100,10 +10490,13 @@ function updateCoopJoin() {
         if (free.length) { coopPending.set(key, { character: free[0], device: { type: 'pad', index: i } }); dirty = true; AudioSystem.play('upgradeSelect', { volume: 0.4 }); }
       }
     } else {
-      if (pad.y && !pad.prevY) {
-        const free = coopAvailableKnights();
-        if (free.length) { slot.character = free[0]; dirty = true; AudioSystem.play('upgradeSelect', { volume: 0.3 }); }
-      }
+      // D-pad or stick left/right walks this knight along the three cards, and
+      // Y still steps forward. Both swap with whoever holds the target, so any
+      // arrangement is reachable from any other.
+      const left = (pad.dpadLeft && !pad.prevDpadLeft) || (pad.navLeft && !pad.prevNavLeft);
+      const right = (pad.dpadRight && !pad.prevDpadRight) || (pad.navRight && !pad.prevNavRight);
+      if (left) cycleKnight(key, -1);
+      else if (right || (pad.y && !pad.prevY)) cycleKnight(key, 1);
       if (pad.b && !pad.prevB) { coopPending.delete(key); dirty = true; }
     }
   }
@@ -10112,15 +10505,8 @@ function updateCoopJoin() {
   // escape hatch when a browser or an OS will not surface a second gamepad.
   const kb = coopPending.get('kb');
   if (keys['Enter'] && !_coopPrevEnter) {
-    if (!kb) {
-      if (coopPending.size + 1 < MAX_PLAYERS) {
-        const free = coopAvailableKnights();
-        if (free.length) { coopPending.set('kb', { character: free[0], device: { type: 'kb' } }); dirty = true; AudioSystem.play('upgradeSelect', { volume: 0.4 }); }
-      }
-    } else {
-      const free = coopAvailableKnights();
-      if (free.length) { kb.character = free[0]; dirty = true; AudioSystem.play('upgradeSelect', { volume: 0.3 }); }
-    }
+    if (!kb) joinKeyboardCompanion();
+    else cycleKnight('kb', 1);   // wraps through all three, swapping as needed
   }
   if (keys['Backspace'] && !_coopPrevBack && kb) { coopPending.delete('kb'); dirty = true; }
   _coopPrevEnter = !!keys['Enter'];
@@ -10202,6 +10588,7 @@ function buildMenuRows(id) {
       _visible('.char-card', root),
       [...root.querySelectorAll('.map-btn')],
       [...root.querySelectorAll('.ogre-btn')],
+      _visible('#coop-slots .coop-slot', root),
       [root.querySelector('#start-btn')],
       _visible('.menu-row button', root),
     ];
@@ -10287,10 +10674,12 @@ function menuBack() {
 }
 
 function handleMenuInput() {
-  const s = gamepadState;
-  if (s.start && !s.prevStart) togglePause();
+  if (gamepadState.start && !gamepadState.prevStart) togglePause();
   refreshMenu(false);
   if (!menuNav.screen) return;
+  // The card screen belongs to one knight, so it reads that knight's pad alone.
+  // Every other screen stays on the shared first-pad state.
+  const s = menuNav.screen === 'level-up-screen' ? pickPadState() : gamepadState;
   const up    = (s.dpadUp && !s.prevDpadUp)       || (s.navUp && !s.prevNavUp);
   const down  = (s.dpadDown && !s.prevDpadDown)   || (s.navDown && !s.prevNavDown);
   const left  = (s.dpadLeft && !s.prevDpadLeft)   || (s.navLeft && !s.prevNavLeft);
@@ -10300,7 +10689,9 @@ function handleMenuInput() {
   else if (left) menuMove(0, -1);
   else if (right) menuMove(0, 1);
   if (s.a && !s.prevA) menuActivate();
-  if (s.b && !s.prevB) menuBack();
+  // B is also the dash button. On the card screen it has nothing to go back to,
+  // so leaving it wired just let a mashed dash close somebody else's pick.
+  if (s.b && !s.prevB && menuNav.screen !== 'level-up-screen') menuBack();
   if (menuNav.screen === 'level-up-screen') {
     if (s.x && !s.prevX) clickIfVisible('reroll-btn');
     if (s.y && !s.prevY) clickIfVisible('banish-btn');
@@ -10333,6 +10724,9 @@ function togglePause() {
       `<span>Time</span><span>${timeStr}</span>` +
       `<span>Kills</span><span>${state.kills}</span>` +
       `<span>Score</span><span>${state.score}</span>` +
+      (players.length > 1
+        ? `<span class="ps-head" style="grid-column:1/-1;text-align:center;color:${_COOP_HUD_TINT[0]};margin-top:6px;">P1 — ${(CHARACTER_NAMES[selectedCharacter] || 'Knight').toUpperCase()}</span>`
+        : '') +
       `<span>Level</span><span>${state.player.level}</span>` +
       `<span>Damage</span><span>${state.player.damage}</span>` +
       `<span>Armor</span><span>${state.player.armor} (${Math.round((1 - armorMultiplier()) * 100)}% less damage)</span>` +
@@ -10350,30 +10744,44 @@ function togglePause() {
       `<span>Dashes</span><span>${runStats.dashesUsed}</span>` +
       ogreInfo;
 
-    // Add weapon loadout
-    let loadout = '';
-    for (const [wKey, wData] of Object.entries(playerWeapons)) {
-      if (!wData.owned) continue;
-      const evoTag = wData.evolved ? ` <span style="color:#ffdd00">★</span>` : '';
-      loadout += `<span>${WEAPON_NAMES[wKey]}</span><span>Lv ${wData.level}${evoTag}</span>`;
-    }
-    if (loadout) {
-      document.getElementById('pause-stats').innerHTML += '<span style="color:#c9a253;grid-column:1/-1;text-align:center;margin-top:6px;border-top:1px solid rgba(212,168,86,0.2);padding-top:6px;">Weapons</span>' + loadout;
-    }
-    // Relics
-    if (state.player.relics) {
-      let rh = '<span style="color:#5fd3c7;grid-column:1/-1;text-align:center;margin-top:4px;">Relics</span>';
-      for (const r of RELICS) if (state.player.relics[r.id]) rh += `<span>${r.icon} ${r.name}</span><span style="font-size:12px">${r.desc}</span>`;
-      document.getElementById('pause-stats').innerHTML += rh;
-    }
-    // Active synergies
-    if (_activeSynergies.size > 0) {
-      let synHtml = '<span style="color:#88ddff;grid-column:1/-1;text-align:center;margin-top:4px;">Synergies</span>';
-      for (const name of _activeSynergies) synHtml += `<span style="grid-column:1/-1;text-align:center;color:#88ddff;font-size:12px">${name}</span>`;
-      document.getElementById('pause-stats').innerHTML += synHtml;
-    }
+    // Weapons, relics and synergies — one block per knight. Solo reads exactly as
+    // it always did (no name header); in co-op each knight gets their own, because
+    // builds diverge now and "what did Parker take?" is the whole conversation.
+    document.getElementById('pause-stats').innerHTML += players.map(pl => pauseLoadoutHtml(pl)).join('');
     document.getElementById('pause-screen').style.display = 'flex';
   }
+}
+
+// One knight's build, for the pause screen. Named only when there is a party.
+function pauseLoadoutHtml(pl) {
+  const solo = players.length === 1;
+  const tint = _COOP_HUD_TINT[pl.index] || '#c9a253';
+  const nm = (CHARACTER_NAMES[pl.character] || `Player ${pl.index + 1}`);
+  const head = (label, color, extra = '') =>
+    `<span class="ps-head" style="color:${color};grid-column:1/-1;text-align:center;margin-top:${extra ? '6px' : '4px'};${extra}">${label}</span>`;
+  let html = '';
+  if (!solo) {
+    html += head(`P${pl.index + 1} — ${nm.toUpperCase()} &middot; Lv ${pl.state.level} &middot; ${Math.max(0, Math.ceil(pl.state.hp))}/${Math.round(pl.state.maxHp)} HP`,
+      tint, 'border-top:1px solid rgba(212,168,86,0.2);padding-top:6px;');
+  }
+  let loadout = '';
+  for (const [wKey, wData] of Object.entries(pl.weapons)) {
+    if (!wData.owned) continue;
+    const evoTag = wData.evolved ? ` <span style="color:#ffdd00">★ ${WEAPON_EVOLUTIONS[wKey]?.evoName || ''}</span>` : '';
+    loadout += `<span class="ps-k">${WEAPON_NAMES[wKey]}</span><span class="ps-v">Lv ${wData.level}${evoTag}</span>`;
+  }
+  if (loadout) html += head('Weapons', '#c9a253', solo ? 'border-top:1px solid rgba(212,168,86,0.2);padding-top:6px;' : '') + loadout;
+  if (pl.state.relics) {
+    let rh = '';
+    for (const r of RELICS) if (pl.state.relics[r.id]) rh += `<span class="ps-k">${r.icon} ${r.name}</span><span class="ps-v" style="font-size:12px">${r.desc}</span>`;
+    if (rh) html += head('Relics', '#5fd3c7') + rh;
+  }
+  const syn = pl.synergies;
+  if (syn && syn.size > 0) {
+    html += head('Synergies', '#88ddff');
+    for (const name of syn) html += `<span style="grid-column:1/-1;text-align:center;color:#88ddff;font-size:12px">${name}</span>`;
+  }
+  return html;
 }
 
 document.getElementById('resume-btn').addEventListener('click', togglePause);
@@ -10384,6 +10792,8 @@ window.addEventListener('keydown', (e) => {
   const screen = visibleScreen();
   if (screen) {
     refreshMenu(false);
+    // A card belongs to one knight; keys that are not theirs do nothing here.
+    if (screen === 'level-up-screen' && !pickKeyAllowed(e.code)) { e.preventDefault(); return; }
     const nav = { ArrowUp: [-1, 0], ArrowDown: [1, 0], ArrowLeft: [0, -1], ArrowRight: [0, 1],
                   KeyW: [-1, 0], KeyS: [1, 0], KeyA: [0, -1], KeyD: [0, 1] };
     if (nav[e.code]) { e.preventDefault(); menuMove(nav[e.code][0], nav[e.code][1]); return; }
@@ -10391,6 +10801,9 @@ window.addEventListener('keydown', (e) => {
     // gets mashed, which would auto-pick the first level-up card.
     if (e.code === 'Enter' || (e.code === 'Space' && screen === 'start-screen')) { e.preventDefault(); menuActivate(); return; }
     if (screen === 'level-up-screen') {
+      // A keyboard companion confirms with Right Shift / Numpad 0 -- Enter and
+      // the number row belong to player 1.
+      if (e.code === 'ShiftRight' || e.code === 'Numpad0') { e.preventDefault(); menuActivate(); return; }
       const n = { Digit1: 0, Digit2: 1, Digit3: 2, Digit4: 3, Numpad1: 0, Numpad2: 1, Numpad3: 2, Numpad4: 3 }[e.code];
       if (n != null) { const btns = document.querySelectorAll('.upgrade-btn'); btns[n]?.click(); return; }
       if (e.code === 'KeyR') { clickIfVisible('reroll-btn'); return; }
@@ -10670,42 +11083,8 @@ async function setupCharacterPreviews() {
         }
       }
 
-      // Attach weapon to hand_r
-      {
-        let handBoneR = null;
-        model.traverse(c => { if (c.isBone && c.name === 'hand_r') handBoneR = c; });
-        if (handBoneR) {
-          const DEG = Math.PI / 180;
-          if (charId === 'brennan' && assets.spear) {
-            const spear = assets.spear.scene.clone();
-            spear.position.set(-0.010, 0.050, 0.170);
-            spear.rotation.set(-272 * DEG, -59 * DEG, 3 * DEG);
-            spear.scale.setScalar(0.94);
-            handBoneR.add(spear);
-          } else if (assets.sword) {
-            const sword = assets.sword.scene.clone();
-            sword.position.set(0.005, 0.065, 0.260);
-            sword.rotation.set(-180 * DEG, -95 * DEG, -90 * DEG);
-            sword.scale.setScalar(0.55);
-            handBoneR.add(sword);
-          }
-        }
-      }
-
-      // Attach shield to hand_l (Dad & Parker)
-      if ((charId === 'dad' || charId === 'parker') && assets.shield) {
-        let handBoneL = null;
-        model.traverse(c => { if (c.isBone && c.name === 'hand_l') handBoneL = c; });
-        if (handBoneL) {
-          const DEG = Math.PI / 180;
-          const shield = assets.shield.scene.clone();
-          const shieldZ = charId === 'dad' ? 0.130 : 0.065;
-          shield.position.set(-0.035, -0.065, shieldZ);
-          shield.rotation.set(-272 * DEG, -101 * DEG, -68 * DEG);
-          shield.scale.setScalar(0.48);
-          handBoneL.add(shield);
-        }
-      }
+      // Exactly the gear the knight spawns with in the run.
+      attachCharacterGear(model, charId, false);
 
       prevScene.add(model);
       // Force an initial render to verify it works
@@ -10754,24 +11133,24 @@ const CHARACTER_BIOS = {
   brennan: "An honor bound knight who takes his sworn oath to protect the kingdom seriously. A rational and critical thinker, he often outwits his opponents with his intellect and raw power.",
   parker: "Once a knight, now sworn to the arcane. He traded shield and blade for a staff and the old words, and strikes from further than any sword can reach — so long as nothing reaches him first."
 };
+function setPlayerOneCharacter(char) {
+  selectedCharacter = char;
+  document.querySelectorAll('.char-card').forEach(c => c.classList.toggle('selected', c.dataset.char === char));
+  const passive = CHARACTER_PASSIVES[char];
+  const passiveText = passive ? `\n⚔ ${passive.name}: ${passive.desc}` : '';
+  document.getElementById('char-bio-area').textContent = (CHARACTER_BIOS[char] || '') + passiveText;
+  // Gold is per knight now, so the title-screen purse follows the selection.
+  updateStartGold();
+}
+
 document.querySelectorAll('.char-card').forEach(card => {
   card.addEventListener('click', () => {
-    document.querySelectorAll('.char-card').forEach(c => c.classList.remove('selected'));
-    card.classList.add('selected');
-    selectedCharacter = card.dataset.char;
-    const passive = CHARACTER_PASSIVES[selectedCharacter];
-    const passiveText = passive ? `\n⚔ ${passive.name}: ${passive.desc}` : '';
-    document.getElementById('char-bio-area').textContent = CHARACTER_BIOS[selectedCharacter] + passiveText;
-    // P1 taking a knight can free or claim one for the companions.
-    for (const [pad, slot] of coopPending) {
-      if (slot.character === selectedCharacter) {
-        const free = coopAvailableKnights();
-        if (free.length) slot.character = free[0]; else coopPending.delete(pad);
-      }
-    }
-    renderCoopRoster();
-    // Gold is per knight now, so the title-screen purse follows the selection.
-    updateStartGold();
+    // Clicking a card a companion already holds swaps the two, rather than
+    // bumping them onto whatever knight happened to be free.
+    const char = card.dataset.char;
+    if (char === selectedCharacter) { renderCoopRoster(); return; }
+    if (!assignKnight('p1', char)) { setPlayerOneCharacter(char); renderCoopRoster(); }
+    AudioSystem.play('upgradeSelect', { volume: 0.3 });
   });
 });
 applyPrivateMode();
@@ -11377,7 +11756,7 @@ init().then(() => {
   // simulation without rendering, and read state. Never used by the game itself.
   if (new URLSearchParams(location.search).has('debug')) {
     window.__cs = {
-      state, enemies, pickups, playerWeapons, upgradeRanks, runStats, keys, weaponTimers,
+      state, enemies, pickups, runStats, keys, weaponTimers,
       UPGRADES, WEAPON_STATS, MAPS, OGRE_LEVELS, FINAL_WAVE,
       players, nearestPlayer, alivePlayers, joinPlayer, makePlayer, createPlayer, partyFocus, AudioSystem, projectiles, CHARACTER_PRIMARY,
       openAudit, closeAudit, collectAudit, renderAudit,
@@ -11388,10 +11767,20 @@ init().then(() => {
       partySpawnMul, partyHpMul, partyBossHpMul, partyMaxEnemies,
       get primaryPadIndex() { return primaryPadIndex; },
       get playerMesh() { return playerMesh; },
+      get upgradeRanks() { return upgradeRanks; },
       get selectedCharacter() { return selectedCharacter; },
       get loadedMap() { return loadedMap; },
       get playerPos() { return playerMesh ? { x: playerMesh.position.x, z: playerMesh.position.z } : null; },
-      get pendingLevelUps() { return _pendingLevelUps; },
+      get pendingLevelUps() { return pendingPickCount(); },
+      pendingPickCount, queuePick, presentNextLevelUp,
+      applyDamage, registerKill, damagePlayersInRadius, playerAt, coopKitHtml,
+      partyHeal, partyBuff, spawnPickup, nearestLivePlayer,
+      assignKnight, cycleKnight, knightHolder, joinKeyboardCompanion,
+      charPreviews, CHARACTER_GEAR, attachCharacterGear,
+      updateHudNow: updateHUD, togglePause,
+      get lastHitCrit() { return _lastHitCrit; },
+      get pickingPlayer() { return _pickingPlayer; },
+      get playerWeapons() { return playerWeapons; },
       get upgradeScreenOpen() { return _upgradeScreenOpen; },
       get victoryTimer() { return _victoryTimer; },
       setLoopUpdates(on) { _loopUpdates = !!on; },

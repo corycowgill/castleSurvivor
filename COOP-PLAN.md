@@ -76,14 +76,44 @@ This must be solved before the refactor, because it determines the shape of the 
 
 | # | Decision | Choice |
 |---|---|---|
-| 1 | Level-up flow | **Non-blocking per-player card overlay** |
+| 1 | Level-up flow | ~~Non-blocking per-player card overlay~~ &rarr; **modal, one knight at a time** (reversed 2026-09-23, see below) |
 | 2 | XP | **Shared pool, `xpToNext` scaled by player count** |
 | 3 | Death | **Downed + revive**, run ends when all are down |
 | 4 | Screen | **Shared screen** with centroid camera + soft leash |
 
 What each one commits us to:
 
-**1 — Non-blocking overlay.** `showLevelUp()` must stop setting `state.paused` (index.html:7402). The card picker becomes a non-modal, per-player overlay anchored to that player's HUD corner, driven by that player's input device only. The sim keeps running underneath, so card effects apply mid-combat and the picker must tolerate the owner being hit, downed or killed while it is open. This is the largest single piece of UI work in Phase B.
+**1 — REVERSED 2026-09-23: the card screen pauses again, for everyone.**
+
+The non-blocking overlay shipped and did not survive contact with three people on
+a sofa. Two failures, both fatal:
+
+- **Every device drove one card list.** `handleMenuInput()` reads a single merged
+  `gamepadState`, so whoever moved a stick scrolled the *other* knight's
+  highlight and whoever hit A — the dash button — picked their upgrade for them.
+  The picker was nominally per-player; the input never was.
+- **You cannot choose a build while being hit.** The owner kept taking damage
+  through their own decision screen, so the answer was always "take whatever is
+  closest and get back to it", which is the opposite of what a card screen is for.
+
+So `showLevelUp()` sets `state.paused = true` unconditionally. In co-op the screen
+is modal for the whole room, but it belongs to exactly one knight: it wears their
+ring colour, names them (`P2 — BRENNAN CHOOSES`), and `pickPadState()` /
+`pickKeyAllowed()` ignore every device but theirs. Queued picks are served one at
+a time, round-robin from whoever picked last, and the sim resumes only when the
+queue is empty.
+
+The arithmetic that motivated the overlay (~141 level-ups per 3-player run, one
+every 7 seconds) is real but is a *curve* problem, not a UI one — `partyXpToNext`
+already scales the cost by `partySpawnMul()`. If the cadence still feels like a
+slideshow at three players, raise that multiplier; do not go back to live input on
+a shared card list.
+
+The pause is also load-bearing now. `beginPickContext()` re-points the
+single-player globals (`state.player`, `playerWeapons`, `upgradeRanks`,
+`banishedUpgrades`, `_activeSynergies`, `playerMesh`) at the picking knight so the
+~70 closures in `UPGRADES` write to the right sheet. That is only safe while
+nothing else is reading them, i.e. while the sim is stopped.
 
 **2 — Shared XP.** Gem pickup stays proximity-based but credits one party pool. `xpToNext` scales with `players.length` so a 3-player party levels at roughly solo pace rather than 3×. Needs a balance pass: the curve was tuned for one knight's DPS.
 
@@ -119,7 +149,7 @@ This is the biggest single chunk and the riskiest. Shipping it as a no-op first 
 1. **Per-player input.** `gamepadState` → `gamepadState[]` (small, already iterating). `readInput(playerIdx)` replacing the summed block at 4911–4926. Pad-to-player assignment on join.
 2. **Join flow.** "Press A to join" on the character select; each joining pad picks its own knight. Private Mode still applies.
 3. **Group camera.** Centroid, zoom from party bounding radius, soft leash beyond max zoom.
-4. **Level-up UI** — non-modal per-player card overlay; `showLevelUp()` stops pausing the sim.
+4. **Level-up UI** — modal card screen owned by one knight at a time; every other device locked out.
 5. **Downed/revive** — bleed-out timer, proximity revive, `gameOver()` only when all are down.
 6. **HUD** — N health bars, N level/XP readouts, N minimap blips, player-coloured rings.
 7. **Difficulty scaling.** 3 players is ~3× DPS. Enemy HP and spawn rate need a party-size multiplier alongside `ogreMods`. This needs its own balance pass — expect the existing wave curve to feel trivial at 3P until retuned.
@@ -128,6 +158,75 @@ This is the biggest single chunk and the riskiest. Shipping it as a no-op first 
 **Verify:** extend the harness bot to drive N players (`balance --players 3`). Target: a 3-player run that reaches wave 20 without being either trivial or impossible.
 
 **Effort:** 3–5 days, plus a balance pass.
+
+
+---
+
+## Phase B follow-up — per-knight ownership (2026-09-23)
+
+The `players[]` refactor moved position, health and input onto the array, but a
+long tail of systems still read the **single-player globals**, which are player
+1's. Each one looked fine solo and was silently wrong in co-op. All of these are
+now owned by the knight they belong to, and `tools/coop-verify.mjs` (48 checks)
+holds them down.
+
+**What a companion picks belongs to a companion.** The `UPGRADES` table, the card
+text, evolutions and synergies are written against `state.player` / `playerWeapons`
+and friends, so a card taken by P2 applied to P1. `beginPickContext()` re-points
+those bindings at the picking knight for the duration of a pick; every knight now
+carries their own `ranks`, `banished`, `synergies`, reroll and banish charges.
+Only safe because the card screen pauses — see Decision 1 above.
+
+**Damage carries an owner.** `applyDamage(enemy, amount, { by })` reads crit
+chance, crit multiplier and the Hunter / Berserker / Wolfsbane / Hooves relics off
+the swinging knight. Projectiles, orbital bombs and burn patches remember who
+fired or lit them; kills credit the killer, so lifesteal heals the right person
+and the throttle is per knight.
+
+**Enemy attacks find every knight.** `damagePlayersInRadius()` and `playerAt()`
+replace the "is player 1 standing here?" test that made companions immune to
+boulders, bomb blasts, boss slams and charges. Archers aim at the knight they are
+chasing; bat dives and thorns resolve against whoever was actually hit; armour is
+the victim's; enemies keep fighting while anyone is still up.
+
+**Party-wide things are party-wide.** Streak, combo and kill-milestone rewards
+(`partyBuff` / `partyHeal`) reach every living knight; a boss reroll goes to all
+of them; drops roll against the luckiest knight in the party; coins magnet to the
+NEAREST knight and merge only when far from all of them; treasure chests, health
+and haste go to whoever walked over them.
+
+**Per-knight weapon state.** Warding Shields kept one global ring driven from
+inside the per-player weapon update, so two knights carrying it shared a ring that
+snapped between them; ember trails shared one "last drop" position. Both now live
+on the player.
+
+**Two bugs this exposed that were never co-op bugs at all.** Parker's Arcane
+Staff had no level-up card and no evolution, so his primary was stuck at level 1
+for the whole run, solo included (`Runed Focus`, and the `Starcaller` evolution).
+And `makeWeaponTable()` handed every companion a free sword on top of their own
+primary, which put Tempered Blade in Parker's card pool and ate a weapon slot.
+
+### The select screen
+
+Only player 1 could choose. Companions were auto-assigned the first unclaimed
+knight, and changing one bumped whoever held the target onto some other free
+knight — so "P1 Parker, P2 Brennan" was unreachable. Now:
+
+- `assignKnight()` **swaps** two slots rather than scattering them, so every
+  arrangement is reachable from every other.
+- Any slot can be driven three ways: click a roster slot, click a character card
+  (that knight goes to P1, swapping), or D-Pad left/right (or Y) on the joining
+  pad. The keyboard companion cycles with Enter.
+- The cards wear a coloured **P1 / P2 / P3 badge**, so who has which knight is
+  visible instead of guessed.
+
+### And the previews
+
+The title-screen preview had its own hand-copied copy of the weapon-attachment
+code and it had drifted: Parker's card showed a **sword and a shield** while the
+game gives him the wizard staff and an empty off hand. There is now one
+`CHARACTER_GEAR` table and one `attachCharacterGear()`, used by both, with a
+check that the two agree.
 
 ---
 

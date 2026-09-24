@@ -49,12 +49,66 @@ srv.listen(0, '127.0.0.1', async () => {
     const out = {};
     const dist = (a, b) => Math.hypot(a.x - b.x, a.z - b.z);
 
+    // ---- TITLE SCREEN: ANY KNIGHT TO ANY SLOT ----
+    // Join two companions, then check every arrangement is reachable.
+    cs.coopPending.clear();
+    document.querySelector('.char-card[data-char="dad"]').click();
+    cs.padSlot(1); cs.padSlot(2);
+    cs.coopPending.set('pad:1', { character: 'brennan', device: { type: 'pad', index: 1 } });
+    cs.coopPending.set('kb', { character: 'parker', device: { type: 'kb' } });
+    cs.renderCoopRoster();
+    const arrangement = () => [cs.selectedCharacter,
+      cs.coopPending.get('pad:1').character, cs.coopPending.get('kb').character].join(',');
+    out.startArrangement = arrangement();
+
+    // The case the user hit: P1 wants Parker, P2 wants Brennan. Clicking Parker
+    // for P1 must SWAP with whoever had it, not scatter the companions.
+    document.querySelector('.char-card[data-char="parker"]').click();
+    out.afterP1TakesParker = arrangement();
+
+    // And a companion can take a knight back off player 1.
+    cs.assignKnight('pad:1', 'parker');
+    out.afterP2TakesParker = arrangement();
+
+    // Cycling wraps through all three, in both directions, from any slot.
+    const seen = new Set();
+    for (let i = 0; i < 6; i++) { cs.cycleKnight('kb', 1); seen.add(cs.coopPending.get('kb').character); }
+    out.kbReachedAll = [...seen].sort().join(',');
+    for (let i = 0; i < 3; i++) cs.cycleKnight('kb', -1);
+    out.noDuplicates = new Set(arrangement().split(',')).size === 3;
+
+    // The cards say who holds them.
+    out.cardBadges = [...document.querySelectorAll('.char-card')]
+      .map(c => `${c.dataset.char}:${c.querySelector('.char-owner')?.textContent || '-'}`).join(' ');
+    // Every roster slot is clickable.
+    out.rosterClickable = [...document.querySelectorAll('#coop-slots .coop-slot')].map(b => b.tagName).join(',');
+    cs.coopPending.clear();
+    document.querySelector('.char-card[data-char="dad"]').click();
+
+    // ---- THE CARD SHOWS THE KNIGHT YOU ACTUALLY PLAY ----
+    // What each hand bone is holding, by the gear model's own name.
+    const gearOf = (model) => {
+      const out = { hand_r: [], hand_l: [] };
+      model.traverse(c => {
+        if (!c.isBone || !out[c.name]) return;
+        for (const child of c.children) if (!child.isBone) out[c.name].push(child.name || 'gear');
+      });
+      return `${out.hand_r.length}/${out.hand_l.length}`;
+    };
+    out.previewGear = {};
+    for (const k of ['dad', 'brennan', 'parker']) {
+      const pv = cs.charPreviews[k];
+      out.previewGear[k] = pv && pv.model ? gearOf(pv.model) : 'missing';
+    }
+
     await cs.startRun({ character: 'dad', map: 'kingsfield', ogre: 0 });
     // P2 on a pad, P3 on the keyboard: both input paths in one run.
     await cs.joinPlayer('brennan', { type: 'pad', index: 1 });
     await cs.joinPlayer('parker', { type: 'kb' });
     const P = cs.players;
     out.partySize = P.length;
+    out.inGameGear = {};
+    for (const pl of P) out.inGameGear[pl.character] = gearOf(pl.mesh);
     out.devices = P.map(p => (p.device ? p.device.type : 'primary'));
     out.maxHp = P.map(p => p.state.maxHp);
     out.primaries = P.map(p => p.state.primaryWeapon);
@@ -110,14 +164,153 @@ srv.listen(0, '127.0.0.1', async () => {
     cs.updateHudNow && cs.updateHudNow();
     out.hudTextBefore = [...document.querySelectorAll('.coop-hp-text')].map(e => e.textContent);
 
-    // ---- SHARED XP ----
+    // ---- SHARED XP + PER-PLAYER CARD PICKS ----
     const lvlBefore = P.map(p => p.state.level);
     cs.gainXP(400);
     out.levelsAfterXP = P.map(p => p.state.level);
     out.levelsMovedTogether = P.every(p => p.state.level > lvlBefore[0]);
-    out.pendingPicks = P.map(p => p.pendingPicks || 0);
-    // Clear the card queue so it does not interfere with the revive test
-    for (let i = 0; i < 40; i++) document.querySelector('.upgrade-btn')?.click();
+    out.pendingPicks = P.map(p => (p.picks ? p.picks.length : 0) + (cs.pickingPlayer === p ? 1 : 0));
+
+    // The card screen must PAUSE, and it must belong to exactly one knight.
+    out.pausedWhilePicking = cs.state.paused && cs.upgradeScreenOpen;
+    out.ownerShown = document.getElementById('pick-owner').textContent;
+
+    // Nobody but the owner may drive it. Drive every OTHER pad and the keyboard
+    // for a few frames and check the card screen has not moved on.
+    const owner = cs.pickingPlayer;
+    const before = cs.upgradeScreenOpen && owner;
+    for (let i = 0; i < 6; i++) {
+      for (let pi = 0; pi < 3; pi++) {
+        if (owner && owner.padIndex === pi) continue;
+        Object.assign(cs.padSlot(pi), { a: false, dpadDown: true });
+      }
+      cs.step(0.05);
+      for (let pi = 0; pi < 3; pi++) {
+        if (owner && owner.padIndex === pi) continue;
+        Object.assign(cs.padSlot(pi), { a: true, dpadDown: false });
+      }
+      cs.step(0.05);
+    }
+    for (let pi = 0; pi < 3; pi++) Object.assign(cs.padSlot(pi), { a: false, dpadDown: false, prevA: false });
+    out.foreignInputIgnored = before && cs.upgradeScreenOpen && cs.pickingPlayer === owner;
+
+    // ---- A COMPANION'S PICK LANDS ON THE COMPANION ----
+    // Force the queue to P2 and take a weapon card; P1's sheet must not move.
+    for (const pl of P) pl.picks = [];
+    while (cs.upgradeScreenOpen) document.querySelector('#skip-btn')?.click();
+    // Every card bumps the picker's rank book, whatever kind of card it is, so
+    // that is the signal: it must land in P2's book and nowhere near P1's.
+    const snap = pl => JSON.stringify([pl.ranks, Object.entries(pl.weapons).map(([k, w]) => [k, w.level]),
+                                       pl.state.damage, pl.state.maxHp, pl.state.armor, pl.state.relics]);
+    P[1].picks = ['level'];
+    cs.presentNextLevelUp();
+    out.pickOwnerIsP2 = cs.pickingPlayer === P[1];
+    const p1Snap = snap(P[0]), p2Snap = snap(P[1]);
+    out.cardTitle = document.querySelector('.upgrade-title')?.textContent || '(none)';
+    document.querySelector('.upgrade-btn')?.click();
+    out.p1Untouched = snap(P[0]) === p1Snap;
+    out.p2Changed = snap(P[1]) !== p2Snap;
+    out.p2Ranks = Object.keys(P[1].ranks).length;
+    out.p1Ranks = Object.keys(P[0].ranks).length;
+    // The globals must be back on player 1 the moment the screen closes.
+    out.globalsRestored = cs.state.player === P[0].state && cs.playerWeapons === P[0].weapons;
+
+    // ---- A FULL ROUND OF PICKS REACHES EVERY KNIGHT ----
+    // Six levels' worth of cards, always taking the first weapon card on offer,
+    // and then every knight must have levelled a weapon of their own.
+    for (const pl of P) { pl.picks = []; for (const k of Object.keys(pl.ranks)) delete pl.ranks[k]; }
+    const wBefore = P.map(pl => Object.values(pl.weapons).reduce((n, w) => n + w.level, 0));
+    for (let round = 0; round < 6; round++) for (const pl of P) pl.picks.push('level');
+    cs.presentNextLevelUp();
+    let guard = 0;
+    while (cs.upgradeScreenOpen && guard++ < 200) {
+      const btns = [...document.querySelectorAll('.upgrade-btn')];
+      const weaponCard = btns.find(b => /NEW|Lv \d/.test(b.textContent)) || btns[0];
+      weaponCard?.click();
+    }
+    out.weaponGain = P.map((pl, i) => Object.values(pl.weapons).reduce((n, w) => n + w.level, 0) - wBefore[i]);
+    out.ranksEach = P.map(pl => Object.keys(pl.ranks).length);
+    out.resumedAfterPicks = !cs.state.paused;
+
+    // ---- HUD SHOWS EACH COMPANION'S WEAPONS AND RELICS ----
+    P[1].state.relics = { wolfsbane: true };
+    P[2].state.relics = { berserker: true };
+    cs.updateHudNow && cs.updateHudNow();
+    out.kitSlots = [...document.querySelectorAll('.coop-kit')].map(e => e.querySelectorAll('.coop-wpn').length);
+    out.kitRelics = [...document.querySelectorAll('.coop-kit')].map(e => e.querySelectorAll('.coop-rel').length);
+
+    // ---- DAMAGE IS CREDITED TO THE KNIGHT WHO DEALT IT ----
+    // P3 alone gets a huge crit chance. If crit belonged to P1 (the old bug),
+    // P3's hits would never crit and P1's always would.
+    const critOf = (pl, n) => {
+      const e = { hp: 1e9, maxHp: 1e9, mesh: { position: { x: 0, y: 0, z: 0 } }, isDying: false, type: 'goblin', anims: {} };
+      let crits = 0;
+      for (let i = 0; i < n; i++) { cs.applyDamage(e, 10, { source: 'sword', canCrit: true, by: pl }); if (cs.lastHitCrit) crits++; }
+      return crits;
+    };
+    P[0].state.critChance = 0; P[1].state.critChance = 0; P[2].state.critChance = 1;
+    out.critByOwner = [critOf(P[0], 40), critOf(P[1], 40), critOf(P[2], 40)];
+
+    // Lifesteal heals the killer, not player 1.
+    P[0].state.lifesteal = 0; P[2].state.lifesteal = 20;
+    P[0].state.hp = 50; P[2].state.hp = 20;
+    P[0]._lastLifesteal = -1; P[2]._lastLifesteal = -1;
+    cs.registerKill(P[2]);
+    out.lifestealHealedKiller = { p1: Math.round(P[0].state.hp), p3: Math.round(P[2].state.hp) };
+    P[2].state.lifesteal = 0;
+
+    // An area attack hits every knight standing in it, not just player 1.
+    P.forEach(pl => { pl.mesh.position.set(0, 0, 0); pl.state.iframes = 0; pl.state.hp = pl.state.maxHp; });
+    cs.damagePlayersInRadius({ x: 0, y: 0, z: 0 }, 5, 30, { by: 'test blast', falloff: false });
+    out.blastHitAll = P.map(pl => pl.state.maxHp - Math.round(pl.state.hp));
+
+    // Armour protects the knight being hit, not everyone equally.
+    P.forEach(pl => { pl.state.iframes = 0; pl.state.hp = pl.state.maxHp; pl.state.armor = 0; });
+    P[2].state.armor = 8;   // -36%
+    cs.damagePlayersInRadius({ x: 0, y: 0, z: 0 }, 5, 100, { by: 'test blast', falloff: false });
+    out.armorPerKnight = P.map(pl => pl.state.maxHp - Math.round(pl.state.hp));
+    P.forEach(pl => { pl.state.armor = 0; pl.state.hp = pl.state.maxHp; pl.state.relics = null; pl.state.critChance = 0.05; });
+
+    // ---- PARTY-WIDE REWARDS REACH EVERY KNIGHT ----
+    P.forEach(pl => { pl.state.hp = 10; });
+    cs.partyHeal(0.5);
+    out.partyHealed = P.map(pl => Math.round(pl.state.hp));
+    const spdBefore = P.map(pl => pl.state.speed);
+    cs.partyBuff('speed', 3, 5);
+    out.partyBuffed = P.map((pl, i) => +(pl.state.speed - spdBefore[i]).toFixed(1));
+    P.forEach(pl => { pl.state.hp = pl.state.maxHp; });
+
+    // ---- COINS FLY TO THE NEAREST KNIGHT, NOT ALWAYS P1 ----
+    // The party is pinned for this one: the coin must move, not the knights.
+    // P1 sits on the FAR side of the coin, so "moved toward P3" and "moved
+    // toward P1" point in opposite directions and the check means something.
+    P[0].mesh.position.set(40, 0, 0);
+    P[1].mesh.position.set(10, 0, 0);
+    P[2].mesh.position.set(20, 0, 0);
+    P.forEach(pl => { pl.state.isDead = false; });
+    cs.pickups.length = 0;   // a lone coin cannot be merged into a blob mid-test
+    cs.spawnPickup('coin', { x: 24, y: 0.5, z: 0 });
+    const coin = cs.pickups[cs.pickups.length - 1];
+    const dTo = pl => Math.hypot(coin.mesh.position.x - pl.mesh.position.x, coin.mesh.position.z - pl.mesh.position.z);
+    const before3 = dTo(P[2]), before1 = dTo(P[0]);
+    for (let i = 0; i < 10; i++) cs.step(0.05);
+    out.coinMovedToP3 = +(before3 - dTo(P[2])).toFixed(2);
+    out.coinMovedToP1 = +(before1 - dTo(P[0])).toFixed(2);
+
+    // ---- ENEMIES KEEP FIGHTING WHEN P1 IS DOWN ----
+    spread();
+    for (let i = 0; i < 8; i++) cs.spawnEnemy('goblin', 0, { at: { x: P[2].mesh.position.x + 6, z: P[2].mesh.position.z }, dist: 2 });
+    for (let i = 0; i < 10; i++) { cs.step(0.05); spread(); }
+    cs.triggerPlayerDeath(P[0]);
+    const eBefore = cs.enemies.filter(e => !e.isDying).map(e => ({ e, x: e.mesh.position.x, z: e.mesh.position.z }));
+    for (let i = 0; i < 30; i++) { cs.step(0.05); spread(); }
+    out.enemiesStillMove = eBefore.filter(r => !r.e.isDying &&
+      Math.hypot(r.e.mesh.position.x - r.x, r.e.mesh.position.z - r.z) > 0.5).length;
+    out.enemiesChecked = eBefore.length;
+    P[0].state.isDead = false; P[0].state.bleedOut = 0; P[0].state.hp = P[0].state.maxHp;
+    P[0]._gameOverTimer = 0; P[0].state._gameOverTimer = 0;
+    for (const e of cs.enemies.slice()) e.hp = -1;
+    for (let i = 0; i < 20; i++) cs.step(0.05);
 
     // ---- REVIVE ----
     spread();
@@ -138,6 +331,17 @@ srv.listen(0, '127.0.0.1', async () => {
     return out;
   });
 
+  check('select starts dad/brennan/parker', r.startArrangement === 'dad,brennan,parker', r.startArrangement);
+  check('P1 taking Parker swaps, not scatters', r.afterP1TakesParker === 'parker,brennan,dad', r.afterP1TakesParker);
+  check('a companion can take it back', r.afterP2TakesParker === 'brennan,parker,dad', r.afterP2TakesParker);
+  check('cycling reaches every knight', r.kbReachedAll === 'brennan,dad,parker', r.kbReachedAll);
+  check('no two slots share a knight', r.noDuplicates, String(r.noDuplicates));
+  check('cards show who holds them', /dad:P/.test(r.cardBadges) && /parker:P/.test(r.cardBadges), r.cardBadges);
+  check('roster slots are buttons', /^(BUTTON,?)+$/.test(r.rosterClickable), r.rosterClickable);
+  // Parker's card used to show a sword and a shield while the game gave him a staff.
+  check('preview gear matches the game', ['dad', 'brennan', 'parker'].every(k => r.previewGear[k] === r.inGameGear[k]),
+    ['dad', 'brennan', 'parker'].map(k => `${k} ${r.previewGear[k]} vs ${r.inGameGear[k]}`).join(', '));
+  check('Parker carries a staff, no shield', r.inGameGear.parker === '1/0', `hand_r/hand_l = ${r.inGameGear.parker}`);
   check('party has 3 players', r.partySize === 3, `${r.partySize}`);
   check('devices are primary/pad/keyboard', r.devices.join(',') === 'primary,pad,kb', r.devices.join(','));
   // Parker is the glass-cannon wizard: 100 base minus 15 from Arcane Focus.
@@ -152,6 +356,27 @@ srv.listen(0, '127.0.0.1', async () => {
   check('HUD shows companion HP', /\d+\/\d+/.test(r.hudTextBefore.join(' ')), r.hudTextBefore.join(' | '));
   check('shared XP levels everyone', r.levelsMovedTogether, r.levelsAfterXP.join('/'));
   check('each player gets card picks', r.pendingPicks.every(n => n > 0), r.pendingPicks.join('/'));
+  check('card screen pauses the game', r.pausedWhilePicking, String(r.pausedWhilePicking));
+  check('card screen names its owner', /P\d/.test(r.ownerShown), r.ownerShown || '(blank)');
+  check('other pads cannot pick', r.foreignInputIgnored, String(r.foreignInputIgnored));
+  check('queue can hand the card to P2', r.pickOwnerIsP2, String(r.pickOwnerIsP2));
+  check("P2's pick lands on P2", r.p2Changed && r.p2Ranks > 0, `${r.cardTitle} -> ${r.p2Ranks} ranks`);
+  check("P2's pick leaves P1 alone", r.p1Untouched && r.p1Ranks === 0, `P1 has ${r.p1Ranks} ranks`);
+  check('globals restored on close', r.globalsRestored, String(r.globalsRestored));
+  check('every knight levels their own weapons', r.weaponGain.every(n => n > 0), r.weaponGain.join('/'));
+  check('every knight banks their own ranks', r.ranksEach.every(n => n > 0), r.ranksEach.join('/'));
+  check('game resumes once picks are done', r.resumedAfterPicks, String(r.resumedAfterPicks));
+  check('HUD lists each companion weapons', r.kitSlots.every(n => n > 0), r.kitSlots.join('/'));
+  check('HUD lists each companion relics', r.kitRelics.every(n => n > 0), r.kitRelics.join('/'));
+  check('crit belongs to the knight who hit', r.critByOwner[0] === 0 && r.critByOwner[1] === 0 && r.critByOwner[2] === 40, r.critByOwner.join('/') + ' of 40');
+  check('lifesteal heals the killer', r.lifestealHealedKiller.p1 === 50 && r.lifestealHealedKiller.p3 > 20, JSON.stringify(r.lifestealHealedKiller));
+  check('a blast hits every knight in it', r.blastHitAll.every(n => n > 0), r.blastHitAll.join('/'));
+  check('armour is per knight', r.armorPerKnight[2] < r.armorPerKnight[0], r.armorPerKnight.join('/'));
+  check('a party heal reaches everyone', r.partyHealed.every(n => n > 10), r.partyHealed.join('/'));
+  check('a party buff reaches everyone', r.partyBuffed.every(n => n === 3), r.partyBuffed.join('/'));
+  check('coins fly to the nearest knight', r.coinMovedToP3 > 0.1 && r.coinMovedToP1 <= 0,
+    `${r.coinMovedToP3} closer to P3, ${r.coinMovedToP1} to P1`);
+  check('enemies fight on when P1 is down', r.enemiesStillMove > 0, `${r.enemiesStillMove}/${r.enemiesChecked} kept moving`);
   check('down does NOT end the run', r.downedNotGameOver.gameOverTimer === 0 && r.downedNotGameOver.alive === 2, JSON.stringify(r.downedNotGameOver));
   check('bleed-out counts down', r.bleedTicked < 25 && r.bleedTicked > 0, `${r.bleedTicked}s left`);
   check('teammate revives', r.revived.isDead === false && r.revived.hp > 0, JSON.stringify(r.revived));
