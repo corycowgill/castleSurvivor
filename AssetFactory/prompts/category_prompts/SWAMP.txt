@@ -16,4 +16,10 @@ Damp matte surfaces with a slight sheen, not glossy, not wet plastic.
 
 No standing water, no puddle, no pool underneath, no mist, no fog, no fireflies, no particles.
 
+Build the object as a SOLID CLOSED MASS of chunky simplified volumes.
+
+Every part must be thick enough to hold its own shape: no thin strands, no wisps, no dangling threads, no open lattice or weave, no fine twigs, no delicate edges, no separated filaments.
+
+Where something would really be fine or hanging, show it as one heavy rounded lump or as shallow surface relief carved into the solid form instead.
+
 {extra_details}

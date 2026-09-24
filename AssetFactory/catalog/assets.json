@@ -1014,7 +1014,7 @@
     "category": "blacksmith_kit",
     "family": "stone",
     "promptTemplate": "PROP",
-    "promptDetails": "Medieval stone and brick forge structure. Open hearth with chimney hood. Contains coal bed area. No fire or glow \u2014 just the physical structure. Approximately 1.5 meters tall.",
+    "promptDetails": "Medieval stone and brick forge structure. Open hearth with chimney hood. Contains coal bed area. No fire or glow — just the physical structure. Approximately 1.5 meters tall.",
     "status": "glb_optimized",
     "batch": 3,
     "game": {
@@ -4020,11 +4020,11 @@
     "category": "swamp",
     "family": "swamp",
     "promptTemplate": "SWAMP",
-    "promptDetails": "A tall bald cypress tree with a hugely flared buttressed base that spreads out into the ground like melted wax, a straight tapering trunk, and a thin ragged crown of feathery dark green needles. Long grey beards of hanging moss droop from the lower limbs. Bark deeply furrowed and water-stained. Approximately 7 meters tall.",
-    "status": "image_generating",
+    "promptDetails": "A chunky stylized swamp tree. A hugely flared buttressed base spreading into the ground like melted wax, a short thick tapering trunk above it, and one single solid rounded canopy of dense dark green foliage read as one closed blob. Deeply furrowed water-stained bark. The canopy is a simple compact mass with a lumpy surface, not individual leaves. No hanging moss, no beards, no wispy strands, no thin twigs, no bare branches. Approximately 7 meters tall.",
+    "status": "glb_optimized",
     "batch": 11,
     "game": {
-      "scaleMeters": 7,
+      "scaleMeters": 4.2,
       "collision": "cylinder",
       "solid": true,
       "breakable": false,
@@ -4034,7 +4034,12 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "glbRaw": "AssetFactory/glb_raw/swamp_cypress_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/swamp_cypress_01.glb",
+    "glbGame": "Game3DAssets/swamp_cypress_01.glb",
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_cypress_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\swamp_cypress_01.glb"
   },
   {
     "id": "swamp_cypress_02",
@@ -4043,10 +4048,10 @@
     "family": "swamp",
     "promptTemplate": "SWAMP",
     "promptDetails": "A half-dead cypress leaning hard to one side, most of its crown gone, a few bare crooked limbs left with tattered moss hanging off them. The flared base is undercut and splitting, pale rot showing through the black bark. Approximately 6 meters tall.",
-    "status": "pending",
+    "status": "glb_optimized",
     "batch": 11,
     "game": {
-      "scaleMeters": 6,
+      "scaleMeters": 4,
       "collision": "cylinder",
       "solid": true,
       "breakable": false,
@@ -4056,7 +4061,12 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_cypress_02.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\swamp_cypress_02.glb",
+    "glbRaw": "AssetFactory/glb_raw/swamp_cypress_02.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/swamp_cypress_02.glb",
+    "glbGame": "Game3DAssets/swamp_cypress_02.glb"
   },
   {
     "id": "swamp_mangrove_01",
@@ -4065,10 +4075,10 @@
     "family": "swamp",
     "promptTemplate": "SWAMP",
     "promptDetails": "A low spreading mangrove standing up on a tangled cage of arching stilt roots, so the trunk starts well above the ground. Dense glossy dark green leaves in a flattened crown, roots slick with algae and mud. Approximately 4.5 meters tall.",
-    "status": "pending",
+    "status": "glb_optimized",
     "batch": 11,
     "game": {
-      "scaleMeters": 4.5,
+      "scaleMeters": 3.6,
       "collision": "cylinder",
       "solid": true,
       "breakable": false,
@@ -4078,7 +4088,12 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_mangrove_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\swamp_mangrove_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/swamp_mangrove_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/swamp_mangrove_01.glb",
+    "glbGame": "Game3DAssets/swamp_mangrove_01.glb"
   },
   {
     "id": "swamp_dead_willow_01",
@@ -4086,8 +4101,8 @@
     "category": "swamp",
     "family": "swamp",
     "promptTemplate": "SWAMP",
-    "promptDetails": "A dead willow, bark peeled to silver-grey bare wood, its long whip-thin branches sweeping down almost to the ground and hung with grey moss. No leaves. The base is swollen and black with rot. Approximately 6.5 meters tall.",
-    "status": "pending",
+    "promptDetails": "A dead swamp tree stripped to bare silvered wood, with a swollen black rotting base and only four or five short THICK tapering limbs, each as chunky as an arm and ending in a blunt broken stub. Solid heavy wood throughout, like a carved club. No twigs, no fine branches, no hanging moss, no leaves. Approximately 6.5 meters tall.",
+    "status": "glb_optimized",
     "batch": 11,
     "game": {
       "scaleMeters": 6.5,
@@ -4100,7 +4115,12 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "glbRaw": "AssetFactory/glb_raw/swamp_dead_willow_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/swamp_dead_willow_01.glb",
+    "glbGame": "Game3DAssets/swamp_dead_willow_01.glb",
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_dead_willow_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\swamp_dead_willow_01.glb"
   },
   {
     "id": "swamp_moss_curtain_01",
@@ -4108,11 +4128,11 @@
     "category": "swamp",
     "family": "swamp",
     "promptTemplate": "SWAMP",
-    "promptDetails": "A single thick curtain of grey-green spanish moss hanging straight down from a short bare horizontal branch, like a ragged beard or a torn veil. Wispy at the bottom edge. Nothing else, no tree behind it. Approximately 3 meters tall.",
-    "status": "pending",
+    "promptDetails": "A single dense clump of moss gathered into one thick rounded teardrop mass, hanging from a short stout stub of branch at the top, like a heavy grey-green hornet nest made of moss. One closed chunky volume with a soft lumpy quilted surface. No loose strands, no wisps, no thin fibres, no individual threads. Approximately 3 meters tall.",
+    "status": "glb_optimized",
     "batch": 11,
     "game": {
-      "scaleMeters": 3,
+      "scaleMeters": 2.2,
       "collision": "none",
       "solid": false,
       "breakable": false,
@@ -4122,7 +4142,12 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "glbRaw": "AssetFactory/glb_raw/swamp_moss_curtain_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/swamp_moss_curtain_01.glb",
+    "glbGame": "Game3DAssets/swamp_moss_curtain_01.glb",
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_moss_curtain_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\swamp_moss_curtain_01.glb"
   },
   {
     "id": "swamp_reed_cluster_01",
@@ -4131,7 +4156,7 @@
     "family": "swamp",
     "promptTemplate": "SWAMP",
     "promptDetails": "A dense clump of tall straight swamp reeds, yellow-green stalks going brown at the tips, packed tight and splaying slightly outward at the top, rising from a base of dark mud. Approximately 1.8 meters tall.",
-    "status": "pending",
+    "status": "glb_optimized",
     "batch": 11,
     "game": {
       "scaleMeters": 1.8,
@@ -4144,7 +4169,12 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_reed_cluster_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\swamp_reed_cluster_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/swamp_reed_cluster_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/swamp_reed_cluster_01.glb",
+    "glbGame": "Game3DAssets/swamp_reed_cluster_01.glb"
   },
   {
     "id": "swamp_cattail_clump_01",
@@ -4153,7 +4183,7 @@
     "family": "swamp",
     "promptTemplate": "SWAMP",
     "promptDetails": "A clump of cattail reeds with flat green blade leaves and eight or nine brown velvety sausage-shaped seed heads on thin stems at different heights. Approximately 1.6 meters tall.",
-    "status": "pending",
+    "status": "glb_optimized",
     "batch": 11,
     "game": {
       "scaleMeters": 1.6,
@@ -4166,7 +4196,12 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_cattail_clump_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\swamp_cattail_clump_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/swamp_cattail_clump_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/swamp_cattail_clump_01.glb",
+    "glbGame": "Game3DAssets/swamp_cattail_clump_01.glb"
   },
   {
     "id": "swamp_lilypads_01",
@@ -4175,7 +4210,7 @@
     "family": "swamp",
     "promptTemplate": "SWAMP",
     "promptDetails": "A small raft of flat round green lily pads of different sizes lying edge to edge, one notched, two curling up at the rim, with a single closed pale pink bud on a short stalk. Seen as a floating cluster. Approximately 0.35 meters tall.",
-    "status": "pending",
+    "status": "glb_optimized",
     "batch": 11,
     "game": {
       "scaleMeters": 0.35,
@@ -4188,7 +4223,12 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_lilypads_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\swamp_lilypads_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/swamp_lilypads_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/swamp_lilypads_01.glb",
+    "glbGame": "Game3DAssets/swamp_lilypads_01.glb"
   },
   {
     "id": "swamp_rotten_log_01",
@@ -4197,7 +4237,7 @@
     "family": "swamp",
     "promptTemplate": "SWAMP",
     "promptDetails": "A fallen log half rotted away, waterlogged and sagging in the middle, the bark sloughing off in sheets to show punky orange-brown rot underneath, the whole top face carpeted in bright green moss. Approximately 1 meter tall.",
-    "status": "pending",
+    "status": "glb_optimized",
     "batch": 11,
     "game": {
       "scaleMeters": 1,
@@ -4210,7 +4250,12 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_rotten_log_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\swamp_rotten_log_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/swamp_rotten_log_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/swamp_rotten_log_01.glb",
+    "glbGame": "Game3DAssets/swamp_rotten_log_01.glb"
   },
   {
     "id": "swamp_stump_mossy_01",
@@ -4218,8 +4263,8 @@
     "category": "swamp",
     "family": "swamp",
     "promptTemplate": "SWAMP",
-    "promptDetails": "A broad broken tree stump, the snapped top jagged and hollowed out, completely upholstered in thick green moss, with three or four cream-coloured shelf fungi stepping up one side. Approximately 1.2 meters tall.",
-    "status": "pending",
+    "promptDetails": "A broad solid tree stump with a jagged snapped top, completely upholstered in thick green moss, with three fat rounded shelf fungi attached flush to one side like thick lips. One chunky closed mass, heavy and simple. No thin edges, no gaps, no loose foliage, no roots. Approximately 1.2 meters tall.",
+    "status": "glb_optimized",
     "batch": 11,
     "game": {
       "scaleMeters": 1.2,
@@ -4232,7 +4277,12 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_stump_mossy_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\swamp_stump_mossy_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/swamp_stump_mossy_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/swamp_stump_mossy_01.glb",
+    "glbGame": "Game3DAssets/swamp_stump_mossy_01.glb"
   },
   {
     "id": "swamp_fungus_shelf_01",
@@ -4240,8 +4290,8 @@
     "category": "swamp",
     "family": "swamp",
     "promptTemplate": "SWAMP",
-    "promptDetails": "A stacked cluster of large bracket fungi, fat semicircular shelves in banded cream, rust orange and brown, growing out of a short piece of blackened rotten wood. Approximately 0.9 meters tall.",
-    "status": "pending",
+    "promptDetails": "A stack of four large bracket fungi growing out of a short chunky piece of blackened rotten wood, each shelf a FAT rounded wedge several centimetres thick with a blunt rim, banded cream, rust orange and brown. Solid heavy forms like stacked stones. No thin edges, no papery gills, no delicate detail. Approximately 0.9 meters tall.",
+    "status": "glb_optimized",
     "batch": 11,
     "game": {
       "scaleMeters": 0.9,
@@ -4254,7 +4304,12 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_fungus_shelf_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\swamp_fungus_shelf_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/swamp_fungus_shelf_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/swamp_fungus_shelf_01.glb",
+    "glbGame": "Game3DAssets/swamp_fungus_shelf_01.glb"
   },
   {
     "id": "swamp_hummock_01",
@@ -4262,8 +4317,8 @@
     "category": "swamp",
     "family": "swamp",
     "promptTemplate": "SWAMP",
-    "promptDetails": "A low rounded mound of peat and moss rising out of the bog like a small grassy island, domed and soft-edged, its top shaggy with sedge grass and its flanks dark and damp. Approximately 1.2 meters tall.",
-    "status": "pending",
+    "promptDetails": "A low solid dome of peat and moss rising out of the ground like a small island, smooth and rounded with soft edges, its top one continuous close-cropped mat of green moss and its flanks dark damp earth. A single simple closed mound. No individual grass blades, no stalks, no loose foliage. Approximately 1.2 meters tall.",
+    "status": "glb_optimized",
     "batch": 11,
     "game": {
       "scaleMeters": 1.2,
@@ -4276,7 +4331,12 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_hummock_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\swamp_hummock_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/swamp_hummock_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/swamp_hummock_01.glb",
+    "glbGame": "Game3DAssets/swamp_hummock_01.glb"
   },
   {
     "id": "swamp_bog_rock_01",
@@ -4284,8 +4344,8 @@
     "category": "swamp",
     "family": "swamp",
     "promptTemplate": "SWAMP",
-    "promptDetails": "A rounded grey boulder sunk into the ground at an angle, its upper half completely overgrown with thick green moss and small ferns, its lower half dark and wet with a pale water-stain line across it. Approximately 1.8 meters tall.",
-    "status": "pending",
+    "promptDetails": "A large rounded grey boulder sunk into the ground at an angle, its upper half under a thick continuous blanket of green moss that follows the shape of the rock, its lower half dark and wet with a pale water-stain line across it. One solid closed stone. No ferns, no plants, no loose foliage, no thin stems. Approximately 1.8 meters tall.",
+    "status": "glb_optimized",
     "batch": 11,
     "game": {
       "scaleMeters": 1.8,
@@ -4298,7 +4358,12 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_bog_rock_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\swamp_bog_rock_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/swamp_bog_rock_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/swamp_bog_rock_01.glb",
+    "glbGame": "Game3DAssets/swamp_bog_rock_01.glb"
   },
   {
     "id": "swamp_driftwood_01",
@@ -4306,8 +4371,8 @@
     "category": "swamp",
     "family": "swamp",
     "promptTemplate": "SWAMP",
-    "promptDetails": "A tangle of bone-white bleached driftwood: two or three smooth twisted root masses and broken branches heaped and interlocking, stripped of bark, weathered smooth and pale. Approximately 1.6 meters tall.",
-    "status": "pending",
+    "promptDetails": "One single thick piece of bone-white bleached driftwood: a heavy smooth twisted root mass, fat and solid like a worn bone, with two or three short blunt stubs where branches snapped off. Weathered smooth, chunky and closed. No tangle, no thin branches, no twigs, no interlocking pieces, no heap. Approximately 1.6 meters tall.",
+    "status": "glb_optimized",
     "batch": 11,
     "game": {
       "scaleMeters": 1.6,
@@ -4320,7 +4385,12 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_driftwood_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\swamp_driftwood_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/swamp_driftwood_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/swamp_driftwood_01.glb",
+    "glbGame": "Game3DAssets/swamp_driftwood_01.glb"
   },
   {
     "id": "fen_stilt_hut_01",
@@ -4329,7 +4399,7 @@
     "family": "fenfolk",
     "promptTemplate": "FENFOLK",
     "promptDetails": "A small one-room hut raised on four crooked wooden stilts well clear of the ground, with a steep thatched reed roof, walls of woven wicker and grey planks, and a short ladder of lashed poles leaning up to the doorway. Approximately 5 meters tall.",
-    "status": "pending",
+    "status": "glb_optimized",
     "batch": 12,
     "game": {
       "scaleMeters": 5,
@@ -4344,7 +4414,12 @@
         "fen_stilt_hut_01"
       ],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\fen_stilt_hut_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\fen_stilt_hut_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/fen_stilt_hut_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/fen_stilt_hut_01.glb",
+    "glbGame": "Game3DAssets/fen_stilt_hut_01.glb"
   },
   {
     "id": "fen_fish_rack_01",
@@ -4353,7 +4428,7 @@
     "family": "fenfolk",
     "promptTemplate": "FENFOLK",
     "promptDetails": "A simple A-frame rack of lashed poles with a horizontal bar, hung with a dozen split fish and long eels drying in a row, and a knotted net draped over one end. Approximately 2.2 meters tall.",
-    "status": "pending",
+    "status": "glb_optimized",
     "batch": 12,
     "game": {
       "scaleMeters": 2.2,
@@ -4369,7 +4444,12 @@
         "fen_stilt_hut_01"
       ],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\fen_fish_rack_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\fen_fish_rack_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/fen_fish_rack_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/fen_fish_rack_01.glb",
+    "glbGame": "Game3DAssets/fen_fish_rack_01.glb"
   },
   {
     "id": "fen_coracle_01",
@@ -4378,7 +4458,7 @@
     "family": "fenfolk",
     "promptTemplate": "FENFOLK",
     "promptDetails": "A small round one-person boat of hide stretched over a woven wicker frame, pulled up and tipped on its side, with a single short paddle leaning against it. Approximately 1.4 meters tall.",
-    "status": "pending",
+    "status": "glb_optimized",
     "batch": 12,
     "game": {
       "scaleMeters": 1.4,
@@ -4393,7 +4473,12 @@
         "fen_stilt_hut_01"
       ],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\fen_coracle_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\fen_coracle_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/fen_coracle_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/fen_coracle_01.glb",
+    "glbGame": "Game3DAssets/fen_coracle_01.glb"
   },
   {
     "id": "fen_wicker_trap_01",
@@ -4401,8 +4486,8 @@
     "category": "fen_camp",
     "family": "fenfolk",
     "promptTemplate": "FENFOLK",
-    "promptDetails": "A stack of three long conical woven wicker eel traps, open funnel mouths facing out, tied with cord, the willow withies gone grey and one basket sprung and unravelling. Approximately 1 meter tall.",
-    "status": "pending",
+    "promptDetails": "One fat conical basket trap of woven willow lying on its side, CLOSED and solid, its weave shown only as shallow carved basketry texture on the surface rather than as open gaps, with a thick rope loop at the narrow end. A single chunky cone. No open lattice, no gaps, no holes, no visible weave openings, no thin strands. Approximately 1 meter tall.",
+    "status": "glb_optimized",
     "batch": 12,
     "game": {
       "scaleMeters": 1,
@@ -4418,7 +4503,12 @@
         "fen_stilt_hut_01"
       ],
       "avoid": []
-    }
+    },
+    "glbRaw": "AssetFactory/glb_raw/fen_wicker_trap_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/fen_wicker_trap_01.glb",
+    "glbGame": "Game3DAssets/fen_wicker_trap_01.glb",
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\fen_wicker_trap_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\fen_wicker_trap_01.glb"
   },
   {
     "id": "fen_boardwalk_01",
@@ -4427,7 +4517,7 @@
     "family": "fenfolk",
     "promptTemplate": "FENFOLK",
     "promptDetails": "A short straight section of plank boardwalk: six or seven grey weathered boards laid across two low crossbeams, slightly uneven, with moss in the gaps between the planks. Seen as a single flat walkway piece. Approximately 0.4 meters tall.",
-    "status": "pending",
+    "status": "glb_optimized",
     "batch": 12,
     "game": {
       "scaleMeters": 0.4,
@@ -4442,7 +4532,12 @@
         "fen_stilt_hut_01"
       ],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\fen_boardwalk_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\fen_boardwalk_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/fen_boardwalk_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/fen_boardwalk_01.glb",
+    "glbGame": "Game3DAssets/fen_boardwalk_01.glb"
   },
   {
     "id": "fen_totem_01",
@@ -4450,8 +4545,8 @@
     "category": "fen_camp",
     "family": "fenfolk",
     "promptTemplate": "FENFOLK",
-    "promptDetails": "A tall crooked pole driven into the ground, wound with rope and hung with animal skulls, black feathers, twists of cloth and small carved wooden charms that dangle and turn. A larger horned skull is lashed at the top. Approximately 3 meters tall.",
-    "status": "pending",
+    "promptDetails": "A thick carved wooden totem post, squat and solid like a heavy tiki carving, with a large horned animal skull fixed flat against the top and simple carved geometric faces down the shaft. Two or three fat rope coils wound tight around it. Everything sits flush against the post so it reads as one solid column. No dangling charms, no feathers, no loose cloth, no hanging objects, no thin cords. Approximately 3 meters tall.",
+    "status": "glb_optimized",
     "batch": 12,
     "game": {
       "scaleMeters": 3,
@@ -4467,7 +4562,12 @@
         "fen_stilt_hut_01"
       ],
       "avoid": []
-    }
+    },
+    "glbRaw": "AssetFactory/glb_raw/fen_totem_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/fen_totem_01.glb",
+    "glbGame": "Game3DAssets/fen_totem_01.glb",
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\fen_totem_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\fen_totem_01.glb"
   },
   {
     "id": "fen_lantern_post_01",
@@ -4476,7 +4576,7 @@
     "family": "fenfolk",
     "promptTemplate": "FENFOLK",
     "promptDetails": "A leaning pole of weathered wood with a small glass-sided lantern hanging from an iron hook at the top. The lantern glows a cold sickly green from within, like a trapped marsh light. Approximately 2.4 meters tall.",
-    "status": "pending",
+    "status": "glb_optimized",
     "batch": 12,
     "game": {
       "scaleMeters": 2.4,
@@ -4491,7 +4591,12 @@
         "fen_stilt_hut_01"
       ],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\fen_lantern_post_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\fen_lantern_post_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/fen_lantern_post_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/fen_lantern_post_01.glb",
+    "glbGame": "Game3DAssets/fen_lantern_post_01.glb"
   },
   {
     "id": "fen_witch_hut_01",
@@ -4500,7 +4605,7 @@
     "family": "fenfolk",
     "promptTemplate": "FENFOLK",
     "promptDetails": "A larger hunched hut of mud-daubed wicker with a sagging thatch roof, a crooked chimney of stacked stones, bundles of dried herbs and bones hanging from the eaves, and a heavy hide curtain for a door. Approximately 5.5 meters tall.",
-    "status": "pending",
+    "status": "glb_optimized",
     "batch": 12,
     "game": {
       "scaleMeters": 5.5,
@@ -4515,7 +4620,12 @@
         "fen_stilt_hut_01"
       ],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\fen_witch_hut_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\fen_witch_hut_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/fen_witch_hut_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/fen_witch_hut_01.glb",
+    "glbGame": "Game3DAssets/fen_witch_hut_01.glb"
   },
   {
     "id": "swamp_wisp_stone_01",
@@ -4524,7 +4634,7 @@
     "family": "swamp",
     "promptTemplate": "SWAMP",
     "promptDetails": "A weathered standing stone leaning out of the ground, its face cut with worn spiral runes that glow a cold pale green from deep inside the carved grooves. Moss creeps up the shaded side. Glowing from within the stone, not lighting its surroundings. Approximately 1.6 meters tall.",
-    "status": "pending",
+    "status": "glb_optimized",
     "batch": 12,
     "game": {
       "scaleMeters": 1.6,
@@ -4537,7 +4647,12 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_wisp_stone_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\swamp_wisp_stone_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/swamp_wisp_stone_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/swamp_wisp_stone_01.glb",
+    "glbGame": "Game3DAssets/swamp_wisp_stone_01.glb"
   },
   {
     "id": "landmark_sunken_temple",
@@ -4546,7 +4661,7 @@
     "family": "landmark",
     "promptTemplate": "BUILDING",
     "promptDetails": "A small ancient stone temple sunk crookedly into the ground up to its windows, tilted well off vertical, its columned portico half swallowed and its roof caved in at one corner. Pale weathered stone blackened with damp at the base, thick moss and creeping vine over the whole north face, carved reliefs worn almost smooth. Approximately 12 meters tall.",
-    "status": "pending",
+    "status": "glb_optimized",
     "batch": 12,
     "game": {
       "scaleMeters": 12,
@@ -4559,7 +4674,12 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_sunken_temple.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\landmark_sunken_temple.glb",
+    "glbRaw": "AssetFactory/glb_raw/landmark_sunken_temple.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/landmark_sunken_temple.glb",
+    "glbGame": "Game3DAssets/landmark_sunken_temple.glb"
   },
   {
     "id": "landmark_great_cypress",
@@ -4567,8 +4687,8 @@
     "category": "landmarks",
     "family": "landmark",
     "promptTemplate": "TREE",
-    "promptDetails": "A colossal ancient cypress, its buttressed base spreading into a wall of fluted roots wide enough to walk into, a vast gnarled trunk, and a broad crown of dark feathery needles hung with enormous curtains of grey moss. Approximately 16 meters tall.",
-    "status": "pending",
+    "promptDetails": "A colossal ancient swamp tree. The base is a wall of thick fluted buttress roots wide enough to walk into, above that one vast gnarled trunk, and at the top a single broad solid dome of dense dark foliage as one closed mass with a lumpy surface. Massive, heavy and simple. No hanging moss, no curtains, no wispy strands, no thin twigs, no separate branches. Approximately 16 meters tall.",
+    "status": "glb_optimized",
     "batch": 12,
     "game": {
       "scaleMeters": 16,
@@ -4581,7 +4701,12 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "glbRaw": "AssetFactory/glb_raw/landmark_great_cypress.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/landmark_great_cypress.glb",
+    "glbGame": "Game3DAssets/landmark_great_cypress.glb",
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_great_cypress.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\landmark_great_cypress.glb"
   },
   {
     "id": "landmark_drowned_bell_tower",
@@ -4589,8 +4714,8 @@
     "category": "landmarks",
     "family": "landmark",
     "promptTemplate": "BUILDING",
-    "promptDetails": "A square stone bell tower leaning at a steep angle, sunk to a third of its height, its upper belfry arches still open with a dark bell hanging crooked inside. Grey stone, green algae band around the sunken base, ivy up one side, the top courses crumbled away. Approximately 14 meters tall.",
-    "status": "pending",
+    "promptDetails": "A squat square stone bell tower leaning at a steep angle and sunk to a third of its height, built as one solid heavy block of masonry with a simple pyramid cap. The belfry is shown as shallow recessed niches carved into the solid wall, NOT as openings. Grey weathered stone with a green algae band round the sunken base and ivy on one face. No open arches, no windows cut through, no thin columns, no hanging bell. Approximately 14 meters tall.",
+    "status": "glb_optimized",
     "batch": 12,
     "game": {
       "scaleMeters": 14,
@@ -4603,6 +4728,11 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "glbRaw": "AssetFactory/glb_raw/landmark_drowned_bell_tower.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/landmark_drowned_bell_tower.glb",
+    "glbGame": "Game3DAssets/landmark_drowned_bell_tower.glb",
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_drowned_bell_tower.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\landmark_drowned_bell_tower.glb"
   }
 ]

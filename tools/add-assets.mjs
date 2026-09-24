@@ -28,7 +28,10 @@ const catalog = Object.fromEntries((Array.isArray(catalogRaw) ? catalogRaw : (ca
 // fixtures (lantern posts, signposts, stalls) use a gentler factor still.
 const UNITS_PER_M = { props: 1.5, village: 1.5, nature: 1.5, tree: 1.3, landmark: 1.5 };
 const unitsFor = (category, metres) => (category !== 'tree' && metres > 2 ? 1.35 : UNITS_PER_M[category]);
-const CATEGORY_MAP = { village_clutter: 'props', village_infrastructure: 'village', blacksmith_kit: 'village', farm_kit: 'props', tavern_kit: 'props', nature: 'nature', combat: 'props', landmarks: 'village', volcanic: 'nature', ogre_camp: 'village' };
+const CATEGORY_MAP = { village_clutter: 'props', village_infrastructure: 'village', blacksmith_kit: 'village', farm_kit: 'props', tavern_kit: 'props', nature: 'nature', combat: 'props', landmarks: 'village', volcanic: 'nature', ogre_camp: 'village',
+  // Mirefen: the swamp itself is nature (so the tree test below can catch the
+  // cypresses), the fen-folk camp is built, so it scales like a village prop.
+  swamp: 'nature', fen_camp: 'village' };
 const ICONS = { props: '📦', village: '🏘', nature: '🌿', tree: '🌳' };
 // Waist-high or fence-like props stay solid whatever their computed radius (fences
 // still break on touch, so they can never pin the player)
@@ -36,7 +39,9 @@ const SOLID = new Set(['village_fence_straight_01', 'village_fence_corner_01', '
   'prop_wood_crate_large_01', 'prop_table_wood_01', 'blacksmith_anvil_01', 'blacksmith_water_barrel_01', 'village_water_trough_01', 'prop_wheelbarrow_01', 'prop_logs_02', 'prop_bench_wood_01',
   // Emberreach: the camp furniture and the stake walls are waist-high or taller and must block
   'ogre_spike_wall_01', 'ogre_butcher_block_01', 'ogre_weapon_rack_01', 'ogre_barricade_01', 'ogre_brazier_01', 'ogre_cook_pot_01', 'ogre_forge_01',
-  'volcanic_rock_cluster_01', 'volcanic_lava_rock_01', 'volcanic_obsidian_shards_01', 'combat_wall_rubble_01', 'combat_wall_destroyed_01']);
+  'volcanic_rock_cluster_01', 'volcanic_lava_rock_01', 'volcanic_obsidian_shards_01', 'combat_wall_rubble_01', 'combat_wall_destroyed_01',
+  // Mirefen: waist-high or taller and must block
+  'swamp_bog_rock_01', 'swamp_stump_mossy_01', 'swamp_moss_curtain_01', 'fen_totem_01', 'fen_fish_rack_01', 'fen_lantern_post_01', 'swamp_wisp_stone_01']);
 
 // Non-pipeline keepers: name, category, metres, collision
 const EXTRA = {
@@ -60,7 +65,7 @@ for (const r of report.results) {
     // Anything 3.5 m or taller in a natural category is a tree and gets the gentler
     // tree scale. Height has to be part of the test: family 'tree' alone would sweep
     // in nature_fallen_log_01, which is a 0.6 m log lying on the ground.
-    const isTree = (g.scaleMeters || 1) >= 3.5 && (cat.family === 'tree' || cat.category === 'nature' || cat.category === 'volcanic');
+    const isTree = (g.scaleMeters || 1) >= 3.5 && (cat.family === 'tree' || cat.category === 'nature' || cat.category === 'volcanic' || cat.category === 'swamp');
     if (isTree) category = 'tree';
     const scale = +((g.scaleMeters || 1) * unitsFor(category, g.scaleMeters || 1)).toFixed(2);
     // Small clutter (buckets, pots, stools, sacks) never blocks movement: a survivors

@@ -305,3 +305,54 @@ exactly `MIRE_PLAYER`, slows a chaser harder, a dash clears it, the causeway and
 the spawn stay dry, black water holds a knight, and Kingsfield and Darkwood carry
 no mires at all. Plus `npm test` clean, and dad and parker both take Mirefen to a
 wave-20 victory with 2–3% bot snagging, in band with the other three maps.
+
+## The asset run — what actually came back
+
+Three passes, 26 meshes catalogued, **23 usable**. The three that never came good
+are `swamp_dead_willow_01`, `fen_wicker_trap_01` and `landmark_great_cypress`;
+all rejected meshes are kept under `AssetFactory/glb_rejected/*.passN.glb`.
+
+**Pass 1 (26 attempted, 14 valid, 5 skipped).** Seven returned splinter geometry.
+
+**The cause was one thing.** Every failed prompt asked Trellis for structure it
+cannot reconstruct: hanging moss beards, whip-thin willow branches, open wicker
+weave, belfry arches, dangling charms, interlocking driftwood. So `SWAMP` and
+`FENFOLK` now carry a **solid-closed-mass rule** — nothing thinner than can hold
+its own shape, and anything that would really be fine or hanging restated as a
+heavy lump or as shallow relief on the solid form. Everything that actually ran
+under that rule produced clean geometry.
+
+**Pass 2 was a no-op for 7 of 12, and the trap is worth remembering.**
+`run_pipeline.py` resumes: Stage 1 is skipped when a source image exists and
+Stage 3 is gated on `if not os.path.exists(raw_glb)`. Resetting catalog status
+and clearing `skipped.json` is not enough — **the pipeline keys off files on
+disk**. The tell was triangle counts identical to three decimals and a 27-minute
+run instead of two hours. To force a genuine retry, delete
+`AssetFactory/source_images/**/<id>.png` and `AssetFactory/glb_raw/<id>.glb`.
+
+**Pass 3 fixed 4 of the remaining 7**, including `swamp_cypress_01`,
+`fen_totem_01` (a skull on a post, exactly right) and `landmark_drowned_bell_tower`.
+
+### Valid is not the same as usable
+
+The render check proves geometry exists, not that it is the right thing, and two
+meshes passed it and were still wrong **in situ**: `swamp_wisp_stone_01` read as a
+bright green capsule and `swamp_hummock_01` as a flat square mat with a visible
+edge — 146 of them across the map. Both were pulled and marked invalid in the
+report. **Look at a capture of the map, not only at the contact sheet.**
+
+Trellis also mislabels: `fen_fish_rack_01` is a porch swing, `fen_coracle_01` a
+mossy box, `swamp_reed_cluster_01` and `swamp_rotten_log_01` are ground mats. They
+are kept because they read fine as swamp clutter, but not as what they are named.
+
+### Two fixes the real meshes forced
+
+- **Scale from the mesh you got, not the mesh you asked for.** The cypresses came
+  back as buttressed root masses with no trunk or canopy. Catalogued at 7 m they
+  scaled to 9.1 units with a 4.5 collision radius, and the kiting bot's snag rate
+  went 2–3% → 8%. Resized to 4.2 m: snag back to 0–2%, dad and parker both take
+  wave 20.
+- **The emitter ground-glow was hard-coded warm orange** (`_glowTex`), so
+  Mirefen's green wisps cast orange pools. The texture is white now and tinted by
+  `look.lantern.color`; white × 0xffb060 reproduces the old warm glow, so the
+  other three maps are unchanged (verified with a Kingsfield capture).

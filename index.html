@@ -1640,7 +1640,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 // shipped in. `number` is the commit count this change will produce. Do not
 // hand-edit: the stamper matches the two marker lines exactly.
 /* BUILD:START */
-const BUILD = { number: 44, date: '2026-09-24' };
+const BUILD = { number: 45, date: '2026-09-24' };
 /* BUILD:END */
 for (const el of document.querySelectorAll('.build-badge')) el.textContent = `BUILD ${BUILD.number}`;
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -3810,7 +3810,15 @@ async function loadMap(mapId) {
       im.castShadow = false;
     }
   }
-  if (!_glowTex) { _glowTex = radialTex('rgba(255,190,110,0.55)', 'rgba(255,160,60,0)'); _canopyTex = radialTex('rgba(0,0,0,0.5)', 'rgba(0,0,0,0)'); _contactTex = radialTex('rgba(0,0,0,0.42)', 'rgba(0,0,0,0)', 64); }
+  // The ground glow under an emitter is now WHITE and tinted by the map's lantern
+  // colour, because it was hard-coded warm orange: Mirefen'"'"'s green wisps were
+  // casting orange pools. White x 0xffb060 reproduces the old warm glow almost
+  // exactly, so Kingsfield, Darkwood and Emberreach are unchanged.
+  // The ground glow under an emitter is now WHITE and tinted by the map's lantern
+  // colour. It was hard-coded warm orange, so Mirefen's green wisps cast orange
+  // pools. White x 0xffb060 reproduces the old warm glow almost exactly, so
+  // Kingsfield, Darkwood and Emberreach are unchanged.
+  if (!_glowTex) { _glowTex = radialTex('rgba(255,255,255,0.55)', 'rgba(255,255,255,0)'); _canopyTex = radialTex('rgba(0,0,0,0.5)', 'rgba(0,0,0,0)'); _contactTex = radialTex('rgba(0,0,0,0.42)', 'rgba(0,0,0,0)', 64); }
 
   // Low quality thins the decoration BEFORE the asset list is derived, so the
   // culled props are never fetched or decoded. Culling at placement time only
@@ -3960,7 +3968,7 @@ async function loadMap(mapId) {
   if (mapData.mires?.length) for (const m of mapData.mires) mires.push({ x: m.x, z: m.z, r: m.r, r2: m.r * m.r });
   if (contacts.length) addInstanced(contacts, _decalGeo, new THREE.MeshBasicMaterial({ map: _contactTex, transparent: true, depthWrite: false }), 0.045, 19);
   if (canopies.length) addInstanced(canopies, _decalGeo, new THREE.MeshBasicMaterial({ map: _canopyTex, transparent: true, depthWrite: false }), 0.05, 20);
-  if (glows.length) addInstanced(glows, _decalGeo, new THREE.MeshBasicMaterial({ map: _glowTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: def.look?.lantern?.intensity >= 12 ? 0.42 : 0.18 }), 0.06, 21);
+  if (glows.length) addInstanced(glows, _decalGeo, new THREE.MeshBasicMaterial({ map: _glowTex, color: new THREE.Color(def.look?.lantern?.color ?? 0xffb060), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: def.look?.lantern?.intensity >= 12 ? 0.42 : 0.18 }), 0.06, 21);
 
   // Freeze the static set. The map never moves, but three.js re-derives a world
   // matrix for every object in the scene every frame -- and twice per frame,

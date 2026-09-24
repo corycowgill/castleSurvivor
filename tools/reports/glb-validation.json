@@ -1,2762 +1,6057 @@
 {
-  "generated": "2026-09-20T16:45:23.282Z",
-  "results": [
-    {
-      "file": "AssetFactory\\glb_optimized\\blacksmith_anvil_01.glb",
-      "name": "blacksmith_anvil_01.glb",
-      "bytes": 335500,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 96552,
-      "vertices": 62273,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.523,
-        0.605,
-        1
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.523,
-          0.605,
-          1
-        ],
-        "drawnFrac": 0.21
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\blacksmith_coal_pile_01.glb",
-      "name": "blacksmith_coal_pile_01.glb",
-      "bytes": 384860,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 84815,
-      "vertices": 65714,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.987,
-        0.565,
-        1
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.987,
-          0.565,
-          1
-        ],
-        "drawnFrac": 0.211
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\blacksmith_forge_01.glb",
-      "name": "blacksmith_forge_01.glb",
-      "bytes": 331108,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 64521,
-      "vertices": 59216,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.75,
-        1,
-        0.976
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.75,
-          1,
-          0.976
-        ],
-        "drawnFrac": 0.426
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\blacksmith_grindstone_01.glb",
-      "name": "blacksmith_grindstone_01.glb",
-      "bytes": 212524,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 7362,
-      "vertices": 17351,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.958,
-        0.736,
-        0.907
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.958,
-          0.736,
-          0.908
-        ],
-        "drawnFrac": 0.002,
-        "error": "rendered nothing (drawnFrac 0.002)"
-      },
-      "valid": false
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\blacksmith_tool_rack_01.glb",
-      "name": "blacksmith_tool_rack_01.glb",
-      "bytes": 361692,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 95596,
-      "vertices": 69874,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.875,
-        1,
-        0.396
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.875,
-          1,
-          0.396
-        ],
-        "drawnFrac": 0.203
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\blacksmith_water_barrel_01.glb",
-      "name": "blacksmith_water_barrel_01.glb",
-      "bytes": 355548,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 94799,
-      "vertices": 67369,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.771,
-        1,
-        0.779
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.771,
-          1,
-          0.779
-        ],
-        "drawnFrac": 0.402
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\blacksmith_weapon_rack_01.glb",
-      "name": "blacksmith_weapon_rack_01.glb",
-      "bytes": 328128,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 98248,
-      "vertices": 65667,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.7,
-        1,
-        0.217
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.7,
-          1,
-          0.217
-        ],
-        "drawnFrac": 0.189
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\combat_barricade_01.glb",
-      "name": "combat_barricade_01.glb",
-      "bytes": 345552,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 96238,
-      "vertices": 70450,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.976,
-        1,
-        0.128
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.976,
-          1,
-          0.128
-        ],
-        "drawnFrac": 0.346
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\farm_scarecrow_01.glb",
-      "name": "farm_scarecrow_01.glb",
-      "bytes": 230692,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 28220,
-      "vertices": 30367,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.815,
-        1,
-        0.281
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.815,
-          1,
-          0.281
-        ],
-        "drawnFrac": 0.138
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_bush_01.glb",
-      "name": "nature_bush_01.glb",
-      "bytes": 249228,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 15699,
-      "vertices": 29734,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.776,
-        0.676,
-        0.794
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.776,
-          0.676,
-          0.794
-        ],
-        "drawnFrac": 0.004,
-        "error": "rendered nothing (drawnFrac 0.004)"
-      },
-      "valid": false
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_bush_02.glb",
-      "name": "nature_bush_02.glb",
-      "bytes": 224696,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 16786,
-      "vertices": 29061,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.97,
-        0.985,
-        0.402
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.97,
-          0.985,
-          0.402
-        ],
-        "drawnFrac": 0.003,
-        "error": "rendered nothing (drawnFrac 0.003)"
-      },
-      "valid": false
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_bush_03.glb",
-      "name": "nature_bush_03.glb",
-      "bytes": 323220,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 99586,
-      "vertices": 67738,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        1,
-        0.727,
-        0.198
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          1,
-          0.727,
-          0.199
-        ],
-        "drawnFrac": 0.125
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_dead_tree_01.glb",
-      "name": "nature_dead_tree_01.glb",
-      "bytes": 9824,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 468,
-      "vertices": 1396,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.774,
-        0.981,
-        0.958
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.777,
-          0.988,
-          0.977
-        ],
-        "drawnFrac": 0,
-        "error": "rendered nothing (drawnFrac 0)"
-      },
-      "valid": false
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_dead_tree_02.glb",
-      "name": "nature_dead_tree_02.glb",
-      "bytes": 126508,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 4309,
-      "vertices": 11180,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.7,
-        0.878,
-        0.863
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.7,
-          0.879,
-          0.863
-        ],
-        "drawnFrac": 0.01,
-        "error": "splinter geometry (drawnFrac 0.01)"
-      },
-      "valid": false
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_fallen_log_01.glb",
-      "name": "nature_fallen_log_01.glb",
-      "bytes": 308688,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 84960,
-      "vertices": 61992,
-      "materials": 1,
-      "textures": 1,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.376,
-        0.299,
-        1
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.376,
-          0.299,
-          1
-        ],
-        "drawnFrac": 0.115
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_fern_01.glb",
-      "name": "nature_fern_01.glb",
-      "bytes": 483204,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 51130,
-      "vertices": 51701,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.983,
-        1,
-        0.978
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.983,
-          1,
-          0.978
-        ],
-        "drawnFrac": 0.189
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_flowers_01.glb",
-      "name": "nature_flowers_01.glb",
-      "bytes": 139296,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 2555,
-      "vertices": 6064,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.626,
-        0.612,
-        0.904
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.648,
-          0.724,
-          0.971
-        ],
-        "drawnFrac": 0.008,
-        "error": "rendered nothing (drawnFrac 0.008)"
-      },
-      "valid": false
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_flowers_02.glb",
-      "name": "nature_flowers_02.glb",
-      "bytes": 587532,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 35751,
-      "vertices": 44531,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.473,
-        0.27,
-        1
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.473,
-          0.27,
-          1
-        ],
-        "drawnFrac": 0.144
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_grass_clump_01.glb",
-      "name": "nature_grass_clump_01.glb",
-      "bytes": 155920,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 4304,
-      "vertices": 10805,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.392,
-        0.884,
-        0.384
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.392,
-          0.884,
-          0.384
-        ],
-        "drawnFrac": 0.003,
-        "error": "rendered nothing (drawnFrac 0.003)"
-      },
-      "valid": false
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_grass_clump_02.glb",
-      "name": "nature_grass_clump_02.glb",
-      "bytes": 114080,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 1724,
-      "vertices": 3350,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.673,
-        0.296,
-        0.861
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.881,
-          0.643,
-          0.993
-        ],
-        "drawnFrac": 0.003,
-        "error": "rendered nothing (drawnFrac 0.003)"
-      },
-      "valid": false
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_mushrooms_01.glb",
-      "name": "nature_mushrooms_01.glb",
-      "bytes": 90088,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 2279,
-      "vertices": 3946,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.954,
-        0.844,
-        0.874
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.954,
-          0.862,
-          0.944
-        ],
-        "drawnFrac": 0.005,
-        "error": "rendered nothing (drawnFrac 0.005)"
-      },
-      "valid": false
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_oak_large_01.glb",
-      "name": "nature_oak_large_01.glb",
-      "bytes": 372048,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 60555,
-      "vertices": 61238,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        1,
-        0.973,
-        0.78
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          1,
-          0.973,
-          0.78
-        ],
-        "drawnFrac": 0.372
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_oak_large_02.glb",
-      "name": "nature_oak_large_02.glb",
-      "bytes": 145992,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 4162,
-      "vertices": 7115,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.835,
-        0.913,
-        0.799
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.928,
-          0.945,
-          0.88
-        ],
-        "drawnFrac": 0.036,
-        "error": "splinter geometry (drawnFrac 0.036)"
-      },
-      "valid": false
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_oak_large_03.glb",
-      "name": "nature_oak_large_03.glb",
-      "bytes": 113080,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 5102,
-      "vertices": 8017,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.882,
-        0.531,
-        0.905
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.953,
-          0.571,
-          0.995
-        ],
-        "drawnFrac": 0.033,
-        "error": "splinter geometry (drawnFrac 0.033)"
-      },
-      "valid": false
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_oak_small_01.glb",
-      "name": "nature_oak_small_01.glb",
-      "bytes": 147864,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 5876,
-      "vertices": 10763,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.758,
-        0.896,
-        0.761
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.858,
-          0.982,
-          0.876
-        ],
-        "drawnFrac": 0.037,
-        "error": "splinter geometry (drawnFrac 0.037)"
-      },
-      "valid": false
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_oak_small_02.glb",
-      "name": "nature_oak_small_02.glb",
-      "bytes": 166328,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 7323,
-      "vertices": 14474,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.813,
-        0.896,
-        0.961
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.946,
-          0.934,
-          0.98
-        ],
-        "drawnFrac": 0.063,
-        "error": "splinter geometry (drawnFrac 0.063)"
-      },
-      "valid": false
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_pine_02.glb",
-      "name": "nature_pine_02.glb",
-      "bytes": 290764,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 13458,
-      "vertices": 28772,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.861,
-        0.555,
-        0.936
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.861,
-          0.555,
-          0.936
-        ],
-        "drawnFrac": 0,
-        "error": "rendered nothing (drawnFrac 0)"
-      },
-      "valid": false
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_pine_03.glb",
-      "name": "nature_pine_03.glb",
-      "bytes": 239376,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 14642,
-      "vertices": 28341,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.814,
-        0.883,
-        0.916
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.814,
-          0.883,
-          0.916
-        ],
-        "drawnFrac": 0,
-        "error": "rendered nothing (drawnFrac 0)"
-      },
-      "valid": false
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_rock_cluster_01.glb",
-      "name": "nature_rock_cluster_01.glb",
-      "bytes": 194528,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 16682,
-      "vertices": 27956,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.921,
-        0.215,
-        0.9
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.921,
-          0.215,
-          0.9
-        ],
-        "drawnFrac": 0.005,
-        "error": "rendered nothing (drawnFrac 0.005)"
-      },
-      "valid": false
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_rock_cluster_02.glb",
-      "name": "nature_rock_cluster_02.glb",
-      "bytes": 351552,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 70008,
-      "vertices": 67419,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.762,
-        1,
-        0.838
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.762,
-          1,
-          0.838
-        ],
-        "drawnFrac": 0.346
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_rock_small_01.glb",
-      "name": "nature_rock_small_01.glb",
-      "bytes": 359300,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 78163,
-      "vertices": 73066,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.626,
-        0.795,
-        1
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.626,
-          0.795,
-          1
-        ],
-        "drawnFrac": 0.362
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_rock_small_02.glb",
-      "name": "nature_rock_small_02.glb",
-      "bytes": 319556,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 58653,
-      "vertices": 57615,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.958,
-        1,
-        0.785
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.959,
-          1,
-          0.785
-        ],
-        "drawnFrac": 0.57
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\nature_sapling_01.glb",
-      "name": "nature_sapling_01.glb",
-      "bytes": 323244,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 8970,
-      "vertices": 17330,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.941,
-        0.592,
-        0.844
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.993,
-          0.595,
-          0.957
-        ],
-        "drawnFrac": 0.034,
-        "error": "splinter geometry (drawnFrac 0.034)"
-      },
-      "valid": false
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\prop_basket_01.glb",
-      "name": "prop_basket_01.glb",
-      "bytes": 128988,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 4245,
-      "vertices": 8380,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.832,
-        0.932,
-        0.871
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.912,
-          0.944,
-          0.88
-        ],
-        "drawnFrac": 0.025,
-        "error": "splinter geometry (drawnFrac 0.025)"
-      },
-      "valid": false
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\prop_bench_wood_01.glb",
-      "name": "prop_bench_wood_01.glb",
-      "bytes": 357968,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 86189,
-      "vertices": 63123,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.382,
-        0.685,
-        1
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.382,
-          0.685,
-          1
-        ],
-        "drawnFrac": 0.259
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\prop_bucket_metal_01.glb",
-      "name": "prop_bucket_metal_01.glb",
-      "bytes": 371404,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 86612,
-      "vertices": 65476,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.682,
-        1,
-        0.669
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.682,
-          1,
-          0.669
-        ],
-        "drawnFrac": 0.239
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\prop_bucket_wood_01.glb",
-      "name": "prop_bucket_wood_01.glb",
-      "bytes": 355680,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 82095,
-      "vertices": 63146,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.734,
-        1,
-        0.684
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.734,
-          1,
-          0.684
-        ],
-        "drawnFrac": 0.292
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\prop_cart_wheel_01.glb",
-      "name": "prop_cart_wheel_01.glb",
-      "bytes": 311852,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 91376,
-      "vertices": 65067,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        1,
-        0.999,
-        0.219
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          1,
-          0.999,
-          0.219
-        ],
-        "drawnFrac": 0.255
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\prop_firewood_stack_01.glb",
-      "name": "prop_firewood_stack_01.glb",
-      "bytes": 13456,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 174,
-      "vertices": 510,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.961,
-        0.965,
-        0.993
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.985,
-          0.972,
-          0.994
-        ],
-        "drawnFrac": 0,
-        "error": "rendered nothing (drawnFrac 0)"
-      },
-      "valid": false
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\prop_grain_sack_01.glb",
-      "name": "prop_grain_sack_01.glb",
-      "bytes": 348728,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 89479,
-      "vertices": 62834,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.646,
-        1,
-        0.672
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.646,
-          1,
-          0.672
-        ],
-        "drawnFrac": 0.372
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\prop_grain_sack_stack_01.glb",
-      "name": "prop_grain_sack_stack_01.glb",
-      "bytes": 338444,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 73229,
-      "vertices": 60134,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.786,
-        0.868,
-        1
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.786,
-          0.868,
-          1
-        ],
-        "drawnFrac": 0.326
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\prop_hay_bale_01.glb",
-      "name": "prop_hay_bale_01.glb",
-      "bytes": 309048,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 31363,
-      "vertices": 33534,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.776,
-        0.619,
-        0.999
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.776,
-          0.619,
-          0.999
-        ],
-        "drawnFrac": 0.435
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\prop_hay_pile_01.glb",
-      "name": "prop_hay_pile_01.glb",
-      "bytes": 119252,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 17999,
-      "vertices": 25420,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.933,
-        0.989,
-        0.939
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.933,
-          0.989,
-          0.939
-        ],
-        "drawnFrac": 0,
-        "error": "rendered nothing (drawnFrac 0)"
-      },
-      "valid": false
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\prop_logs_01.glb",
-      "name": "prop_logs_01.glb",
-      "bytes": 184916,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 3497,
-      "vertices": 7092,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.857,
-        0.936,
-        0.505
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.915,
-          0.955,
-          0.587
-        ],
-        "drawnFrac": 0.009,
-        "error": "rendered nothing (drawnFrac 0.009)"
-      },
-      "valid": false
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\prop_pottery_01.glb",
-      "name": "prop_pottery_01.glb",
-      "bytes": 336072,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 90947,
-      "vertices": 62833,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.885,
-        1,
-        0.751
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.885,
-          1,
-          0.751
-        ],
-        "drawnFrac": 0.349
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\prop_stool_wood_01.glb",
-      "name": "prop_stool_wood_01.glb",
-      "bytes": 315720,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 91983,
-      "vertices": 64481,
-      "materials": 1,
-      "textures": 1,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.772,
-        1,
-        0.838
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.772,
-          1,
-          0.838
-        ],
-        "drawnFrac": 0.382
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\prop_table_wood_01.glb",
-      "name": "prop_table_wood_01.glb",
-      "bytes": 274232,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 91180,
-      "vertices": 59412,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        1,
-        0.374,
-        0.495
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          1,
-          0.374,
-          0.495
-        ],
-        "drawnFrac": 0.17
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\prop_tree_stump_01.glb",
-      "name": "prop_tree_stump_01.glb",
-      "bytes": 101296,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 12524,
-      "vertices": 26210,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.85,
-        0.456,
-        0.92
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.85,
-          0.456,
-          0.92
-        ],
-        "drawnFrac": 0,
-        "error": "rendered nothing (drawnFrac 0)"
-      },
-      "valid": false
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\prop_water_jug_01.glb",
-      "name": "prop_water_jug_01.glb",
-      "bytes": 291964,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 95858,
-      "vertices": 59684,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        1,
-        0.992,
-        0.87
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          1,
-          0.992,
-          0.87
-        ],
-        "drawnFrac": 0.402
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\prop_wheelbarrow_01.glb",
-      "name": "prop_wheelbarrow_01.glb",
-      "bytes": 210628,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 33948,
-      "vertices": 38733,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.996,
-        0.643,
-        1
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.996,
-          0.643,
-          1
-        ],
-        "drawnFrac": 0.21
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\prop_wood_crate_broken_01.glb",
-      "name": "prop_wood_crate_broken_01.glb",
-      "bytes": 370724,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 91318,
-      "vertices": 66668,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        1,
-        0.527,
-        0.591
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          1,
-          0.527,
-          0.591
-        ],
-        "drawnFrac": 0.369
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\prop_wood_crate_large_01.glb",
-      "name": "prop_wood_crate_large_01.glb",
-      "bytes": 4319900,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 96137,
-      "vertices": 69106,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.779,
-        1,
-        0.909
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.779,
-          1,
-          0.909
-        ],
-        "drawnFrac": 0.667
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\prop_wood_crate_small_01.glb",
-      "name": "prop_wood_crate_small_01.glb",
-      "bytes": 393304,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 91492,
-      "vertices": 66990,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.878,
-        0.896,
-        1
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.878,
-          0.896,
-          1
-        ],
-        "drawnFrac": 0.695
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\village_fence_broken_01.glb",
-      "name": "village_fence_broken_01.glb",
-      "bytes": 340668,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 83133,
-      "vertices": 76785,
-      "materials": 1,
-      "textures": 1,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        1,
-        0.888,
-        0.177
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          1,
-          0.888,
-          0.177
-        ],
-        "drawnFrac": 0.185
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\village_fence_corner_01.glb",
-      "name": "village_fence_corner_01.glb",
-      "bytes": 244256,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 41133,
-      "vertices": 44205,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        1,
-        0.613,
-        0.465
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          1,
-          0.613,
-          0.465
-        ],
-        "drawnFrac": 0.197
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\village_fence_gate_01.glb",
-      "name": "village_fence_gate_01.glb",
-      "bytes": 370520,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 83654,
-      "vertices": 67800,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        1,
-        0.872,
-        0.239
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          1,
-          0.872,
-          0.239
-        ],
-        "drawnFrac": 0.307
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\village_fence_straight_01.glb",
-      "name": "village_fence_straight_01.glb",
-      "bytes": 299972,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 95944,
-      "vertices": 62450,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.763,
-        1,
-        0.12
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.763,
-          1,
-          0.12
-        ],
-        "drawnFrac": 0.236
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\village_hitching_post_01.glb",
-      "name": "village_hitching_post_01.glb",
-      "bytes": 287188,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 94459,
-      "vertices": 63039,
-      "materials": 1,
-      "textures": 1,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        1,
-        0.762,
-        0.103
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          1,
-          0.762,
-          0.103
-        ],
-        "drawnFrac": 0.135
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\village_lantern_post_01.glb",
-      "name": "village_lantern_post_01.glb",
-      "bytes": 315248,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 99562,
-      "vertices": 64682,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.412,
-        1,
-        0.411
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.412,
-          1,
-          0.411
-        ],
-        "drawnFrac": 0.105
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\village_market_stall_01.glb",
-      "name": "village_market_stall_01.glb",
-      "bytes": 376048,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 78879,
-      "vertices": 63485,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.745,
-        1,
-        0.933
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.745,
-          1,
-          0.933
-        ],
-        "drawnFrac": 0.443
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\village_market_stall_02.glb",
-      "name": "village_market_stall_02.glb",
-      "bytes": 233016,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 18229,
-      "vertices": 26955,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.979,
-        0.861,
-        0.612
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.979,
-          0.861,
-          0.612
-        ],
-        "drawnFrac": 0.003,
-        "error": "rendered nothing (drawnFrac 0.003)"
-      },
-      "valid": false
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\village_signpost_01.glb",
-      "name": "village_signpost_01.glb",
-      "bytes": 380332,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 37122,
-      "vertices": 42115,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.837,
-        1,
-        0.279
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.837,
-          1,
-          0.279
-        ],
-        "drawnFrac": 0.132
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\village_water_trough_01.glb",
-      "name": "village_water_trough_01.glb",
-      "bytes": 325964,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 71224,
-      "vertices": 53323,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        1,
-        0.702,
-        0.437
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          1,
-          0.702,
-          0.437
-        ],
-        "drawnFrac": 0.255
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\village_water_well_01.glb",
-      "name": "village_water_well_01.glb",
-      "bytes": 323568,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 48914,
-      "vertices": 48858,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.822,
-        1,
-        0.66
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.822,
-          1,
-          0.66
-        ],
-        "drawnFrac": 0.317
-      },
-      "valid": true
-    },
-    {
-      "file": "AssetFactory\\glb_optimized\\village_weapon_rack_01.glb",
-      "name": "village_weapon_rack_01.glb",
-      "bytes": 402488,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 98154,
-      "vertices": 69837,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.6,
-        1,
-        0.214
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.6,
-          1,
-          0.214
-        ],
-        "drawnFrac": 0.195
-      },
-      "valid": true
-    },
-    {
-      "file": "tools\\reports\\glb-candidates\\hayBales.glb",
-      "name": "hayBales.glb",
-      "bytes": 7317884,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 142135,
-      "vertices": 150287,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.873,
-        0.632,
-        1
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.873,
-          0.632,
-          1
-        ],
-        "drawnFrac": 0.428
-      },
-      "valid": true
-    },
-    {
-      "file": "tools\\reports\\glb-candidates\\oakTree.glb",
-      "name": "oakTree.glb",
-      "bytes": 16501268,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 298233,
-      "vertices": 370671,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.991,
-        0.881,
-        0.506
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.991,
-          0.881,
-          0.506
-        ],
-        "drawnFrac": 0.226
-      },
-      "valid": true
-    },
-    {
-      "file": "tools\\reports\\glb-candidates\\swordShrine.glb",
-      "name": "swordShrine.glb",
-      "bytes": 6647876,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 166595,
-      "vertices": 122920,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.918,
-        1,
-        0.874
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.918,
-          1,
-          0.874
-        ],
-        "drawnFrac": 0.208
-      },
-      "valid": true
-    },
-    {
-      "file": "tools\\reports\\glb-candidates\\villageWell.glb",
-      "name": "villageWell.glb",
-      "bytes": 7722268,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 164190,
-      "vertices": 147692,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        1,
-        0.83,
-        0.995
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          1,
-          0.83,
-          0.995
-        ],
-        "drawnFrac": 0.394
-      },
-      "valid": true
-    },
-    {
-      "file": "tools\\reports\\glb-candidates\\willowTree.glb",
-      "name": "willowTree.glb",
-      "bytes": 5100012,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 51186,
-      "vertices": 132842,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.98,
-        0.932,
-        0.932
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.98,
-          0.932,
-          0.932
-        ],
-        "drawnFrac": 0.025,
-        "error": "splinter geometry (drawnFrac 0.025)"
-      },
-      "valid": false
-    },
-    {
-      "file": "Game3DAssets/village_rail_fence_straight_01.glb",
-      "name": "village_rail_fence_straight_01.glb",
-      "bytes": 335068,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 95586,
-      "vertices": 63768,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        1,
-        0.497,
-        0.909
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          1,
-          0.497,
-          0.909
-        ],
-        "drawnFrac": 0.329
-      },
-      "valid": true
-    },
-    {
-      "file": "Game3DAssets/village_rail_fence_corner_01.glb",
-      "name": "village_rail_fence_corner_01.glb",
-      "bytes": 363108,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 91363,
-      "vertices": 68162,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        1,
-        0.397,
-        0.233
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          1,
-          0.397,
-          0.233
-        ],
-        "drawnFrac": 0.153
-      },
-      "valid": true
-    },
-    {
-      "file": "Game3DAssets/village_rail_fence_gate_01.glb",
-      "name": "village_rail_fence_gate_01.glb",
-      "bytes": 325768,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 89301,
-      "vertices": 66732,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        1,
-        0.765,
-        0.133
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          1,
-          0.765,
-          0.133
-        ],
-        "drawnFrac": 0.3
-      },
-      "valid": true
-    },
-    {
-      "file": "Game3DAssets/nature_reeds_01.glb",
-      "name": "nature_reeds_01.glb",
-      "bytes": 312292,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 8614,
-      "vertices": 14746,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.859,
-        0.295,
-        0.815
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.945,
-          0.552,
-          0.912
-        ],
-        "drawnFrac": 0.066,
-        "error": "splinter geometry (drawnFrac 0.066)"
-      },
-      "valid": false
-    },
-    {
-      "file": "Game3DAssets/prop_hay_pile_02.glb",
-      "name": "prop_hay_pile_02.glb",
-      "bytes": 109252,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 2804,
-      "vertices": 6662,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.968,
-        0.74,
-        0.928
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.969,
-          0.744,
-          0.928
-        ],
-        "drawnFrac": 0.011,
-        "error": "splinter geometry (drawnFrac 0.011)"
-      },
-      "valid": false
-    },
-    {
-      "file": "Game3DAssets/prop_logs_02.glb",
-      "name": "prop_logs_02.glb",
-      "bytes": 366272,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 88407,
-      "vertices": 66625,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        1,
-        0.698,
-        0.689
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          1,
-          0.698,
-          0.689
-        ],
-        "drawnFrac": 0.457
-      },
-      "valid": true
-    },
-    {
-      "file": "Game3DAssets/prop_tree_stump_02.glb",
-      "name": "prop_tree_stump_02.glb",
-      "bytes": 230728,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 35975,
-      "vertices": 36914,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        1,
-        0.544,
-        0.997
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          1,
-          0.544,
-          0.997
-        ],
-        "drawnFrac": 0.272
-      },
-      "valid": true
-    },
-    {
-      "file": "Game3DAssets/prop_firewood_stack_02.glb",
-      "name": "prop_firewood_stack_02.glb",
-      "bytes": 387744,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 79310,
-      "vertices": 66200,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        1,
-        0.806,
-        0.281
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          1,
-          0.806,
-          0.281
-        ],
-        "drawnFrac": 0.288
-      },
-      "valid": true
-    },
-    {
-      "file": "Game3DAssets/nature_dead_tree_03.glb",
-      "name": "nature_dead_tree_03.glb",
-      "bytes": 388092,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 82800,
-      "vertices": 87553,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        1,
-        0.858,
-        0.994
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          1,
-          0.858,
-          0.994
-        ],
-        "drawnFrac": 0.142
-      },
-      "valid": true
-    },
-    {
-      "file": "Game3DAssets/nature_mushrooms_02.glb",
-      "name": "nature_mushrooms_02.glb",
-      "bytes": 210496,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 13490,
-      "vertices": 26396,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.872,
-        0.424,
-        0.718
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.872,
-          0.424,
-          0.718
-        ],
-        "drawnFrac": 0.006,
-        "error": "rendered nothing (drawnFrac 0.006)"
-      },
-      "valid": false
-    },
-    {
-      "file": "Game3DAssets/landmark_village_fountain.glb",
-      "name": "landmark_village_fountain.glb",
-      "bytes": 680808,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 71004,
-      "vertices": 63188,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.854,
-        1,
-        0.865
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.854,
-          1,
-          0.865
-        ],
-        "drawnFrac": 0.299
-      },
-      "valid": true
-    },
-    {
-      "file": "Game3DAssets/landmark_ancient_oak.glb",
-      "name": "landmark_ancient_oak.glb",
-      "bytes": 237412,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 6673,
-      "vertices": 10060,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.73,
-        0.93,
-        0.892
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.959,
-          0.956,
-          0.964
-        ],
-        "drawnFrac": 0.112
-      },
-      "valid": false,
-      "reason": "splinter geometry (manual review of glb-sheet 2026-09-20)"
-    },
-    {
-      "file": "Game3DAssets/landmark_ruined_tower.glb",
-      "name": "landmark_ruined_tower.glb",
-      "bytes": 630588,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 87100,
-      "vertices": 79547,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        1,
-        0.937,
-        0.804
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          1,
-          0.937,
-          0.804
-        ],
-        "drawnFrac": 0.572
-      },
-      "valid": true
-    },
-    {
-      "file": "Game3DAssets/landmark_windmill.glb",
-      "name": "landmark_windmill.glb",
-      "bytes": 541996,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 71692,
-      "vertices": 66831,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.867,
-        1,
-        0.835
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.867,
-          1,
-          0.835
-        ],
-        "drawnFrac": 0.304
-      },
-      "valid": true
-    },
-    {
-      "file": "Game3DAssets/landmark_graveyard_gate.glb",
-      "name": "landmark_graveyard_gate.glb",
-      "bytes": 731748,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 82558,
-      "vertices": 72109,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        1,
-        0.964,
-        0.411
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          1,
-          0.964,
-          0.411
-        ],
-        "drawnFrac": 0.354
-      },
-      "valid": true
-    },
-    {
-      "file": "Game3DAssets/landmark_enemy_totem.glb",
-      "name": "landmark_enemy_totem.glb",
-      "bytes": 16640,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 178,
-      "vertices": 530,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.871,
-        0.986,
-        0.368
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": false,
-        "meshes": 1,
-        "size": [
-          0.942,
-          0.992,
-          0.439
-        ],
-        "drawnFrac": 0,
-        "error": "rendered nothing (drawnFrac 0)"
-      },
-      "valid": false
-    },
-    {
-      "file": "Game3DAssets/landmark_destroyed_watchtower.glb",
-      "name": "landmark_destroyed_watchtower.glb",
-      "bytes": 589032,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 72892,
-      "vertices": 71229,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        1,
-        0.934,
-        0.741
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          1,
-          0.934,
-          0.741
-        ],
-        "drawnFrac": 0.484
-      },
-      "valid": true
-    },
-    {
-      "file": "Game3DAssets/combat_broken_cart_01.glb",
-      "name": "combat_broken_cart_01.glb",
-      "bytes": 344964,
-      "ok": true,
-      "meshes": 1,
-      "primitives": 1,
-      "triangles": 89903,
-      "vertices": 69701,
-      "materials": 1,
-      "textures": 2,
-      "animations": 0,
-      "skins": 0,
-      "size": [
-        0.562,
-        0.459,
-        1
-      ],
-      "problems": [],
-      "viewer": {
-        "ok": true,
-        "meshes": 1,
-        "size": [
-          0.562,
-          0.459,
-          1
-        ],
-        "drawnFrac": 0.16
-      },
-      "valid": true
-    }
-  ]
+ "generated": "2026-09-24T13:18:59.281Z",
+ "results": [
+  {
+   "file": "Game3DAssets\\apothecaryBuilding.glb",
+   "name": "apothecaryBuilding.glb",
+   "bytes": 314352,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 40811,
+   "vertices": 57178,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.999,
+    0.774,
+    0.914
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.999,
+     0.774,
+     0.914
+    ],
+    "drawnFrac": 0.353
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\arros.glb",
+   "name": "arros.glb",
+   "bytes": 175900,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 29310,
+   "vertices": 23046,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.112,
+    0.031,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.112,
+     0.031,
+     1
+    ],
+    "drawnFrac": 0.011,
+    "error": "splinter geometry (drawnFrac 0.011)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\barrelWithMesh_00001_.glb",
+   "name": "barrelWithMesh_00001_.glb",
+   "bytes": 292592,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 40836,
+   "vertices": 43617,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.881,
+    1,
+    0.88
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.881,
+     1,
+     0.88
+    ],
+    "drawnFrac": 0.47
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\basalt_boulder_01.glb",
+   "name": "basalt_boulder_01.glb",
+   "bytes": 289860,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 46488,
+   "vertices": 60753,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.558,
+    0.974
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.558,
+     0.974
+    ],
+    "drawnFrac": 0.181
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\basalt_cluster_01.glb",
+   "name": "basalt_cluster_01.glb",
+   "bytes": 323700,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 68521,
+   "vertices": 65555,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.762,
+    1,
+    0.838
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.762,
+     1,
+     0.838
+    ],
+    "drawnFrac": 0.281
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\basalt_small_01.glb",
+   "name": "basalt_small_01.glb",
+   "bytes": 339560,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 77679,
+   "vertices": 72431,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.626,
+    0.795,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.626,
+     0.795,
+     1
+    ],
+    "drawnFrac": 0.297
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\basalt_small_02.glb",
+   "name": "basalt_small_02.glb",
+   "bytes": 290888,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 56922,
+   "vertices": 55170,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.958,
+    1,
+    0.785
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.958,
+     1,
+     0.785
+    ],
+    "drawnFrac": 0.447
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\batWithAnimation.glb",
+   "name": "batWithAnimation.glb",
+   "bytes": 1243152,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 153910,
+   "vertices": 152052,
+   "materials": 1,
+   "textures": 2,
+   "animations": 5,
+   "skins": 1,
+   "size": [
+    1.001,
+    0.444,
+    0.646
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1.129,
+     0.465,
+     0.529
+    ],
+    "drawnFrac": 0.113
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\blacksmithBuilding.glb",
+   "name": "blacksmithBuilding.glb",
+   "bytes": 186864,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 16942,
+   "vertices": 22047,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.834,
+    0.998,
+    0.998
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.834,
+     0.998,
+     0.998
+    ],
+    "drawnFrac": 0.385
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\blacksmith_anvil_01.glb",
+   "name": "blacksmith_anvil_01.glb",
+   "bytes": 345168,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 96528,
+   "vertices": 62264,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.523,
+    0.605,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.523,
+     0.605,
+     1
+    ],
+    "drawnFrac": 0.223
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\blacksmith_coal_pile_01.glb",
+   "name": "blacksmith_coal_pile_01.glb",
+   "bytes": 386148,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 83600,
+   "vertices": 64497,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.987,
+    0.565,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.987,
+     0.565,
+     1
+    ],
+    "drawnFrac": 0.235
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\blacksmith_forge_01.glb",
+   "name": "blacksmith_forge_01.glb",
+   "bytes": 339892,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 63299,
+   "vertices": 57536,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.75,
+    1,
+    0.976
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.75,
+     1,
+     0.976
+    ],
+    "drawnFrac": 0.43
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\blacksmith_grindstone_01.glb",
+   "name": "blacksmith_grindstone_01.glb",
+   "bytes": 212524,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 7362,
+   "vertices": 17351,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.958,
+    0.736,
+    0.907
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.958,
+     0.736,
+     0.908
+    ],
+    "drawnFrac": 0.002,
+    "error": "rendered nothing (drawnFrac 0.002)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\blacksmith_tool_rack_01.glb",
+   "name": "blacksmith_tool_rack_01.glb",
+   "bytes": 371492,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 95308,
+   "vertices": 69553,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.875,
+    1,
+    0.396
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.875,
+     1,
+     0.396
+    ],
+    "drawnFrac": 0.209
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\blacksmith_water_barrel_01.glb",
+   "name": "blacksmith_water_barrel_01.glb",
+   "bytes": 364696,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 94555,
+   "vertices": 67084,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.771,
+    1,
+    0.779
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.771,
+     1,
+     0.779
+    ],
+    "drawnFrac": 0.422
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\blacksmith_weapon_rack_01.glb",
+   "name": "blacksmith_weapon_rack_01.glb",
+   "bytes": 336244,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 98244,
+   "vertices": 65666,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.7,
+    1,
+    0.217
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.7,
+     1,
+     0.217
+    ],
+    "drawnFrac": 0.19
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\bog_barricade_01.glb",
+   "name": "bog_barricade_01.glb",
+   "bytes": 334212,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 96238,
+   "vertices": 70450,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.976,
+    1,
+    0.128
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.976,
+     1,
+     0.128
+    ],
+    "drawnFrac": 0.184
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\bog_cart_01.glb",
+   "name": "bog_cart_01.glb",
+   "bytes": 327520,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 89409,
+   "vertices": 69118,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.562,
+    0.459,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.562,
+     0.459,
+     1
+    ],
+    "drawnFrac": 0.105
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\bog_crate_01.glb",
+   "name": "bog_crate_01.glb",
+   "bytes": 364752,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 90942,
+   "vertices": 66197,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.527,
+    0.591
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.527,
+     0.591
+    ],
+    "drawnFrac": 0.263
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\bog_dead_tree_01.glb",
+   "name": "bog_dead_tree_01.glb",
+   "bytes": 371200,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 81982,
+   "vertices": 86539,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.858,
+    0.994
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.858,
+     0.994
+    ],
+    "drawnFrac": 0.098
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\bog_dead_tree_02.glb",
+   "name": "bog_dead_tree_02.glb",
+   "bytes": 385144,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 81982,
+   "vertices": 86539,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.858,
+    0.994
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.858,
+     0.994
+    ],
+    "drawnFrac": 0.176
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\bog_driftwood_01.glb",
+   "name": "bog_driftwood_01.glb",
+   "bytes": 281356,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 83658,
+   "vertices": 60444,
+   "materials": 1,
+   "textures": 1,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.376,
+    0.299,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.376,
+     0.299,
+     1
+    ],
+    "drawnFrac": 0.117
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\bog_fence_01.glb",
+   "name": "bog_fence_01.glb",
+   "bytes": 318580,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 81793,
+   "vertices": 75093,
+   "materials": 1,
+   "textures": 1,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.888,
+    0.177
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.888,
+     0.177
+    ],
+    "drawnFrac": 0.186
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\bog_fern_01.glb",
+   "name": "bog_fern_01.glb",
+   "bytes": 444920,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 48130,
+   "vertices": 47936,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.983,
+    1,
+    0.978
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.983,
+     1,
+     0.978
+    ],
+    "drawnFrac": 0.192
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\bog_flowers_01.glb",
+   "name": "bog_flowers_01.glb",
+   "bytes": 557992,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 35456,
+   "vertices": 43907,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.473,
+    0.27,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.473,
+     0.27,
+     1
+    ],
+    "drawnFrac": 0.142
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\bog_logs_01.glb",
+   "name": "bog_logs_01.glb",
+   "bytes": 348744,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 87996,
+   "vertices": 66085,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.698,
+    0.689
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.698,
+     0.689
+    ],
+    "drawnFrac": 0.402
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\bog_log_01.glb",
+   "name": "bog_log_01.glb",
+   "bytes": 287848,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 83658,
+   "vertices": 60436,
+   "materials": 1,
+   "textures": 1,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.376,
+    0.299,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.376,
+     0.299,
+     1
+    ],
+    "drawnFrac": 0.099
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\bog_oak_01.glb",
+   "name": "bog_oak_01.glb",
+   "bytes": 351336,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 60021,
+   "vertices": 60440,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.973,
+    0.78
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.973,
+     0.78
+    ],
+    "drawnFrac": 0.368
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\bog_oak_02.glb",
+   "name": "bog_oak_02.glb",
+   "bytes": 1857416,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 298150,
+   "vertices": 375009,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.991,
+    0.881,
+    0.506
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.991,
+     0.881,
+     0.506
+    ],
+    "drawnFrac": 0.211
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\bog_rock_01.glb",
+   "name": "bog_rock_01.glb",
+   "bytes": 307204,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 46488,
+   "vertices": 60753,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.558,
+    0.974
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.558,
+     0.974
+    ],
+    "drawnFrac": 0.305
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\bog_rock_cluster_01.glb",
+   "name": "bog_rock_cluster_01.glb",
+   "bytes": 329100,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 68521,
+   "vertices": 65555,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.762,
+    1,
+    0.838
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.762,
+     1,
+     0.838
+    ],
+    "drawnFrac": 0.344
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\bog_stump_01.glb",
+   "name": "bog_stump_01.glb",
+   "bytes": 215612,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 30744,
+   "vertices": 30845,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.544,
+    0.997
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.544,
+     0.997
+    ],
+    "drawnFrac": 0.26
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\bombOgreWithAnimation.glb",
+   "name": "bombOgreWithAnimation.glb",
+   "bytes": 1613520,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 161508,
+   "vertices": 176923,
+   "materials": 1,
+   "textures": 2,
+   "animations": 5,
+   "skins": 1,
+   "size": [
+    1.001,
+    0.964,
+    0.355
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.553,
+     0.837,
+     0.708
+    ],
+    "drawnFrac": 0.143
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\boulder.glb",
+   "name": "boulder.glb",
+   "bytes": 310052,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 46488,
+   "vertices": 60748,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.558,
+    0.974
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.558,
+     0.974
+    ],
+    "drawnFrac": 0.321
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\bow.glb",
+   "name": "bow.glb",
+   "bytes": 239836,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 55142,
+   "vertices": 39399,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.145,
+    0.05,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.145,
+     0.05,
+     1
+    ],
+    "drawnFrac": 0.018,
+    "error": "splinter geometry (drawnFrac 0.018)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\brennanKingtFinal.glb",
+   "name": "brennanKingtFinal.glb",
+   "bytes": 1753204,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 210314,
+   "vertices": 253068,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.99,
+    0.895,
+    0.249
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.99,
+     0.895,
+     0.249
+    ],
+    "drawnFrac": 0.102
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\brennwrig.glb",
+   "name": "brennwrig.glb",
+   "bytes": 1882772,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 210312,
+   "vertices": 253087,
+   "materials": 1,
+   "textures": 2,
+   "animations": 2,
+   "skins": 1,
+   "size": [
+    0.99,
+    0.895,
+    0.249
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.445,
+     0.903,
+     0.289
+    ],
+    "drawnFrac": 0.112
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\char_barricade_01.glb",
+   "name": "char_barricade_01.glb",
+   "bytes": 335772,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 96238,
+   "vertices": 70450,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.976,
+    1,
+    0.128
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.976,
+     1,
+     0.128
+    ],
+    "drawnFrac": 0.288
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\char_bush_01.glb",
+   "name": "char_bush_01.glb",
+   "bytes": 307408,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 99560,
+   "vertices": 67724,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.727,
+    0.198
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.727,
+     0.198
+    ],
+    "drawnFrac": 0.114
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\char_dead_tree_01.glb",
+   "name": "char_dead_tree_01.glb",
+   "bytes": 371272,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 81982,
+   "vertices": 86539,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.858,
+    0.994
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.858,
+     0.994
+    ],
+    "drawnFrac": 0.133
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\char_dead_tree_02.glb",
+   "name": "char_dead_tree_02.glb",
+   "bytes": 381272,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 81982,
+   "vertices": 86539,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.858,
+    0.994
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.858,
+     0.994
+    ],
+    "drawnFrac": 0.152
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\char_dead_tree_03.glb",
+   "name": "char_dead_tree_03.glb",
+   "bytes": 377080,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 81982,
+   "vertices": 86539,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.858,
+    0.994
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.858,
+     0.994
+    ],
+    "drawnFrac": 0.11
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\char_fallen_log_01.glb",
+   "name": "char_fallen_log_01.glb",
+   "bytes": 290048,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 83658,
+   "vertices": 60436,
+   "materials": 1,
+   "textures": 1,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.376,
+    0.299,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.376,
+     0.299,
+     1
+    ],
+    "drawnFrac": 0.11
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\char_logs_01.glb",
+   "name": "char_logs_01.glb",
+   "bytes": 348640,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 87996,
+   "vertices": 66085,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.698,
+    0.689
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.698,
+     0.689
+    ],
+    "drawnFrac": 0.441
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\char_shrub_01.glb",
+   "name": "char_shrub_01.glb",
+   "bytes": 189964,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 8956,
+   "vertices": 21574,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.922,
+    0.569,
+    0.88
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.922,
+     0.569,
+     0.88
+    ],
+    "drawnFrac": 0.001,
+    "error": "rendered nothing (drawnFrac 0.001)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\char_stump_01.glb",
+   "name": "char_stump_01.glb",
+   "bytes": 202980,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 30744,
+   "vertices": 30845,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.544,
+    0.997
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.544,
+     0.997
+    ],
+    "drawnFrac": 0.274
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\clubWithMesh_00001_.glb",
+   "name": "clubWithMesh_00001_.glb",
+   "bytes": 328768,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 54128,
+   "vertices": 52086,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.439,
+    1,
+    0.369
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.439,
+     1,
+     0.369
+    ],
+    "drawnFrac": 0.089
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\coinWithMesh_00001_.glb",
+   "name": "coinWithMesh_00001_.glb",
+   "bytes": 266388,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 55876,
+   "vertices": 43202,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.997,
+    1,
+    0.251
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.997,
+     1,
+     0.251
+    ],
+    "drawnFrac": 0.409
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\combat_barricade_01.glb",
+   "name": "combat_barricade_01.glb",
+   "bytes": 355992,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 96238,
+   "vertices": 70452,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.976,
+    1,
+    0.128
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.976,
+     1,
+     0.128
+    ],
+    "drawnFrac": 0.349
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\combat_broken_cart_01.glb",
+   "name": "combat_broken_cart_01.glb",
+   "bytes": 344964,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 89903,
+   "vertices": 69701,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.562,
+    0.459,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.562,
+     0.459,
+     1
+    ],
+    "drawnFrac": 0.16
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\cornTile.glb",
+   "name": "cornTile.glb",
+   "bytes": 290876,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 37280,
+   "vertices": 51373,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.832,
+    0.556,
+    0.999
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.832,
+     0.556,
+     0.999
+    ],
+    "drawnFrac": 0.313
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\dadKnightFinal.glb",
+   "name": "dadKnightFinal.glb",
+   "bytes": 1834276,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 213760,
+   "vertices": 274016,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.995,
+    0.809,
+    0.212
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.995,
+     0.809,
+     0.212
+    ],
+    "drawnFrac": 0.093
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\dadKnightRigged.glb",
+   "name": "dadKnightRigged.glb",
+   "bytes": 847804,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 92477,
+   "vertices": 86612,
+   "materials": 1,
+   "textures": 2,
+   "animations": 1,
+   "skins": 1,
+   "size": [
+    1,
+    0.802,
+    0.204
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.721,
+     0.446,
+     0.565
+    ],
+    "drawnFrac": 0.131
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\dadwrig.glb",
+   "name": "dadwrig.glb",
+   "bytes": 1982436,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 213760,
+   "vertices": 274054,
+   "materials": 1,
+   "textures": 2,
+   "animations": 1,
+   "skins": 1,
+   "size": [
+    0.995,
+    0.809,
+    0.212
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.547,
+     0.205,
+     0.845
+    ],
+    "drawnFrac": 0.096
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\daggerWithMesh_00001_.glb",
+   "name": "daggerWithMesh_00001_.glb",
+   "bytes": 327304,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 57080,
+   "vertices": 52873,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.329,
+    1,
+    0.094
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.329,
+     1,
+     0.094
+    ],
+    "drawnFrac": 0.054,
+    "error": "splinter geometry (drawnFrac 0.054)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\dragonOgreHybridBossWithAnimation.glb",
+   "name": "dragonOgreHybridBossWithAnimation.glb",
+   "bytes": 1513912,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 163738,
+   "vertices": 209325,
+   "materials": 1,
+   "textures": 2,
+   "animations": 9,
+   "skins": 1,
+   "size": [
+    1,
+    0.924,
+    0.552
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.953,
+     0.975,
+     0.612
+    ],
+    "drawnFrac": 0.253
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\farmHouse.glb",
+   "name": "farmHouse.glb",
+   "bytes": 322524,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 54847,
+   "vertices": 64905,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.998,
+    0.519,
+    0.767
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.998,
+     0.519,
+     0.767
+    ],
+    "drawnFrac": 0.225
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\farm_scarecrow_01.glb",
+   "name": "farm_scarecrow_01.glb",
+   "bytes": 223108,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 22197,
+   "vertices": 23193,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.815,
+    1,
+    0.281
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.815,
+     1,
+     0.281
+    ],
+    "drawnFrac": 0.139
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\fen_boardwalk_01.glb",
+   "name": "fen_boardwalk_01.glb",
+   "bytes": 344824,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 97406,
+   "vertices": 63161,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.901,
+    0.285
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.901,
+     0.285
+    ],
+    "drawnFrac": 0.275
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\fen_coracle_01.glb",
+   "name": "fen_coracle_01.glb",
+   "bytes": 209872,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 27454,
+   "vertices": 31166,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.616,
+    0.826,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.616,
+     0.826,
+     1
+    ],
+    "drawnFrac": 0.297
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\fen_fish_rack_01.glb",
+   "name": "fen_fish_rack_01.glb",
+   "bytes": 296524,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 83627,
+   "vertices": 66572,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.845,
+    1,
+    0.635
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.845,
+     1,
+     0.635
+    ],
+    "drawnFrac": 0.184
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\fen_lantern_post_01.glb",
+   "name": "fen_lantern_post_01.glb",
+   "bytes": 352764,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 91839,
+   "vertices": 67778,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.588,
+    1,
+    0.208
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.588,
+     1,
+     0.208
+    ],
+    "drawnFrac": 0.118
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\fen_stilt_hut_01.glb",
+   "name": "fen_stilt_hut_01.glb",
+   "bytes": 216788,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 37110,
+   "vertices": 38759,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.803,
+    0.923,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.803,
+     0.923,
+     1
+    ],
+    "drawnFrac": 0.374
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\fen_totem_01.glb",
+   "name": "fen_totem_01.glb",
+   "bytes": 354072,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 93406,
+   "vertices": 70809,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.422,
+    1,
+    0.526
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.422,
+     1,
+     0.526
+    ],
+    "drawnFrac": 0.239
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\fen_witch_hut_01.glb",
+   "name": "fen_witch_hut_01.glb",
+   "bytes": 356304,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 81847,
+   "vertices": 68584,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.968,
+    1,
+    0.707
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.968,
+     1,
+     0.707
+    ],
+    "drawnFrac": 0.405
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\foodWithMesh_00001_.glb",
+   "name": "foodWithMesh_00001_.glb",
+   "bytes": 363812,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 53738,
+   "vertices": 58196,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.408,
+    0.862
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.408,
+     0.862
+    ],
+    "drawnFrac": 0.228
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\goblinArcherAnimation.glb",
+   "name": "goblinArcherAnimation.glb",
+   "bytes": 1381120,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 156074,
+   "vertices": 171665,
+   "materials": 1,
+   "textures": 2,
+   "animations": 6,
+   "skins": 1,
+   "size": [
+    1.001,
+    0.899,
+    0.451
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.741,
+     0.795,
+     0.602
+    ],
+    "drawnFrac": 0.202
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\goblineWithAnimations.glb",
+   "name": "goblineWithAnimations.glb",
+   "bytes": 764108,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 106152,
+   "vertices": 92689,
+   "materials": 1,
+   "textures": 2,
+   "animations": 5,
+   "skins": 1,
+   "size": [
+    1,
+    0.643,
+    0.218
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.402,
+     0.649,
+     0.344
+    ],
+    "drawnFrac": 0.171
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\grassTile1WithMesh_00001_.glb",
+   "name": "grassTile1WithMesh_00001_.glb",
+   "bytes": 202572,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 18734,
+   "vertices": 34240,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.995,
+    0.171,
+    0.999
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.995,
+     0.171,
+     0.999
+    ],
+    "drawnFrac": 0.132
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\hayBales.glb",
+   "name": "hayBales.glb",
+   "bytes": 919976,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 138736,
+   "vertices": 142562,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.873,
+    0.632,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.873,
+     0.632,
+     1
+    ],
+    "drawnFrac": 0.428
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\healthPowerup.glb",
+   "name": "healthPowerup.glb",
+   "bytes": 239508,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 37704,
+   "vertices": 36292,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.867,
+    1,
+    0.912
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.867,
+     1,
+     0.912
+    ],
+    "drawnFrac": 0.341
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\horse.glb",
+   "name": "horse.glb",
+   "bytes": 271620,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 46622,
+   "vertices": 53120,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.273,
+    0.714,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.273,
+     0.714,
+     1
+    ],
+    "drawnFrac": 0.129
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\horseCart.glb",
+   "name": "horseCart.glb",
+   "bytes": 302856,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 56870,
+   "vertices": 58258,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.416,
+    0.652
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.416,
+     0.652
+    ],
+    "drawnFrac": 0.155
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\horseStable.glb",
+   "name": "horseStable.glb",
+   "bytes": 342440,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 52806,
+   "vertices": 63283,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.582,
+    0.682
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.582,
+     0.682
+    ],
+    "drawnFrac": 0.277
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\HumanCastle.glb",
+   "name": "HumanCastle.glb",
+   "bytes": 315456,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 41545,
+   "vertices": 58353,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.998,
+    0.874,
+    0.892
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.998,
+     0.874,
+     0.892
+    ],
+    "drawnFrac": 0.347
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\knightWithAnimations.glb",
+   "name": "knightWithAnimations.glb",
+   "bytes": 912204,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 92686,
+   "vertices": 85779,
+   "materials": 1,
+   "textures": 2,
+   "animations": 9,
+   "skins": 1,
+   "size": [
+    1,
+    0.828,
+    0.279
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.442,
+     0.813,
+     0.413
+    ],
+    "drawnFrac": 0.109
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\landmark_ancient_oak.glb",
+   "name": "landmark_ancient_oak.glb",
+   "bytes": 264452,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 6635,
+   "vertices": 10015,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.73,
+    0.93,
+    0.892
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.73,
+     0.93,
+     0.892
+    ],
+    "drawnFrac": 0.117
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\landmark_destroyed_watchtower.glb",
+   "name": "landmark_destroyed_watchtower.glb",
+   "bytes": 620240,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 71531,
+   "vertices": 69456,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.934,
+    0.741
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.934,
+     0.741
+    ],
+    "drawnFrac": 0.488
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\landmark_drowned_bell_tower.glb",
+   "name": "landmark_drowned_bell_tower.glb",
+   "bytes": 529588,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 90928,
+   "vertices": 73268,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.716,
+    0.876
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.716,
+     0.876
+    ],
+    "drawnFrac": 0.426
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\landmark_enemy_totem.glb",
+   "name": "landmark_enemy_totem.glb",
+   "bytes": 16640,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 178,
+   "vertices": 530,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.871,
+    0.986,
+    0.368
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.942,
+     0.992,
+     0.439
+    ],
+    "drawnFrac": 0,
+    "error": "rendered nothing (drawnFrac 0)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\landmark_graveyard_gate.glb",
+   "name": "landmark_graveyard_gate.glb",
+   "bytes": 771052,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 81332,
+   "vertices": 70592,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.964,
+    0.411
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.964,
+     0.411
+    ],
+    "drawnFrac": 0.357
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\landmark_ruined_tower.glb",
+   "name": "landmark_ruined_tower.glb",
+   "bytes": 675208,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 86936,
+   "vertices": 79296,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.937,
+    0.804
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.937,
+     0.804
+    ],
+    "drawnFrac": 0.581
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\landmark_sunken_temple.glb",
+   "name": "landmark_sunken_temple.glb",
+   "bytes": 584352,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 87468,
+   "vertices": 68431,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.947,
+    1,
+    0.752
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.947,
+     1,
+     0.752
+    ],
+    "drawnFrac": 0.514
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\landmark_village_fountain.glb",
+   "name": "landmark_village_fountain.glb",
+   "bytes": 710420,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 69678,
+   "vertices": 61619,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.854,
+    1,
+    0.865
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.854,
+     1,
+     0.865
+    ],
+    "drawnFrac": 0.299
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\landmark_windmill.glb",
+   "name": "landmark_windmill.glb",
+   "bytes": 570044,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 69912,
+   "vertices": 64766,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.867,
+    1,
+    0.835
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.867,
+     1,
+     0.835
+    ],
+    "drawnFrac": 0.305
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\nature_bush_01.glb",
+   "name": "nature_bush_01.glb",
+   "bytes": 249228,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 15699,
+   "vertices": 29734,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.776,
+    0.676,
+    0.794
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.776,
+     0.676,
+     0.794
+    ],
+    "drawnFrac": 0.004,
+    "error": "rendered nothing (drawnFrac 0.004)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\nature_bush_02.glb",
+   "name": "nature_bush_02.glb",
+   "bytes": 224696,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 16786,
+   "vertices": 29061,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.97,
+    0.985,
+    0.402
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.97,
+     0.985,
+     0.402
+    ],
+    "drawnFrac": 0.003,
+    "error": "rendered nothing (drawnFrac 0.003)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\nature_bush_03.glb",
+   "name": "nature_bush_03.glb",
+   "bytes": 334168,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 99560,
+   "vertices": 67726,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.727,
+    0.198
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.727,
+     0.198
+    ],
+    "drawnFrac": 0.125
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\nature_dead_tree_01.glb",
+   "name": "nature_dead_tree_01.glb",
+   "bytes": 9824,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 468,
+   "vertices": 1396,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.774,
+    0.981,
+    0.958
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.777,
+     0.988,
+     0.977
+    ],
+    "drawnFrac": 0,
+    "error": "rendered nothing (drawnFrac 0)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\nature_dead_tree_02.glb",
+   "name": "nature_dead_tree_02.glb",
+   "bytes": 126508,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 4309,
+   "vertices": 11180,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.7,
+    0.878,
+    0.863
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.7,
+     0.879,
+     0.863
+    ],
+    "drawnFrac": 0.01,
+    "error": "splinter geometry (drawnFrac 0.01)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\nature_dead_tree_03.glb",
+   "name": "nature_dead_tree_03.glb",
+   "bytes": 396604,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 81982,
+   "vertices": 86552,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.858,
+    0.994
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.858,
+     0.994
+    ],
+    "drawnFrac": 0.151
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\nature_fallen_log_01.glb",
+   "name": "nature_fallen_log_01.glb",
+   "bytes": 317412,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 83658,
+   "vertices": 60440,
+   "materials": 1,
+   "textures": 1,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.376,
+    0.299,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.376,
+     0.299,
+     1
+    ],
+    "drawnFrac": 0.119
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\nature_fern_01.glb",
+   "name": "nature_fern_01.glb",
+   "bytes": 493928,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 48130,
+   "vertices": 47979,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.983,
+    1,
+    0.978
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.983,
+     1,
+     0.978
+    ],
+    "drawnFrac": 0.197
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\nature_flowers_01.glb",
+   "name": "nature_flowers_01.glb",
+   "bytes": 139296,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 2555,
+   "vertices": 6064,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.626,
+    0.612,
+    0.904
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.648,
+     0.724,
+     0.971
+    ],
+    "drawnFrac": 0.008,
+    "error": "rendered nothing (drawnFrac 0.008)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\nature_flowers_02.glb",
+   "name": "nature_flowers_02.glb",
+   "bytes": 610468,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 35456,
+   "vertices": 43961,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.473,
+    0.27,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.473,
+     0.27,
+     1
+    ],
+    "drawnFrac": 0.148
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\nature_grass_clump_01.glb",
+   "name": "nature_grass_clump_01.glb",
+   "bytes": 155920,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 4304,
+   "vertices": 10805,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.392,
+    0.884,
+    0.384
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.392,
+     0.884,
+     0.384
+    ],
+    "drawnFrac": 0.003,
+    "error": "rendered nothing (drawnFrac 0.003)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\nature_grass_clump_02.glb",
+   "name": "nature_grass_clump_02.glb",
+   "bytes": 114080,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 1724,
+   "vertices": 3350,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.673,
+    0.296,
+    0.861
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.881,
+     0.643,
+     0.993
+    ],
+    "drawnFrac": 0.003,
+    "error": "rendered nothing (drawnFrac 0.003)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\nature_mushrooms_01.glb",
+   "name": "nature_mushrooms_01.glb",
+   "bytes": 90088,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 2279,
+   "vertices": 3946,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.954,
+    0.844,
+    0.874
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.954,
+     0.862,
+     0.944
+    ],
+    "drawnFrac": 0.005,
+    "error": "rendered nothing (drawnFrac 0.005)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\nature_mushrooms_02.glb",
+   "name": "nature_mushrooms_02.glb",
+   "bytes": 210496,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 13490,
+   "vertices": 26396,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.872,
+    0.424,
+    0.718
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.872,
+     0.424,
+     0.718
+    ],
+    "drawnFrac": 0.006,
+    "error": "rendered nothing (drawnFrac 0.006)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\nature_oak_large_01.glb",
+   "name": "nature_oak_large_01.glb",
+   "bytes": 385696,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 60021,
+   "vertices": 60477,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.973,
+    0.78
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.973,
+     0.78
+    ],
+    "drawnFrac": 0.372
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\nature_oak_large_02.glb",
+   "name": "nature_oak_large_02.glb",
+   "bytes": 145992,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 4162,
+   "vertices": 7115,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.835,
+    0.913,
+    0.799
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.928,
+     0.945,
+     0.88
+    ],
+    "drawnFrac": 0.036,
+    "error": "splinter geometry (drawnFrac 0.036)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\nature_oak_large_03.glb",
+   "name": "nature_oak_large_03.glb",
+   "bytes": 113080,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 5102,
+   "vertices": 8017,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.882,
+    0.531,
+    0.905
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.953,
+     0.571,
+     0.995
+    ],
+    "drawnFrac": 0.033,
+    "error": "splinter geometry (drawnFrac 0.033)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\nature_oak_small_01.glb",
+   "name": "nature_oak_small_01.glb",
+   "bytes": 147864,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 5876,
+   "vertices": 10763,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.758,
+    0.896,
+    0.761
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.858,
+     0.982,
+     0.876
+    ],
+    "drawnFrac": 0.037,
+    "error": "splinter geometry (drawnFrac 0.037)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\nature_oak_small_02.glb",
+   "name": "nature_oak_small_02.glb",
+   "bytes": 166328,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 7323,
+   "vertices": 14474,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.813,
+    0.896,
+    0.961
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.946,
+     0.934,
+     0.98
+    ],
+    "drawnFrac": 0.063,
+    "error": "splinter geometry (drawnFrac 0.063)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\nature_pine_02.glb",
+   "name": "nature_pine_02.glb",
+   "bytes": 290764,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 13458,
+   "vertices": 28772,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.861,
+    0.555,
+    0.936
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.861,
+     0.555,
+     0.936
+    ],
+    "drawnFrac": 0,
+    "error": "rendered nothing (drawnFrac 0)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\nature_pine_03.glb",
+   "name": "nature_pine_03.glb",
+   "bytes": 239376,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 14642,
+   "vertices": 28341,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.814,
+    0.883,
+    0.916
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.814,
+     0.883,
+     0.916
+    ],
+    "drawnFrac": 0,
+    "error": "rendered nothing (drawnFrac 0)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\nature_reeds_01.glb",
+   "name": "nature_reeds_01.glb",
+   "bytes": 312292,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 8614,
+   "vertices": 14746,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.859,
+    0.295,
+    0.815
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.945,
+     0.552,
+     0.912
+    ],
+    "drawnFrac": 0.066,
+    "error": "splinter geometry (drawnFrac 0.066)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\nature_rock_cluster_01.glb",
+   "name": "nature_rock_cluster_01.glb",
+   "bytes": 194528,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 16682,
+   "vertices": 27956,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.921,
+    0.215,
+    0.9
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.921,
+     0.215,
+     0.9
+    ],
+    "drawnFrac": 0.005,
+    "error": "rendered nothing (drawnFrac 0.005)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\nature_rock_cluster_02.glb",
+   "name": "nature_rock_cluster_02.glb",
+   "bytes": 360176,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 68521,
+   "vertices": 65575,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.762,
+    1,
+    0.838
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.762,
+     1,
+     0.838
+    ],
+    "drawnFrac": 0.346
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\nature_rock_small_01.glb",
+   "name": "nature_rock_small_01.glb",
+   "bytes": 369936,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 77679,
+   "vertices": 72443,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.626,
+    0.795,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.626,
+     0.795,
+     1
+    ],
+    "drawnFrac": 0.384
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\nature_rock_small_02.glb",
+   "name": "nature_rock_small_02.glb",
+   "bytes": 326776,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 56922,
+   "vertices": 55200,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.958,
+    1,
+    0.785
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.958,
+     1,
+     0.785
+    ],
+    "drawnFrac": 0.575
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\nature_sapling_01.glb",
+   "name": "nature_sapling_01.glb",
+   "bytes": 323244,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 8970,
+   "vertices": 17330,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.941,
+    0.592,
+    0.844
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.993,
+     0.595,
+     0.957
+    ],
+    "drawnFrac": 0.034,
+    "error": "splinter geometry (drawnFrac 0.034)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\oakTree.glb",
+   "name": "oakTree.glb",
+   "bytes": 1874028,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 298197,
+   "vertices": 374087,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.991,
+    0.881,
+    0.506
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.991,
+     0.881,
+     0.506
+    ],
+    "drawnFrac": 0.226
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\ogreBoss1Animation.glb",
+   "name": "ogreBoss1Animation.glb",
+   "bytes": 1967568,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 159844,
+   "vertices": 177574,
+   "materials": 1,
+   "textures": 2,
+   "animations": 8,
+   "skins": 1,
+   "size": [
+    0.998,
+    0.958,
+    0.378
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.67,
+     0.964,
+     0.492
+    ],
+    "drawnFrac": 0.186
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\ogreKingRigged.glb",
+   "name": "ogreKingRigged.glb",
+   "bytes": 2157676,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 158550,
+   "vertices": 218957,
+   "materials": 1,
+   "textures": 2,
+   "animations": 8,
+   "skins": 1,
+   "size": [
+    1,
+    0.959,
+    0.412
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.485,
+     0.826,
+     0.803
+    ],
+    "drawnFrac": 0.251
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\ogreWizardWithAnimation.glb",
+   "name": "ogreWizardWithAnimation.glb",
+   "bytes": 1610736,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 161766,
+   "vertices": 182587,
+   "materials": 1,
+   "textures": 2,
+   "animations": 8,
+   "skins": 1,
+   "size": [
+    0.691,
+    1.001,
+    0.288
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.534,
+     0.901,
+     0.622
+    ],
+    "drawnFrac": 0.101
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\OrgreCastle.glb",
+   "name": "OrgreCastle.glb",
+   "bytes": 320592,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 41311,
+   "vertices": 60978,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.999,
+    0.896,
+    0.957
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.999,
+     0.896,
+     0.957
+    ],
+    "drawnFrac": 0.41
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\orgreWithAnimations.glb",
+   "name": "orgreWithAnimations.glb",
+   "bytes": 783096,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 90988,
+   "vertices": 84747,
+   "materials": 1,
+   "textures": 2,
+   "animations": 4,
+   "skins": 1,
+   "size": [
+    1,
+    0.789,
+    0.298
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.555,
+     0.633,
+     0.698
+    ],
+    "drawnFrac": 0.196
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\parkerKnightFinal.glb",
+   "name": "parkerKnightFinal.glb",
+   "bytes": 3333144,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 377874,
+   "vertices": 367881,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.999,
+    0.962,
+    0.213
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.999,
+     0.962,
+     0.213
+    ],
+    "drawnFrac": 0.111
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\parkerWizardAnimated.glb",
+   "name": "parkerWizardAnimated.glb",
+   "bytes": 1422512,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 159600,
+   "vertices": 176507,
+   "materials": 1,
+   "textures": 2,
+   "animations": 4,
+   "skins": 1,
+   "size": [
+    0.823,
+    1.001,
+    0.243
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.413,
+     0.987,
+     0.579
+    ],
+    "drawnFrac": 0.063,
+    "error": "splinter geometry (drawnFrac 0.063)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\parkerwrig.glb",
+   "name": "parkerwrig.glb",
+   "bytes": 3525136,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 377874,
+   "vertices": 367881,
+   "materials": 1,
+   "textures": 2,
+   "animations": 2,
+   "skins": 1,
+   "size": [
+    0.999,
+    0.962,
+    0.213
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.526,
+     0.792,
+     0.809
+    ],
+    "drawnFrac": 0.159
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\peasntHouse1WithMesh_00001_.glb",
+   "name": "peasntHouse1WithMesh_00001_.glb",
+   "bytes": 295020,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 39950,
+   "vertices": 54904,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.964,
+    0.682,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.964,
+     0.682,
+     1
+    ],
+    "drawnFrac": 0.371
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\pineTree.glb",
+   "name": "pineTree.glb",
+   "bytes": 233680,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 28012,
+   "vertices": 42305,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.607,
+    0.999,
+    0.612
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.607,
+     0.999,
+     0.612
+    ],
+    "drawnFrac": 0.167
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\prop_basket_01.glb",
+   "name": "prop_basket_01.glb",
+   "bytes": 128988,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 4245,
+   "vertices": 8380,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.832,
+    0.932,
+    0.871
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.912,
+     0.944,
+     0.88
+    ],
+    "drawnFrac": 0.025,
+    "error": "splinter geometry (drawnFrac 0.025)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\prop_bench_wood_01.glb",
+   "name": "prop_bench_wood_01.glb",
+   "bytes": 370228,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 85805,
+   "vertices": 62780,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.382,
+    0.685,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.382,
+     0.685,
+     1
+    ],
+    "drawnFrac": 0.259
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\prop_bucket_metal_01.glb",
+   "name": "prop_bucket_metal_01.glb",
+   "bytes": 376312,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 85740,
+   "vertices": 64300,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.682,
+    1,
+    0.669
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.682,
+     1,
+     0.669
+    ],
+    "drawnFrac": 0.247
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\prop_bucket_wood_01.glb",
+   "name": "prop_bucket_wood_01.glb",
+   "bytes": 360876,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 81229,
+   "vertices": 62046,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.734,
+    1,
+    0.684
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.734,
+     1,
+     0.684
+    ],
+    "drawnFrac": 0.298
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\prop_cart_wheel_01.glb",
+   "name": "prop_cart_wheel_01.glb",
+   "bytes": 321904,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 91028,
+   "vertices": 64669,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.999,
+    0.219
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.999,
+     0.219
+    ],
+    "drawnFrac": 0.258
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\prop_firewood_stack_01.glb",
+   "name": "prop_firewood_stack_01.glb",
+   "bytes": 13456,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 174,
+   "vertices": 510,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.961,
+    0.965,
+    0.993
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.985,
+     0.972,
+     0.994
+    ],
+    "drawnFrac": 0,
+    "error": "rendered nothing (drawnFrac 0)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\prop_firewood_stack_02.glb",
+   "name": "prop_firewood_stack_02.glb",
+   "bytes": 399080,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 77988,
+   "vertices": 64623,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.806,
+    0.281
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.806,
+     0.281
+    ],
+    "drawnFrac": 0.288
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\prop_grain_sack_01.glb",
+   "name": "prop_grain_sack_01.glb",
+   "bytes": 360316,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 89070,
+   "vertices": 62365,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.646,
+    1,
+    0.672
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.646,
+     1,
+     0.672
+    ],
+    "drawnFrac": 0.372
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\prop_grain_sack_stack_01.glb",
+   "name": "prop_grain_sack_stack_01.glb",
+   "bytes": 347708,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 71124,
+   "vertices": 57579,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.786,
+    0.868,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.786,
+     0.868,
+     1
+    ],
+    "drawnFrac": 0.327
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\prop_hay_bale_01.glb",
+   "name": "prop_hay_bale_01.glb",
+   "bytes": 316872,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 29496,
+   "vertices": 31054,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.776,
+    0.619,
+    0.999
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.776,
+     0.619,
+     0.999
+    ],
+    "drawnFrac": 0.435
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\prop_hay_pile_01.glb",
+   "name": "prop_hay_pile_01.glb",
+   "bytes": 119252,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 17999,
+   "vertices": 25420,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.933,
+    0.989,
+    0.939
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.933,
+     0.989,
+     0.939
+    ],
+    "drawnFrac": 0,
+    "error": "rendered nothing (drawnFrac 0)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\prop_hay_pile_02.glb",
+   "name": "prop_hay_pile_02.glb",
+   "bytes": 109252,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 2804,
+   "vertices": 6662,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.968,
+    0.74,
+    0.928
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.969,
+     0.744,
+     0.928
+    ],
+    "drawnFrac": 0.011,
+    "error": "splinter geometry (drawnFrac 0.011)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\prop_logs_01.glb",
+   "name": "prop_logs_01.glb",
+   "bytes": 184916,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 3497,
+   "vertices": 7092,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.857,
+    0.936,
+    0.505
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.915,
+     0.955,
+     0.587
+    ],
+    "drawnFrac": 0.009,
+    "error": "rendered nothing (drawnFrac 0.009)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\prop_logs_02.glb",
+   "name": "prop_logs_02.glb",
+   "bytes": 378140,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 87996,
+   "vertices": 66089,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.698,
+    0.689
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.698,
+     0.689
+    ],
+    "drawnFrac": 0.458
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\prop_pottery_01.glb",
+   "name": "prop_pottery_01.glb",
+   "bytes": 342936,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 90460,
+   "vertices": 62349,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.885,
+    1,
+    0.751
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.885,
+     1,
+     0.751
+    ],
+    "drawnFrac": 0.35
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\prop_stool_wood_01.glb",
+   "name": "prop_stool_wood_01.glb",
+   "bytes": 323456,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 91369,
+   "vertices": 63719,
+   "materials": 1,
+   "textures": 1,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.772,
+    1,
+    0.838
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.772,
+     1,
+     0.838
+    ],
+    "drawnFrac": 0.382
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\prop_table_wood_01.glb",
+   "name": "prop_table_wood_01.glb",
+   "bytes": 279700,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 90870,
+   "vertices": 59102,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.374,
+    0.495
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.374,
+     0.495
+    ],
+    "drawnFrac": 0.171
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\prop_tree_stump_01.glb",
+   "name": "prop_tree_stump_01.glb",
+   "bytes": 101296,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 12524,
+   "vertices": 26210,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.85,
+    0.456,
+    0.92
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.85,
+     0.456,
+     0.92
+    ],
+    "drawnFrac": 0,
+    "error": "rendered nothing (drawnFrac 0)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\prop_tree_stump_02.glb",
+   "name": "prop_tree_stump_02.glb",
+   "bytes": 223316,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 30744,
+   "vertices": 30878,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.544,
+    0.997
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.544,
+     0.997
+    ],
+    "drawnFrac": 0.276
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\prop_water_jug_01.glb",
+   "name": "prop_water_jug_01.glb",
+   "bytes": 296060,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 95858,
+   "vertices": 59683,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.992,
+    0.87
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.992,
+     0.87
+    ],
+    "drawnFrac": 0.402
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\prop_wheelbarrow_01.glb",
+   "name": "prop_wheelbarrow_01.glb",
+   "bytes": 203044,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 28557,
+   "vertices": 31893,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.996,
+    0.643,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.996,
+     0.643,
+     1
+    ],
+    "drawnFrac": 0.211
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\prop_wood_crate_broken_01.glb",
+   "name": "prop_wood_crate_broken_01.glb",
+   "bytes": 380804,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 90942,
+   "vertices": 66201,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.527,
+    0.591
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.527,
+     0.591
+    ],
+    "drawnFrac": 0.38
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\prop_wood_crate_large_01.glb",
+   "name": "prop_wood_crate_large_01.glb",
+   "bytes": 364104,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 95500,
+   "vertices": 67933,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.779,
+    1,
+    0.909
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.779,
+     1,
+     0.909
+    ],
+    "drawnFrac": 0.668
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\prop_wood_crate_small_01.glb",
+   "name": "prop_wood_crate_small_01.glb",
+   "bytes": 407320,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 91212,
+   "vertices": 66639,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.878,
+    0.896,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.878,
+     0.896,
+     1
+    ],
+    "drawnFrac": 0.695
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\pumpkingPatch.glb",
+   "name": "pumpkingPatch.glb",
+   "bytes": 433636,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 48954,
+   "vertices": 68242,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.18,
+    0.869
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.18,
+     0.869
+    ],
+    "drawnFrac": 0.236
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\ratEnemyAnimated.glb",
+   "name": "ratEnemyAnimated.glb",
+   "bytes": 2430200,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 157876,
+   "vertices": 227264,
+   "materials": 1,
+   "textures": 2,
+   "animations": 5,
+   "skins": 1,
+   "size": [
+    0.845,
+    0.753,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.844,
+     0.727,
+     1.048
+    ],
+    "drawnFrac": 0.162
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\roadTile1WithMesh_00001_.glb",
+   "name": "roadTile1WithMesh_00001_.glb",
+   "bytes": 364816,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 56394,
+   "vertices": 69861,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.97,
+    0.076,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.97,
+     0.076,
+     1
+    ],
+    "drawnFrac": 0.226
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\shieldModel.glb",
+   "name": "shieldModel.glb",
+   "bytes": 812756,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 117256,
+   "vertices": 135640,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.75,
+    1.001,
+    0.307
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.75,
+     1.001,
+     0.307
+    ],
+    "drawnFrac": 0.229
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\shrubbery.glb",
+   "name": "shrubbery.glb",
+   "bytes": 202212,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 8956,
+   "vertices": 21543,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.922,
+    0.569,
+    0.88
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.922,
+     0.569,
+     0.88
+    ],
+    "drawnFrac": 0.006,
+    "error": "rendered nothing (drawnFrac 0.006)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\sonteWallWithMesh_00001_.glb",
+   "name": "sonteWallWithMesh_00001_.glb",
+   "bytes": 300864,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 55329,
+   "vertices": 51603,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.421,
+    0.158
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.421,
+     0.158
+    ],
+    "drawnFrac": 0.178
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\spearWeapon.glb",
+   "name": "spearWeapon.glb",
+   "bytes": 561412,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 88580,
+   "vertices": 94662,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.133,
+    1.001,
+    0.1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.133,
+     1.001,
+     0.1
+    ],
+    "drawnFrac": 0.016,
+    "error": "splinter geometry (drawnFrac 0.016)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\speedPowerup.glb",
+   "name": "speedPowerup.glb",
+   "bytes": 306776,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 55008,
+   "vertices": 55869,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.304,
+    0.752,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.304,
+     0.752,
+     1
+    ],
+    "drawnFrac": 0.173
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\streamTile.glb",
+   "name": "streamTile.glb",
+   "bytes": 220536,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 59580,
+   "vertices": 39923,
+   "materials": 1,
+   "textures": 1,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.31,
+    0.039,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.31,
+     0.039,
+     1
+    ],
+    "drawnFrac": 0.082
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\swamp_bog_rock_01.glb",
+   "name": "swamp_bog_rock_01.glb",
+   "bytes": 311224,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 98248,
+   "vertices": 55855,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.245,
+    0.661
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.245,
+     0.661
+    ],
+    "drawnFrac": 0.179
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\swamp_cattail_clump_01.glb",
+   "name": "swamp_cattail_clump_01.glb",
+   "bytes": 409316,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 85877,
+   "vertices": 93071,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.221,
+    0.685
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.221,
+     0.685
+    ],
+    "drawnFrac": 0.13
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\swamp_cypress_01.glb",
+   "name": "swamp_cypress_01.glb",
+   "bytes": 367908,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 72361,
+   "vertices": 69021,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.933,
+    0.885
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.933,
+     0.885
+    ],
+    "drawnFrac": 0.344
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\swamp_cypress_02.glb",
+   "name": "swamp_cypress_02.glb",
+   "bytes": 333124,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 96067,
+   "vertices": 66057,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.681,
+    0.26,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.681,
+     0.26,
+     1
+    ],
+    "drawnFrac": 0.108
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\swamp_driftwood_01.glb",
+   "name": "swamp_driftwood_01.glb",
+   "bytes": 346276,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 89424,
+   "vertices": 64539,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.892,
+    1,
+    0.79
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.892,
+     1,
+     0.79
+    ],
+    "drawnFrac": 0.34
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\swamp_fungus_shelf_01.glb",
+   "name": "swamp_fungus_shelf_01.glb",
+   "bytes": 384240,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 60575,
+   "vertices": 60569,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.713,
+    1,
+    0.937
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.713,
+     1,
+     0.937
+    ],
+    "drawnFrac": 0.287
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\swamp_hummock_01.glb",
+   "name": "swamp_hummock_01.glb",
+   "bytes": 453384,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 84966,
+   "vertices": 73435,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.863,
+    0.14,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.863,
+     0.14,
+     1
+    ],
+    "drawnFrac": 0.23
+   },
+   "valid": false,
+   "reason": "wrong in situ: reads as a green capsule / a flat square mat with a visible edge"
+  },
+  {
+   "file": "Game3DAssets\\swamp_lilypads_01.glb",
+   "name": "swamp_lilypads_01.glb",
+   "bytes": 326872,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 89157,
+   "vertices": 70429,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.082,
+    0.995
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.082,
+     0.995
+    ],
+    "drawnFrac": 0.166
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\swamp_mangrove_01.glb",
+   "name": "swamp_mangrove_01.glb",
+   "bytes": 381868,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 86326,
+   "vertices": 75223,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.973,
+    0.484,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.973,
+     0.484,
+     1
+    ],
+    "drawnFrac": 0.139
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\swamp_moss_curtain_01.glb",
+   "name": "swamp_moss_curtain_01.glb",
+   "bytes": 359204,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 96780,
+   "vertices": 70738,
+   "materials": 1,
+   "textures": 1,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.748,
+    0.69
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.748,
+     0.69
+    ],
+    "drawnFrac": 0.301
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\swamp_reed_cluster_01.glb",
+   "name": "swamp_reed_cluster_01.glb",
+   "bytes": 331708,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 94624,
+   "vertices": 67529,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.169,
+    0.761
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.169,
+     0.761
+    ],
+    "drawnFrac": 0.145
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\swamp_rotten_log_01.glb",
+   "name": "swamp_rotten_log_01.glb",
+   "bytes": 4074720,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 60698,
+   "vertices": 77348,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.238,
+    0.752
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.238,
+     0.752
+    ],
+    "drawnFrac": 0.153
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\swamp_stump_mossy_01.glb",
+   "name": "swamp_stump_mossy_01.glb",
+   "bytes": 355980,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 83614,
+   "vertices": 72216,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.713,
+    0.935
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.713,
+     0.935
+    ],
+    "drawnFrac": 0.22
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\swamp_wisp_stone_01.glb",
+   "name": "swamp_wisp_stone_01.glb",
+   "bytes": 363664,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 98204,
+   "vertices": 66065,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.409,
+    1,
+    0.298
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.409,
+     1,
+     0.298
+    ],
+    "drawnFrac": 0.162
+   },
+   "valid": false,
+   "reason": "wrong in situ: reads as a green capsule / a flat square mat with a visible edge"
+  },
+  {
+   "file": "Game3DAssets\\swordShrine.glb",
+   "name": "swordShrine.glb",
+   "bytes": 750964,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 166059,
+   "vertices": 122089,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.918,
+    1,
+    0.874
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.918,
+     1,
+     0.874
+    ],
+    "drawnFrac": 0.208
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\swordWithMesh_00001_.glb",
+   "name": "swordWithMesh_00001_.glb",
+   "bytes": 205600,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 57640,
+   "vertices": 39324,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.314,
+    1,
+    0.058
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.314,
+     1,
+     0.058
+    ],
+    "drawnFrac": 0.035,
+    "error": "splinter geometry (drawnFrac 0.035)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\tavernBuilding.glb",
+   "name": "tavernBuilding.glb",
+   "bytes": 321300,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 44650,
+   "vertices": 61149,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.971,
+    0.807,
+    1
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.971,
+     0.806,
+     1
+    ],
+    "drawnFrac": 0.355
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\tavernBuilding_2.glb",
+   "name": "tavernBuilding_2.glb",
+   "bytes": 296764,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 39574,
+   "vertices": 55759,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.998,
+    0.841,
+    0.95
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.998,
+     0.841,
+     0.95
+    ],
+    "drawnFrac": 0.369
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\townStatue.glb",
+   "name": "townStatue.glb",
+   "bytes": 288188,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 48446,
+   "vertices": 58055,
+   "materials": 1,
+   "textures": 1,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.949,
+    0.888
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.949,
+     0.888
+    ],
+    "drawnFrac": 0.306
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\treasure_chestWithMesh_00001_.glb",
+   "name": "treasure_chestWithMesh_00001_.glb",
+   "bytes": 359348,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 50958,
+   "vertices": 57878,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.999,
+    0.782,
+    0.85
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.999,
+     0.782,
+     0.85
+    ],
+    "drawnFrac": 0.378
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\villageWell.glb",
+   "name": "villageWell.glb",
+   "bytes": 913164,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 163835,
+   "vertices": 146860,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.83,
+    0.995
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.83,
+     0.995
+    ],
+    "drawnFrac": 0.395
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\village_fence_broken_01.glb",
+   "name": "village_fence_broken_01.glb",
+   "bytes": 345972,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 81793,
+   "vertices": 75112,
+   "materials": 1,
+   "textures": 1,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.888,
+    0.177
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.888,
+     0.177
+    ],
+    "drawnFrac": 0.193
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\village_fence_corner_01.glb",
+   "name": "village_fence_corner_01.glb",
+   "bytes": 243668,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 37311,
+   "vertices": 39723,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.613,
+    0.465
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.613,
+     0.465
+    ],
+    "drawnFrac": 0.201
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\village_fence_gate_01.glb",
+   "name": "village_fence_gate_01.glb",
+   "bytes": 384088,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 82772,
+   "vertices": 66782,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.872,
+    0.239
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.872,
+     0.239
+    ],
+    "drawnFrac": 0.311
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\village_fence_straight_01.glb",
+   "name": "village_fence_straight_01.glb",
+   "bytes": 303712,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 95944,
+   "vertices": 62451,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.763,
+    1,
+    0.12
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.763,
+     1,
+     0.12
+    ],
+    "drawnFrac": 0.239
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\village_hitching_post_01.glb",
+   "name": "village_hitching_post_01.glb",
+   "bytes": 293880,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 94277,
+   "vertices": 62827,
+   "materials": 1,
+   "textures": 1,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.762,
+    0.103
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.762,
+     0.103
+    ],
+    "drawnFrac": 0.136
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\village_lantern_post_01.glb",
+   "name": "village_lantern_post_01.glb",
+   "bytes": 324252,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 99558,
+   "vertices": 64679,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.412,
+    1,
+    0.411
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.412,
+     1,
+     0.411
+    ],
+    "drawnFrac": 0.112
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\village_market_stall_01.glb",
+   "name": "village_market_stall_01.glb",
+   "bytes": 383712,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 77978,
+   "vertices": 62317,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.745,
+    1,
+    0.933
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.745,
+     1,
+     0.933
+    ],
+    "drawnFrac": 0.444
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\village_market_stall_02.glb",
+   "name": "village_market_stall_02.glb",
+   "bytes": 233016,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 18229,
+   "vertices": 26955,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.979,
+    0.861,
+    0.612
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.979,
+     0.861,
+     0.612
+    ],
+    "drawnFrac": 0.003,
+    "error": "rendered nothing (drawnFrac 0.003)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\village_rail_fence_corner_01.glb",
+   "name": "village_rail_fence_corner_01.glb",
+   "bytes": 375364,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 90826,
+   "vertices": 67512,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.397,
+    0.233
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.397,
+     0.233
+    ],
+    "drawnFrac": 0.156
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\village_rail_fence_gate_01.glb",
+   "name": "village_rail_fence_gate_01.glb",
+   "bytes": 335008,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 88548,
+   "vertices": 65822,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.765,
+    0.133
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.765,
+     0.133
+    ],
+    "drawnFrac": 0.303
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\village_rail_fence_straight_01.glb",
+   "name": "village_rail_fence_straight_01.glb",
+   "bytes": 344932,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 95354,
+   "vertices": 63652,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.497,
+    0.909
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.497,
+     0.909
+    ],
+    "drawnFrac": 0.339
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\village_signpost_01.glb",
+   "name": "village_signpost_01.glb",
+   "bytes": 378928,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 31346,
+   "vertices": 35056,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.837,
+    1,
+    0.279
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.837,
+     1,
+     0.279
+    ],
+    "drawnFrac": 0.132
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\village_water_trough_01.glb",
+   "name": "village_water_trough_01.glb",
+   "bytes": 332308,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 69995,
+   "vertices": 51625,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    1,
+    0.702,
+    0.437
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     1,
+     0.702,
+     0.437
+    ],
+    "drawnFrac": 0.255
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\village_water_well_01.glb",
+   "name": "village_water_well_01.glb",
+   "bytes": 331312,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 46343,
+   "vertices": 45748,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.822,
+    1,
+    0.66
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.822,
+     1,
+     0.66
+    ],
+    "drawnFrac": 0.32
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\village_weapon_rack_01.glb",
+   "name": "village_weapon_rack_01.glb",
+   "bytes": 414488,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 98152,
+   "vertices": 69836,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.6,
+    1,
+    0.214
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.6,
+     1,
+     0.214
+    ],
+    "drawnFrac": 0.198
+   },
+   "valid": true
+  },
+  {
+   "file": "Game3DAssets\\wizardStaff.glb",
+   "name": "wizardStaff.glb",
+   "bytes": 667552,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 88482,
+   "vertices": 104140,
+   "materials": 1,
+   "textures": 2,
+   "animations": 0,
+   "skins": 0,
+   "size": [
+    0.203,
+    0.999,
+    0.105
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": false,
+    "meshes": 1,
+    "size": [
+     0.203,
+     0.999,
+     0.105
+    ],
+    "drawnFrac": 0.027,
+    "error": "splinter geometry (drawnFrac 0.027)"
+   },
+   "valid": false
+  },
+  {
+   "file": "Game3DAssets\\wolfWithAnimation.glb",
+   "name": "wolfWithAnimation.glb",
+   "bytes": 2481816,
+   "ok": true,
+   "meshes": 1,
+   "primitives": 1,
+   "triangles": 162754,
+   "vertices": 228726,
+   "materials": 1,
+   "textures": 2,
+   "animations": 9,
+   "skins": 1,
+   "size": [
+    0.552,
+    0.666,
+    0.998
+   ],
+   "problems": [],
+   "viewer": {
+    "ok": true,
+    "meshes": 1,
+    "size": [
+     0.538,
+     0.537,
+     1.082
+    ],
+    "drawnFrac": 0.156
+   },
+   "valid": true
+  }
+ ]
 }

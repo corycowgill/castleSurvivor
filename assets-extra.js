@@ -237,6 +237,105 @@ export const EXTRA_ASSETS = [
     "icon": "🌿"
   },
   {
+    "key": "swamp_bog_rock_01",
+    "name": "Bog Boulder",
+    "file": "swamp_bog_rock_01.glb",
+    "category": "nature",
+    "defaultScale": 2.7,
+    "obstacle": true,
+    "radius": 1.4,
+    "breakable": false,
+    "icon": "🌿"
+  },
+  {
+    "key": "swamp_cattail_clump_01",
+    "name": "Cattails",
+    "file": "swamp_cattail_clump_01.glb",
+    "category": "nature",
+    "defaultScale": 2.4,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🌿"
+  },
+  {
+    "key": "swamp_driftwood_01",
+    "name": "Bleached Driftwood",
+    "file": "swamp_driftwood_01.glb",
+    "category": "nature",
+    "defaultScale": 2.4,
+    "obstacle": true,
+    "radius": 1.1,
+    "breakable": false,
+    "icon": "🌿"
+  },
+  {
+    "key": "swamp_fungus_shelf_01",
+    "name": "Bracket Fungus",
+    "file": "swamp_fungus_shelf_01.glb",
+    "category": "nature",
+    "defaultScale": 1.35,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🌿"
+  },
+  {
+    "key": "swamp_lilypads_01",
+    "name": "Lily Pads",
+    "file": "swamp_lilypads_01.glb",
+    "category": "nature",
+    "defaultScale": 0.52,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🌿"
+  },
+  {
+    "key": "swamp_moss_curtain_01",
+    "name": "Hanging Moss",
+    "file": "swamp_moss_curtain_01.glb",
+    "category": "nature",
+    "defaultScale": 2.97,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🌿"
+  },
+  {
+    "key": "swamp_reed_cluster_01",
+    "name": "Reed Stand",
+    "file": "swamp_reed_cluster_01.glb",
+    "category": "nature",
+    "defaultScale": 2.7,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🌿"
+  },
+  {
+    "key": "swamp_rotten_log_01",
+    "name": "Rotten Log",
+    "file": "swamp_rotten_log_01.glb",
+    "category": "nature",
+    "defaultScale": 1.5,
+    "obstacle": true,
+    "radius": 0.8,
+    "breakable": false,
+    "icon": "🌿"
+  },
+  {
+    "key": "swamp_stump_mossy_01",
+    "name": "Mossy Stump",
+    "file": "swamp_stump_mossy_01.glb",
+    "category": "nature",
+    "defaultScale": 1.8,
+    "obstacle": true,
+    "radius": 0.9,
+    "breakable": false,
+    "icon": "🌿"
+  },
+  {
     "key": "bog_barricade_01",
     "name": "Rotted Barricade",
     "file": "bog_barricade_01.glb",
@@ -659,6 +758,17 @@ export const EXTRA_ASSETS = [
     "charredFrom": "nature_dead_tree_03"
   },
   {
+    "key": "landmark_ancient_oak",
+    "name": "Ancient Oak",
+    "file": "landmark_ancient_oak.glb",
+    "category": "tree",
+    "defaultScale": 15.6,
+    "obstacle": true,
+    "radius": 7.5,
+    "breakable": false,
+    "icon": "🌳"
+  },
+  {
     "key": "nature_dead_tree_03",
     "name": "Dead Tree",
     "file": "nature_dead_tree_03.glb",
@@ -688,6 +798,39 @@ export const EXTRA_ASSETS = [
     "defaultScale": 10.4,
     "obstacle": true,
     "radius": 5.2,
+    "breakable": false,
+    "icon": "🌳"
+  },
+  {
+    "key": "swamp_cypress_01",
+    "name": "Bald Cypress",
+    "file": "swamp_cypress_01.glb",
+    "category": "tree",
+    "defaultScale": 5.46,
+    "obstacle": true,
+    "radius": 2.7,
+    "breakable": false,
+    "icon": "🌳"
+  },
+  {
+    "key": "swamp_cypress_02",
+    "name": "Leaning Cypress",
+    "file": "swamp_cypress_02.glb",
+    "category": "tree",
+    "defaultScale": 5.2,
+    "obstacle": true,
+    "radius": 2.6,
+    "breakable": false,
+    "icon": "🌳"
+  },
+  {
+    "key": "swamp_mangrove_01",
+    "name": "Mangrove Stilt Tree",
+    "file": "swamp_mangrove_01.glb",
+    "category": "tree",
+    "defaultScale": 4.68,
+    "obstacle": true,
+    "radius": 2.3,
     "breakable": false,
     "icon": "🌳"
   },
@@ -770,6 +913,83 @@ export const EXTRA_ASSETS = [
     "charredFrom": "village_fence_broken_01"
   },
   {
+    "key": "fen_boardwalk_01",
+    "name": "Boardwalk Section",
+    "file": "fen_boardwalk_01.glb",
+    "category": "village",
+    "defaultScale": 0.6,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "fen_coracle_01",
+    "name": "Coracle",
+    "file": "fen_coracle_01.glb",
+    "category": "village",
+    "defaultScale": 2.1,
+    "obstacle": true,
+    "radius": 1.1,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "fen_fish_rack_01",
+    "name": "Drying Rack",
+    "file": "fen_fish_rack_01.glb",
+    "category": "village",
+    "defaultScale": 2.97,
+    "obstacle": true,
+    "radius": 1.3,
+    "breakable": true,
+    "icon": "🏘"
+  },
+  {
+    "key": "fen_lantern_post_01",
+    "name": "Fen Lantern",
+    "file": "fen_lantern_post_01.glb",
+    "category": "village",
+    "defaultScale": 3.24,
+    "obstacle": true,
+    "radius": 1,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "fen_stilt_hut_01",
+    "name": "Stilt Hut",
+    "file": "fen_stilt_hut_01.glb",
+    "category": "village",
+    "defaultScale": 6.75,
+    "obstacle": true,
+    "radius": 3.4,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "fen_totem_01",
+    "name": "Bog Totem",
+    "file": "fen_totem_01.glb",
+    "category": "village",
+    "defaultScale": 4.05,
+    "obstacle": true,
+    "radius": 1.1,
+    "breakable": true,
+    "icon": "🏘"
+  },
+  {
+    "key": "fen_witch_hut_01",
+    "name": "Bog Witch Hut",
+    "file": "fen_witch_hut_01.glb",
+    "category": "village",
+    "defaultScale": 7.43,
+    "obstacle": true,
+    "radius": 3.6,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
     "key": "landmark_destroyed_watchtower",
     "name": "Border Keep",
     "file": "landmark_destroyed_watchtower.glb",
@@ -777,6 +997,17 @@ export const EXTRA_ASSETS = [
     "defaultScale": 6.75,
     "obstacle": true,
     "radius": 3.4,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "landmark_drowned_bell_tower",
+    "name": "Drowned Bell Tower",
+    "file": "landmark_drowned_bell_tower.glb",
+    "category": "village",
+    "defaultScale": 18.9,
+    "obstacle": true,
+    "radius": 9.4,
     "breakable": false,
     "icon": "🏘"
   },
@@ -799,6 +1030,17 @@ export const EXTRA_ASSETS = [
     "defaultScale": 10.8,
     "obstacle": true,
     "radius": 5.4,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "landmark_sunken_temple",
+    "name": "Sunken Temple",
+    "file": "landmark_sunken_temple.glb",
+    "category": "village",
+    "defaultScale": 16.2,
+    "obstacle": true,
+    "radius": 7.7,
     "breakable": false,
     "icon": "🏘"
   },

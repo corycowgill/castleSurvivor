@@ -18,3 +18,8 @@ images/**/*.src.png
 AssetFactory/glb_pretint/
 AssetFactory/audio_raw/
 AssetFactory/glb_precompress/
+# Meshes the render check or an in-game capture rejected; kept locally for comparison
+AssetFactory/glb_rejected/
+# Per-pass validation reports and runner stdout (regenerable)
+tools/reports/mirefen-*.json
+tools/reports/*.out

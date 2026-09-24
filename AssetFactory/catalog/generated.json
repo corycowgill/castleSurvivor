@@ -1426,5 +1426,707 @@
       "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_burned_cart_01.png"
     },
     "timestamp": "2026-09-23T16:57:55"
+  },
+  {
+    "id": "swamp_cypress_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_cypress_01.png"
+    },
+    "timestamp": "2026-09-23T21:35:56"
+  },
+  {
+    "id": "swamp_cypress_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-23T21:43:05"
+  },
+  {
+    "id": "swamp_cypress_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-23T21:43:06"
+  },
+  {
+    "id": "swamp_cypress_02",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_cypress_02.png"
+    },
+    "timestamp": "2026-09-23T21:43:42"
+  },
+  {
+    "id": "swamp_cypress_02",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-23T21:46:35"
+  },
+  {
+    "id": "swamp_cypress_02",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-23T21:46:36"
+  },
+  {
+    "id": "swamp_mangrove_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_mangrove_01.png"
+    },
+    "timestamp": "2026-09-23T21:47:12"
+  },
+  {
+    "id": "swamp_mangrove_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-23T21:50:20"
+  },
+  {
+    "id": "swamp_mangrove_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-23T21:50:21"
+  },
+  {
+    "id": "swamp_dead_willow_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_dead_willow_01.png"
+    },
+    "timestamp": "2026-09-23T21:50:57"
+  },
+  {
+    "id": "swamp_dead_willow_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-23T21:53:38"
+  },
+  {
+    "id": "swamp_dead_willow_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-23T21:53:39"
+  },
+  {
+    "id": "swamp_moss_curtain_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_moss_curtain_01.png"
+    },
+    "timestamp": "2026-09-23T21:54:15"
+  },
+  {
+    "id": "swamp_moss_curtain_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:00:23"
+  },
+  {
+    "id": "swamp_moss_curtain_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:00:24"
+  },
+  {
+    "id": "swamp_reed_cluster_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_reed_cluster_01.png"
+    },
+    "timestamp": "2026-09-23T22:01:00"
+  },
+  {
+    "id": "swamp_reed_cluster_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:04:27"
+  },
+  {
+    "id": "swamp_reed_cluster_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:04:28"
+  },
+  {
+    "id": "swamp_cattail_clump_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_cattail_clump_01.png"
+    },
+    "timestamp": "2026-09-23T22:05:04"
+  },
+  {
+    "id": "swamp_cattail_clump_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:08:02"
+  },
+  {
+    "id": "swamp_cattail_clump_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:08:02"
+  },
+  {
+    "id": "swamp_lilypads_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_lilypads_01.png"
+    },
+    "timestamp": "2026-09-23T22:08:39"
+  },
+  {
+    "id": "swamp_lilypads_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:11:27"
+  },
+  {
+    "id": "swamp_lilypads_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:11:27"
+  },
+  {
+    "id": "swamp_rotten_log_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_rotten_log_01.png"
+    },
+    "timestamp": "2026-09-23T22:12:04"
+  },
+  {
+    "id": "swamp_rotten_log_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:15:08"
+  },
+  {
+    "id": "swamp_rotten_log_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:15:08"
+  },
+  {
+    "id": "fen_stilt_hut_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\fen_stilt_hut_01.png"
+    },
+    "timestamp": "2026-09-23T22:15:40"
+  },
+  {
+    "id": "fen_stilt_hut_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:21:17"
+  },
+  {
+    "id": "fen_stilt_hut_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:21:17"
+  },
+  {
+    "id": "fen_fish_rack_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\fen_fish_rack_01.png"
+    },
+    "timestamp": "2026-09-23T22:21:54"
+  },
+  {
+    "id": "fen_fish_rack_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:24:57"
+  },
+  {
+    "id": "fen_fish_rack_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:24:58"
+  },
+  {
+    "id": "fen_coracle_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\fen_coracle_01.png"
+    },
+    "timestamp": "2026-09-23T22:25:34"
+  },
+  {
+    "id": "fen_coracle_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:29:41"
+  },
+  {
+    "id": "fen_coracle_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:29:42"
+  },
+  {
+    "id": "fen_wicker_trap_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\fen_wicker_trap_01.png"
+    },
+    "timestamp": "2026-09-23T22:30:18"
+  },
+  {
+    "id": "fen_wicker_trap_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:34:20"
+  },
+  {
+    "id": "fen_wicker_trap_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:34:20"
+  },
+  {
+    "id": "fen_boardwalk_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\fen_boardwalk_01.png"
+    },
+    "timestamp": "2026-09-23T22:34:57"
+  },
+  {
+    "id": "fen_boardwalk_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:38:34"
+  },
+  {
+    "id": "fen_boardwalk_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:38:35"
+  },
+  {
+    "id": "fen_totem_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\fen_totem_01.png"
+    },
+    "timestamp": "2026-09-23T22:39:11"
+  },
+  {
+    "id": "fen_totem_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:42:43"
+  },
+  {
+    "id": "fen_totem_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:42:43"
+  },
+  {
+    "id": "fen_lantern_post_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\fen_lantern_post_01.png"
+    },
+    "timestamp": "2026-09-23T22:43:15"
+  },
+  {
+    "id": "fen_lantern_post_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:46:02"
+  },
+  {
+    "id": "fen_lantern_post_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:46:02"
+  },
+  {
+    "id": "fen_witch_hut_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\fen_witch_hut_01.png"
+    },
+    "timestamp": "2026-09-23T22:46:39"
+  },
+  {
+    "id": "fen_witch_hut_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:51:36"
+  },
+  {
+    "id": "fen_witch_hut_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:51:36"
+  },
+  {
+    "id": "swamp_wisp_stone_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_wisp_stone_01.png"
+    },
+    "timestamp": "2026-09-23T22:52:13"
+  },
+  {
+    "id": "swamp_wisp_stone_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:55:28"
+  },
+  {
+    "id": "swamp_wisp_stone_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-23T22:55:28"
+  },
+  {
+    "id": "landmark_sunken_temple",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_sunken_temple.png"
+    },
+    "timestamp": "2026-09-23T22:56:00"
+  },
+  {
+    "id": "landmark_sunken_temple",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-23T23:02:55"
+  },
+  {
+    "id": "landmark_sunken_temple",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-23T23:02:56"
+  },
+  {
+    "id": "landmark_great_cypress",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_great_cypress.png"
+    },
+    "timestamp": "2026-09-23T23:03:32"
+  },
+  {
+    "id": "landmark_great_cypress",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-23T23:10:34"
+  },
+  {
+    "id": "landmark_great_cypress",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-23T23:10:35"
+  },
+  {
+    "id": "landmark_drowned_bell_tower",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_drowned_bell_tower.png"
+    },
+    "timestamp": "2026-09-23T23:11:11"
+  },
+  {
+    "id": "landmark_drowned_bell_tower",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-23T23:15:22"
+  },
+  {
+    "id": "landmark_drowned_bell_tower",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-23T23:15:22"
+  },
+  {
+    "id": "swamp_cypress_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:06:21"
+  },
+  {
+    "id": "swamp_dead_willow_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:06:40"
+  },
+  {
+    "id": "swamp_moss_curtain_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:06:57"
+  },
+  {
+    "id": "swamp_stump_mossy_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_stump_mossy_01.png"
+    },
+    "timestamp": "2026-09-24T07:07:33"
+  },
+  {
+    "id": "swamp_stump_mossy_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:11:16"
+  },
+  {
+    "id": "swamp_stump_mossy_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:11:17"
+  },
+  {
+    "id": "swamp_fungus_shelf_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_fungus_shelf_01.png"
+    },
+    "timestamp": "2026-09-24T07:11:53"
+  },
+  {
+    "id": "swamp_fungus_shelf_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:16:52"
+  },
+  {
+    "id": "swamp_fungus_shelf_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:16:52"
+  },
+  {
+    "id": "swamp_hummock_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_hummock_01.png"
+    },
+    "timestamp": "2026-09-24T07:17:29"
+  },
+  {
+    "id": "swamp_hummock_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:20:49"
+  },
+  {
+    "id": "swamp_hummock_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:20:49"
+  },
+  {
+    "id": "swamp_bog_rock_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_bog_rock_01.png"
+    },
+    "timestamp": "2026-09-24T07:21:25"
+  },
+  {
+    "id": "swamp_bog_rock_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:24:52"
+  },
+  {
+    "id": "swamp_bog_rock_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:24:53"
+  },
+  {
+    "id": "swamp_driftwood_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_driftwood_01.png"
+    },
+    "timestamp": "2026-09-24T07:25:29"
+  },
+  {
+    "id": "swamp_driftwood_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:30:53"
+  },
+  {
+    "id": "swamp_driftwood_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:30:54"
+  },
+  {
+    "id": "fen_wicker_trap_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:31:23"
+  },
+  {
+    "id": "fen_totem_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:31:44"
+  },
+  {
+    "id": "landmark_great_cypress",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:32:02"
+  },
+  {
+    "id": "landmark_drowned_bell_tower",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:32:20"
+  },
+  {
+    "id": "swamp_cypress_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_cypress_01.png"
+    },
+    "timestamp": "2026-09-24T07:36:52"
+  },
+  {
+    "id": "swamp_cypress_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:41:48"
+  },
+  {
+    "id": "swamp_cypress_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:41:49"
+  },
+  {
+    "id": "swamp_dead_willow_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_dead_willow_01.png"
+    },
+    "timestamp": "2026-09-24T07:42:20"
+  },
+  {
+    "id": "swamp_dead_willow_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:47:19"
+  },
+  {
+    "id": "swamp_dead_willow_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:47:20"
+  },
+  {
+    "id": "swamp_moss_curtain_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\swamp_moss_curtain_01.png"
+    },
+    "timestamp": "2026-09-24T07:47:56"
+  },
+  {
+    "id": "swamp_moss_curtain_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:54:08"
+  },
+  {
+    "id": "swamp_moss_curtain_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:54:08"
+  },
+  {
+    "id": "fen_wicker_trap_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\fen_wicker_trap_01.png"
+    },
+    "timestamp": "2026-09-24T07:54:40"
+  },
+  {
+    "id": "fen_wicker_trap_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:59:09"
+  },
+  {
+    "id": "fen_wicker_trap_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-24T07:59:10"
+  },
+  {
+    "id": "fen_totem_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\props\\fen_totem_01.png"
+    },
+    "timestamp": "2026-09-24T07:59:46"
+  },
+  {
+    "id": "fen_totem_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-24T08:03:17"
+  },
+  {
+    "id": "fen_totem_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-24T08:03:18"
+  },
+  {
+    "id": "landmark_great_cypress",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_great_cypress.png"
+    },
+    "timestamp": "2026-09-24T08:03:54"
+  },
+  {
+    "id": "landmark_great_cypress",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-24T08:10:21"
+  },
+  {
+    "id": "landmark_great_cypress",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-24T08:10:21"
+  },
+  {
+    "id": "landmark_drowned_bell_tower",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_drowned_bell_tower.png"
+    },
+    "timestamp": "2026-09-24T08:10:58"
+  },
+  {
+    "id": "landmark_drowned_bell_tower",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-24T08:15:54"
+  },
+  {
+    "id": "landmark_drowned_bell_tower",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-24T08:15:54"
   }
 ]

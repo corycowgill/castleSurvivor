@@ -15,3 +15,1241 @@ Processing 1 assets (batch 1)...
 [1/1] swamp_cypress_01 — Bald Cypress
   Category: swamp, Template: SWAMP
     Generating image (attempt 1, seed 463198898)...
+    Saved: C:\Users\coryc\castleSurvivor\AssetFactory\source_images\props\swamp_cypress_01.png
+    Removing background...
+    Background removed OK
+    Copying image to ComfyUI input...
+    Submitting Trellis workflow...
+    Prompt ID: 9caaa0d5-1447-44e3-aac5-8eafd8b3bd46
+    Raw GLB saved: C:\Users\coryc\castleSurvivor\AssetFactory\glb_raw\swamp_cypress_01.glb (2703KB)
+    Optimizing GLB...
+    Optimized: 2703KB -> 239KB (91.2% reduction)
+    [OK] READY -> C:\Users\coryc\castleSurvivor\Game3DAssets\swamp_cypress_01.glb
+
+============================================================
+DONE! Processed 1 assets.
+  Success: 1
+  Failed:  0
+============================================================
+============================================================
+Castle Survivor — Asset Factory Status
+============================================================
+  Total assets: 175
+    glb_optimized: 79
+    pending: 90
+    rejected: 6
+
+  Batches:
+    Batch 1: 0/10 ready, 0 failed, 0 pending
+    Batch 2: 0/25 ready, 0 failed, 0 pending
+    Batch 3: 0/29 ready, 0 failed, 0 pending
+    Batch 4: 0/13 ready, 0 failed, 12 pending
+    Batch 5: 0/14 ready, 0 failed, 12 pending
+    Batch 6: 0/13 ready, 0 failed, 13 pending
+    Batch 7: 0/7 ready, 0 failed, 0 pending
+    Batch 8: 0/10 ready, 0 failed, 0 pending
+    Batch 9: 0/20 ready, 0 failed, 20 pending
+    Batch 10: 0/8 ready, 0 failed, 8 pending
+    Batch 11: 0/14 ready, 0 failed, 13 pending
+    Batch 12: 0/12 ready, 0 failed, 12 pending
+
+  Files on disk:
+    Source images: 90
+    Raw GLBs:      85
+    Optimized GLBs:85
+    Thumbnails:    0
+  >> OK (1 done, 0 failed)
+
+[2/14] swamp_cypress_02 -- Leaning Cypress
+
+============================================================
+Castle Survivor — Asset Factory Pipeline
+============================================================
+ComfyUI: CONNECTED
+
+Processing 1 assets (batch 1)...
+
+
+[1/1] swamp_cypress_02 — Leaning Cypress
+  Category: swamp, Template: SWAMP
+    Generating image (attempt 1, seed 463198899)...
+    Saved: C:\Users\coryc\castleSurvivor\AssetFactory\source_images\props\swamp_cypress_02.png
+    Removing background...
+    Background removed OK
+    Copying image to ComfyUI input...
+    Submitting Trellis workflow...
+    Prompt ID: 271c934f-17cd-454b-84b2-c7e238b4efe0
+    Raw GLB saved: C:\Users\coryc\castleSurvivor\AssetFactory\glb_raw\swamp_cypress_02.glb (4226KB)
+    Optimizing GLB...
+    Optimized: 4226KB -> 325KB (92.3% reduction)
+    [OK] READY -> C:\Users\coryc\castleSurvivor\Game3DAssets\swamp_cypress_02.glb
+
+============================================================
+DONE! Processed 1 assets.
+  Success: 1
+  Failed:  0
+============================================================
+============================================================
+Castle Survivor — Asset Factory Status
+============================================================
+  Total assets: 175
+    glb_optimized: 80
+    pending: 89
+    rejected: 6
+
+  Batches:
+    Batch 1: 0/10 ready, 0 failed, 0 pending
+    Batch 2: 0/25 ready, 0 failed, 0 pending
+    Batch 3: 0/29 ready, 0 failed, 0 pending
+    Batch 4: 0/13 ready, 0 failed, 12 pending
+    Batch 5: 0/14 ready, 0 failed, 12 pending
+    Batch 6: 0/13 ready, 0 failed, 13 pending
+    Batch 7: 0/7 ready, 0 failed, 0 pending
+    Batch 8: 0/10 ready, 0 failed, 0 pending
+    Batch 9: 0/20 ready, 0 failed, 20 pending
+    Batch 10: 0/8 ready, 0 failed, 8 pending
+    Batch 11: 0/14 ready, 0 failed, 12 pending
+    Batch 12: 0/12 ready, 0 failed, 12 pending
+
+  Files on disk:
+    Source images: 91
+    Raw GLBs:      86
+    Optimized GLBs:86
+    Thumbnails:    0
+  >> OK (2 done, 0 failed)
+
+[3/14] swamp_mangrove_01 -- Mangrove Stilt Tree
+
+============================================================
+Castle Survivor — Asset Factory Pipeline
+============================================================
+ComfyUI: CONNECTED
+
+Processing 1 assets (batch 1)...
+
+
+[1/1] swamp_mangrove_01 — Mangrove Stilt Tree
+  Category: swamp, Template: SWAMP
+    Generating image (attempt 1, seed 270964649)...
+    Saved: C:\Users\coryc\castleSurvivor\AssetFactory\source_images\props\swamp_mangrove_01.png
+    Removing background...
+    Background removed OK
+    Copying image to ComfyUI input...
+    Submitting Trellis workflow...
+    Prompt ID: d39f23e9-d07e-4bde-870c-041290bc965d
+    Raw GLB saved: C:\Users\coryc\castleSurvivor\AssetFactory\glb_raw\swamp_mangrove_01.glb (4871KB)
+    Optimizing GLB...
+    Optimized: 4871KB -> 373KB (92.3% reduction)
+    [OK] READY -> C:\Users\coryc\castleSurvivor\Game3DAssets\swamp_mangrove_01.glb
+
+============================================================
+DONE! Processed 1 assets.
+  Success: 1
+  Failed:  0
+============================================================
+============================================================
+Castle Survivor — Asset Factory Status
+============================================================
+  Total assets: 175
+    glb_optimized: 81
+    pending: 88
+    rejected: 6
+
+  Batches:
+    Batch 1: 0/10 ready, 0 failed, 0 pending
+    Batch 2: 0/25 ready, 0 failed, 0 pending
+    Batch 3: 0/29 ready, 0 failed, 0 pending
+    Batch 4: 0/13 ready, 0 failed, 12 pending
+    Batch 5: 0/14 ready, 0 failed, 12 pending
+    Batch 6: 0/13 ready, 0 failed, 13 pending
+    Batch 7: 0/7 ready, 0 failed, 0 pending
+    Batch 8: 0/10 ready, 0 failed, 0 pending
+    Batch 9: 0/20 ready, 0 failed, 20 pending
+    Batch 10: 0/8 ready, 0 failed, 8 pending
+    Batch 11: 0/14 ready, 0 failed, 11 pending
+    Batch 12: 0/12 ready, 0 failed, 12 pending
+
+  Files on disk:
+    Source images: 92
+    Raw GLBs:      87
+    Optimized GLBs:87
+    Thumbnails:    0
+  >> OK (3 done, 0 failed)
+
+[4/14] swamp_dead_willow_01 -- Drowned Willow
+
+============================================================
+Castle Survivor — Asset Factory Pipeline
+============================================================
+ComfyUI: CONNECTED
+
+Processing 1 assets (batch 1)...
+
+
+[1/1] swamp_dead_willow_01 — Drowned Willow
+  Category: swamp, Template: SWAMP
+    Generating image (attempt 1, seed 702829130)...
+    Saved: C:\Users\coryc\castleSurvivor\AssetFactory\source_images\props\swamp_dead_willow_01.png
+    Removing background...
+    Background removed OK
+    Copying image to ComfyUI input...
+    Submitting Trellis workflow...
+    Prompt ID: a170eca0-9b0b-464a-8f5e-02b0aaa79b9f
+    Raw GLB saved: C:\Users\coryc\castleSurvivor\AssetFactory\glb_raw\swamp_dead_willow_01.glb (3912KB)
+    Optimizing GLB...
+    Optimized: 3912KB -> 302KB (92.3% reduction)
+    [OK] READY -> C:\Users\coryc\castleSurvivor\Game3DAssets\swamp_dead_willow_01.glb
+
+============================================================
+DONE! Processed 1 assets.
+  Success: 1
+  Failed:  0
+============================================================
+============================================================
+Castle Survivor — Asset Factory Status
+============================================================
+  Total assets: 175
+    glb_optimized: 82
+    pending: 87
+    rejected: 6
+
+  Batches:
+    Batch 1: 0/10 ready, 0 failed, 0 pending
+    Batch 2: 0/25 ready, 0 failed, 0 pending
+    Batch 3: 0/29 ready, 0 failed, 0 pending
+    Batch 4: 0/13 ready, 0 failed, 12 pending
+    Batch 5: 0/14 ready, 0 failed, 12 pending
+    Batch 6: 0/13 ready, 0 failed, 13 pending
+    Batch 7: 0/7 ready, 0 failed, 0 pending
+    Batch 8: 0/10 ready, 0 failed, 0 pending
+    Batch 9: 0/20 ready, 0 failed, 20 pending
+    Batch 10: 0/8 ready, 0 failed, 8 pending
+    Batch 11: 0/14 ready, 0 failed, 10 pending
+    Batch 12: 0/12 ready, 0 failed, 12 pending
+
+  Files on disk:
+    Source images: 93
+    Raw GLBs:      88
+    Optimized GLBs:88
+    Thumbnails:    0
+  >> OK (4 done, 0 failed)
+
+[5/14] swamp_moss_curtain_01 -- Hanging Moss
+
+============================================================
+Castle Survivor — Asset Factory Pipeline
+============================================================
+ComfyUI: CONNECTED
+
+Processing 1 assets (batch 1)...
+
+
+[1/1] swamp_moss_curtain_01 — Hanging Moss
+  Category: swamp, Template: SWAMP
+    Generating image (attempt 1, seed 569728588)...
+    Saved: C:\Users\coryc\castleSurvivor\AssetFactory\source_images\props\swamp_moss_curtain_01.png
+    Removing background...
+    Background removed OK
+    Copying image to ComfyUI input...
+    Submitting Trellis workflow...
+    Prompt ID: 28c14d42-82c6-4315-bb5d-b3afd902dba3
+    Raw GLB saved: C:\Users\coryc\castleSurvivor\AssetFactory\glb_raw\swamp_moss_curtain_01.glb (1624KB)
+    Optimizing GLB...
+    Optimized: 1624KB -> 13KB (99.2% reduction)
+    [OK] READY -> C:\Users\coryc\castleSurvivor\Game3DAssets\swamp_moss_curtain_01.glb
+
+============================================================
+DONE! Processed 1 assets.
+  Success: 1
+  Failed:  0
+============================================================
+============================================================
+Castle Survivor — Asset Factory Status
+============================================================
+  Total assets: 175
+    glb_optimized: 83
+    pending: 86
+    rejected: 6
+
+  Batches:
+    Batch 1: 0/10 ready, 0 failed, 0 pending
+    Batch 2: 0/25 ready, 0 failed, 0 pending
+    Batch 3: 0/29 ready, 0 failed, 0 pending
+    Batch 4: 0/13 ready, 0 failed, 12 pending
+    Batch 5: 0/14 ready, 0 failed, 12 pending
+    Batch 6: 0/13 ready, 0 failed, 13 pending
+    Batch 7: 0/7 ready, 0 failed, 0 pending
+    Batch 8: 0/10 ready, 0 failed, 0 pending
+    Batch 9: 0/20 ready, 0 failed, 20 pending
+    Batch 10: 0/8 ready, 0 failed, 8 pending
+    Batch 11: 0/14 ready, 0 failed, 9 pending
+    Batch 12: 0/12 ready, 0 failed, 12 pending
+
+  Files on disk:
+    Source images: 94
+    Raw GLBs:      89
+    Optimized GLBs:89
+    Thumbnails:    0
+  >> OK (5 done, 0 failed)
+
+[6/14] swamp_reed_cluster_01 -- Reed Stand
+
+============================================================
+Castle Survivor — Asset Factory Pipeline
+============================================================
+ComfyUI: CONNECTED
+
+Processing 1 assets (batch 1)...
+
+
+[1/1] swamp_reed_cluster_01 — Reed Stand
+  Category: swamp, Template: SWAMP
+    Generating image (attempt 1, seed 123133270)...
+    Saved: C:\Users\coryc\castleSurvivor\AssetFactory\source_images\props\swamp_reed_cluster_01.png
+    Removing background...
+    Background removed OK
+    Copying image to ComfyUI input...
+    Submitting Trellis workflow...
+    Prompt ID: be6db124-2e05-4327-85de-3b7419367be5
+    Raw GLB saved: C:\Users\coryc\castleSurvivor\AssetFactory\glb_raw\swamp_reed_cluster_01.glb (4135KB)
+    Optimizing GLB...
+    Optimized: 4135KB -> 324KB (92.2% reduction)
+    [OK] READY -> C:\Users\coryc\castleSurvivor\Game3DAssets\swamp_reed_cluster_01.glb
+
+============================================================
+DONE! Processed 1 assets.
+  Success: 1
+  Failed:  0
+============================================================
+============================================================
+Castle Survivor — Asset Factory Status
+============================================================
+  Total assets: 175
+    glb_optimized: 84
+    pending: 85
+    rejected: 6
+
+  Batches:
+    Batch 1: 0/10 ready, 0 failed, 0 pending
+    Batch 2: 0/25 ready, 0 failed, 0 pending
+    Batch 3: 0/29 ready, 0 failed, 0 pending
+    Batch 4: 0/13 ready, 0 failed, 12 pending
+    Batch 5: 0/14 ready, 0 failed, 12 pending
+    Batch 6: 0/13 ready, 0 failed, 13 pending
+    Batch 7: 0/7 ready, 0 failed, 0 pending
+    Batch 8: 0/10 ready, 0 failed, 0 pending
+    Batch 9: 0/20 ready, 0 failed, 20 pending
+    Batch 10: 0/8 ready, 0 failed, 8 pending
+    Batch 11: 0/14 ready, 0 failed, 8 pending
+    Batch 12: 0/12 ready, 0 failed, 12 pending
+
+  Files on disk:
+    Source images: 95
+    Raw GLBs:      90
+    Optimized GLBs:90
+    Thumbnails:    0
+  >> OK (6 done, 0 failed)
+
+[7/14] swamp_cattail_clump_01 -- Cattails
+
+============================================================
+Castle Survivor — Asset Factory Pipeline
+============================================================
+ComfyUI: CONNECTED
+
+Processing 1 assets (batch 1)...
+
+
+[1/1] swamp_cattail_clump_01 — Cattails
+  Category: swamp, Template: SWAMP
+    Generating image (attempt 1, seed 631930091)...
+    Saved: C:\Users\coryc\castleSurvivor\AssetFactory\source_images\props\swamp_cattail_clump_01.png
+    Removing background...
+    Background removed OK
+    Copying image to ComfyUI input...
+    Submitting Trellis workflow...
+    Prompt ID: d3dbe028-823a-4e7a-8b37-a6fb7fa5bae3
+    Raw GLB saved: C:\Users\coryc\castleSurvivor\AssetFactory\glb_raw\swamp_cattail_clump_01.glb (4748KB)
+    Optimizing GLB...
+    Optimized: 4748KB -> 400KB (91.6% reduction)
+    [OK] READY -> C:\Users\coryc\castleSurvivor\Game3DAssets\swamp_cattail_clump_01.glb
+
+============================================================
+DONE! Processed 1 assets.
+  Success: 1
+  Failed:  0
+============================================================
+============================================================
+Castle Survivor — Asset Factory Status
+============================================================
+  Total assets: 175
+    glb_optimized: 85
+    pending: 84
+    rejected: 6
+
+  Batches:
+    Batch 1: 0/10 ready, 0 failed, 0 pending
+    Batch 2: 0/25 ready, 0 failed, 0 pending
+    Batch 3: 0/29 ready, 0 failed, 0 pending
+    Batch 4: 0/13 ready, 0 failed, 12 pending
+    Batch 5: 0/14 ready, 0 failed, 12 pending
+    Batch 6: 0/13 ready, 0 failed, 13 pending
+    Batch 7: 0/7 ready, 0 failed, 0 pending
+    Batch 8: 0/10 ready, 0 failed, 0 pending
+    Batch 9: 0/20 ready, 0 failed, 20 pending
+    Batch 10: 0/8 ready, 0 failed, 8 pending
+    Batch 11: 0/14 ready, 0 failed, 7 pending
+    Batch 12: 0/12 ready, 0 failed, 12 pending
+
+  Files on disk:
+    Source images: 96
+    Raw GLBs:      91
+    Optimized GLBs:91
+    Thumbnails:    0
+  >> OK (7 done, 0 failed)
+
+[8/14] swamp_lilypads_01 -- Lily Pads
+
+============================================================
+Castle Survivor — Asset Factory Pipeline
+============================================================
+ComfyUI: CONNECTED
+
+Processing 1 assets (batch 1)...
+
+
+[1/1] swamp_lilypads_01 — Lily Pads
+  Category: swamp, Template: SWAMP
+    Generating image (attempt 1, seed 224510075)...
+    Saved: C:\Users\coryc\castleSurvivor\AssetFactory\source_images\props\swamp_lilypads_01.png
+    Removing background...
+    Background removed OK
+    Copying image to ComfyUI input...
+    Submitting Trellis workflow...
+    Prompt ID: 629562f7-5776-4957-9e19-4f8711825fc8
+    Raw GLB saved: C:\Users\coryc\castleSurvivor\AssetFactory\glb_raw\swamp_lilypads_01.glb (4210KB)
+    Optimizing GLB...
+    Optimized: 4210KB -> 319KB (92.4% reduction)
+    [OK] READY -> C:\Users\coryc\castleSurvivor\Game3DAssets\swamp_lilypads_01.glb
+
+============================================================
+DONE! Processed 1 assets.
+  Success: 1
+  Failed:  0
+============================================================
+============================================================
+Castle Survivor — Asset Factory Status
+============================================================
+  Total assets: 175
+    glb_optimized: 86
+    pending: 83
+    rejected: 6
+
+  Batches:
+    Batch 1: 0/10 ready, 0 failed, 0 pending
+    Batch 2: 0/25 ready, 0 failed, 0 pending
+    Batch 3: 0/29 ready, 0 failed, 0 pending
+    Batch 4: 0/13 ready, 0 failed, 12 pending
+    Batch 5: 0/14 ready, 0 failed, 12 pending
+    Batch 6: 0/13 ready, 0 failed, 13 pending
+    Batch 7: 0/7 ready, 0 failed, 0 pending
+    Batch 8: 0/10 ready, 0 failed, 0 pending
+    Batch 9: 0/20 ready, 0 failed, 20 pending
+    Batch 10: 0/8 ready, 0 failed, 8 pending
+    Batch 11: 0/14 ready, 0 failed, 6 pending
+    Batch 12: 0/12 ready, 0 failed, 12 pending
+
+  Files on disk:
+    Source images: 97
+    Raw GLBs:      92
+    Optimized GLBs:92
+    Thumbnails:    0
+  >> OK (8 done, 0 failed)
+
+[9/14] swamp_rotten_log_01 -- Rotten Log
+
+============================================================
+Castle Survivor — Asset Factory Pipeline
+============================================================
+ComfyUI: CONNECTED
+
+Processing 1 assets (batch 1)...
+
+
+[1/1] swamp_rotten_log_01 — Rotten Log
+  Category: swamp, Template: SWAMP
+    Generating image (attempt 1, seed 73353529)...
+    Saved: C:\Users\coryc\castleSurvivor\AssetFactory\source_images\props\swamp_rotten_log_01.png
+    Removing background...
+    Background removed OK
+    Copying image to ComfyUI input...
+    Submitting Trellis workflow...
+    Prompt ID: 3d610074-c780-4c36-95cb-c67e3a60b793
+    Raw GLB saved: C:\Users\coryc\castleSurvivor\AssetFactory\glb_raw\swamp_rotten_log_01.glb (3979KB)
+    Optimizing GLB...
+    Optimization failed: 
+    Copied raw GLB as fallback
+    [OK] READY -> C:\Users\coryc\castleSurvivor\Game3DAssets\swamp_rotten_log_01.glb
+
+============================================================
+DONE! Processed 1 assets.
+  Success: 1
+  Failed:  0
+============================================================
+============================================================
+Castle Survivor — Asset Factory Status
+============================================================
+  Total assets: 175
+    glb_optimized: 87
+    pending: 82
+    rejected: 6
+
+  Batches:
+    Batch 1: 0/10 ready, 0 failed, 0 pending
+    Batch 2: 0/25 ready, 0 failed, 0 pending
+    Batch 3: 0/29 ready, 0 failed, 0 pending
+    Batch 4: 0/13 ready, 0 failed, 12 pending
+    Batch 5: 0/14 ready, 0 failed, 12 pending
+    Batch 6: 0/13 ready, 0 failed, 13 pending
+    Batch 7: 0/7 ready, 0 failed, 0 pending
+    Batch 8: 0/10 ready, 0 failed, 0 pending
+    Batch 9: 0/20 ready, 0 failed, 20 pending
+    Batch 10: 0/8 ready, 0 failed, 8 pending
+    Batch 11: 0/14 ready, 0 failed, 5 pending
+    Batch 12: 0/12 ready, 0 failed, 12 pending
+
+  Files on disk:
+    Source images: 98
+    Raw GLBs:      93
+    Optimized GLBs:93
+    Thumbnails:    0
+  >> OK (9 done, 0 failed)
+
+[10/14] swamp_stump_mossy_01 -- Mossy Stump
+  >> FAILED (exit 3221225794), skipping
+
+[11/14] swamp_fungus_shelf_01 -- Bracket Fungus
+  >> FAILED (exit 3221225794), skipping
+
+[12/14] swamp_hummock_01 -- Peat Hummock
+  >> FAILED (exit 3221225794), skipping
+
+[13/14] swamp_bog_rock_01 -- Bog Boulder
+  >> FAILED (exit 3221225794), skipping
+
+[14/14] swamp_driftwood_01 -- Bleached Driftwood
+  >> FAILED (exit 3221225794), skipping
+
+=== Batch 11 complete ===
+  Done: 9
+  Failed/Skipped: 5
+  Previously skipped: 12
+=== batch 11 done Wed Sep 23 22:15:08 CDT 2026 ===
+C:              930G  919G   11G  99% /c
+=== batch 12 start Wed Sep 23 22:15:09 CDT 2026 ===
+=== Batch 12: 12 assets to process ===
+  (skipping 17 previously failed)
+
+[1/12] fen_stilt_hut_01 -- Stilt Hut
+
+============================================================
+Castle Survivor — Asset Factory Pipeline
+============================================================
+ComfyUI: CONNECTED
+
+Processing 1 assets (batch 1)...
+
+
+[1/1] fen_stilt_hut_01 — Stilt Hut
+  Category: fen_camp, Template: FENFOLK
+    Generating image (attempt 1, seed 204730460)...
+    Saved: C:\Users\coryc\castleSurvivor\AssetFactory\source_images\props\fen_stilt_hut_01.png
+    Removing background...
+    Background removed OK
+    Copying image to ComfyUI input...
+    Submitting Trellis workflow...
+    Prompt ID: 9c623643-1ee5-494a-abd3-751d4896b849
+    Raw GLB saved: C:\Users\coryc\castleSurvivor\AssetFactory\glb_raw\fen_stilt_hut_01.glb (3164KB)
+    Optimizing GLB...
+    Optimized: 3164KB -> 212KB (93.3% reduction)
+    [OK] READY -> C:\Users\coryc\castleSurvivor\Game3DAssets\fen_stilt_hut_01.glb
+
+============================================================
+DONE! Processed 1 assets.
+  Success: 1
+  Failed:  0
+============================================================
+============================================================
+Castle Survivor — Asset Factory Status
+============================================================
+  Total assets: 175
+    glb_optimized: 88
+    pending: 81
+    rejected: 6
+
+  Batches:
+    Batch 1: 0/10 ready, 0 failed, 0 pending
+    Batch 2: 0/25 ready, 0 failed, 0 pending
+    Batch 3: 0/29 ready, 0 failed, 0 pending
+    Batch 4: 0/13 ready, 0 failed, 12 pending
+    Batch 5: 0/14 ready, 0 failed, 12 pending
+    Batch 6: 0/13 ready, 0 failed, 13 pending
+    Batch 7: 0/7 ready, 0 failed, 0 pending
+    Batch 8: 0/10 ready, 0 failed, 0 pending
+    Batch 9: 0/20 ready, 0 failed, 20 pending
+    Batch 10: 0/8 ready, 0 failed, 8 pending
+    Batch 11: 0/14 ready, 0 failed, 5 pending
+    Batch 12: 0/12 ready, 0 failed, 11 pending
+
+  Files on disk:
+    Source images: 99
+    Raw GLBs:      94
+    Optimized GLBs:94
+    Thumbnails:    0
+  >> OK (1 done, 0 failed)
+
+[2/12] fen_fish_rack_01 -- Drying Rack
+
+============================================================
+Castle Survivor — Asset Factory Pipeline
+============================================================
+ComfyUI: CONNECTED
+
+Processing 1 assets (batch 1)...
+
+
+[1/1] fen_fish_rack_01 — Drying Rack
+  Category: fen_camp, Template: FENFOLK
+    Generating image (attempt 1, seed 309092917)...
+    Saved: C:\Users\coryc\castleSurvivor\AssetFactory\source_images\props\fen_fish_rack_01.png
+    Removing background...
+    Background removed OK
+    Copying image to ComfyUI input...
+    Submitting Trellis workflow...
+    Prompt ID: 76d21773-6072-4044-95ed-a899c100483f
+    Raw GLB saved: C:\Users\coryc\castleSurvivor\AssetFactory\glb_raw\fen_fish_rack_01.glb (3870KB)
+    Optimizing GLB...
+    Optimized: 3870KB -> 290KB (92.5% reduction)
+    [OK] READY -> C:\Users\coryc\castleSurvivor\Game3DAssets\fen_fish_rack_01.glb
+
+============================================================
+DONE! Processed 1 assets.
+  Success: 1
+  Failed:  0
+============================================================
+============================================================
+Castle Survivor — Asset Factory Status
+============================================================
+  Total assets: 175
+    glb_optimized: 89
+    pending: 80
+    rejected: 6
+
+  Batches:
+    Batch 1: 0/10 ready, 0 failed, 0 pending
+    Batch 2: 0/25 ready, 0 failed, 0 pending
+    Batch 3: 0/29 ready, 0 failed, 0 pending
+    Batch 4: 0/13 ready, 0 failed, 12 pending
+    Batch 5: 0/14 ready, 0 failed, 12 pending
+    Batch 6: 0/13 ready, 0 failed, 13 pending
+    Batch 7: 0/7 ready, 0 failed, 0 pending
+    Batch 8: 0/10 ready, 0 failed, 0 pending
+    Batch 9: 0/20 ready, 0 failed, 20 pending
+    Batch 10: 0/8 ready, 0 failed, 8 pending
+    Batch 11: 0/14 ready, 0 failed, 5 pending
+    Batch 12: 0/12 ready, 0 failed, 10 pending
+
+  Files on disk:
+    Source images: 100
+    Raw GLBs:      95
+    Optimized GLBs:95
+    Thumbnails:    0
+  >> OK (2 done, 0 failed)
+
+[3/12] fen_coracle_01 -- Coracle
+
+============================================================
+Castle Survivor — Asset Factory Pipeline
+============================================================
+ComfyUI: CONNECTED
+
+Processing 1 assets (batch 1)...
+
+
+[1/1] fen_coracle_01 — Coracle
+  Category: fen_camp, Template: FENFOLK
+    Generating image (attempt 1, seed 709809168)...
+    Saved: C:\Users\coryc\castleSurvivor\AssetFactory\source_images\props\fen_coracle_01.png
+    Removing background...
+    Background removed OK
+    Copying image to ComfyUI input...
+    Submitting Trellis workflow...
+    Prompt ID: 987d2660-76ed-4506-a57e-7765aa4c9936
+    Raw GLB saved: C:\Users\coryc\castleSurvivor\AssetFactory\glb_raw\fen_coracle_01.glb (3062KB)
+    Optimizing GLB...
+    Optimized: 3062KB -> 205KB (93.3% reduction)
+    [OK] READY -> C:\Users\coryc\castleSurvivor\Game3DAssets\fen_coracle_01.glb
+
+============================================================
+DONE! Processed 1 assets.
+  Success: 1
+  Failed:  0
+============================================================
+============================================================
+Castle Survivor — Asset Factory Status
+============================================================
+  Total assets: 175
+    glb_optimized: 90
+    pending: 79
+    rejected: 6
+
+  Batches:
+    Batch 1: 0/10 ready, 0 failed, 0 pending
+    Batch 2: 0/25 ready, 0 failed, 0 pending
+    Batch 3: 0/29 ready, 0 failed, 0 pending
+    Batch 4: 0/13 ready, 0 failed, 12 pending
+    Batch 5: 0/14 ready, 0 failed, 12 pending
+    Batch 6: 0/13 ready, 0 failed, 13 pending
+    Batch 7: 0/7 ready, 0 failed, 0 pending
+    Batch 8: 0/10 ready, 0 failed, 0 pending
+    Batch 9: 0/20 ready, 0 failed, 20 pending
+    Batch 10: 0/8 ready, 0 failed, 8 pending
+    Batch 11: 0/14 ready, 0 failed, 5 pending
+    Batch 12: 0/12 ready, 0 failed, 9 pending
+
+  Files on disk:
+    Source images: 101
+    Raw GLBs:      96
+    Optimized GLBs:96
+    Thumbnails:    0
+  >> OK (3 done, 0 failed)
+
+[4/12] fen_wicker_trap_01 -- Eel Traps
+
+============================================================
+Castle Survivor — Asset Factory Pipeline
+============================================================
+ComfyUI: CONNECTED
+
+Processing 1 assets (batch 1)...
+
+
+[1/1] fen_wicker_trap_01 — Eel Traps
+  Category: fen_camp, Template: FENFOLK
+    Generating image (attempt 1, seed 633848747)...
+    Saved: C:\Users\coryc\castleSurvivor\AssetFactory\source_images\props\fen_wicker_trap_01.png
+    Removing background...
+    Background removed OK
+    Copying image to ComfyUI input...
+    Submitting Trellis workflow...
+    Prompt ID: 1208ac29-e55b-4ad7-8e69-a7849bde4acf
+    Raw GLB saved: C:\Users\coryc\castleSurvivor\AssetFactory\glb_raw\fen_wicker_trap_01.glb (2353KB)
+    Optimizing GLB...
+    Optimized: 2353KB -> 62KB (97.4% reduction)
+    [OK] READY -> C:\Users\coryc\castleSurvivor\Game3DAssets\fen_wicker_trap_01.glb
+
+============================================================
+DONE! Processed 1 assets.
+  Success: 1
+  Failed:  0
+============================================================
+============================================================
+Castle Survivor — Asset Factory Status
+============================================================
+  Total assets: 175
+    glb_optimized: 91
+    pending: 78
+    rejected: 6
+
+  Batches:
+    Batch 1: 0/10 ready, 0 failed, 0 pending
+    Batch 2: 0/25 ready, 0 failed, 0 pending
+    Batch 3: 0/29 ready, 0 failed, 0 pending
+    Batch 4: 0/13 ready, 0 failed, 12 pending
+    Batch 5: 0/14 ready, 0 failed, 12 pending
+    Batch 6: 0/13 ready, 0 failed, 13 pending
+    Batch 7: 0/7 ready, 0 failed, 0 pending
+    Batch 8: 0/10 ready, 0 failed, 0 pending
+    Batch 9: 0/20 ready, 0 failed, 20 pending
+    Batch 10: 0/8 ready, 0 failed, 8 pending
+    Batch 11: 0/14 ready, 0 failed, 5 pending
+    Batch 12: 0/12 ready, 0 failed, 8 pending
+
+  Files on disk:
+    Source images: 102
+    Raw GLBs:      97
+    Optimized GLBs:97
+    Thumbnails:    0
+  >> OK (4 done, 0 failed)
+
+[5/12] fen_boardwalk_01 -- Boardwalk Section
+
+============================================================
+Castle Survivor — Asset Factory Pipeline
+============================================================
+ComfyUI: CONNECTED
+
+Processing 1 assets (batch 1)...
+
+
+[1/1] fen_boardwalk_01 — Boardwalk Section
+  Category: fen_camp, Template: FENFOLK
+    Generating image (attempt 1, seed 518536004)...
+    Saved: C:\Users\coryc\castleSurvivor\AssetFactory\source_images\props\fen_boardwalk_01.png
+    Removing background...
+    Background removed OK
+    Copying image to ComfyUI input...
+    Submitting Trellis workflow...
+    Prompt ID: 10f77b52-3807-41c0-a6c0-b52a6fa1ad18
+    Raw GLB saved: C:\Users\coryc\castleSurvivor\AssetFactory\glb_raw\fen_boardwalk_01.glb (4334KB)
+    Optimizing GLB...
+    Optimized: 4334KB -> 337KB (92.2% reduction)
+    [OK] READY -> C:\Users\coryc\castleSurvivor\Game3DAssets\fen_boardwalk_01.glb
+
+============================================================
+DONE! Processed 1 assets.
+  Success: 1
+  Failed:  0
+============================================================
+============================================================
+Castle Survivor — Asset Factory Status
+============================================================
+  Total assets: 175
+    glb_optimized: 92
+    pending: 77
+    rejected: 6
+
+  Batches:
+    Batch 1: 0/10 ready, 0 failed, 0 pending
+    Batch 2: 0/25 ready, 0 failed, 0 pending
+    Batch 3: 0/29 ready, 0 failed, 0 pending
+    Batch 4: 0/13 ready, 0 failed, 12 pending
+    Batch 5: 0/14 ready, 0 failed, 12 pending
+    Batch 6: 0/13 ready, 0 failed, 13 pending
+    Batch 7: 0/7 ready, 0 failed, 0 pending
+    Batch 8: 0/10 ready, 0 failed, 0 pending
+    Batch 9: 0/20 ready, 0 failed, 20 pending
+    Batch 10: 0/8 ready, 0 failed, 8 pending
+    Batch 11: 0/14 ready, 0 failed, 5 pending
+    Batch 12: 0/12 ready, 0 failed, 7 pending
+
+  Files on disk:
+    Source images: 103
+    Raw GLBs:      98
+    Optimized GLBs:98
+    Thumbnails:    0
+  >> OK (5 done, 0 failed)
+
+[6/12] fen_totem_01 -- Bog Totem
+
+============================================================
+Castle Survivor — Asset Factory Pipeline
+============================================================
+ComfyUI: CONNECTED
+
+Processing 1 assets (batch 1)...
+
+
+[1/1] fen_totem_01 — Bog Totem
+  Category: fen_camp, Template: FENFOLK
+    Generating image (attempt 1, seed 575737329)...
+    Saved: C:\Users\coryc\castleSurvivor\AssetFactory\source_images\props\fen_totem_01.png
+    Removing background...
+    Background removed OK
+    Copying image to ComfyUI input...
+    Submitting Trellis workflow...
+    Prompt ID: a137ebc2-6491-4ace-9d26-0bad97f4e988
+    Raw GLB saved: C:\Users\coryc\castleSurvivor\AssetFactory\glb_raw\fen_totem_01.glb (2503KB)
+    Optimizing GLB...
+    Optimized: 2503KB -> 135KB (94.6% reduction)
+    [OK] READY -> C:\Users\coryc\castleSurvivor\Game3DAssets\fen_totem_01.glb
+
+============================================================
+DONE! Processed 1 assets.
+  Success: 1
+  Failed:  0
+============================================================
+============================================================
+Castle Survivor — Asset Factory Status
+============================================================
+  Total assets: 175
+    glb_optimized: 93
+    pending: 76
+    rejected: 6
+
+  Batches:
+    Batch 1: 0/10 ready, 0 failed, 0 pending
+    Batch 2: 0/25 ready, 0 failed, 0 pending
+    Batch 3: 0/29 ready, 0 failed, 0 pending
+    Batch 4: 0/13 ready, 0 failed, 12 pending
+    Batch 5: 0/14 ready, 0 failed, 12 pending
+    Batch 6: 0/13 ready, 0 failed, 13 pending
+    Batch 7: 0/7 ready, 0 failed, 0 pending
+    Batch 8: 0/10 ready, 0 failed, 0 pending
+    Batch 9: 0/20 ready, 0 failed, 20 pending
+    Batch 10: 0/8 ready, 0 failed, 8 pending
+    Batch 11: 0/14 ready, 0 failed, 5 pending
+    Batch 12: 0/12 ready, 0 failed, 6 pending
+
+  Files on disk:
+    Source images: 104
+    Raw GLBs:      99
+    Optimized GLBs:99
+    Thumbnails:    0
+  >> OK (6 done, 0 failed)
+
+[7/12] fen_lantern_post_01 -- Fen Lantern
+
+============================================================
+Castle Survivor — Asset Factory Pipeline
+============================================================
+ComfyUI: CONNECTED
+
+Processing 1 assets (batch 1)...
+
+
+[1/1] fen_lantern_post_01 — Fen Lantern
+  Category: fen_camp, Template: FENFOLK
+    Generating image (attempt 1, seed 92971927)...
+    Saved: C:\Users\coryc\castleSurvivor\AssetFactory\source_images\props\fen_lantern_post_01.png
+    Removing background...
+    Background removed OK
+    Copying image to ComfyUI input...
+    Submitting Trellis workflow...
+    Prompt ID: 079311b8-1ddd-41e9-a1ce-e9672fd3749f
+    Raw GLB saved: C:\Users\coryc\castleSurvivor\AssetFactory\glb_raw\fen_lantern_post_01.glb (4266KB)
+    Optimizing GLB...
+    Optimized: 4266KB -> 344KB (91.9% reduction)
+    [OK] READY -> C:\Users\coryc\castleSurvivor\Game3DAssets\fen_lantern_post_01.glb
+
+============================================================
+DONE! Processed 1 assets.
+  Success: 1
+  Failed:  0
+============================================================
+============================================================
+Castle Survivor — Asset Factory Status
+============================================================
+  Total assets: 175
+    glb_optimized: 94
+    pending: 75
+    rejected: 6
+
+  Batches:
+    Batch 1: 0/10 ready, 0 failed, 0 pending
+    Batch 2: 0/25 ready, 0 failed, 0 pending
+    Batch 3: 0/29 ready, 0 failed, 0 pending
+    Batch 4: 0/13 ready, 0 failed, 12 pending
+    Batch 5: 0/14 ready, 0 failed, 12 pending
+    Batch 6: 0/13 ready, 0 failed, 13 pending
+    Batch 7: 0/7 ready, 0 failed, 0 pending
+    Batch 8: 0/10 ready, 0 failed, 0 pending
+    Batch 9: 0/20 ready, 0 failed, 20 pending
+    Batch 10: 0/8 ready, 0 failed, 8 pending
+    Batch 11: 0/14 ready, 0 failed, 5 pending
+    Batch 12: 0/12 ready, 0 failed, 5 pending
+
+  Files on disk:
+    Source images: 105
+    Raw GLBs:      100
+    Optimized GLBs:100
+    Thumbnails:    0
+  >> OK (7 done, 0 failed)
+
+[8/12] fen_witch_hut_01 -- Bog Witch Hut
+
+============================================================
+Castle Survivor — Asset Factory Pipeline
+============================================================
+ComfyUI: CONNECTED
+
+Processing 1 assets (batch 1)...
+
+
+[1/1] fen_witch_hut_01 — Bog Witch Hut
+  Category: fen_camp, Template: FENFOLK
+    Generating image (attempt 1, seed 499374689)...
+    Saved: C:\Users\coryc\castleSurvivor\AssetFactory\source_images\props\fen_witch_hut_01.png
+    Removing background...
+    Background removed OK
+    Copying image to ComfyUI input...
+    Submitting Trellis workflow...
+    Prompt ID: b526c431-2224-4826-b151-a3b647a9be27
+    Raw GLB saved: C:\Users\coryc\castleSurvivor\AssetFactory\glb_raw\fen_witch_hut_01.glb (4342KB)
+    Optimizing GLB...
+    Optimized: 4342KB -> 348KB (92.0% reduction)
+    [OK] READY -> C:\Users\coryc\castleSurvivor\Game3DAssets\fen_witch_hut_01.glb
+
+============================================================
+DONE! Processed 1 assets.
+  Success: 1
+  Failed:  0
+============================================================
+============================================================
+Castle Survivor — Asset Factory Status
+============================================================
+  Total assets: 175
+    glb_optimized: 95
+    pending: 74
+    rejected: 6
+
+  Batches:
+    Batch 1: 0/10 ready, 0 failed, 0 pending
+    Batch 2: 0/25 ready, 0 failed, 0 pending
+    Batch 3: 0/29 ready, 0 failed, 0 pending
+    Batch 4: 0/13 ready, 0 failed, 12 pending
+    Batch 5: 0/14 ready, 0 failed, 12 pending
+    Batch 6: 0/13 ready, 0 failed, 13 pending
+    Batch 7: 0/7 ready, 0 failed, 0 pending
+    Batch 8: 0/10 ready, 0 failed, 0 pending
+    Batch 9: 0/20 ready, 0 failed, 20 pending
+    Batch 10: 0/8 ready, 0 failed, 8 pending
+    Batch 11: 0/14 ready, 0 failed, 5 pending
+    Batch 12: 0/12 ready, 0 failed, 4 pending
+
+  Files on disk:
+    Source images: 106
+    Raw GLBs:      101
+    Optimized GLBs:101
+    Thumbnails:    0
+  >> OK (8 done, 0 failed)
+
+[9/12] swamp_wisp_stone_01 -- Wisp Stone
+
+============================================================
+Castle Survivor — Asset Factory Pipeline
+============================================================
+ComfyUI: CONNECTED
+
+Processing 1 assets (batch 1)...
+
+
+[1/1] swamp_wisp_stone_01 — Wisp Stone
+  Category: swamp, Template: SWAMP
+    Generating image (attempt 1, seed 41401999)...
+    Saved: C:\Users\coryc\castleSurvivor\AssetFactory\source_images\props\swamp_wisp_stone_01.png
+    Removing background...
+    Background removed OK
+    Copying image to ComfyUI input...
+    Submitting Trellis workflow...
+    Prompt ID: af8d877f-6c17-4c44-90f1-7f9e7ab49036
+    Raw GLB saved: C:\Users\coryc\castleSurvivor\AssetFactory\glb_raw\swamp_wisp_stone_01.glb (4338KB)
+    Optimizing GLB...
+    Optimized: 4338KB -> 355KB (91.8% reduction)
+    [OK] READY -> C:\Users\coryc\castleSurvivor\Game3DAssets\swamp_wisp_stone_01.glb
+
+============================================================
+DONE! Processed 1 assets.
+  Success: 1
+  Failed:  0
+============================================================
+============================================================
+Castle Survivor — Asset Factory Status
+============================================================
+  Total assets: 175
+    glb_optimized: 96
+    pending: 73
+    rejected: 6
+
+  Batches:
+    Batch 1: 0/10 ready, 0 failed, 0 pending
+    Batch 2: 0/25 ready, 0 failed, 0 pending
+    Batch 3: 0/29 ready, 0 failed, 0 pending
+    Batch 4: 0/13 ready, 0 failed, 12 pending
+    Batch 5: 0/14 ready, 0 failed, 12 pending
+    Batch 6: 0/13 ready, 0 failed, 13 pending
+    Batch 7: 0/7 ready, 0 failed, 0 pending
+    Batch 8: 0/10 ready, 0 failed, 0 pending
+    Batch 9: 0/20 ready, 0 failed, 20 pending
+    Batch 10: 0/8 ready, 0 failed, 8 pending
+    Batch 11: 0/14 ready, 0 failed, 5 pending
+    Batch 12: 0/12 ready, 0 failed, 3 pending
+
+  Files on disk:
+    Source images: 107
+    Raw GLBs:      102
+    Optimized GLBs:102
+    Thumbnails:    0
+  >> OK (9 done, 0 failed)
+
+[10/12] landmark_sunken_temple -- Sunken Temple
+
+============================================================
+Castle Survivor — Asset Factory Pipeline
+============================================================
+ComfyUI: CONNECTED
+
+Processing 1 assets (batch 1)...
+
+
+[1/1] landmark_sunken_temple — Sunken Temple
+  Category: landmarks, Template: BUILDING
+    Generating image (attempt 1, seed 335769888)...
+    Saved: C:\Users\coryc\castleSurvivor\AssetFactory\source_images\landmarks\landmark_sunken_temple.png
+    Removing background...
+    Background removed OK
+    Copying image to ComfyUI input...
+    Submitting Trellis workflow...
+    Prompt ID: 0633a2dd-0ba9-442f-b8b0-3c9a353d9c69
+    Raw GLB saved: C:\Users\coryc\castleSurvivor\AssetFactory\glb_raw\landmark_sunken_temple.glb (4450KB)
+    Optimizing GLB...
+    Optimized: 4450KB -> 571KB (87.2% reduction)
+    [OK] READY -> C:\Users\coryc\castleSurvivor\Game3DAssets\landmark_sunken_temple.glb
+
+============================================================
+DONE! Processed 1 assets.
+  Success: 1
+  Failed:  0
+============================================================
+============================================================
+Castle Survivor — Asset Factory Status
+============================================================
+  Total assets: 175
+    glb_optimized: 97
+    pending: 72
+    rejected: 6
+
+  Batches:
+    Batch 1: 0/10 ready, 0 failed, 0 pending
+    Batch 2: 0/25 ready, 0 failed, 0 pending
+    Batch 3: 0/29 ready, 0 failed, 0 pending
+    Batch 4: 0/13 ready, 0 failed, 12 pending
+    Batch 5: 0/14 ready, 0 failed, 12 pending
+    Batch 6: 0/13 ready, 0 failed, 13 pending
+    Batch 7: 0/7 ready, 0 failed, 0 pending
+    Batch 8: 0/10 ready, 0 failed, 0 pending
+    Batch 9: 0/20 ready, 0 failed, 20 pending
+    Batch 10: 0/8 ready, 0 failed, 8 pending
+    Batch 11: 0/14 ready, 0 failed, 5 pending
+    Batch 12: 0/12 ready, 0 failed, 2 pending
+
+  Files on disk:
+    Source images: 108
+    Raw GLBs:      103
+    Optimized GLBs:103
+    Thumbnails:    0
+  >> OK (10 done, 0 failed)
+
+[11/12] landmark_great_cypress -- The Great Cypress
+
+============================================================
+Castle Survivor — Asset Factory Pipeline
+============================================================
+ComfyUI: CONNECTED
+
+Processing 1 assets (batch 1)...
+
+
+[1/1] landmark_great_cypress — The Great Cypress
+  Category: landmarks, Template: TREE
+    Generating image (attempt 1, seed 826344724)...
+    Saved: C:\Users\coryc\castleSurvivor\AssetFactory\source_images\landmarks\landmark_great_cypress.png
+    Removing background...
+    Background removed OK
+    Copying image to ComfyUI input...
+    Submitting Trellis workflow...
+    Prompt ID: 2d432af9-7c53-47ed-8852-1f91cfefbbb0
+    Raw GLB saved: C:\Users\coryc\castleSurvivor\AssetFactory\glb_raw\landmark_great_cypress.glb (3008KB)
+    Optimizing GLB...
+    Optimized: 3008KB -> 273KB (90.9% reduction)
+    [OK] READY -> C:\Users\coryc\castleSurvivor\Game3DAssets\landmark_great_cypress.glb
+
+============================================================
+DONE! Processed 1 assets.
+  Success: 1
+  Failed:  0
+============================================================
+============================================================
+Castle Survivor — Asset Factory Status
+============================================================
+  Total assets: 175
+    glb_optimized: 98
+    pending: 71
+    rejected: 6
+
+  Batches:
+    Batch 1: 0/10 ready, 0 failed, 0 pending
+    Batch 2: 0/25 ready, 0 failed, 0 pending
+    Batch 3: 0/29 ready, 0 failed, 0 pending
+    Batch 4: 0/13 ready, 0 failed, 12 pending
+    Batch 5: 0/14 ready, 0 failed, 12 pending
+    Batch 6: 0/13 ready, 0 failed, 13 pending
+    Batch 7: 0/7 ready, 0 failed, 0 pending
+    Batch 8: 0/10 ready, 0 failed, 0 pending
+    Batch 9: 0/20 ready, 0 failed, 20 pending
+    Batch 10: 0/8 ready, 0 failed, 8 pending
+    Batch 11: 0/14 ready, 0 failed, 5 pending
+    Batch 12: 0/12 ready, 0 failed, 1 pending
+
+  Files on disk:
+    Source images: 109
+    Raw GLBs:      104
+    Optimized GLBs:104
+    Thumbnails:    0
+  >> OK (11 done, 0 failed)
+
+[12/12] landmark_drowned_bell_tower -- Drowned Bell Tower
+
+============================================================
+Castle Survivor — Asset Factory Pipeline
+============================================================
+ComfyUI: CONNECTED
+
+Processing 1 assets (batch 1)...
+
+
+[1/1] landmark_drowned_bell_tower — Drowned Bell Tower
+  Category: landmarks, Template: BUILDING
+    Generating image (attempt 1, seed 5485472)...
+    Saved: C:\Users\coryc\castleSurvivor\AssetFactory\source_images\landmarks\landmark_drowned_bell_tower.png
+    Removing background...
+    Background removed OK
+    Copying image to ComfyUI input...
+    Submitting Trellis workflow...
+    Prompt ID: 1c46e711-3ab6-44fb-9696-e18d6258cc31
+    Raw GLB saved: C:\Users\coryc\castleSurvivor\AssetFactory\glb_raw\landmark_drowned_bell_tower.glb (2374KB)
+    Optimizing GLB...
+    Optimized: 2374KB -> 240KB (89.9% reduction)
+    [OK] READY -> C:\Users\coryc\castleSurvivor\Game3DAssets\landmark_drowned_bell_tower.glb
+
+============================================================
+DONE! Processed 1 assets.
+  Success: 1
+  Failed:  0
+============================================================
+============================================================
+Castle Survivor — Asset Factory Status
+============================================================
+  Total assets: 175
+    glb_optimized: 99
+    pending: 70
+    rejected: 6
+
+  Batches:
+    Batch 1: 0/10 ready, 0 failed, 0 pending
+    Batch 2: 0/25 ready, 0 failed, 0 pending
+    Batch 3: 0/29 ready, 0 failed, 0 pending
+    Batch 4: 0/13 ready, 0 failed, 12 pending
+    Batch 5: 0/14 ready, 0 failed, 12 pending
+    Batch 6: 0/13 ready, 0 failed, 13 pending
+    Batch 7: 0/7 ready, 0 failed, 0 pending
+    Batch 8: 0/10 ready, 0 failed, 0 pending
+    Batch 9: 0/20 ready, 0 failed, 20 pending
+    Batch 10: 0/8 ready, 0 failed, 8 pending
+    Batch 11: 0/14 ready, 0 failed, 5 pending
+    Batch 12: 0/12 ready, 0 failed, 0 pending
+
+  Files on disk:
+    Source images: 110
+    Raw GLBs:      105
+    Optimized GLBs:105
+    Thumbnails:    0
+  >> OK (12 done, 0 failed)
+
+=== Batch 12 complete ===
+  Done: 12
+  Failed/Skipped: 0
+  Previously skipped: 17
+=== batch 12 done Wed Sep 23 23:15:23 CDT 2026 ===
+C:              930G  920G   11G  99% /c
+=== all batches done Wed Sep 23 23:15:23 CDT 2026 ===
