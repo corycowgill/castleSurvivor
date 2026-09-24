@@ -206,7 +206,7 @@ Target: 8/10 on the same reviewer's rubric. Each item names the pain point, the 
 - [x] 19.2 Local co-op - per-device input isolation (WASD / arrows / pad), join slots on the title screen (A to join, Y to change knight, B to leave), centroid camera with zoom from party spread and a soft `PARTY_LEASH` tether at 26, modal per-knight level-up picks (one owner, every other device locked out), per-knight upgrade books / damage ownership / loadout HUD, and a swap-based character select where any knight can go to any slot, downed + bleed-out + proximity revive, HUD row per companion, shared XP pool
 - [x] 19.3 Party difficulty scaling - `PARTY_SCALE = { spawn: 0.8, hp: 0.25, bossHp: 0.7, cap: 0.6 }`, every multiplier exactly 1.0 at one player so solo is untouched
 - [x] 19.4 `tools/coop-verify.mjs` drives a three-knight party and prints PASS/FAIL per check; 19/19. Review pass fixed two things tests could not catch: the shared XP bar now reads "Party Level N - x / y XP (shared)", and a downed knight keeps its ring as a marker that brightens as a rescuer revives it
-- [ ] 19.5 **3-player balance pass - the one part of local co-op still owed.** `PARTY_SCALE` was reasoned out, never measured, and `tools/playtest.mjs` has no `--players N`, so it cannot be measured. COOP-PLAN Phase B item 7 called this out. Done when a 3-player run reaches wave 20 without being either trivial or impossible
+- [ ] 19.5 **3-player balance pass - the one part of local co-op still owed.** `PARTY_SCALE` was reasoned out, never measured, and `tools/playtest.mjs` has no `--players N`, so it cannot be measured. COOP-PLAN Phase B item 7 called this out. Done when a 3-player run reaches wave 20 without being either trivial or impossible. **More urgent after Phase 27**: companions used to be immune to boulders, bomb blasts, boss charges and boss slams, and enemies froze when P1 went down, so 3-player difficulty has risen by an unmeasured amount on top of a multiplier that was already a guess
 - [-] 19.6 Online co-op (COOP-PLAN Phases C + D) - deferred by design. Needs a fixed timestep and a seeded PRNG across 85 `Math.random()` sites before any netcode; re-decide with real 3-player experience in hand
 
 ## Phase 20 - Mobile and iOS memory (2026-09-22/23)
@@ -266,7 +266,7 @@ Three decisions, all taken deliberately:
 - [x] 25.3 Migration from v1 copies the old single wallet **to every profile** rather than handing it to one knight. Nobody opens the Forge to find their savings gone
 - [x] 25.4 `applyForgeStatsTo(ps, p)` per player, so in co-op each knight fights with the upgrades they paid for. `calcRunGold(who)` uses the earning knight's own Golden Touch. The Forge header reads `BRENNAN'S GOLD: 310`, and the title-screen purse follows the knight you select
 - [x] 25.5 `tools/profile-verify.mjs`, 9/9: v1 migration preserves gold and ranks for all three and keeps unlocks shared; spending from one wallet leaves the others untouched; Forge ranks are per knight; a three-knight co-op run pays all three (160 each). `coop-verify` 19/19, `touch-verify` 5/5 and smoke all still clean
-- [ ] 25.6 Not done, and worth knowing: run-wide Forge effects (magnet range, reroll and banish charges, the starting weapon) still come from player 1's profile via `applyForgeUpgrades`, because they are properties of the run rather than of a knight. If a companion buys Fate's Favor expecting their own extra reroll, they will not get it
+- [x] 25.6 **Fixed in 27.1** (2026-09-24): rerolls, banish charges and the bonus starting weapon now come from each knight's own Forge through `applyForgeStatsTo`, so a companion who buys Fate's Favor gets their own extra reroll. Only magnet range is still run-wide, and deliberately: pickups fly to the whole party
 
 
 ## Phase 26 - Emberreach, the ogre homeland (2026-09-23)
@@ -380,3 +380,95 @@ rather than out of props we already had. Full design in `NEW-LEVEL-PLAN.md`.
 - 2026-09-21 — Session hand-off after 18.1–18.4: generated audio, balance, Darkwood merged; 18.5/18.7 not started; all servers stopped. See memory `project_session_handoff.md`.
 - 2026-09-20 — Phase 14: both maps regenerated from scripts with district layouts and full prop variety.
 - 2026-09-19 — Phases 1–7 implemented in one pass (see checkboxes). Deferred: real audio assets, second map, module split, far-enemy LOD.
+
+## Phase 27 - Per-knight ownership (2026-09-24, from playing co-op)
+"The 2nd player isn't getting weapon level ups." One report, and underneath it a
+long tail of systems that still read the single-player globals - which are player
+1's. Each looked right solo and was silently wrong with three people on the sofa.
+
+- [x] 27.1 **A companion's card lands on the companion.** The `UPGRADES` table, the
+  card text, evolutions and synergies are all written against `state.player` /
+  `playerWeapons`, so a card taken by P2 applied to P1. `beginPickContext()` re-points
+  those bindings at the picking knight for the length of a pick; every knight carries
+  their own `ranks`, `banished`, `synergies`, reroll and banish charges. Companions
+  also get the rerolls, banishes and start weapon from the Forge THEY paid into
+  (closes 25.6)
+- [x] 27.2 **The level-up screen pauses again, reversing COOP-PLAN decision 1.** The
+  non-blocking overlay aimed three sets of live inputs at one card list: whoever moved
+  a stick drove the other knight's highlight, and a mashed dash button picked their
+  upgrade for them. Nobody can choose a build while being hit either. The screen is
+  modal but belongs to ONE knight - their colour, their name, and `pickPadState()` /
+  `pickKeyAllowed()` ignore every other device. The pause is load-bearing: it is what
+  makes 27.1's binding swap safe
+- [x] 27.3 **Damage carries an owner.** `applyDamage(enemy, amount, { by })` reads crit
+  and the Hunter / Berserker / Wolfsbane / Hooves relics off the knight who swung -
+  before this, every hit in the game rolled player 1's crit chance. Projectiles, bombs
+  and burn patches remember who fired them; kills credit the killer, so lifesteal heals
+  the right person on a per-knight throttle
+- [x] 27.4 **Enemy attacks find every knight.** Companions were immune to boulders,
+  bomb blasts, boss charges and boss slams - all four tested player 1's position only.
+  `damagePlayersInRadius()` / `playerAt()` replace that. Archers aim at the knight they
+  chase, thorns and armour belong to the victim, and enemies no longer freeze on the
+  spot the moment P1 goes down
+- [x] 27.5 **Party-wide things are party-wide.** Streak, combo and kill-milestone
+  rewards reach everyone (they were worth a third as much in a trio), a boss reroll goes
+  to all of them, drops roll against the luckiest knight, coins magnet to the NEAREST
+  knight and merge only when far from all of them, and chests, health and haste go to
+  whoever walked over them. Warding Shields and ember trails were single global rings
+  shared by the whole party
+- [x] 27.6 **HUD and pause screen per knight.** Each companion row carries their weapons
+  (level badges, gold border when evolved) and relics; the pause screen gives each knight
+  a tinted section with weapons, relics and synergies, and scrolls so RESUME stays put
+- [x] 27.7 **Any knight to any slot.** `assignKnight()` SWAPS two slots instead of
+  scattering them - "P1 Parker, P2 Brennan" was previously unreachable, because choosing
+  Parker for P1 bumped P2 onto whatever was free. Drive it by clicking a roster slot,
+  clicking a card, or D-Pad left/right on the joining pad; the cards wear P1/P2/P3 badges
+- [x] 27.8 **Two bugs this exposed that were never co-op bugs.** Parker's Arcane Staff
+  had no level-up card and no evolution, so his primary sat at level 1 for a whole run
+  in SOLO too (added `Runed Focus` and the `Starcaller` evolution; he now finishes
+  `staff*`). And `makeWeaponTable()` handed every companion a free sword on top of their
+  own primary, which put Tempered Blade in Parker's card pool and ate a weapon slot.
+  His title-screen preview also had a drifted copy of the attachment code and showed him
+  with a sword and shield - one `CHARACTER_GEAR` table now serves both
+- [x] 27.9 **Verify:** `tools/coop-verify.mjs` grown from 19 checks to 48, all passing.
+  `npm test` clean; solo balance reaches wave 20 at or above the 2026-09-22 baseline
+
+## Phase 28 - Mirefen, the drowned lowland (2026-09-24)
+A fourth battlefield, and the first one that is not just a palette. Full design and
+the asset-run post-mortem in `NEW-LEVEL-PLAN.md`.
+
+- [x] 28.1 **The ground is the decision.** Kingsfield, Darkwood and Emberreach differ in
+  lighting, props, textures and enemy weights and in nothing else - same open arena, same
+  rules, and on no map can the ground itself do anything (Emberreach's lava is an obstacle
+  you route around). Mirefen adds `mires`: soft ground, 62% speed for a knight and 50% for
+  anything chasing one, a dash clears it, bats fly over. Black water is impassable, crossed
+  at two boardwalk fords. Dry hummock islands sit out in the bog at full speed, away from
+  the causeway so taking one costs you. The bog hurts the enemy more than you, so retreating
+  into it is a move rather than a punishment
+- [x] 28.2 **Eighteen bog-graded props before any GPU work.** Four new grades in
+  `char-glb.mjs` (`bogMoss`, `sunken`, `bleached`, `algaeStone`). The split into green mass,
+  dark wet mass and a PALE note is deliberate: a bog in only greens and blacks is one smear
+  from above. Six ground textures, four decals and two sprites in four minutes
+- [x] 28.3 **Look pass, four corrections each off a capture.** (1) Pass 1 was a bright green
+  lawn - algae painted at `bogField x 1.7` saturated the channel across the map, the same
+  mistake Emberreach made with orange. (2) The air was green too; saturation moved out of
+  the ambient and into the moss and wisps. (3) 284M triangles a frame because six scatter
+  roles all fell back through `m.pick()` to the same 48k-tri mesh. (4) The channels read as
+  holes until `water.color` lifted
+- [x] 28.4 **The asset run: 26 catalogued, 23 usable, three passes.** Every pass-1 failure
+  asked Trellis for thin geometry, so `SWAMP`/`FENFOLK` carry a solid-closed-mass rule.
+  Pass 2 was a no-op for 7 of 12 because `run_pipeline.py` resumes off FILES, not catalog
+  status. Two meshes passed the render check and were still wrong in place. Scale from the
+  mesh you got: the cypresses came back as root masses and at tree scale took the bot's snag
+  rate to 8%
+- [x] 28.5 **Emitter ground-glow follows its light.** `_glowTex` was hard-coded warm orange,
+  so Mirefen's green wisps cast orange pools. White now, tinted by `look.lantern.color`;
+  white x 0xffb060 reproduces the old warm glow and the other three maps are unchanged
+- [x] 28.6 **Verify:** `tools/mirefen-verify.mjs`, 12 checks, all passing - the bog slows a
+  knight at exactly `MIRE_PLAYER`, slows a chaser harder, a dash clears it, the causeway and
+  spawn stay dry, black water holds a knight, and the other maps carry no mires. `npm test`
+  clean; snag 0-2%; dad and parker both take Mirefen to a wave-20 victory
+- [ ] 28.7 Still open: three meshes never came good (`swamp_dead_willow_01`,
+  `fen_wicker_trap_01`, `landmark_great_cypress`) and four are mislabels that read fine as
+  swamp clutter but are not what they are named (`fen_fish_rack_01` is a porch swing,
+  `fen_coracle_01` a mossy box, `swamp_reed_cluster_01` and `swamp_rotten_log_01` ground mats)
