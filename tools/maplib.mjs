@@ -281,10 +281,19 @@ export class MapBuilder {
     this.counts[key] = (this.counts[key] || 0) + 1;
   }
   // Props and buildings: clearance-checked unless force
+  // `scale` may be a number or a [min, max] range, rolled per placement. The range
+  // form is what scatterDecals and scatterTufts already take, and passing one here
+  // used to poison the collision radius: `a.r * ([0.9,1.4] / a.scale)` is NaN, every
+  // isClear comparison against NaN is false, so the prop skipped every obstacle,
+  // keep-out, road and barrier check and serialised `radius: null`. That put 560
+  // phantom obstacles into Mirefen, some of them standing in impassable water.
   add(key, x, z, { rotY = 0, scale, force = false, ignoreRoads = false, ignoreKeepOut = false, pad = 0 } = {}) {
     const a = ASSET[key]; if (!a) throw new Error('unknown asset ' + key);
-    const s = scale ?? a.scale;
+    let s = scale ?? a.scale;
+    if (Array.isArray(s)) s = this.rnd.range(s[0], s[1]);
+    if (!Number.isFinite(s)) throw new Error(`bad scale for ${key}: ${JSON.stringify(scale)}`);
     const r = a.r > 0 ? a.r * (s / a.scale) : 0.5;
+    if (!Number.isFinite(r)) throw new Error(`bad radius for ${key} (scale ${s})`);
     if (!force && !this.isClear(x, z, r + pad, { ignoreRoads, ignoreKeepOut })) return false;
     this.objects.push({ key, x: +x.toFixed(1), z: +z.toFixed(1), rotX: 0, rotY: +rotY.toFixed(2), rotZ: 0, scale: s, obstacle: a.r > 0, radius: a.r > 0 ? +r.toFixed(1) : 0 });
     if (a.r > 0) this.obstacles.push({ x, z, r });
