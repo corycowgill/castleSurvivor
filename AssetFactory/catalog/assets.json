@@ -1014,7 +1014,7 @@
     "category": "blacksmith_kit",
     "family": "stone",
     "promptTemplate": "PROP",
-    "promptDetails": "Medieval stone and brick forge structure. Open hearth with chimney hood. Contains coal bed area. No fire or glow — just the physical structure. Approximately 1.5 meters tall.",
+    "promptDetails": "Medieval stone and brick forge structure. Open hearth with chimney hood. Contains coal bed area. No fire or glow \u2014 just the physical structure. Approximately 1.5 meters tall.",
     "status": "glb_optimized",
     "batch": 3,
     "game": {
@@ -4021,7 +4021,7 @@
     "family": "swamp",
     "promptTemplate": "SWAMP",
     "promptDetails": "A tall bald cypress tree with a hugely flared buttressed base that spreads out into the ground like melted wax, a straight tapering trunk, and a thin ragged crown of feathery dark green needles. Long grey beards of hanging moss droop from the lower limbs. Bark deeply furrowed and water-stained. Approximately 7 meters tall.",
-    "status": "pending",
+    "status": "image_generating",
     "batch": 11,
     "game": {
       "scaleMeters": 7,

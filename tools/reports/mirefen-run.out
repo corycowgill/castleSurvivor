@@ -1,0 +1,17 @@
+=== batch 11 start Wed Sep 23 21:34:45 CDT 2026 ===
+=== Batch 11: 14 assets to process ===
+  (skipping 12 previously failed)
+
+[1/14] swamp_cypress_01 -- Bald Cypress
+
+============================================================
+Castle Survivor — Asset Factory Pipeline
+============================================================
+ComfyUI: CONNECTED
+
+Processing 1 assets (batch 1)...
+
+
+[1/1] swamp_cypress_01 — Bald Cypress
+  Category: swamp, Template: SWAMP
+    Generating image (attempt 1, seed 463198898)...
