@@ -52,6 +52,78 @@ export const EXTRA_ASSETS = [
     "charredFrom": "nature_rock_small_02"
   },
   {
+    "key": "bog_driftwood_01",
+    "name": "Driftwood",
+    "file": "bog_driftwood_01.glb",
+    "category": "nature",
+    "defaultScale": 0.9,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🌿",
+    "charredFrom": "char_fallen_log_01"
+  },
+  {
+    "key": "bog_fern_01",
+    "name": "Marsh Fern",
+    "file": "bog_fern_01.glb",
+    "category": "nature",
+    "defaultScale": 0.75,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🌿",
+    "charredFrom": "nature_fern_01"
+  },
+  {
+    "key": "bog_flowers_01",
+    "name": "Marsh Flowers",
+    "file": "bog_flowers_01.glb",
+    "category": "nature",
+    "defaultScale": 0.45,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🌿",
+    "charredFrom": "nature_flowers_02"
+  },
+  {
+    "key": "bog_log_01",
+    "name": "Waterlogged Log",
+    "file": "bog_log_01.glb",
+    "category": "nature",
+    "defaultScale": 0.9,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🌿",
+    "charredFrom": "nature_fallen_log_01"
+  },
+  {
+    "key": "bog_rock_01",
+    "name": "Algae Boulder",
+    "file": "bog_rock_01.glb",
+    "category": "nature",
+    "defaultScale": 3.2,
+    "obstacle": true,
+    "radius": 1.7,
+    "breakable": false,
+    "icon": "🌿",
+    "charredFrom": "boulder"
+  },
+  {
+    "key": "bog_rock_cluster_01",
+    "name": "Mossy Rubble",
+    "file": "bog_rock_cluster_01.glb",
+    "category": "nature",
+    "defaultScale": 1.5,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🌿",
+    "charredFrom": "nature_rock_cluster_02"
+  },
+  {
     "key": "char_bush_01",
     "name": "Dead Scorched Bush",
     "file": "char_bush_01.glb",
@@ -163,6 +235,66 @@ export const EXTRA_ASSETS = [
     "radius": 0,
     "breakable": false,
     "icon": "🌿"
+  },
+  {
+    "key": "bog_barricade_01",
+    "name": "Rotted Barricade",
+    "file": "bog_barricade_01.glb",
+    "category": "props",
+    "defaultScale": 2.25,
+    "obstacle": true,
+    "radius": 1.1,
+    "breakable": true,
+    "icon": "📦",
+    "charredFrom": "combat_barricade_01"
+  },
+  {
+    "key": "bog_cart_01",
+    "name": "Sunken Cart",
+    "file": "bog_cart_01.glb",
+    "category": "props",
+    "defaultScale": 1.8,
+    "obstacle": true,
+    "radius": 0.9,
+    "breakable": false,
+    "icon": "📦",
+    "charredFrom": "combat_broken_cart_01"
+  },
+  {
+    "key": "bog_crate_01",
+    "name": "Swollen Crate",
+    "file": "bog_crate_01.glb",
+    "category": "props",
+    "defaultScale": 0.75,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "📦",
+    "charredFrom": "prop_wood_crate_broken_01"
+  },
+  {
+    "key": "bog_logs_01",
+    "name": "Rotting Log Stack",
+    "file": "bog_logs_01.glb",
+    "category": "props",
+    "defaultScale": 1.2,
+    "obstacle": true,
+    "radius": 0.8,
+    "breakable": false,
+    "icon": "📦",
+    "charredFrom": "prop_logs_02"
+  },
+  {
+    "key": "bog_stump_01",
+    "name": "Mossy Stump",
+    "file": "bog_stump_01.glb",
+    "category": "props",
+    "defaultScale": 0.9,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "📦",
+    "charredFrom": "prop_tree_stump_02"
   },
   {
     "key": "char_barricade_01",
@@ -443,6 +575,54 @@ export const EXTRA_ASSETS = [
     "icon": "📦"
   },
   {
+    "key": "bog_dead_tree_01",
+    "name": "Drowned Tree",
+    "file": "bog_dead_tree_01.glb",
+    "category": "tree",
+    "defaultScale": 7.8,
+    "obstacle": true,
+    "radius": 3.9,
+    "breakable": false,
+    "icon": "🌳",
+    "charredFrom": "nature_dead_tree_03"
+  },
+  {
+    "key": "bog_dead_tree_02",
+    "name": "Bleached Snag",
+    "file": "bog_dead_tree_02.glb",
+    "category": "tree",
+    "defaultScale": 7.8,
+    "obstacle": true,
+    "radius": 3.9,
+    "breakable": false,
+    "icon": "🌳",
+    "charredFrom": "nature_dead_tree_03"
+  },
+  {
+    "key": "bog_oak_01",
+    "name": "Mossy Bog Oak",
+    "file": "bog_oak_01.glb",
+    "category": "tree",
+    "defaultScale": 10.4,
+    "obstacle": true,
+    "radius": 5.2,
+    "breakable": false,
+    "icon": "🌳",
+    "charredFrom": "nature_oak_large_01"
+  },
+  {
+    "key": "bog_oak_02",
+    "name": "Moss-Hung Oak",
+    "file": "bog_oak_02.glb",
+    "category": "tree",
+    "defaultScale": 10.4,
+    "obstacle": true,
+    "radius": 5.2,
+    "breakable": false,
+    "icon": "🌳",
+    "charredFrom": "oakTree"
+  },
+  {
     "key": "char_dead_tree_01",
     "name": "Charred Dead Tree",
     "file": "char_dead_tree_01.glb",
@@ -576,6 +756,18 @@ export const EXTRA_ASSETS = [
     "radius": 0.8,
     "breakable": false,
     "icon": "🏘"
+  },
+  {
+    "key": "bog_fence_01",
+    "name": "Rotted Fence",
+    "file": "bog_fence_01.glb",
+    "category": "village",
+    "defaultScale": 1.5,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🏘",
+    "charredFrom": "village_fence_broken_01"
   },
   {
     "key": "landmark_destroyed_watchtower",

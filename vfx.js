@@ -4408,6 +4408,51 @@ const manager = {
   // Rising sparks off the hot ground, plus a little grey ash falling through them.
   // The embers go up and the ash comes down, which reads as heat without any
   // extra system: the same two particle groups the other maps already use.
+  // Mirefen. Embers rise and glow; spores hang and drift sideways. Two layers:
+  // pale motes that barely move, and a thin scatter of green wisp glimmers that
+  // sell the light identity of the map even where there is no lantern nearby.
+  ambientSpores(playerPos) {
+    if (!quality.envParticles) return;
+    const motes = getGroup('softCircle', THREE.NormalBlending);
+    const count = Math.ceil(3 * quality.particleMul);
+    for (let i = 0; i < count; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 4 + Math.random() * 16;
+      motes.emit({
+        x: playerPos.x + Math.cos(angle) * dist,
+        y: 0.3 + Math.random() * 2.2,
+        z: playerPos.z + Math.sin(angle) * dist,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: 0.02 + Math.random() * 0.12,        // spores hang rather than rise
+        vz: (Math.random() - 0.5) * 0.5,
+        color: 0xd8e6c8,
+        sizeStart: 0.04 + Math.random() * 0.05, sizeEnd: 0.02,
+        life: 3.0 + Math.random() * 2.5,
+        opacityStart: 0.22 + Math.random() * 0.18, opacityEnd: 0,
+        drag: 1.4,
+      });
+    }
+    const wisp = getGroup('softCircle', THREE.AdditiveBlending);
+    for (let i = 0; i < Math.ceil(quality.particleMul); i++) {
+      if (Math.random() > 0.45) continue;
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 6 + Math.random() * 16;
+      wisp.emit({
+        x: playerPos.x + Math.cos(angle) * dist,
+        y: 0.5 + Math.random() * 1.6,
+        z: playerPos.z + Math.sin(angle) * dist,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: 0.1 + Math.random() * 0.25,
+        vz: (Math.random() - 0.5) * 0.3,
+        color: Math.random() > 0.5 ? 0x7dffb0 : 0x9fffd8,
+        sizeStart: 0.07 + Math.random() * 0.08, sizeEnd: 0.015,
+        life: 2.2 + Math.random() * 2.0,
+        opacityStart: 0.5 + Math.random() * 0.3, opacityEnd: 0,
+        drag: 1.1,
+      });
+    }
+  },
+
   ambientEmbers(playerPos) {
     if (!quality.envParticles) return;
     const hot = getGroup('softCircle', THREE.AdditiveBlending);

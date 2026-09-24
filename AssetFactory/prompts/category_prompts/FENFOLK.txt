@@ -1,0 +1,17 @@
+{base_prompt}
+
+{asset_description}
+
+Built by bog-dwellers out of what the swamp gives them: lashed green saplings, split planks gone grey, woven wicker and reed, tarred rope, stretched hide, and bone.
+
+Crude hand-made construction, nothing milled or forged, everything bound with cord and pegs rather than nails.
+
+Sagging, weathered and waterlogged, leaning slightly out of true, with moss and algae creeping up from the base and pale water-stain lines showing an old flood height.
+
+Muted palette: silvered grey wood, rope brown, dull green moss, bone white, with one small note of faded dyed cloth or a hanging charm.
+
+Bold readable silhouette, chunky stylized shapes, hand-painted game texture.
+
+No standing water, no puddle, no pool underneath, no mist, no fog, no particles, no people.
+
+{extra_details}

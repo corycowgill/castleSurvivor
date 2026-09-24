@@ -1,5 +1,6 @@
 /**
- * Charred / basalt variants of existing props, for Emberreach (NEW-LEVEL-PLAN §1a).
+ * Re-graded variants of existing props: charred/basalt for Emberreach and
+ * bog/bleached for Mirefen (NEW-LEVEL-PLAN §1a).
  *
  *   node tools/char-glb.mjs [--only key,key] [--dry] [--sheet]
  *
@@ -53,6 +54,21 @@ const GRADES = {
   // which vanishes against basalt ground. This opens the shadows instead, so a burnt
   // pine reads as a grey ash-covered skeleton rather than a hole in the frame.
   charFoliage: { floor: 0.085, range: 0.40, gamma: 0.82, sat: 0.04, tint: [1.04, 1.00, 0.94], contrast: 1.15 },
+
+  // ── Mirefen ──
+  // The bog is a GREEN map, so unlike the volcanic grades these keep real
+  // saturation and steer it rather than crushing it. `sat` here is the fraction
+  // of the ORIGINAL hue that survives before the tint lands, so 0.2 keeps enough
+  // wood or stone underneath for the moss to look like it is growing ON something.
+  bogMoss:  { floor: 0.090, range: 0.42, gamma: 1.00, sat: 0.22, tint: [0.80, 1.06, 0.74], contrast: 1.12 },
+  // Waterlogged: dark, desaturated, faintly cold. Rot, not soot -- the floor sits
+  // above `char` so a sunken log still reads as wood against black water.
+  sunken:   { floor: 0.075, range: 0.34, gamma: 1.12, sat: 0.16, tint: [0.98, 1.00, 0.99], contrast: 1.16 },
+  // Driftwood bleached bone-pale. This is the map's brightest value and it is
+  // meant to be: pale wood is the only thing that reads against peat from above.
+  bleached: { floor: 0.300, range: 0.44, gamma: 0.88, sat: 0.05, tint: [1.00, 1.00, 1.02], contrast: 1.05 },
+  // Stone under algae: greener and lighter than bogMoss, for rock rather than bark.
+  algaeStone: { floor: 0.150, range: 0.40, gamma: 0.95, sat: 0.18, tint: [0.86, 1.04, 0.80], contrast: 1.10 },
 };
 
 // source key → { key, name, grade }.  Scale, radius and breakability are inherited
@@ -75,6 +91,36 @@ const VARIANTS = [
   { from: 'nature_rock_cluster_02', key: 'basalt_cluster_01', name: 'Basalt Rubble',      grade: 'basalt' },
   { from: 'nature_rock_small_01', key: 'basalt_small_01',    name: 'Basalt Rock',         grade: 'basalt' },
   { from: 'nature_rock_small_02', key: 'basalt_small_02',    name: 'Basalt Rock (B)',     grade: 'basalt' },
+
+  // Mirefen. The bog has one job the volcano did not: it has to read GREEN and
+  // still have something pale in it, or the top-down frame turns into one dark
+  // smear. So the set is deliberately split three ways -- mossy (green mass),
+  // sunken (dark wet mass) and bleached (the pale note) -- across silhouettes the
+  // player already knows from Kingsfield and Darkwood.
+  { from: 'nature_dead_tree_03',   key: 'bog_dead_tree_01',   name: 'Drowned Tree',        grade: 'sunken' },
+  { from: 'nature_dead_tree_03',   key: 'bog_dead_tree_02',   name: 'Bleached Snag',       grade: 'bleached' },
+  { from: 'nature_oak_large_01',   key: 'bog_oak_01',         name: 'Mossy Bog Oak',       grade: 'bogMoss' },
+  { from: 'oakTree',               key: 'bog_oak_02',         name: 'Moss-Hung Oak',       grade: 'bogMoss' },
+  { from: 'nature_fallen_log_01',  key: 'bog_log_01',         name: 'Waterlogged Log',     grade: 'sunken' },
+  { from: 'prop_tree_stump_02',    key: 'bog_stump_01',       name: 'Mossy Stump',         grade: 'bogMoss' },
+  { from: 'nature_fern_01',        key: 'bog_fern_01',        name: 'Marsh Fern',          grade: 'bogMoss' },
+  { from: 'nature_flowers_02',     key: 'bog_flowers_01',     name: 'Marsh Flowers',       grade: 'bogMoss' },
+  { from: 'boulder',               key: 'bog_rock_01',        name: 'Algae Boulder',       grade: 'algaeStone' },
+  { from: 'nature_rock_cluster_02', key: 'bog_rock_cluster_01', name: 'Mossy Rubble',      grade: 'algaeStone' },
+  // NOT regraded, and the reason is worth keeping: Trellis mislabels, and the
+  // grade makes a mislabel worse. nature_bush_03 is actually a mossy BENCH, so
+  // bog_bush_01 came out as a neon-green lozenge on legs and the generator put
+  // 437 of them across the map. nature_rock_small_01 is a tiny castle (same
+  // list in the asset-registry notes). And shrubbery.glb draws 0.6% of frame --
+  // it is a thin mesh that never really renders, so bog_scrub_01 was 419
+  // invisible objects. Look at tools/shots/glb-sheet.png before adding one.
+
+  { from: 'char_fallen_log_01',    key: 'bog_driftwood_01',   name: 'Driftwood',           grade: 'bleached' },
+  { from: 'prop_logs_02',          key: 'bog_logs_01',        name: 'Rotting Log Stack',   grade: 'sunken' },
+  { from: 'village_fence_broken_01', key: 'bog_fence_01',     name: 'Rotted Fence',        grade: 'sunken' },
+  { from: 'prop_wood_crate_broken_01', key: 'bog_crate_01',   name: 'Swollen Crate',       grade: 'sunken' },
+  { from: 'combat_barricade_01',   key: 'bog_barricade_01',   name: 'Rotted Barricade',    grade: 'sunken' },
+  { from: 'combat_broken_cart_01', key: 'bog_cart_01',        name: 'Sunken Cart',         grade: 'sunken' },
 ];
 
 // Source entries for the legacy (non-pipeline) assets that have no assets-extra.js row
@@ -82,6 +128,7 @@ const LEGACY_SRC = {
   pineTree:  { file: 'pineTree.glb',  category: 'tree',   defaultScale: 7,   obstacle: true, radius: 1.2, breakable: false },
   boulder:   { file: 'boulder.glb',   category: 'nature', defaultScale: 3.2, obstacle: true, radius: 1.7, breakable: false },
   shrubbery: { file: 'shrubbery.glb', category: 'nature', defaultScale: 2.6, obstacle: false, radius: 0,  breakable: false },
+  oakTree:   { file: 'oakTree.glb',   category: 'tree',   defaultScale: 8,   obstacle: true,  radius: 1.4, breakable: false },
 };
 const ICONS = { props: '📦', village: '🏘', nature: '🌿', tree: '🌳' };
 

@@ -80,7 +80,7 @@ export class MapBuilder {
     // Splat map: 4 float channels over the world, written as RGBA PNG (row 0 = north / -z)
     this.splatSize = 512;
     this.splat = new Float32Array(this.splatSize * this.splatSize * 4);
-    this.decals = []; this.tufts = []; this.shafts = []; this.streams = []; this.barriers = [];
+    this.decals = []; this.tufts = []; this.shafts = []; this.streams = []; this.barriers = []; this.mires = [];
     this.missing = {};
   }
   // Is this mesh registered? The Emberreach generator runs while its Trellis batch
@@ -98,6 +98,30 @@ export class MapBuilder {
     this.obstacles.push({ x, z, r });                 // also keeps props out of the lava
     this.counts.barriers = (this.counts.barriers || 0) + 1;
     return true;
+  }
+  // Soft ground: slows whatever walks through it, blocks nothing, draws nothing.
+  // Unlike barrier() this does NOT go into the obstacle list -- reeds and stumps
+  // should stand in a bog quite happily, and the props are most of what tells the
+  // player the ground is soft before they feel it.
+  mire(x, z, r) {
+    if (Math.abs(x) > this.worldSize + 8 || Math.abs(z) > this.worldSize + 8) return false;
+    this.mires.push({ x: +x.toFixed(1), z: +z.toFixed(1), r: +r.toFixed(1) });
+    this.counts.mires = (this.counts.mires || 0) + 1;
+    return true;
+  }
+  // Fill a region with overlapping mire discs wherever `fn(x, z)` is positive, so
+  // the bog follows the same noise field that paints it and the two cannot drift
+  // apart. `keepOut` is a list of {x, z, r} kept dry (the spawn, the causeways).
+  mireField(fn, { x0 = -this.limit, x1 = this.limit, z0 = -this.limit, z1 = this.limit,
+                  step = 7, r = [5, 8.5], dry = [] } = {}) {
+    for (let z = z0; z <= z1; z += step) for (let x = x0; x <= x1; x += step) {
+      const px = x + this.rnd.range(-step * 0.35, step * 0.35);
+      const pz = z + this.rnd.range(-step * 0.35, step * 0.35);
+      if (fn(px, pz) <= 0) continue;
+      const rad = this.rnd.range(r[0], r[1]);
+      if (dry.some(d => Math.hypot(px - d.x, pz - d.z) < d.r + rad * 0.55)) continue;
+      this.mire(px, pz, rad);
+    }
   }
   // A run of barriers along x = fn(z), skipped near the fords so a crossing stays open
   barrierCurve(fn, z0, z1, { step = 3, r = 3, fords = [], gap = 4.5 } = {}) {
@@ -330,7 +354,8 @@ export class MapBuilder {
   toJSON({ omit = [] } = {}) {
     const objects = omit.length ? this.objects.filter(o => !omit.includes(o.key)) : this.objects;
     return { version: 3, gridSnap: 2, worldSize: this.worldSize, spawnX: this.spawnX, spawnZ: this.spawnZ, enemySpawnDistance: this.enemySpawnDistance,
-             objects, decals: this.decals, tufts: this.tufts, shafts: this.shafts, streams: this.streams, barriers: this.barriers };
+             objects, decals: this.decals, tufts: this.tufts, shafts: this.shafts, streams: this.streams,
+             barriers: this.barriers, mires: this.mires };
   }
   summary() { return Object.entries(this.counts).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k}:${v}`).join(' '); }
   missingSummary() {

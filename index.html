@@ -1399,6 +1399,7 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
       <button class="map-btn selected" data-map="kingsfield"><img src="images/maps/kingsfield.webp" alt="" onerror="this.remove()">Kingsfield</button>
       <button class="map-btn" data-map="darkwood"><img src="images/maps/darkwood.webp" alt="" onerror="this.remove()">Darkwood</button>
       <button class="map-btn" data-map="emberreach"><img src="images/maps/emberreach.webp" alt="" onerror="this.remove()">Emberreach</button>
+      <button class="map-btn" data-map="mirefen"><img src="images/maps/mirefen.webp" alt="" onerror="this.remove()">Mirefen</button>
     </div>
     <div id="map-desc">The castle town and its farms. Walls to the north, fields and woods beyond, ogre keeps in every corner.</div>
   </div>
@@ -1639,7 +1640,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 // shipped in. `number` is the commit count this change will produce. Do not
 // hand-edit: the stamper matches the two marker lines exactly.
 /* BUILD:START */
-const BUILD = { number: 42, date: '2026-09-24' };
+const BUILD = { number: 43, date: '2026-09-24' };
 /* BUILD:END */
 for (const el of document.querySelectorAll('.build-badge')) el.textContent = `BUILD ${BUILD.number}`;
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -3337,6 +3338,56 @@ const MAPS = {
     // here too. Wolves and rats barely live on this rock.
     weights: { ogre: 2.0, goblinBomb: 1.5, shaman: 1.3, bat: 1.1, goblin: 1.0, archer: 0.9, wolf: 0.4, rat: 0.3 },
   },
+  mirefen: {
+    name: 'Mirefen', desc: 'A drowned lowland of black water and peat. The causeways are quick and exposed; the bog is slow, and it drags on them harder than on thee.',
+    // Authored by tools/generate-mirefen.mjs
+    load: async () => {
+      const r = await fetch('map.mirefen.json');
+      if (!r.ok) throw new Error('map.mirefen.json missing - run node tools/generate-mirefen.mjs');
+      return await r.json();
+    },
+    // Heavy low fog: a bog should close in around you. The ground under the splat
+    // is peat, so anything unpainted still reads as wet earth rather than grass.
+    bg: 0x1b241e, fog: [34, 74], ground: 0x2f3a28, ambient: 0.44, hemi: 0.34,
+    terrain: { base: 'peat', layers: ['silt', 'bogMoss', 'algae', 'sedgeMat'], splat: 'map.mirefen.splat.png',
+               tile: 4.4, layerScale: [1.0, 1.2, 1.5, 0.9], tufts: ['reeds', 'sedge', 'reeds', 'tuft3'], flow: 'swampWater' },
+    look: {
+      // The light identity has to be the one thing the other three maps do not
+      // own. Kingsfield is warm daylight, Darkwood is blue moonlight, Emberreach
+      // is orange firelight -- so Mirefen is an overcast green-grey day lit from
+      // below by wisps. A weak, high, colourless key so nothing casts a confident
+      // shadow, a green-tinted ambient doing most of the work, and all the
+      // saturation held back for the wisp lanterns and the algae.
+      // Pass 1 read as a flat green lawn: a strong green ambient over green ground
+      // left nothing but one hue. The ambient is greyer and weaker now, the key
+      // carries more of the light, and the grade no longer pushes green on top --
+      // the green belongs to the moss props and the wisps, not to the air.
+      key: 0xdfe6da, keyIntensity: 1.35, ambient: 0x6f7d75, ambientIntensity: 0.95,
+      hemiSky: 0x93a396, hemiGround: 0x353c2c, hemiIntensity: 0.75, exposure: 1.06,
+      grade: { lift: [0.004, 0.008, 0.006], gain: [0.98, 1.0, 0.96], gamma: [1, 1, 1], saturation: 0.92, vignette: 0.46 },
+      lantern: { color: 0x7dffb0, intensity: 16, distance: 14 }, forge: { color: 0xff7a30, intensity: 18, distance: 11 },
+      // Wisps, not fires. Cold green point lights are what makes this map legible
+      // in its own colour rather than borrowing Darkwood's lanterns.
+      emitters: {
+        fen_lantern_post_01:     { color: 0x7dffb0, intensity: 18, distance: 15, y: 0.8, glow: 0.40 },
+        swamp_wisp_stone_01:     { color: 0x8affd0, intensity: 14, distance: 12, y: 0.5, glow: 0.34 },
+        village_lantern_post_01: { color: 0x7dffb0, intensity: 16, distance: 14, y: 0.8, glow: 0.38 },
+        blacksmith_forge_01:     { color: 0xff7a30, intensity: 14, distance: 10, y: 0.45, glow: 0.34 },
+      },
+      // Pale shafts through a canopy, the Darkwood rig tinted sickly green.
+      shafts: { color: 0xbfe6c4, opacity: 0.075 },
+      // The water ribbons are dark tannin, not lava: no emission, just a sheen.
+      // 0x22302a read as a hole cut in the ground rather than water. Lifted until
+      // the texture's bronze sheen survives the tint and the channel reflects.
+      water: { color: 0x44584a, emissive: 0 },
+      ambientParticles: 'spores',
+      ao: 1.0,
+    },
+    // A bog breeds vermin and things that fly over it. Rats and bats lead, the
+    // shamans are at home, and the heavies bog down -- which the mires enforce
+    // mechanically as well as in the weights.
+    weights: { rat: 1.9, bat: 1.7, shaman: 1.5, goblin: 1.1, archer: 0.9, goblinBomb: 0.8, ogre: 0.7, wolf: 0.6 },
+  },
 };
 // Shared time uniform for the animated materials (water scroll, grass sway)
 const lookUniforms = { uTime: { value: 0 } };
@@ -3471,12 +3522,19 @@ function buildStreamRibbon(pts, w, tex, flow = 'water', look = null) {
     // map this dark would render the rivers as brown mud. The colour is deliberately
     // >1 so the tone mapper blooms the hot core.
     const e = isLava ? (look?.lava?.emissive ?? 1.35) : 1;
+    // A named flow other than 'water' is still-ish standing water: a bog channel
+    // barely moves and is nearly black, so it takes its tint from look.water and
+    // scrolls at a fraction of the rate a stream does.
+    const still = !isLava && flow !== 'water';
     const mat = isLava
       ? new THREE.MeshBasicMaterial({ map, transparent: true, depthWrite: false, fog: true })
-      : new THREE.MeshStandardMaterial({ map, color: map ? 0x9fb3b8 : 0x3a5f6a, roughness: 0.25, metalness: 0.05, transparent: true, depthWrite: false });
+      : new THREE.MeshStandardMaterial({ map, color: look?.water?.color ?? (map ? 0x9fb3b8 : 0x3a5f6a),
+          roughness: still ? 0.45 : 0.25, metalness: 0.05, transparent: true, depthWrite: false });
     if (isLava) { const c = new THREE.Color(look?.lava?.color ?? 0xff8c1a); mat.color.setRGB(c.r * e * 1.6, c.g * e * 1.6, c.b * e * 1.6); }
-    // Lava creeps; water runs. Same shader, different rates.
-    const scroll = isLava ? 0.012 : 0.05, shimmerRate = isLava ? 0.006 : 0.021, shimmerMix = isLava ? 0.45 : 0.25;
+    // Lava creeps; a stream runs; a bog channel hardly moves at all.
+    const scroll = isLava ? 0.012 : still ? 0.009 : 0.05;
+    const shimmerRate = isLava ? 0.006 : still ? 0.005 : 0.021;
+    const shimmerMix = isLava ? 0.45 : still ? 0.3 : 0.25;
     mat.onBeforeCompile = (shader) => {
       shader.uniforms.uTime = lookUniforms.uTime;
       shader.vertexShader = shader.vertexShader
@@ -3874,6 +3932,10 @@ async function loadMap(mapId) {
     let flowTex = null;
     if (flow === 'lava') {
       flowTex = loadTex('images/ground/lavaFlow.webp', true);
+    } else if (flow !== 'water') {
+      // Any other name is a ground texture to scroll along the ribbon, which is
+      // how Mirefen gets black tannin water instead of the blue stream tile.
+      flowTex = loadTex(`images/ground/${flow}.webp`, true);
     } else if (assets.stream) {
       assets.stream.scene.traverse(c => { if (!flowTex && c.isMesh && c.material?.map) flowTex = c.material.map; });
     }
@@ -3888,6 +3950,14 @@ async function loadMap(mapId) {
   if (mapData.barriers?.length) {
     for (const b of mapData.barriers) obstacles.push({ x: b.x, z: b.z, radius: b.r, disabled: false });
   }
+  // Mires: the first ground in the game that does something. Not a barrier and
+  // not damage -- soft bog that drags on anything walking through it. Mirefen is
+  // built around them: the causeways are fast and exposed, the bog is slow and
+  // safe-ish, and the choice between the two is the map. Enemies wade slower than
+  // you do (MIRE_ENEMY vs MIRE_PLAYER), so retreating through a bog is a real move
+  // rather than a punishment, and a dash clears one outright.
+  mires.length = 0;
+  if (mapData.mires?.length) for (const m of mapData.mires) mires.push({ x: m.x, z: m.z, r: m.r, r2: m.r * m.r });
   if (contacts.length) addInstanced(contacts, _decalGeo, new THREE.MeshBasicMaterial({ map: _contactTex, transparent: true, depthWrite: false }), 0.045, 19);
   if (canopies.length) addInstanced(canopies, _decalGeo, new THREE.MeshBasicMaterial({ map: _canopyTex, transparent: true, depthWrite: false }), 0.05, 20);
   if (glows.length) addInstanced(glows, _decalGeo, new THREE.MeshBasicMaterial({ map: _glowTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: def.look?.lantern?.intensity >= 12 ? 0.42 : 0.18 }), 0.06, 21);
@@ -3960,6 +4030,20 @@ function updateBreakables() {
       scatterPickups('food', _pickupPos, Math.max(1, Math.round(1 * ogreMods.foodMul)), 2);
     }
   }
+}
+
+// Soft-ground discs (see the map loader). Empty on every map but Mirefen, and the
+// lookup short-circuits on an empty list, so the other three cost nothing.
+const mires = [];
+const MIRE_PLAYER = 0.62;   // you wade at ~2/3 speed
+const MIRE_ENEMY = 0.5;     // they wade at half, so the bog is a tool, not a tax
+function inMire(x, z) {
+  for (let i = 0; i < mires.length; i++) {
+    const m = mires[i];
+    const dx = x - m.x, dz = z - m.z;
+    if (dx * dx + dz * dz < m.r2) return true;
+  }
+  return false;
 }
 
 // ─── PLAYER ───
@@ -5895,8 +5979,10 @@ function updatePlayer(p, dt) {
     dx /= len;
     dz /= len;
 
-    let newX = pmesh.position.x + dx * ps.speed * dt;
-    let newZ = pmesh.position.z + dz * ps.speed * dt;
+    const wade = mires.length && inMire(pmesh.position.x, pmesh.position.z) ? MIRE_PLAYER : 1;
+    ps._inMire = wade < 1;
+    let newX = pmesh.position.x + dx * ps.speed * wade * dt;
+    let newZ = pmesh.position.z + dz * ps.speed * wade * dt;
 
     // Clamp to world bounds
     newX = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, newX));
@@ -6829,7 +6915,9 @@ function updateEnemies(dt) {
       // A dragon ogre lingers at throwing range; the Ogre King does not — he
       // closes at full speed so the fight cannot be kited forever
       const baseSpeed = (enemy.isDragonOgre && !enemy.isFinalBoss && dist < enemy.attackRange) ? enemy.speed * 0.4 : enemy.speed;
-      const moveSpeed = baseSpeed * getEventEnemySpeedMul();
+      // Bats fly; everything else wades.
+      const mireMul = (mires.length && !enemy.isBat && inMire(enemy.mesh.position.x, enemy.mesh.position.z)) ? MIRE_ENEMY : 1;
+      const moveSpeed = baseSpeed * getEventEnemySpeedMul() * mireMul;
       let newX, newZ;
 
       if (enemy.isWolf && dist < 12 && dist > 2.5) {
@@ -9934,8 +10022,11 @@ function updateGame(dt, rawDt = dt) {
       _envParticleTimer = 0;
       // Per-map ambience (MAPS[].look.ambientParticles); the default is the
       // dust-and-ash pair Kingsfield and Darkwood have always used
-      if (MAPS[loadedMap]?.look?.ambientParticles === 'embers') {
+      const amb = MAPS[loadedMap]?.look?.ambientParticles;
+      if (amb === 'embers') {
         vfx.ambientEmbers(playerMesh.position);
+      } else if (amb === 'spores') {
+        vfx.ambientSpores(playerMesh.position);
       } else {
         vfx.ambientDust(playerMesh.position);
         // Drifting ash every other tick
@@ -11775,6 +11866,7 @@ init().then(() => {
       pendingPickCount, queuePick, presentNextLevelUp,
       applyDamage, registerKill, damagePlayersInRadius, playerAt, coopKitHtml,
       partyHeal, partyBuff, spawnPickup, nearestLivePlayer,
+      mires, inMire, MIRE_PLAYER, MIRE_ENEMY,
       assignKnight, cycleKnight, knightHolder, joinKeyboardCompanion,
       charPreviews, CHARACTER_GEAR, attachCharacterGear,
       updateHudNow: updateHUD, togglePause,

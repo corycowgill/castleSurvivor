@@ -1,0 +1,19 @@
+{base_prompt}
+
+{asset_description}
+
+Swamp and bog feature from a stylized fantasy game.
+
+Waterlogged and rotting: dark damp wood, peat-stained bark, wet grey-brown mud caked around the base.
+
+Thick sphagnum moss and algae growth in sickly yellow-green and blue-green, creeping over the upper and shaded surfaces.
+
+Where wood shows through it is pale silvered driftwood or blackened rot, never fresh timber.
+
+Soft sagging organic shapes with a bold readable silhouette, hand-painted game texture, strong value contrast between the dark wet mass, the pale bleached wood and the acid-green moss.
+
+Damp matte surfaces with a slight sheen, not glossy, not wet plastic.
+
+No standing water, no puddle, no pool underneath, no mist, no fog, no fireflies, no particles.
+
+{extra_details}

@@ -42,6 +42,18 @@ const TEXTURES = {
   lavaCrust:  { subject: 'black cooled lava crust broken into plates with a bright network of glowing orange and yellow molten cracks between them, seen straight from above', seed: 204 },
   sulfur:     { subject: 'crusty bright yellow sulphur mineral deposit over dark volcanic rock, pale yellow-white crystalline edges, seen straight from above', seed: 205 },
   lavaFlow:   { subject: 'bright molten lava flowing, glowing yellow-white at the hottest veins through orange to deep red, with drifting dark grey crust plates on the surface, seen straight from above', seed: 206 },
+  // Mirefen (drowned lowland). Base is `peat`; the splat layers are silt (bare
+  // wet ground), bogMoss (the green mass), algae (standing scum) and sedgeMat
+  // (matted dead grass on the dry hummocks). swampWater scrolls along the channels.
+  // The whole set is deliberately LOW contrast and low chroma except algae -- the
+  // saturation on this map belongs to the moss props and the wisp lights, and a
+  // loud ground texture would fight them.
+  peat:       { subject: 'dark wet peat bog soil, almost black-brown, spongy and fibrous with scattered bits of rotted plant matter and a few pale dead grass stems, seen straight from above', seed: 301 },
+  silt:       { subject: 'smooth wet grey-green river silt and fine mud, slick and almost featureless, with a fine crazing of shallow drying cracks and a faint scatter of tiny dark grit, very small scale detail, no stones, no pebbles, no rocks, seen straight from above', seed: 332 },
+  bogMoss:    { subject: 'a dense carpet of tiny sphagnum moss cushions, muted olive and yellow-green with damp brown hollows between them, very fine small-scale repeating detail like a low shag rug, desaturated and dull, no red, no bright colour, no large shapes, seen straight from above', seed: 333 },
+  algae:      { subject: 'a fine speckled film of tiny duckweed grains and green algae scum on dark brown water, each speck only a few millimetres across, dense stippled texture with small gaps of dark water, muted olive green not bright green, very small scale, no leaves, no lily pads, no large round shapes, seen straight from above', seed: 334 },
+  sedgeMat:   { subject: 'matted flattened dead sedge grass, pale straw and grey-brown stems all lying in tangled layers over damp dark soil, seen straight from above', seed: 305 },
+  swampWater: { subject: 'the surface of deep black water at night, almost entirely flat matte black-brown, empty and featureless, only the faintest soft broad ripples and a very subtle dull bronze sheen catching the light, extremely dark, nothing floating on it, completely empty water surface, no plants, no duckweed, no algae, no leaves, no lily pads, no foam, no green, seen straight from above', seed: 341 },
 };
 const DECALS = {
   puddle:     { subject: 'a single shallow muddy rain puddle, seen straight from above' },
@@ -62,6 +74,11 @@ const DECALS = {
   ashDrift:   { subject: 'a soft irregular drift of pale grey volcanic ash settled over dark ground, seen straight from above', seed: 213, painterly: true },
   sulfurStain:{ subject: 'an irregular stain of crusty bright yellow sulphur deposit on dark rock, seen straight from above', seed: 214, painterly: true },
   slag:       { subject: 'a spill of dark glassy slag and iron scrap with a few dull orange hot pieces, seen straight from above', seed: 215, painterly: true },
+  // Mirefen decals
+  lilyPatch:  { subject: 'a loose raft of flat round green lily pads of different sizes lying on dark water, a few curled at the rim, two pale pink buds, seen straight from above', seed: 311, painterly: true },
+  bogScum:    { subject: 'an irregular film of bright yellow-green algae scum and duckweed on dark still water, ragged edged and thickest in the middle, seen straight from above', seed: 312, painterly: true },
+  rootMat:    { subject: 'a tangled mat of thin pale exposed tree roots and reed stems woven flat over dark wet peat, seen straight from above, no trunk, no leaves', seed: 313, painterly: true },
+  bogPool:    { subject: 'a small still pool of near-black swamp water with a soft muddy rim and a thin green scum ring, seen straight from above', seed: 314, painterly: true },
 };
 const SPRITES = {
   tuft1: { subject: 'a single clump of green meadow grass, side view, game sprite' },
@@ -71,6 +88,9 @@ const SPRITES = {
   // Emberreach tufts: dead stalks, not grass
   ashTuft:    { subject: 'a single small clump of dead brittle grey-brown grass stalks, dried and withered, side view, game sprite, pure white background', seed: 221 },
   cinderTuft: { subject: 'a single small clump of burnt black charred grass stalks with pale ash on the tips, side view, game sprite, pure white background', seed: 222 },
+  // Mirefen tufts. `reeds` already exists and is reused as the map's first variant.
+  sedge:      { subject: 'a single clump of coarse marsh sedge grass, stiff yellow-green blades fanning out and arching over at the tips, side view, game sprite, pure white background', seed: 321 },
+  swampFern:  { subject: 'a single clump of broad dark green marsh ferns, three or four arching fronds, side view, game sprite, pure white background', seed: 322 },
 };
 
 function hashSeed(str) { let h = 0; for (let i = 0; i < str.length; i++) { h = ((h << 5) - h) + str.charCodeAt(i); h |= 0; } return Math.abs(h) % 4294967295; }

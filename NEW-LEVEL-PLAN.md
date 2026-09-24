@@ -217,3 +217,91 @@ npm run overhead && npm run thumbs
 - **A dark map is hard to read.** Darkwood needed a lighting pass after the fact
   (PLAN 18.4). Budget for the same here: emitters first, then rim light and
   ground discs if enemies vanish against the basalt.
+
+---
+
+# New Level — **Mirefen**, the Drowned Lowland
+
+The fourth battlefield, built 2026-09-24 on the Emberreach template. A peat basin
+of black water and bog: two channels cut it apart, a raised causeway runs its
+length, and the low ground between is soft.
+
+## Why a swamp is not just a fourth palette
+
+Kingsfield, Darkwood and Emberreach differ in lighting, props, ground textures and
+enemy weights, and in nothing else. Same open arena, same wave script, same rules;
+Emberreach's lava is an *obstacle*, so on no map can the ground itself do anything.
+Mirefen's whole reason to exist is the one rule the other three do not have:
+
+- **Black water** is impassable (`m.barrier`), crossed only at two boardwalk fords.
+- **Bog** is soft (`m.mire`, new): 62% speed for a knight, **50% for anything
+  chasing one**, and a dash clears it outright. Bats fly over it.
+- **Dry hummock islands** sit out in the bog at full speed — the footing worth
+  holding, and deliberately placed away from the causeway so taking one costs you.
+
+So the causeway is the fast exposed line, the bog is the slow safe one, and the
+choice between them is the map. The bog is slower for the enemy than for you, which
+makes retreating into it a move rather than a punishment.
+
+Enemy mix follows: rats 1.9, bats 1.7, shamans 1.5 — vermin and things that fly
+over a bog — and the heavies bog down both in the weights and mechanically.
+
+## Free art before any GPU work
+
+`tools/char-glb.mjs` gained four Mirefen grades (`bogMoss`, `sunken`, `bleached`,
+`algaeStone`) and **eighteen** variants of props we already ship, which is what the
+map is standing on now. The split is deliberate: green mass, dark wet mass, and a
+*pale* note — a bog rendered only in greens and blacks is one smear from above, and
+bleached driftwood is the only thing that reads against peat.
+
+Three were cut after looking at the contact sheet, and the reason generalises:
+Trellis mislabels, and a grade makes a mislabel worse. `nature_bush_03` is actually
+a mossy *bench*, so its bog variant was a neon-green lozenge on legs and the
+generator placed 437 of them. `nature_rock_small_01` is a tiny castle.
+`shrubbery.glb` draws 0.6% of frame — 419 invisible objects. **Look at
+`tools/shots/glb-sheet.png` before trusting a regrade.**
+
+## Ground art (SD only, ~4 minutes total)
+
+Textures `peat` (base), `silt`, `bogMoss`, `algae`, `sedgeMat`, `swampWater`;
+decals `lilyPatch`, `bogScum`, `rootMat`, `bogPool`; sprites `sedge`, `swampFern`
+(`reeds` already existed). Four of the six textures needed a re-roll, both times
+for **scale**: SD returns one four-metre lily pad unless the prompt insists on
+"very small scale, no large shapes", and a texture tiled every 4.4 units cannot
+carry a hero object.
+
+## Assets to generate — batches 11 and 12 (26 meshes)
+
+`AssetFactory/scripts/add-mirefen-assets.mjs`, prompt templates `SWAMP` and
+`FENFOLK`. Batch 11 is the swamp itself (cypress ×2, mangrove, drowned willow,
+moss curtain, reeds, cattails, lily pads, rotten log, mossy stump, bracket fungus,
+peat hummock, bog boulder, driftwood); batch 12 is the fen-folk camp (stilt hut,
+drying rack, coracle, eel traps, boardwalk, bog totem, fen lantern, witch hut, wisp
+stone) plus three landmarks — the sunken temple, the great cypress and the drowned
+bell tower. Every one is asked for by name through `m.pick()` with a bog-graded
+stand-in behind it, so the map plays now and improves as meshes land.
+
+## Look corrections, each driven by a capture
+
+1. **Pass 1 was a bright green lawn.** `ALGAE` was painted at `bogField × 1.7`,
+   which saturated the channel across most of the map — the same mistake Emberreach
+   made with orange. Algae is now the wettest patches only (`(bogField − 0.30) × 2.4`)
+   sitting as islands on dark peat, and moss is a mid tone rather than a ground cover.
+2. **The air was green too.** A strong green ambient (0x76907a at 1.35) over green
+   ground left one hue. The ambient is greyer and weaker, the key carries more, and
+   the grade no longer pushes green on top: the green belongs to the moss and the
+   wisps, not to the air.
+3. **284M triangles a frame.** Six roles (reeds, cattails, lilies, hummocks, moss
+   curtains, scrub) all fell back to the same 48k-tri fern, so the map placed 797 of
+   it. Stand-ins spread across three meshes and the counts roughly halved: 3,594 →
+   2,449 objects, 157M triangles.
+4. **The channels read as holes** cut in the ground. `water.color` lifted from
+   0x22302a to 0x44584a until the texture's bronze sheen survives the tint.
+
+## Verification
+
+`tools/mirefen-verify.mjs` — **12 checks, all passing**: the bog slows a knight at
+exactly `MIRE_PLAYER`, slows a chaser harder, a dash clears it, the causeway and
+the spawn stay dry, black water holds a knight, and Kingsfield and Darkwood carry
+no mires at all. Plus `npm test` clean, and dad and parker both take Mirefen to a
+wave-20 victory with 2–3% bot snagging, in band with the other three maps.
