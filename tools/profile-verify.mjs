@@ -44,6 +44,16 @@ const page = await browser.newPage();
 const errors = [];
 page.on('pageerror', e => errors.push(e.message));
 
+// Private Mode ships on and hides two of the three knights. The harness drives
+// all of them, so it seeds the unlock before any page script runs.
+await page.evaluateOnNewDocument(() => {
+  try {
+    const k = 'castleSurvivor_settings';
+    const d = JSON.parse(localStorage.getItem(k) || '{}');
+    localStorage.setItem(k, JSON.stringify({ ...d, privateMode: false, privateUnlocked: true }));
+  } catch {}
+});
+
 // ── Seed a v1 save BEFORE the page scripts run, so migration is exercised ──
 await page.goto(`http://127.0.0.1:${port}/index.html`, { waitUntil: 'domcontentloaded' });
 await page.evaluate(() => localStorage.setItem('castleSurvivor_meta', JSON.stringify({

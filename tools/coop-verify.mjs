@@ -41,6 +41,15 @@ srv.listen(0, '127.0.0.1', async () => {
   await page.setViewport({ width: 1280, height: 800 });
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
+  // Private Mode ships on and hides two of the three knights. The harness drives
+  // all of them, so it seeds the unlock before any page script runs.
+  await page.evaluateOnNewDocument(() => {
+    try {
+      const k = 'castleSurvivor_settings';
+      const d = JSON.parse(localStorage.getItem(k) || '{}');
+      localStorage.setItem(k, JSON.stringify({ ...d, privateMode: false, privateUnlocked: true }));
+    } catch {}
+  });
   await page.goto(`http://localhost:${port}/?debug`, { waitUntil: 'networkidle0', timeout: 180000 });
   await page.waitForFunction(() => window.__cs, { timeout: 420000 });
 

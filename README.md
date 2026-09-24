@@ -2,7 +2,18 @@
 
 A browser-based survivors-like built in Three.js. Three knights — Dad, Brennan and Parker — hold a medieval kingdom against twenty waves of goblins, wolves and ogres.
 
-It is a family project: the three playable knights are a father and his two sons, and the game has a Private Mode that hides the other two so each kid only sees themselves and their dad.
+It is a family project: the three playable knights are a father and his two sons.
+
+**Private Mode is the shipping default.** With it on, the public build has one
+knight (Dad), the public title plate, no Codex entry for the other two primaries,
+and it never fetches the two sons' models at all. It comes off only by typing the
+unlock code into Settings, and switching it back on re-locks, so the code is needed
+again next time. The code lives in `PRIVATE_CODE` in `index.html`.
+
+Note that this is a client-side gate on a static site: it governs what the game
+shows and what it downloads, not what a determined visitor could pull out of the
+page source or guess at a `Game3DAssets/` URL. For a hard guarantee the two sons'
+GLBs and the family title plate would have to be kept out of the deploy entirely.
 
 **Play:** open `index.html` in a browser, or visit the deployed site. No install, no build step, no backend.
 

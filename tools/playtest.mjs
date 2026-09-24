@@ -80,6 +80,15 @@ async function openGame(headed) {
   page.on('pageerror', e => errors.push('pageerror: ' + (e.message || e)));
   // Missing optional audio files are expected 404s; everything else is a real error
   page.on('console', m => { if (m.type() === 'error' && !/404/.test(m.text())) errors.push('console.error: ' + m.text()); });
+  // Private Mode ships on and hides two of the three knights. The harness drives
+  // all of them, so it seeds the unlock before any page script runs.
+  await page.evaluateOnNewDocument(() => {
+    try {
+      const k = 'castleSurvivor_settings';
+      const d = JSON.parse(localStorage.getItem(k) || '{}');
+      localStorage.setItem(k, JSON.stringify({ ...d, privateMode: false, privateUnlocked: true }));
+    } catch {}
+  });
   const t0 = Date.now();
   await page.goto(`http://127.0.0.1:${port}/index.html?debug`, { waitUntil: 'domcontentloaded' });
   // 420 s is ample on an idle machine, but a cold SwiftShader boot while the

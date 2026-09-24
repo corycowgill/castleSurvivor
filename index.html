@@ -7,6 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@700;900&display=swap" rel="stylesheet">
 <style>
+/* Title art. The public plate is the default so the loading screen is already
+   correct before any script runs; Private Mode off swaps in the family art. */
+:root { --title-bg: url('castleTitlePublic.png'); }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { overflow: hidden; background: #000; font-family: 'Cinzel', 'Georgia', serif; }
 .touch-active { touch-action: none; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
@@ -37,7 +40,7 @@ canvas { display: block; }
 
 #loading-screen {
   position: fixed; inset: 0;
-  background: url('castleBackgroundTitle.png') center center / cover no-repeat;
+  background: var(--title-bg) center center / cover no-repeat;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   z-index: 1000; color: #c9a253;
 }
@@ -83,7 +86,7 @@ canvas { display: block; }
 /* ─── START SCREEN ─── */
 #start-screen {
   position: fixed; inset: 0;
-  background: url('castleBackgroundTitle.png') center center / cover no-repeat;
+  background: var(--title-bg) center center / cover no-repeat;
   display: none; flex-direction: column; align-items: center;
   z-index: 999; color: #c9a253;
   overflow-y: auto;
@@ -1479,7 +1482,12 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
     <span class="setting-label">Screen Shake</span><input type="range" id="set-shake" min="0" max="100" step="10"><span class="setting-value" id="set-shake-val"></span>
     <span class="setting-label">Damage Numbers</span><button class="setting-toggle" id="set-dmgnums"></button><span></span>
     <span class="setting-label">Hit Freeze</span><button class="setting-toggle" id="set-hitfreeze"></button><span></span>
-    <span class="setting-label" title="Only Dad is selectable; Brennan and Parker are hidden">Private Mode</span><button class="setting-toggle" id="set-private"></button><span></span>
+    <span class="setting-label" title="Only the Knight Commander is selectable; the other knights are hidden">Private Mode</span><button class="setting-toggle" id="set-private"></button><span class="setting-value" id="set-private-state"></span>
+  </div>
+  <div id="private-unlock-row" style="display:none;grid-template-columns:180px 260px 1fr;gap:12px 16px;align-items:center;margin:8px 0 0">
+    <span class="setting-label">Unlock Code</span>
+    <input type="password" id="private-code" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Enter code" style="width:180px;padding:6px 8px;font-family:'Cinzel',serif;font-size:14px;color:#e8c860;background:#1a0e05;border:2px solid #5a3a1a;border-radius:3px;outline:none">
+    <span><button class="setting-toggle" id="private-unlock-btn" style="width:110px">UNLOCK</button> <span class="setting-value" id="private-code-msg"></span></span>
   </div>
   <div class="divider" style="margin:4px 0 8px"></div>
   <div id="settings-grid-perf" style="display:grid;grid-template-columns:180px 260px 60px;gap:12px 16px;align-items:center;margin:6px 0 14px">
@@ -1659,7 +1667,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 // shipped in. `number` is the commit count this change will produce. Do not
 // hand-edit: the stamper matches the two marker lines exactly.
 /* BUILD:START */
-const BUILD = { number: 48, date: '2026-09-24' };
+const BUILD = { number: 49, date: '2026-09-24' };
 /* BUILD:END */
 for (const el of document.querySelectorAll('.build-badge')) el.textContent = `BUILD ${BUILD.number}`;
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -2620,12 +2628,15 @@ const assetList = [
   { key: 'knight', file: 'dadKnightRigged.glb' },
   { key: 'knightAnims', file: 'knightWithAnimations.glb' },
   { key: 'charDad', file: 'dadwrig.glb', keepBuffer: true },
-  { key: 'charBrennan', file: 'brennwrig.glb', keepBuffer: true },
-  { key: 'charParker', file: 'parkerWizardAnimated.glb', keepBuffer: true },
+  // `private: true` models are the two hidden knights. Private Mode never asks
+  // for them, so their faces and filenames stay off the wire entirely -- the
+  // loading line names every file it fetches.
+  { key: 'charBrennan', file: 'brennwrig.glb', keepBuffer: true, private: true },
+  { key: 'charParker', file: 'parkerWizardAnimated.glb', keepBuffer: true, private: true },
   // Static character previews for select screen
   { key: 'charDadPreview', file: 'dadKnightFinal.glb' },
-  { key: 'charBrennanPreview', file: 'brennanKingtFinal.glb' },
-  { key: 'charParkerPreview', file: 'parkerWizardAnimated.glb' },
+  { key: 'charBrennanPreview', file: 'brennanKingtFinal.glb', private: true },
+  { key: 'charParkerPreview', file: 'parkerWizardAnimated.glb', private: true },
   { key: 'goblin', file: 'goblineWithAnimations.glb', keepBuffer: true },
   { key: 'ogre', file: 'orgreWithAnimations.glb', keepBuffer: true },
   { key: 'wolf', file: 'wolfWithAnimation.glb', keepBuffer: true },
@@ -2684,36 +2695,42 @@ let loadedCount = 0;
 const loadBarInner = document.getElementById('load-bar-inner');
 const loadText = document.getElementById('load-text');
 
-function loadAssets() {
-  return Promise.all(assetList.map(({ key, file, keepBuffer }) =>
+// Shared by the boot load and by the on-demand load the unlock code triggers.
+// The latter passes `quiet`: it happens long after the loading screen is gone,
+// so it must not touch the bar.
+function loadAssetEntries(entries, opts = {}) {
+  const denom = opts.total || entries.length;
+  if (entries.length === 0) return Promise.resolve();
+  return Promise.all(entries.map(({ key, file, keepBuffer }) =>
     new Promise((resolve, reject) => {
       const path = `Game3DAssets/${file}`;
+      const done = (gltf) => {
+        assets[key] = gltf;
+        if (!opts.quiet) {
+          loadedCount++;
+          const pct = Math.round((loadedCount / denom) * 100);
+          loadBarInner.style.width = pct + '%';
+          loadText.textContent = `Forging ${file}... (${pct}%)`;
+        }
+        resolve();
+      };
       if (keepBuffer) {
         // Fetch raw buffer for enemy models so we can re-parse fresh instances
         fetch(path).then(r => r.arrayBuffer()).then(buffer => {
           enemyBuffers[key] = buffer;
           // Also parse one copy for reference
-          loader.parse(buffer.slice(0), '', (gltf) => {
-            assets[key] = gltf;
-            loadedCount++;
-            const pct = Math.round((loadedCount / assetList.length) * 100);
-            loadBarInner.style.width = pct + '%';
-            loadText.textContent = `Forging ${file}... (${pct}%)`;
-            resolve();
-          }, reject);
+          loader.parse(buffer.slice(0), '', done, reject);
         }).catch(reject);
       } else {
-        loader.load(path, (gltf) => {
-          assets[key] = gltf;
-          loadedCount++;
-          const pct = Math.round((loadedCount / assetList.length) * 100);
-          loadBarInner.style.width = pct + '%';
-          loadText.textContent = `Forging ${file}... (${pct}%)`;
-          resolve();
-        }, undefined, reject);
+        loader.load(path, done, undefined, reject);
       }
     })
   ));
+}
+
+function loadAssets() {
+  const entries = assetList.filter(a => !(a.private && settings.privateMode));
+  return loadAssetEntries(entries, { total: entries.length });
 }
 
 // Parse a fresh enemy model from the stored buffer (only for previews/one-offs)
@@ -3111,7 +3128,11 @@ const SETTINGS_KEY = 'castleSurvivor_settings';
 // ambientOcc (GTAO) is experimental and off: it blackens whole props on both the
 // software and the D3D11 renderer at this scene scale, so grounding comes from the
 // contact-shadow decals instead. Reachable through the debug hook (setAO) for tuning.
-const settings = { master: 70, sfx: 80, music: 40, shake: 100, dmgNumbers: true, hitFreeze: true, privateMode: false, ambientOcc: false, gfx: {} };
+// Private Mode is the shipping default: the public build shows one knight and
+// the public title plate. It only comes off with PRIVATE_CODE, and turning it
+// back on re-locks, so the code is needed again next time.
+const PRIVATE_CODE = 'Castle1000!';
+const settings = { master: 70, sfx: 80, music: 40, shake: 100, dmgNumbers: true, hitFreeze: true, privateMode: true, privateUnlocked: false, ambientOcc: false, gfx: {} };
 // Live look-dev controls. Each entry is null/absent until the user moves that
 // slider, in which case it overrides the active map's MAPS[].look value.
 // fallback is used before any map has loaded.
@@ -3156,12 +3177,15 @@ function applyGfx(look) {
   dirLight.intensity = _gfx.key;
   hemiLight.intensity = _gfx.fill;
 }
-const SETTING_TOGGLES = [['dmgNumbers', 'set-dmgnums'], ['hitFreeze', 'set-hitfreeze'], ['privateMode', 'set-private']];
+const SETTING_TOGGLES = [['dmgNumbers', 'set-dmgnums'], ['hitFreeze', 'set-hitfreeze']];
 function loadSettings() {
   try {
     const d = JSON.parse(localStorage.getItem(SETTINGS_KEY));
     if (d && typeof d === 'object') Object.assign(settings, d);
   } catch {}
+  // A stored `privateMode: false` predates the code and unlocks nothing: only a
+  // saved unlock, which the code is the sole way to write, may lift it.
+  if (!settings.privateUnlocked) settings.privateMode = true;
 }
 function saveSettings() { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch {} }
 function applySettings() {
@@ -3195,11 +3219,22 @@ function renderSettings() {
     b.textContent = settings[k] ? 'ON' : 'OFF';
     b.classList.toggle('on', !!settings[k]);
   }
+  const pb = document.getElementById('set-private');
+  if (pb) {
+    pb.textContent = settings.privateMode ? 'ON' : 'OFF';
+    pb.classList.toggle('on', !!settings.privateMode);
+    pb.title = settings.privateMode ? 'Enter the unlock code to turn this off' : 'Turning this back on requires the code again';
+    const st = document.getElementById('set-private-state');
+    if (st) st.textContent = settings.privateMode ? 'locked' : 'unlocked';
+  }
 }
-// Private Mode: only Dad is selectable; the other two knights are hidden from
-// the title screen entirely.
+// Private Mode: only Dad is selectable. The other two knights are hidden from
+// the title screen, their models are never fetched, the Codex drops their
+// primaries, and the title art is the public plate that has only Dad on it.
 function applyPrivateMode() {
   const on = !!settings.privateMode;
+  document.documentElement.style.setProperty('--title-bg',
+    on ? "url('castleTitlePublic.png')" : "url('castleBackgroundTitle.png')");
   document.querySelectorAll('.char-card').forEach(card => {
     if (card.dataset.char === 'dad') return;
     card.style.display = on ? 'none' : '';
@@ -3207,6 +3242,56 @@ function applyPrivateMode() {
   if (on && selectedCharacter !== 'dad') {
     document.querySelector('.char-card[data-char="dad"]')?.click();
   }
+  const state = document.getElementById('set-private-state');
+  if (state) state.textContent = on ? 'locked' : 'unlocked';
+  if (on) hidePrivateUnlock();
+  if (typeof renderCoopRoster === 'function') renderCoopRoster();
+}
+function showPrivateUnlock() {
+  const row = document.getElementById('private-unlock-row');
+  if (!row) return;
+  row.style.display = 'grid';
+  document.getElementById('private-code-msg').textContent = '';
+  const inp = document.getElementById('private-code');
+  inp.value = '';
+  inp.focus();
+}
+function hidePrivateUnlock() {
+  const row = document.getElementById('private-unlock-row');
+  if (!row) return;
+  row.style.display = 'none';
+  const inp = document.getElementById('private-code');
+  if (inp) inp.value = '';
+}
+// The knights only exist once the code has been accepted, so their models are
+// pulled in here rather than at boot.
+let _privateAssetsPromise = null;
+function ensurePrivateAssets() {
+  if (!_privateAssetsPromise) {
+    const missing = assetList.filter(a => a.private && !assets[a.key]);
+    _privateAssetsPromise = loadAssetEntries(missing, { quiet: true }).then(() => setupCharacterPreviews());
+  }
+  return _privateAssetsPromise;
+}
+async function submitPrivateCode() {
+  const inp = document.getElementById('private-code');
+  const msg = document.getElementById('private-code-msg');
+  if (inp.value !== PRIVATE_CODE) {
+    msg.textContent = 'Wrong code';
+    msg.style.color = '#dd8866';
+    inp.value = '';
+    inp.focus();
+    return;
+  }
+  msg.textContent = 'Unlocking…';
+  msg.style.color = '#8fe08f';
+  settings.privateUnlocked = true;
+  settings.privateMode = false;
+  saveSettings();
+  applyPrivateMode();
+  renderSettings();
+  AudioSystem.play('upgradeSelect', { volume: 0.4 });
+  await ensurePrivateAssets();
 }
 function initSettingsUI() {
   for (const k of ['master', 'sfx', 'music', 'shake']) {
@@ -3245,10 +3330,23 @@ function initSettingsUI() {
     document.getElementById(id).addEventListener('click', () => {
       settings[k] = !settings[k];
       saveSettings(); renderSettings();
-      if (k === 'privateMode') applyPrivateMode();
       AudioSystem.play('upgradeSelect', { volume: 0.3 });
     });
   }
+  // Private Mode goes on freely and comes off only with the code. Switching it
+  // back on drops the unlock, so leaving the machine re-hides the knights.
+  document.getElementById('set-private').addEventListener('click', () => {
+    if (settings.privateMode) { showPrivateUnlock(); return; }
+    settings.privateMode = true;
+    settings.privateUnlocked = false;
+    saveSettings(); renderSettings(); applyPrivateMode();
+    AudioSystem.play('upgradeSelect', { volume: 0.3 });
+  });
+  document.getElementById('private-unlock-btn').addEventListener('click', submitPrivateCode);
+  document.getElementById('private-code').addEventListener('keydown', (e) => {
+    if (e.code === 'Enter' || e.code === 'NumpadEnter') { e.preventDefault(); submitPrivateCode(); }
+    if (e.code === 'Escape') { e.preventDefault(); hidePrivateUnlock(); }
+  });
 }
 // Settings can be opened from the main menu or from pause; it returns to whichever
 let _settingsReturnTo = 'start-screen';
@@ -3264,6 +3362,9 @@ function closeSettings() {
 }
 loadSettings();
 applySettings();
+// Before anything loads, so the loading screen already carries the right plate.
+document.documentElement.style.setProperty('--title-bg',
+  settings.privateMode ? "url('castleTitlePublic.png')" : "url('castleBackgroundTitle.png')");
 
 // ─── MAPS ───
 // Each map has its own look and enemy mix. Kingsfield is map.json (or the
@@ -9445,6 +9546,9 @@ function renderHighScores(highlightStamp) {
     body.innerHTML = '<div id="scores-empty">No quests recorded yet. The hall awaits its first hero.</div>' + renderFeatsHtml();
     return;
   }
+  // A hall of fame written before Private Mode went on still carries the hidden
+  // knights' names, so the column is masked rather than the rows dropped.
+  const hero = n => (settings.privateMode && n && n.toLowerCase() !== 'dad') ? 'Knight' : (n || '-');
   const rows = scores.map((r, i) => {
     const grade = GRADES_BY_LETTER[r.grade] || { color: '#887755' };
     const when = r.date ? new Date(r.date).toLocaleDateString() : '';
@@ -9454,7 +9558,7 @@ function renderHighScores(highlightStamp) {
     return `<tr${fresh}>
       <td class="rank">${i + 1}</td>
       <td class="grade" style="color:${grade.color}">${r.grade || '-'}</td>
-      <td>${r.character || '-'}</td>
+      <td>${hero(r.character)}</td>
       <td>${where}</td>
       <td>${(r.score ?? 0).toLocaleString()}</td>
       <td>${r.wave ?? 0}</td>
@@ -10940,6 +11044,10 @@ document.getElementById('resume-btn').addEventListener('click', togglePause);
 
 // ─── INPUT ───
 window.addEventListener('keydown', (e) => {
+  // Typing in a text field is not menu input: WASD and the arrows would
+  // otherwise be swallowed by the navigation below, and the unlock code has an
+  // 'a' and an 's' in it.
+  if (e.target && e.target.tagName === 'INPUT' && e.target.type !== 'range') return;
   keys[e.code] = true;
   const screen = visibleScreen();
   if (screen) {
@@ -11157,6 +11265,7 @@ async function setupCharacterPreviews() {
   // slice of the memory budget before the game has even started.
   if (LOW_QUALITY) {
     for (const key of Object.keys(CHARACTER_ASSETS)) {
+      if (settings.privateMode && key !== 'dad') continue;
       const canvas = document.getElementById('preview-' + key);
       if (!canvas) continue;
       const card = canvas.closest('.char-card');
@@ -11171,7 +11280,10 @@ async function setupCharacterPreviews() {
     return;
   }
 
-  const chars = ['dad', 'brennan', 'parker'];
+  // Private Mode never loaded the hidden knights' models, so there is nothing
+  // to build for them; the unlock code calls this again once they are in.
+  const chars = ['dad', 'brennan', 'parker'].filter(id =>
+    !charPreviews[id] && (id === 'dad' || !settings.privateMode));
   const animGltf = assets.knightAnims;
 
   for (const charId of chars) {
@@ -11514,7 +11626,10 @@ function populateHelpScreen() {
   document.getElementById('help-tab-powerups').innerHTML = powerupHtml;
 
   // --- WEAPONS TAB ---
-  const weaponUpgrades = UPGRADES.filter(u => u.isWeapon);
+  // The hidden knights' primaries name them, and nothing in a Private Mode run
+  // can ever roll one, so the Codex drops them with the knights.
+  const PRIVATE_PRIMARIES = new Set(['spear', 'quickblade', 'staff']);
+  const weaponUpgrades = UPGRADES.filter(u => u.isWeapon && !(settings.privateMode && PRIVATE_PRIMARIES.has(u.id)));
   let weaponHtml = '<div class="help-section-title">Primary Weapons (one per knight)</div>';
   weaponHtml += `<div class="help-item"><div class="help-item-info">
     <div class="help-item-desc">Each knight fights with his own primary weapon. It auto-attacks the nearest foe and can be honed at level-up. You may carry <span style="color:#e8c860">${MAX_WEAPON_SLOTS} weapons</span> in total, so choose your arsenal.</div>
