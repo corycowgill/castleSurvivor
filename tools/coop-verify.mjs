@@ -324,6 +324,59 @@ srv.listen(0, '127.0.0.1', async () => {
     out.revived = { isDead: P[2].state.isDead, hp: Math.round(P[2].state.hp) };
     out.hudTextAfterRevive = [...document.querySelectorAll('.coop-hp-text')].map(e => e.textContent);
 
+    // ---- EACH KNIGHT'S OWN PROFILE: GOLD, FORGE RANKS, STAT EFFECT ----
+    // Give the three knights different wallets and different Forge investments,
+    // then check that nothing leaks between them.
+    const save0 = cs.loadSave();
+    save0.profiles.dad     = { gold: 1000, ranks: { vitality: 5, treasure: 0, rerolls: 0 } };
+    save0.profiles.brennan = { gold: 2000, ranks: { vitality: 0, treasure: 3, rerolls: 2 } };
+    save0.profiles.parker  = { gold: 3000, ranks: { vitality: 2, treasure: 0, banish: 2 } };
+    save0.shared.achievements = ['wave5'];
+    cs.saveSave(save0);
+
+    out.walletsSeparate = P.map(pl => cs.loadMeta(pl).gold);
+    out.ranksSeparate = P.map(pl => cs.loadMeta(pl).ranks.vitality || 0);
+    out.sharedVisibleToAll = P.every(pl => (cs.loadMeta(pl).achievements || []).includes('wave5'));
+
+    // Forge STATS have to reach the knight who paid for them: +10 Max HP per
+    // vitality rank, on top of each character's own base.
+    const sheet = () => ({ maxHp: 100, hp: 100, damage: 0, speed: 0, armor: 0, critChance: 0, regen: 0 });
+    const forged = P.map(pl => { const ps = sheet(); cs.applyForgeStatsTo(ps, pl); return ps.maxHp - 100; });
+    out.forgeHpByKnight = forged;          // expect dad +50, brennan +0, parker +20
+
+    // Fate's Favor and Fate's Scorn are per knight too (they were player 1's only).
+    // The `who` has to carry the character, or profileIdFor() falls back to the
+    // knight on the title screen and every wallet reads as dad's.
+    const charges = P.map(pl => { const q = { index: 9, character: pl.character, weapons: {}, rerollCharges: 0, banishCharges: 0 };
+      cs.applyForgeStatsTo(sheet(), q); return [q.rerollCharges, q.banishCharges]; });
+    out.rerollByKnight = charges.map(c => c[0]);   // expect 0, 2, 0
+    out.banishByKnight = charges.map(c => c[1]);   // expect 0, 0, 2
+
+    // A run pays every knight into their OWN wallet, at their OWN Golden Touch rank.
+    cs.state.wave = 10; cs.state.kills = 500; cs.state.score = 5000;
+    const goldBefore = P.map(pl => cs.loadMeta(pl).gold);
+    const expectRatio = cs.calcRunGold(P[1]) / cs.calcRunGold(P[0]);   // brennan has treasure 3
+    cs.gameOver(false);
+    const goldAfter = P.map(pl => cs.loadMeta(pl).gold);
+    out.goldGained = goldAfter.map((g, i) => g - goldBefore[i]);
+    out.goldenTouchRatio = +expectRatio.toFixed(2);
+    out.allThreePaid = out.goldGained.every(g => g > 0);
+    out.brennanPaidMore = out.goldGained[1] > out.goldGained[0];
+
+    // The Forge screen opens on the title-screen knight, but a companion can pick
+    // their own wallet and spend from it without being made player 1 first.
+    cs.forgeProfileReset();
+    cs.renderForge();
+    out.forgeOpensOn = document.getElementById('forge-gold').textContent;
+    out.forgeTabs = [...document.querySelectorAll('.forge-who-tab')].map(b => b.dataset.who).join(',');
+    document.querySelector('.forge-who-tab[data-who="parker"]').click();
+    out.forgeAfterTab = document.getElementById('forge-gold').textContent;
+    // Buy Fortified Vitality (50 gold) as parker and check whose purse paid.
+    const purseBefore = cs.PROFILE_IDS.map(id => cs.loadMeta(id).gold);
+    document.querySelectorAll('#forge-grid .forge-item')[0].click();
+    const purseAfter = cs.PROFILE_IDS.map(id => cs.loadMeta(id).gold);
+    out.forgeSpend = purseAfter.map((g, i) => g - purseBefore[i]);
+
     // ---- PARTY WIPE ends the run ----
     cs.triggerPlayerDeath(P[1]); cs.triggerPlayerDeath(P[2]); cs.triggerPlayerDeath(P[0]);
     out.wipe = { alive: cs.alivePlayers().length, gameOverTimer: +(P[0].state._gameOverTimer || 0).toFixed(1) };
@@ -382,6 +435,18 @@ srv.listen(0, '127.0.0.1', async () => {
   check('teammate revives', r.revived.isDead === false && r.revived.hp > 0, JSON.stringify(r.revived));
   check('HUD reflects revived HP', /\d+\/\d+/.test(r.hudTextAfterRevive.join(' ')), r.hudTextAfterRevive.join(' | '));
   check('party wipe ends run', r.wipe.alive === 0 && r.wipe.gameOverTimer > 0, JSON.stringify(r.wipe));
+  check('wallets are per knight', r.walletsSeparate.join(',') === '1000,2000,3000', r.walletsSeparate.join('/'));
+  check('Forge ranks are per knight', r.ranksSeparate.join(',') === '5,0,2', r.ranksSeparate.join('/'));
+  check('achievements stay shared', r.sharedVisibleToAll, String(r.sharedVisibleToAll));
+  check('Forge stats reach the buyer', r.forgeHpByKnight.join(',') === '50,0,20', '+HP ' + r.forgeHpByKnight.join('/'));
+  check('Fate\'s Favor is per knight', r.rerollByKnight.join(',') === '0,2,0', r.rerollByKnight.join('/'));
+  check('Fate\'s Scorn is per knight', r.banishByKnight.join(',') === '0,0,2', r.banishByKnight.join('/'));
+  check('a run pays every knight', r.allThreePaid, '+' + r.goldGained.join(' / +'));
+  check('Golden Touch is the buyer\'s', r.brennanPaidMore, `ratio ${r.goldenTouchRatio}, gained ${r.goldGained.join('/')}`);
+  check('Forge opens on the P1 knight', /Dad/.test(r.forgeOpensOn), r.forgeOpensOn);
+  check('Forge offers a tab per knight', r.forgeTabs === 'dad,brennan,parker', r.forgeTabs);
+  check('a tab switches the wallet', /Parker/.test(r.forgeAfterTab), r.forgeAfterTab);
+  check('spending debits that knight', r.forgeSpend[0] === 0 && r.forgeSpend[1] === 0 && r.forgeSpend[2] < 0, r.forgeSpend.join('/'));
   check('no JS errors', errors.length === 0, errors.slice(0, 3).join(' | ') || 'none');
 
   console.log('\nTWO-PLAYER CO-OP VERIFICATION\n');

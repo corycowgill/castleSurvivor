@@ -1033,6 +1033,24 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
   margin-top: 6px; font-family: 'MedievalSharp', cursive;
   font-size: 15px; color: #d4a856;
 }
+/* Whose Forge this is. A companion earns their own gold but could only SPEND it
+   by going back and making their knight player 1, which is a shuffle to ask of a
+   nine-year-old. Pick the wallet here instead. */
+#forge-who { display: flex; gap: 8px; justify-content: center; margin-bottom: 10px; }
+#forge-who:empty { display: none; }
+.forge-who-tab {
+  padding: 5px 14px; border-radius: 5px; cursor: pointer;
+  border: 1px solid #4a3418; background: rgba(20,10,2,0.6);
+  font-family: 'Cinzel', serif; font-size: 13px; color: #8a7040;
+  transition: border-color 0.15s, color 0.15s;
+}
+.forge-who-tab:hover, .forge-who-tab.gp-focus { border-color: var(--who-tint, #c9a253); color: #d4c080; }
+.forge-who-tab.active {
+  border-color: var(--who-tint, #c9a253); color: var(--who-tint, #e8c860);
+  background: linear-gradient(180deg, rgba(45,26,8,0.9), rgba(20,10,2,0.9));
+}
+.forge-who-tab .fw-gold { font-family: 'MedievalSharp', cursive; font-size: 11px; color: #8a7040; display: block; }
+.forge-who-tab.active .fw-gold { color: #c9a253; }
 #forge-gold {
   font-family: 'Cinzel', serif; font-size: 20px; font-weight: 700;
   color: #e8c860; margin-bottom: 14px;
@@ -1511,6 +1529,7 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
   <h2>THE FORGE</h2>
   <div id="forge-subtitle">Permanent Upgrades Between Runs</div>
   <div class="divider"></div>
+  <div id="forge-who"></div>
   <div id="forge-gold"></div>
   <div id="forge-grid"></div>
   <div id="forge-mastery"></div>
@@ -1640,7 +1659,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 // shipped in. `number` is the commit count this change will produce. Do not
 // hand-edit: the stamper matches the two marker lines exactly.
 /* BUILD:START */
-const BUILD = { number: 46, date: '2026-09-24' };
+const BUILD = { number: 47, date: '2026-09-24' };
 /* BUILD:END */
 for (const el of document.querySelectorAll('.build-badge')) el.textContent = `BUILD ${BUILD.number}`;
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -8440,10 +8459,44 @@ function applyForgeUpgrades() {
   }
 }
 
+// Which knight's Forge is open. Null means "the one picked on the title screen",
+// which is what it always used to be and is still the default every time the
+// screen opens -- the tabs are for spending a companion's gold without having to
+// make them player 1 first.
+let forgeProfile = null;
+function forgeWho() {
+  const id = forgeProfile || profileIdFor();
+  // Private Mode hides the other knights, so it also pins the Forge to Dad.
+  return (settings.privateMode && id !== 'dad') ? 'dad' : id;
+}
+
+function renderForgeTabs() {
+  const el = document.getElementById('forge-who');
+  if (!el) return;
+  const cur = forgeWho();
+  // One knight visible means nothing to choose between.
+  const ids = settings.privateMode ? ['dad'] : PROFILE_IDS;
+  if (ids.length < 2) { el.innerHTML = ''; return; }
+  el.innerHTML = ids.map((id, i) => {
+    const tint = _COOP_HUD_TINT[i] || '#c9a253';
+    const g = loadMeta(id).gold;
+    return `<button class="forge-who-tab${id === cur ? ' active' : ''}" data-who="${id}" style="--who-tint:${tint}">`
+      + `${CHARACTER_NAMES[id] || id}<span class="fw-gold">${g} gold</span></button>`;
+  }).join('');
+  for (const b of el.querySelectorAll('.forge-who-tab')) {
+    b.addEventListener('click', () => {
+      forgeProfile = b.dataset.who;
+      AudioSystem.play('coinPickup', { volume: 0.3, pitch: 1.2 });
+      renderForge();
+    });
+  }
+}
+
 function renderForge() {
-  // The Forge always belongs to the knight selected on the title screen.
-  const meta = loadMeta();
-  const whoName = CHARACTER_NAMES[profileIdFor()] || 'Knight';
+  const who = forgeWho();
+  renderForgeTabs();
+  const meta = loadMeta(who);
+  const whoName = CHARACTER_NAMES[who] || 'Knight';
   document.getElementById('forge-gold').textContent = `${whoName}'s Gold: ${meta.gold}`;
   const grid = document.getElementById('forge-grid');
   grid.innerHTML = '';
@@ -8465,16 +8518,16 @@ function renderForge() {
     `;
     if (!isMaxed) {
       el.addEventListener('click', () => {
-        const m = loadMeta();
+        const m = loadMeta(who);
         const r = getForgeRank(m, upg.id);
         if (r >= upg.maxRank) return;
         const c = upg.costs[r];
         if (m.gold < c) return;
         m.gold -= c;
         m.ranks[upg.id] = r + 1;
-        saveMeta(m);      // m carries _profile, so this lands in the right wallet
+        saveMeta(m, who);   // the wallet on screen, not the one on the title screen
         renderForge();
-        updateStartGold();
+        updateStartGold();   // the title-screen purse is still player 1's
       });
     }
     grid.appendChild(el);
@@ -10699,7 +10752,7 @@ function buildMenuRows(id) {
     }
     case 'pause-screen':     return [_visible('#pause-btns button', root)];
     case 'game-over-screen': return [_visible('#go-btns button', root)];
-    case 'forge-screen':     return [..._chunk([...root.querySelectorAll('.forge-item')], 2), [root.querySelector('#forge-close-btn')]];
+    case 'forge-screen':     return [_visible('.forge-who-tab', root), ..._chunk([...root.querySelectorAll('.forge-item')], 2), [root.querySelector('#forge-close-btn')]];
     case 'scores-screen':    return [_visible('#scores-actions button', root)];
     case 'help-screen':      return [[...root.querySelectorAll('.help-tab')], [root.querySelector('#help-close-btn')]];
     case 'settings-screen':  return [
@@ -11370,6 +11423,9 @@ document.getElementById('settings-close-btn').addEventListener('click', closeSet
 initSettingsUI();
 
 document.getElementById('forge-btn').addEventListener('click', () => {
+  // Always opens on the knight picked on the title screen; the tabs are a
+  // deliberate second step, so nobody spends the wrong wallet by muscle memory.
+  forgeProfile = null;
   renderForge();
   document.getElementById('start-screen').style.display = 'none';
   document.getElementById('forge-screen').style.display = 'flex';
@@ -11875,6 +11931,8 @@ init().then(() => {
       applyDamage, registerKill, damagePlayersInRadius, playerAt, coopKitHtml,
       partyHeal, partyBuff, spawnPickup, nearestLivePlayer,
       mires, inMire, MIRE_PLAYER, MIRE_ENEMY,
+      applyForgeStatsTo, calcRunGold, renderForge, gameOver, loadSave, saveSave,
+      forgeProfileReset() { forgeProfile = null; },
       assignKnight, cycleKnight, knightHolder, joinKeyboardCompanion,
       charPreviews, CHARACTER_GEAR, attachCharacterGear,
       updateHudNow: updateHUD, togglePause,
