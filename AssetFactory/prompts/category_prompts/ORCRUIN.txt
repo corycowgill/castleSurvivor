@@ -1,0 +1,23 @@
+Stylized fantasy game asset concept art of a SMASHED, BATTLE-DAMAGED orc structure, broken and burnt: {asset_description} The complete structure from base to top, seen from outside in a three-quarter view, centered and small in the frame with empty space all round, on a plain flat neutral background, no scenery, no ground, no sky. Painterly stylized game art, not a photograph.
+
+A crude structure built by orcs and ogres, oversized and brutal, lashed together from huge sharpened logs, animal hide and bone, and dark hand-beaten black iron with rivets and spikes.
+
+It has just been through a battle: smashed, scorched and battered, with logs snapped, iron plates torn loose, hide roofs sagging and burnt through, and one side caved in. Show the damage as bold readable shapes.
+
+Weathered, soot-stained, clearly used and abused.
+
+Exaggerated chunky proportions with a bold readable silhouette, hand-painted stylized game texture, dark timber and black iron with dull red and bone-white accents.
+
+Build the object as a SOLID CLOSED MASS of chunky simplified volumes.
+
+Every part must be thick enough to hold its own shape: no thin strands, no loose splinters, no dangling threads, no open lattice, no fine sticks, no delicate edges, no separated fragments floating apart from the main mass.
+
+Where something would really be fine or broken loose, show it as one heavy lump or as shallow surface relief carved into the solid form instead.
+
+Menacing but cartoon-stylized, suitable for an all-ages fantasy game: no blood, no gore, no realistic corpses.
+
+No fire, no flames, no smoke, no glowing embers, no particles: the fire is added by the game.
+
+{extra_details}
+
+{base_prompt}

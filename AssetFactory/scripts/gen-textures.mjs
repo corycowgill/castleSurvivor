@@ -54,6 +54,15 @@ const TEXTURES = {
   algae:      { subject: 'a fine speckled film of tiny duckweed grains and green algae scum on dark brown water, each speck only a few millimetres across, dense stippled texture with small gaps of dark water, muted olive green not bright green, very small scale, no leaves, no lily pads, no large round shapes, seen straight from above', seed: 334 },
   sedgeMat:   { subject: 'matted flattened dead sedge grass, pale straw and grey-brown stems all lying in tangled layers over damp dark soil, seen straight from above', seed: 305 },
   swampWater: { subject: 'the surface of deep black water at night, almost entirely flat matte black-brown, empty and featureless, only the faintest soft broad ripples and a very subtle dull bronze sheen catching the light, extremely dark, nothing floating on it, completely empty water surface, no plants, no duckweed, no algae, no leaves, no lily pads, no foam, no green, seen straight from above', seed: 341 },
+  // Bloodmarch (the war-torn field). Base is `churnedMud`; the splat layers are
+  // scorchedEarth (fire), battleGrass (what grass survived, trampled), rubbleGround
+  // (stone and mortar dust round the walls) and ironMud (rust-stained wet ground).
+  // Brown, grey and black: the colour on this map is the fire, not the ground.
+  churnedMud:    { subject: 'dark brown churned mud trampled by boots and hooves, ridged and rutted with shallow water in the ruts, a few small stones and broken sticks, small scale detail, seen straight from above', seed: 401 },
+  scorchedEarth: { subject: 'burnt black scorched earth and grey ash with a few charred sticks and a scatter of dull dark embers, matte, seen straight from above', seed: 402 },
+  battleGrass:   { subject: 'trampled dead grass, flattened yellow-brown and grey stalks pressed into dark mud with bare patches, seen straight from above', seed: 403 },
+  rubbleGround:  { subject: 'a ground of broken grey stone chips, mortar dust and small chunks of masonry over dark earth, fine scale, no large blocks, seen straight from above', seed: 404 },
+  ironMud:       { subject: 'wet dark mud stained rust red-brown in streaks and patches, with iron-grey pebbles and a faint sheen of standing water, seen straight from above', seed: 405 },
 };
 const DECALS = {
   puddle:     { subject: 'a single shallow muddy rain puddle, seen straight from above' },
@@ -79,6 +88,14 @@ const DECALS = {
   bogScum:    { subject: 'an irregular film of bright yellow-green algae scum and duckweed on dark still water, ragged edged and thickest in the middle, seen straight from above', seed: 312, painterly: true },
   rootMat:    { subject: 'a tangled mat of thin pale exposed tree roots and reed stems woven flat over dark wet peat, seen straight from above, no trunk, no leaves', seed: 313, painterly: true },
   bogPool:    { subject: 'a small still pool of near-black swamp water with a soft muddy rim and a thin green scum ring, seen straight from above', seed: 314, painterly: true },
+  // Bloodmarch decals
+  craterScorch: { subject: 'a shallow blast crater seen straight from above, a scorched black bowl in the middle with a ring of thrown-up dark earth clods and broken stones around it', seed: 411, painterly: true },
+  arrowStorm:   { subject: 'two dozen arrows stuck upright in dark mud at different angles, feathered shafts casting no shadow, seen straight from above', seed: 412, painterly: true },
+  shieldScatter:{ subject: 'a scatter of broken kite shields in faded blue and gold, a dented helmet, a snapped spear and a fallen sword lying on dark mud, seen straight from above', seed: 413, painterly: true },
+  charredBeams: { subject: 'a few thick charred black roof beams and burnt planks fallen in a loose crisscross on ash-grey ground, seen straight from above', seed: 414, painterly: true },
+  bootChurn:    { subject: 'an irregular patch of dark mud churned up by many boot prints and hoof prints, ridged and wet, seen straight from above', seed: 415, painterly: true },
+  warStain:     { subject: 'an irregular dark rust-brown stain soaked into muddy ground, muted and dry-edged, no shapes, seen straight from above', seed: 416, painterly: true },
+  rubbleSpill:  { subject: 'a spill of broken grey castle stone blocks and mortar rubble fanning out over dark earth, seen straight from above', seed: 417, painterly: true },
 };
 const SPRITES = {
   tuft1: { subject: 'a single clump of green meadow grass, side view, game sprite' },
@@ -91,6 +108,8 @@ const SPRITES = {
   // Mirefen tufts. `reeds` already exists and is reused as the map's first variant.
   sedge:      { subject: 'a single clump of coarse marsh sedge grass, stiff yellow-green blades fanning out and arching over at the tips, side view, game sprite, pure white background', seed: 321 },
   swampFern:  { subject: 'a single clump of broad dark green marsh ferns, three or four arching fronds, side view, game sprite, pure white background', seed: 322 },
+  // Bloodmarch tufts: trampled and burnt, alongside the existing ashTuft / cinderTuft
+  trampledTuft: { subject: 'a single small clump of flattened trampled dead grass, brown and muddy, bent over sideways, side view, game sprite, pure white background', seed: 421 },
 };
 
 function hashSeed(str) { let h = 0; for (let i = 0; i < str.length; i++) { h = ((h << 5) - h) + str.charCodeAt(i); h |= 0; } return Math.abs(h) % 4294967295; }

@@ -31,7 +31,9 @@ const unitsFor = (category, metres) => (category !== 'tree' && metres > 2 ? 1.35
 const CATEGORY_MAP = { village_clutter: 'props', village_infrastructure: 'village', blacksmith_kit: 'village', farm_kit: 'props', tavern_kit: 'props', nature: 'nature', combat: 'props', landmarks: 'village', volcanic: 'nature', ogre_camp: 'village',
   // Mirefen: the swamp itself is nature (so the tree test below can catch the
   // cypresses), the fen-folk camp is built, so it scales like a village prop.
-  swamp: 'nature', fen_camp: 'village' };
+  swamp: 'nature', fen_camp: 'village',
+  // Bloodmarch: everything on the war-torn field is built or wrecked, so it scales like a village prop
+  warfront_human: 'village', warfront_orc: 'village', warfront_field: 'props' };
 const ICONS = { props: '📦', village: '🏘', nature: '🌿', tree: '🌳' };
 // Waist-high or fence-like props stay solid whatever their computed radius (fences
 // still break on touch, so they can never pin the player)
@@ -41,7 +43,11 @@ const SOLID = new Set(['village_fence_straight_01', 'village_fence_corner_01', '
   'ogre_spike_wall_01', 'ogre_butcher_block_01', 'ogre_weapon_rack_01', 'ogre_barricade_01', 'ogre_brazier_01', 'ogre_cook_pot_01', 'ogre_forge_01',
   'volcanic_rock_cluster_01', 'volcanic_lava_rock_01', 'volcanic_obsidian_shards_01', 'combat_wall_rubble_01', 'combat_wall_destroyed_01',
   // Mirefen: waist-high or taller and must block
-  'swamp_bog_rock_01', 'swamp_stump_mossy_01', 'swamp_moss_curtain_01', 'fen_totem_01', 'fen_fish_rack_01', 'fen_lantern_post_01', 'swamp_wisp_stone_01']);
+  'swamp_bog_rock_01', 'swamp_stump_mossy_01', 'swamp_moss_curtain_01', 'fen_totem_01', 'fen_fish_rack_01', 'fen_lantern_post_01', 'swamp_wisp_stone_01',
+  // Bloodmarch: walls, engines, barricades and fire baskets block; craters, ladders and cairns do not
+  'war_castle_wall_01', 'war_castle_wall_breach_01', 'war_ballista_01', 'war_shield_pile_01', 'war_market_stall_ruin_01', 'war_supply_wagon_wreck_01',
+  'orc_fortress_wall_01', 'orc_fortress_wall_broken_01', 'orc_spike_barricade_01', 'orc_watch_fire_01', 'orc_war_drum_01', 'orc_loot_pile_01', 'orc_pen_01',
+  'field_siege_boulder_01', 'field_charred_beam_pile_01', 'field_shield_wall_01', 'field_broken_cart_burnt_01', 'field_sandbag_wall_01']);
 
 // Non-pipeline keepers: name, category, metres, collision
 const EXTRA = {

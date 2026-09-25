@@ -80,7 +80,7 @@ export class MapBuilder {
     // Splat map: 4 float channels over the world, written as RGBA PNG (row 0 = north / -z)
     this.splatSize = 512;
     this.splat = new Float32Array(this.splatSize * this.splatSize * 4);
-    this.decals = []; this.tufts = []; this.shafts = []; this.streams = []; this.barriers = []; this.mires = [];
+    this.decals = []; this.tufts = []; this.shafts = []; this.streams = []; this.barriers = []; this.mires = []; this.fires = [];
     this.missing = {};
   }
   // Is this mesh registered? The Emberreach generator runs while its Trellis batch
@@ -141,6 +141,16 @@ export class MapBuilder {
     }
     flush();
     this.counts.streams = (this.counts.streams || 0) + this.streams.length;
+  }
+  // A fire: flames, a smoke column and a pooled point light, drawn by the game
+  // (updateMapFires / vfx.buildingFire). r = footprint radius of the blaze, y =
+  // where the flames start (a roof, a cart bed), h = how high the smoke climbs,
+  // s = intensity 0..1. Bloodmarch's burning town is made of these.
+  fire(x, z, { r = 1.2, y = 0.3, h = 8, s = 1 } = {}) {
+    if (Math.abs(x) > this.worldSize + 8 || Math.abs(z) > this.worldSize + 8) return false;
+    this.fires.push({ x: +x.toFixed(1), z: +z.toFixed(1), r: +r.toFixed(2), y: +y.toFixed(2), h: +h.toFixed(1), s: +s.toFixed(2) });
+    this.counts.fires = (this.counts.fires || 0) + 1;
+    return true;
   }
   // Light shaft: a tall additive plane the game leans along the key light
   shaft(x, z, { w = 5, h = 26, rotY = 0.6 } = {}) { this.shafts.push({ x: +x.toFixed(1), z: +z.toFixed(1), w, h, rotY }); this.counts.shafts = (this.counts.shafts || 0) + 1; }
@@ -364,7 +374,7 @@ export class MapBuilder {
     const objects = omit.length ? this.objects.filter(o => !omit.includes(o.key)) : this.objects;
     return { version: 3, gridSnap: 2, worldSize: this.worldSize, spawnX: this.spawnX, spawnZ: this.spawnZ, enemySpawnDistance: this.enemySpawnDistance,
              objects, decals: this.decals, tufts: this.tufts, shafts: this.shafts, streams: this.streams,
-             barriers: this.barriers, mires: this.mires };
+             barriers: this.barriers, mires: this.mires, fires: this.fires };
   }
   summary() { return Object.entries(this.counts).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k}:${v}`).join(' '); }
   missingSummary() {

@@ -1014,7 +1014,7 @@
     "category": "blacksmith_kit",
     "family": "stone",
     "promptTemplate": "PROP",
-    "promptDetails": "Medieval stone and brick forge structure. Open hearth with chimney hood. Contains coal bed area. No fire or glow — just the physical structure. Approximately 1.5 meters tall.",
+    "promptDetails": "Medieval stone and brick forge structure. Open hearth with chimney hood. Contains coal bed area. No fire or glow \u2014 just the physical structure. Approximately 1.5 meters tall.",
     "status": "glb_optimized",
     "batch": 3,
     "game": {
@@ -2259,7 +2259,8 @@
     "glbRaw": "AssetFactory/glb_raw/combat_spikes_01.glb",
     "glbOptimized": "AssetFactory/glb_optimized/combat_spikes_01.glb",
     "glbGame": "Game3DAssets/combat_spikes_01.glb",
-    "rejectReason": "Trellis produced a 1449-tri sliver that renders nothing (drawnFrac 0.001)"
+    "rejectReason": "Trellis produced a 1449-tri sliver that renders nothing (drawnFrac 0.001)",
+    "rejectedWhy": "2026-09-25 image pass: flat texture, scenery, or thin geometry Trellis cannot rebuild"
   },
   {
     "id": "combat_broken_cart_01",
@@ -2318,7 +2319,7 @@
     "family": "stone",
     "promptTemplate": "CLUSTER",
     "promptDetails": "Pile of broken stone wall rubble. Crumbled masonry blocks and dust. Remnant of a destroyed wall.",
-    "status": "pending",
+    "status": "rejected",
     "batch": 5,
     "game": {
       "scaleMeters": 0.8,
@@ -2331,7 +2332,9 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_wall_rubble_01.png",
+    "rejectedWhy": "2026-09-25 image pass: flat texture, scenery, or thin geometry Trellis cannot rebuild"
   },
   {
     "id": "combat_wall_destroyed_01",
@@ -2340,7 +2343,7 @@
     "family": "stone",
     "promptTemplate": "PROP",
     "promptDetails": "Partially destroyed stone wall segment. Top portion crumbled, bottom intact. Battle damage with cracks and missing stones.",
-    "status": "pending",
+    "status": "rejected",
     "batch": 5,
     "game": {
       "scaleMeters": 1.8,
@@ -2353,7 +2356,9 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_wall_destroyed_01.png",
+    "rejectedWhy": "2026-09-25 image pass: flat texture, scenery, or thin geometry Trellis cannot rebuild"
   },
   {
     "id": "combat_abandoned_sword_01",
@@ -2362,7 +2367,7 @@
     "family": "war",
     "promptTemplate": "PROP",
     "promptDetails": "Medieval sword stuck in the ground at an angle. Blade partially buried, handle and crossguard exposed.",
-    "status": "pending",
+    "status": "rejected",
     "batch": 5,
     "game": {
       "scaleMeters": 1,
@@ -2375,7 +2380,9 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_abandoned_sword_01.png",
+    "rejectedWhy": "2026-09-25 image pass: flat texture, scenery, or thin geometry Trellis cannot rebuild"
   },
   {
     "id": "combat_abandoned_shield_01",
@@ -2384,7 +2391,7 @@
     "family": "war",
     "promptTemplate": "PROP",
     "promptDetails": "Damaged medieval shield lying on the ground. Dented, scratched, partially broken. Simple heraldic design.",
-    "status": "pending",
+    "status": "image_complete",
     "batch": 5,
     "game": {
       "scaleMeters": 0.7,
@@ -2399,7 +2406,8 @@
         "combat_abandoned_sword_01"
       ],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_abandoned_shield_01.png"
   },
   {
     "id": "combat_arrow_cluster_01",
@@ -2408,7 +2416,7 @@
     "family": "war",
     "promptTemplate": "CLUSTER",
     "promptDetails": "Cluster of 4-5 medieval arrows stuck in the ground at various angles. Aftermath of battle.",
-    "status": "pending",
+    "status": "rejected",
     "batch": 5,
     "game": {
       "scaleMeters": 0.6,
@@ -2421,7 +2429,9 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_arrow_cluster_01.png",
+    "rejectedWhy": "2026-09-25 image pass: flat texture, scenery, or thin geometry Trellis cannot rebuild"
   },
   {
     "id": "combat_bones_01",
@@ -2430,7 +2440,7 @@
     "family": "war",
     "promptTemplate": "CLUSTER",
     "promptDetails": "Small pile of scattered bones on the ground. Old yellowed bones, not gory. Fantasy game style.",
-    "status": "pending",
+    "status": "rejected",
     "batch": 5,
     "game": {
       "scaleMeters": 0.5,
@@ -2447,7 +2457,9 @@
       "avoid": [
         "house"
       ]
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_bones_01.png",
+    "rejectedWhy": "2026-09-25 image pass: flat texture, scenery, or thin geometry Trellis cannot rebuild"
   },
   {
     "id": "combat_skull_01",
@@ -2456,7 +2468,7 @@
     "family": "war",
     "promptTemplate": "PROP",
     "promptDetails": "Single human skull on the ground. Stylized fantasy game skull, not photorealistic.",
-    "status": "pending",
+    "status": "image_complete",
     "batch": 5,
     "game": {
       "scaleMeters": 0.2,
@@ -2474,7 +2486,8 @@
       "avoid": [
         "house"
       ]
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_skull_01.png"
   },
   {
     "id": "combat_enemy_totem_01",
@@ -2483,7 +2496,7 @@
     "family": "war",
     "promptTemplate": "PROP",
     "promptDetails": "Menacing primitive totem pole made of bones, skulls, and rough wood. Enemy territory marker. Approximately 3.0 meters tall.",
-    "status": "pending",
+    "status": "image_complete",
     "batch": 5,
     "game": {
       "scaleMeters": 3,
@@ -2502,7 +2515,8 @@
         "house",
         "tavern"
       ]
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_enemy_totem_01.png"
   },
   {
     "id": "combat_skull_stake_01",
@@ -2511,7 +2525,7 @@
     "family": "war",
     "promptTemplate": "PROP",
     "promptDetails": "Human skull impaled on a wooden stake. Warning marker. Approximately 2.0 meters tall.",
-    "status": "pending",
+    "status": "image_complete",
     "batch": 5,
     "game": {
       "scaleMeters": 2,
@@ -2530,7 +2544,8 @@
       "avoid": [
         "house"
       ]
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_skull_stake_01.png"
   },
   {
     "id": "combat_burned_tree_01",
@@ -2539,7 +2554,7 @@
     "family": "war",
     "promptTemplate": "TREE",
     "promptDetails": "Charred burned tree. Blackened trunk and branches, no leaves. Fire damage clearly visible. Approximately 4 meters tall.",
-    "status": "pending",
+    "status": "rejected",
     "batch": 5,
     "game": {
       "scaleMeters": 4,
@@ -2556,7 +2571,9 @@
       "avoid": [
         "house"
       ]
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_burned_tree_01.png",
+    "rejectedWhy": "2026-09-25 image pass: flat texture, scenery, or thin geometry Trellis cannot rebuild"
   },
   {
     "id": "combat_burned_cart_01",
@@ -3371,7 +3388,7 @@
     "family": "rock",
     "promptTemplate": "VOLCANIC",
     "promptDetails": "A tall jagged spire of columnar basalt thrusting straight up out of the ground, narrowing to a broken point. Hexagonal column facets down the sides, pale ash caught in the crevices, a few thin orange fissures near the base. Approximately 5 meters tall.",
-    "status": "pending",
+    "status": "image_complete",
     "batch": 9,
     "game": {
       "scaleMeters": 5,
@@ -3384,7 +3401,8 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_spire_01.png"
   },
   {
     "id": "volcanic_spire_02",
@@ -3393,7 +3411,7 @@
     "family": "rock",
     "promptTemplate": "VOLCANIC",
     "promptDetails": "A leaning wedge of broken black basalt, snapped off at an angle with a sheared flat face and a rubble skirt at its foot. Rough crusted rock, ash dusted, one deep orange-glowing crack up the leaning side. Approximately 3.5 meters tall.",
-    "status": "pending",
+    "status": "rejected",
     "batch": 9,
     "game": {
       "scaleMeters": 3.5,
@@ -3406,7 +3424,9 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_spire_02.png",
+    "rejectedWhy": "2026-09-25 image pass: SD returned a flat texture / wrong object under the VOLCANIC-OGRE template; re-prompt before another run"
   },
   {
     "id": "volcanic_rock_cluster_01",
@@ -3415,7 +3435,7 @@
     "family": "rock",
     "promptTemplate": "VOLCANIC",
     "promptDetails": "A compact cluster of five or six angular black basalt chunks of different sizes heaped together, sharp fractured faces, grey ash settled between them. Approximately 1.6 meters tall.",
-    "status": "pending",
+    "status": "rejected",
     "batch": 9,
     "game": {
       "scaleMeters": 1.6,
@@ -3428,7 +3448,9 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_rock_cluster_01.png",
+    "rejectedWhy": "2026-09-25 image pass: SD returned a flat texture / wrong object under the VOLCANIC-OGRE template; re-prompt before another run"
   },
   {
     "id": "volcanic_boulder_01",
@@ -3437,7 +3459,7 @@
     "family": "rock",
     "promptTemplate": "VOLCANIC",
     "promptDetails": "A single big rounded boulder of dark volcanic rock, pocked and bubbled like cooled lava, split by one wide crack that glows orange deep inside. Ash dusted on top. Approximately 2.4 meters tall.",
-    "status": "pending",
+    "status": "image_complete",
     "batch": 9,
     "game": {
       "scaleMeters": 2.4,
@@ -3450,7 +3472,8 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_boulder_01.png"
   },
   {
     "id": "volcanic_lava_rock_01",
@@ -3459,7 +3482,7 @@
     "family": "rock",
     "promptTemplate": "VOLCANIC",
     "promptDetails": "A knee-high slab of black crusted lava rock broken into plates, with a web of bright orange glowing fissures running between the plates like cracked embers in a fireplace. Approximately 1.2 meters tall.",
-    "status": "pending",
+    "status": "rejected",
     "batch": 9,
     "game": {
       "scaleMeters": 1.2,
@@ -3472,7 +3495,9 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_lava_rock_01.png",
+    "rejectedWhy": "2026-09-25 image pass: SD returned a flat texture / wrong object under the VOLCANIC-OGRE template; re-prompt before another run"
   },
   {
     "id": "volcanic_vent_01",
@@ -3481,7 +3506,7 @@
     "family": "rock",
     "promptTemplate": "VOLCANIC",
     "promptDetails": "A small squat volcanic vent cone: a ring of crusted yellow-stained rock built up around a dark open hole in the middle, the rim caked in pale sulphur, the throat glowing dull orange. No smoke plume. Approximately 1.6 meters tall.",
-    "status": "pending",
+    "status": "image_complete",
     "batch": 9,
     "game": {
       "scaleMeters": 1.6,
@@ -3494,7 +3519,8 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_vent_01.png"
   },
   {
     "id": "volcanic_obsidian_shards_01",
@@ -3503,7 +3529,7 @@
     "family": "rock",
     "promptTemplate": "VOLCANIC",
     "promptDetails": "A cluster of tall sharp shards of glossy black obsidian jutting up out of a low rocky base at different angles, like broken black glass blades. Deep black with hard bright highlights along the edges. Approximately 2 meters tall.",
-    "status": "pending",
+    "status": "rejected",
     "batch": 9,
     "game": {
       "scaleMeters": 2,
@@ -3516,7 +3542,9 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_obsidian_shards_01.png",
+    "rejectedWhy": "2026-09-25 image pass: SD returned a flat texture / wrong object under the VOLCANIC-OGRE template; re-prompt before another run"
   },
   {
     "id": "volcanic_ash_mound_01",
@@ -3525,7 +3553,7 @@
     "family": "rock",
     "promptTemplate": "VOLCANIC",
     "promptDetails": "A low soft drift of pale grey volcanic ash piled up like a snow bank, smooth wind-rippled surface, with two or three dark rocks half buried in it. Approximately 1 meter tall.",
-    "status": "pending",
+    "status": "rejected",
     "batch": 9,
     "game": {
       "scaleMeters": 1,
@@ -3538,7 +3566,9 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_ash_mound_01.png",
+    "rejectedWhy": "2026-09-25 image pass: SD returned a flat texture / wrong object under the VOLCANIC-OGRE template; re-prompt before another run"
   },
   {
     "id": "volcanic_sulfur_crust_01",
@@ -3547,7 +3577,7 @@
     "family": "rock",
     "promptTemplate": "VOLCANIC",
     "promptDetails": "A low crusty patch of bright yellow sulphur deposit built up over dark rock, knobbly and mineral, with pale white-yellow crystalline edges. Approximately 0.6 meters tall.",
-    "status": "pending",
+    "status": "image_complete",
     "batch": 9,
     "game": {
       "scaleMeters": 0.6,
@@ -3560,7 +3590,8 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_sulfur_crust_01.png"
   },
   {
     "id": "volcanic_crater_slab_01",
@@ -3569,7 +3600,7 @@
     "family": "rock",
     "promptTemplate": "VOLCANIC",
     "promptDetails": "A wide flat slab of cooled black lava crust lying almost flat on the ground, broken into tilted plates with thin orange glowing seams between them, edges crumbling to cinder. Wider than it is tall. Approximately 1.4 meters wide and low to the ground.",
-    "status": "pending",
+    "status": "rejected",
     "batch": 9,
     "game": {
       "scaleMeters": 1.4,
@@ -3582,7 +3613,9 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_crater_slab_01.png",
+    "rejectedWhy": "2026-09-25 image pass: SD returned a flat texture / wrong object under the VOLCANIC-OGRE template; re-prompt before another run"
   },
   {
     "id": "ogre_brazier_01",
@@ -3591,7 +3624,7 @@
     "family": "ogre",
     "promptTemplate": "OGRE",
     "promptDetails": "A huge crude brazier: a heavy black iron bowl on three bent iron legs, heaped with glowing orange coals and charred wood. Riveted iron, soot-blackened, a bone charm hanging from one leg. Approximately 1.8 meters tall.",
-    "status": "pending",
+    "status": "image_complete",
     "batch": 9,
     "game": {
       "scaleMeters": 1.8,
@@ -3606,7 +3639,8 @@
         "ogreCastle"
       ],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_brazier_01.png"
   },
   {
     "id": "ogre_cook_pot_01",
@@ -3615,7 +3649,7 @@
     "family": "ogre",
     "promptTemplate": "OGRE",
     "promptDetails": "An enormous dented black iron cooking cauldron slung from a crude tripod of lashed timber over a bed of glowing coals. Thick iron rim, rivets, soup slopped down the side, a giant wooden ladle hooked on the rim. Approximately 2.2 meters tall.",
-    "status": "pending",
+    "status": "image_complete",
     "batch": 9,
     "game": {
       "scaleMeters": 2.2,
@@ -3630,7 +3664,8 @@
         "ogreCastle"
       ],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_cook_pot_01.png"
   },
   {
     "id": "ogre_totem_01",
@@ -3639,7 +3674,7 @@
     "family": "ogre",
     "promptTemplate": "OGRE",
     "promptDetails": "A tall crude totem pole of rough dark timber, lashed with rawhide, mounted with stylized animal and goblin skulls and hung with feathers, teeth and strips of hide. Carved with harsh angular ogre marks daubed in red. Approximately 3.4 meters tall.",
-    "status": "pending",
+    "status": "image_complete",
     "batch": 9,
     "game": {
       "scaleMeters": 3.4,
@@ -3655,7 +3690,8 @@
         "ogreCastle"
       ],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_totem_01.png"
   },
   {
     "id": "ogre_bone_pile_01",
@@ -3664,7 +3700,7 @@
     "family": "ogre",
     "promptTemplate": "OGRE",
     "promptDetails": "A heaped pile of big pale yellowed animal bones, ribs and leg bones, tossed together with one large cartoon-stylized horned skull on top. Clean dry bones, no blood, no gore. Approximately 1.1 meters tall.",
-    "status": "pending",
+    "status": "image_complete",
     "batch": 9,
     "game": {
       "scaleMeters": 1.1,
@@ -3680,7 +3716,8 @@
         "ogreCastle"
       ],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_bone_pile_01.png"
   },
   {
     "id": "ogre_spike_wall_01",
@@ -3689,7 +3726,7 @@
     "family": "ogre",
     "promptTemplate": "OGRE",
     "promptDetails": "A straight section of crude defensive wall made of thick tree trunks sharpened to points at the top, driven into the ground shoulder to shoulder and lashed together with two horizontal rails of rope-bound timber. Scorched and weathered. A straight modular segment with clean flat ends. Approximately 2.4 meters tall.",
-    "status": "pending",
+    "status": "image_complete",
     "batch": 9,
     "game": {
       "scaleMeters": 2.4,
@@ -3704,7 +3741,8 @@
         "ogreCastle"
       ],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_spike_wall_01.png"
   },
   {
     "id": "ogre_banner_01",
@@ -3713,7 +3751,7 @@
     "family": "ogre",
     "promptTemplate": "OGRE",
     "promptDetails": "A tall crude banner pole of rough timber topped with a stylized iron skull finial, flying a big ragged torn banner of dark red hide with a harsh angular ogre rune daubed on it in black. Rope lashings, tattered edges. Approximately 3.8 meters tall.",
-    "status": "pending",
+    "status": "image_complete",
     "batch": 9,
     "game": {
       "scaleMeters": 3.8,
@@ -3729,7 +3767,8 @@
         "ogreCastle"
       ],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_banner_01.png"
   },
   {
     "id": "ogre_cage_01",
@@ -3738,7 +3777,7 @@
     "family": "ogre",
     "promptTemplate": "OGRE",
     "promptDetails": "A big crude cage of thick timber bars bound with black iron bands and rope, roughly cube shaped on a plank floor, with a heavy barred door held shut by an oversized iron padlock. Empty. Weathered scorched wood. Approximately 2.6 meters tall.",
-    "status": "pending",
+    "status": "rejected",
     "batch": 9,
     "game": {
       "scaleMeters": 2.6,
@@ -3754,7 +3793,9 @@
         "ogreCastle"
       ],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_cage_01.png",
+    "rejectedWhy": "2026-09-25 image pass: SD returned a flat texture / wrong object under the VOLCANIC-OGRE template; re-prompt before another run"
   },
   {
     "id": "ogre_butcher_block_01",
@@ -3763,7 +3804,7 @@
     "family": "ogre",
     "promptTemplate": "OGRE",
     "promptDetails": "A massive chopping block cut from a single tree trunk, deeply scarred and hacked across the top, with an oversized rusty iron cleaver buried in it and a coil of rope at the base. No blood, no meat. Approximately 1.2 meters tall.",
-    "status": "pending",
+    "status": "rejected",
     "batch": 9,
     "game": {
       "scaleMeters": 1.2,
@@ -3779,7 +3820,9 @@
         "ogreCastle"
       ],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_butcher_block_01.png",
+    "rejectedWhy": "2026-09-25 image pass: SD returned a flat texture / wrong object under the VOLCANIC-OGRE template; re-prompt before another run"
   },
   {
     "id": "ogre_weapon_rack_01",
@@ -3788,7 +3831,7 @@
     "family": "ogre",
     "promptTemplate": "OGRE",
     "promptDetails": "A crude A-frame rack of lashed timber holding oversized ogre weapons: two huge knobbly wooden clubs, a rusty iron cleaver and a spiked maul, plus a battered round hide shield leaning against the foot. Approximately 2 meters tall.",
-    "status": "pending",
+    "status": "rejected",
     "batch": 9,
     "game": {
       "scaleMeters": 2,
@@ -3804,7 +3847,9 @@
         "ogreCastle"
       ],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_weapon_rack_01.png",
+    "rejectedWhy": "2026-09-25 image pass: wall-mounted close-up, not a free-standing rack"
   },
   {
     "id": "ogre_hut_01",
@@ -3813,7 +3858,7 @@
     "family": "ogre",
     "promptTemplate": "BUILDING",
     "promptDetails": "A large crude ogre dwelling: a domed frame of huge curved bones and rough timber poles lashed together and covered with stitched brown animal hides, a low dark doorway hung with a hide flap, skulls and antlers fixed above it, a crooked stone chimney at the back. Approximately 4.5 meters tall.",
-    "status": "pending",
+    "status": "image_complete",
     "batch": 9,
     "game": {
       "scaleMeters": 4.5,
@@ -3828,7 +3873,8 @@
         "ogreCastle"
       ],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_hut_01.png"
   },
   {
     "id": "ogre_forge_01",
@@ -3837,7 +3883,7 @@
     "family": "ogre",
     "promptTemplate": "OGRE",
     "promptDetails": "A brutal open forge built of stacked black basalt blocks and iron plate, its firebox packed with glowing orange coals, a huge crude bellows of hide and timber strapped to one side and a soot-stained iron chimney hood above. Slag and cinder heaped at the base. Approximately 2.6 meters tall.",
-    "status": "pending",
+    "status": "image_complete",
     "batch": 10,
     "game": {
       "scaleMeters": 2.6,
@@ -3852,7 +3898,8 @@
         "ogreCastle"
       ],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_forge_01.png"
   },
   {
     "id": "ogre_barricade_01",
@@ -3861,7 +3908,7 @@
     "family": "ogre",
     "promptTemplate": "OGRE",
     "promptDetails": "A crude portable barricade: a heavy frame of rough timber crossed with black iron bars and bristling with outward-pointing iron spikes, braced by two angled legs, bound with rope and chain. Approximately 1.8 meters tall.",
-    "status": "pending",
+    "status": "image_complete",
     "batch": 10,
     "game": {
       "scaleMeters": 1.8,
@@ -3877,7 +3924,8 @@
         "ogreCastle"
       ],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_barricade_01.png"
   },
   {
     "id": "ogre_skull_pile_01",
@@ -3886,7 +3934,7 @@
     "family": "ogre",
     "promptTemplate": "OGRE",
     "promptDetails": "A cairn of stylized pale skulls stacked into a rough pyramid on a base of dark volcanic stones, bound with a strand of rope and topped with one large horned skull. Clean dry bone, cartoon fantasy style, no blood, no gore. Approximately 1.4 meters tall.",
-    "status": "pending",
+    "status": "image_complete",
     "batch": 10,
     "game": {
       "scaleMeters": 1.4,
@@ -3902,7 +3950,8 @@
         "ogreCastle"
       ],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_skull_pile_01.png"
   },
   {
     "id": "burnt_tree_giant_01",
@@ -3910,7 +3959,7 @@
     "category": "volcanic",
     "family": "tree",
     "promptTemplate": "DEADTREE",
-    "status": "pending",
+    "status": "image_complete",
     "batch": 10,
     "promptDetails": "An enormous ancient dead tree, burnt black, with a massive buttressed trunk and huge twisted clawing branches reaching upward and outward. Deeply fissured charred bark with pale ash-grey wood showing in the splits. Approximately 9 meters tall.",
     "game": {
@@ -3924,7 +3973,8 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\burnt_tree_giant_01.png"
   },
   {
     "id": "landmark_ogre_gate",
@@ -3933,7 +3983,7 @@
     "family": "landmark",
     "promptTemplate": "BUILDING",
     "promptDetails": "A colossal fortress gateway built by ogres: two massive square towers of rough black basalt blocks flanking a huge pair of iron-banded timber doors, the lintel mounted with giant horned skulls, iron spikes along the battlements, tattered red banners hanging either side. Scorched, battle-scarred, monumental. Approximately 14 meters tall.",
-    "status": "pending",
+    "status": "image_complete",
     "batch": 10,
     "game": {
       "scaleMeters": 14,
@@ -3946,7 +3996,8 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_ogre_gate.png"
   },
   {
     "id": "landmark_volcano_cone_01",
@@ -3955,7 +4006,7 @@
     "family": "landmark",
     "promptTemplate": "TERRAIN",
     "promptDetails": "A stylized volcano: a steep broad cone of near-black ash and basalt with a broken crater rim at the top glowing orange from within, and three bright orange lava channels running down its flanks and fading out before the base. Ash-grey streaks between the lava runs. A single solid mountain form, no smoke plume, no clouds, no surrounding landscape. Approximately 20 meters tall.",
-    "status": "pending",
+    "status": "rejected",
     "batch": 10,
     "game": {
       "scaleMeters": 20,
@@ -3968,7 +4019,9 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_volcano_cone_01.png",
+    "rejectedWhy": "2026-09-25 image pass: a lava texture, not a cone"
   },
   {
     "id": "landmark_obsidian_arch_01",
@@ -3977,7 +4030,7 @@
     "family": "landmark",
     "promptTemplate": "VOLCANIC",
     "promptDetails": "A natural arch of glossy black volcanic rock, two thick weathered legs meeting in a heavy span overhead, the stone faceted and glassy with sharp bright edge highlights and pale ash dusting the top of the span. Approximately 10 meters tall.",
-    "status": "pending",
+    "status": "image_complete",
     "batch": 10,
     "game": {
       "scaleMeters": 10,
@@ -3990,7 +4043,8 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_obsidian_arch_01.png"
   },
   {
     "id": "landmark_ogre_idol_01",
@@ -3999,7 +4053,7 @@
     "family": "landmark",
     "promptTemplate": "BUILDING",
     "promptDetails": "A colossal crude idol carved from a single block of dark volcanic stone: a squat brutish ogre figure, seated, with a heavy jaw and tusks, oversized fists resting on its knees, harsh angular chisel marks all over it and glowing orange gemstones set in the eye sockets. Chipped, weathered, half sunk in ash. Approximately 9 meters tall.",
-    "status": "pending",
+    "status": "image_complete",
     "batch": 10,
     "game": {
       "scaleMeters": 9,
@@ -4012,7 +4066,8 @@
     "placement": {
       "near": [],
       "avoid": []
-    }
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_ogre_idol_01.png"
   },
   {
     "id": "swamp_cypress_01",
@@ -4734,5 +4789,1085 @@
     "glbGame": "Game3DAssets/landmark_drowned_bell_tower.glb",
     "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_drowned_bell_tower.png",
     "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\landmark_drowned_bell_tower.glb"
+  },
+  {
+    "id": "war_house_ruin_01",
+    "name": "Burnt-Out Cottage",
+    "category": "warfront_human",
+    "family": "ruin",
+    "promptTemplate": "WARRUIN",
+    "promptDetails": "A small stone-and-timber peasant cottage burnt out by fire: the thatch roof gone except for a charred sagging section at one end, the exposed roof beams black and thick, the walls sooted above every window, one corner of the wall fallen into a heap of stone. Approximately 5 meters tall.",
+    "status": "glb_optimized",
+    "batch": 13,
+    "game": {
+      "scaleMeters": 5,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 6,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_house_ruin_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\war_house_ruin_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/war_house_ruin_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/war_house_ruin_01.glb",
+    "glbGame": "Game3DAssets/war_house_ruin_01.glb"
+  },
+  {
+    "id": "war_house_ruin_02",
+    "name": "Breached Cottage",
+    "category": "warfront_human",
+    "family": "ruin",
+    "promptTemplate": "WARRUIN",
+    "promptDetails": "A half-timbered village house BREACHED: its whole front wall blown open into a ragged gap, the clay-tile roof caved in over the breach, plaster fallen away to show scorched black timber framing, a heap of rubble spilling out of the gap. A single small house. Approximately 4.5 meters tall.",
+    "status": "glb_optimized",
+    "batch": 13,
+    "game": {
+      "scaleMeters": 4.5,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 6,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_house_ruin_02.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\war_house_ruin_02.glb",
+    "glbRaw": "AssetFactory/glb_raw/war_house_ruin_02.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/war_house_ruin_02.glb",
+    "glbGame": "Game3DAssets/war_house_ruin_02.glb"
+  },
+  {
+    "id": "war_tavern_ruin_01",
+    "name": "Gutted Tavern",
+    "category": "warfront_human",
+    "family": "ruin",
+    "promptTemplate": "WARRUIN",
+    "promptDetails": "A two-storey timber-framed tavern GUTTED BY FIRE and half collapsed: the whole upper floor and roof fallen in leaving a jagged black ridge of charred beams, one end wall gone into a heap of stone, the ground floor walls sooted black above every window, a heavy stone chimney standing alone at one end. Approximately 7 meters tall.",
+    "status": "trellis_generating",
+    "batch": 13,
+    "game": {
+      "scaleMeters": 7,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 3,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_tavern_ruin_01.png"
+  },
+  {
+    "id": "war_barn_ruin_01",
+    "name": "Collapsed Barn",
+    "category": "warfront_human",
+    "family": "ruin",
+    "promptTemplate": "WARRUIN",
+    "promptDetails": "ONE single large wooden barn collapsed on one side: half the plank roof slid down to the ground in one heavy scorched slab, the other half still up on blackened posts, the hayloft doors hanging open, walls charred dark. A single building. Approximately 6 meters tall.",
+    "status": "image_complete",
+    "batch": 13,
+    "game": {
+      "scaleMeters": 6,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 4,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_barn_ruin_01.png",
+    "seed": 31337
+  },
+  {
+    "id": "war_farmhouse_ruin_01",
+    "name": "Scorched Farmhouse",
+    "category": "warfront_human",
+    "family": "ruin",
+    "promptTemplate": "WARRUIN",
+    "promptDetails": "A stone farmhouse BURNT OUT: the roof gone except for thick blackened rafters, the two stone gable ends standing open to the sky, one gable cracked and leaning, the front porch smashed flat, the walls sooted black above the windows. Approximately 6 meters tall.",
+    "status": "image_complete",
+    "batch": 13,
+    "game": {
+      "scaleMeters": 6,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 4,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_farmhouse_ruin_01.png"
+  },
+  {
+    "id": "war_chapel_ruin_01",
+    "name": "Ruined Chapel",
+    "category": "warfront_human",
+    "family": "ruin",
+    "promptTemplate": "WARRUIN",
+    "promptDetails": "A small stone village chapel with its roof burnt away, leaving the stone walls and a pointed bell gable standing open to the sky, one side wall breached into rubble, a round window cracked, soot streaking the pale stone. Approximately 8 meters tall.",
+    "status": "image_complete",
+    "batch": 13,
+    "game": {
+      "scaleMeters": 8,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_chapel_ruin_01.png"
+  },
+  {
+    "id": "war_castle_wall_01",
+    "name": "Battered Curtain Wall",
+    "category": "warfront_human",
+    "family": "ruin",
+    "promptTemplate": "WARRUIN",
+    "promptDetails": "A short FREE-STANDING segment of castle curtain wall, the whole segment visible with both cut ends and the walkway on top, built of heavy grey stone blocks about three storeys high, its crenellations half smashed away, deep gouges and cracks across the face, scorched black in patches. One long solid block seen from outside. Approximately 6 meters tall and 10 meters long.",
+    "status": "image_complete",
+    "batch": 13,
+    "game": {
+      "scaleMeters": 6,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 8,
+      "maxCluster": 6
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_castle_wall_01.png"
+  },
+  {
+    "id": "war_castle_wall_breach_01",
+    "name": "Breached Wall",
+    "category": "warfront_human",
+    "family": "ruin",
+    "promptTemplate": "FIELD",
+    "promptDetails": "A short free-standing section of grey stone castle wall smashed through the middle: two jagged standing stubs of wall with a wide heap of broken blocks between them, both cut ends visible, the whole piece small in the frame. Approximately 6 meters tall and 10 meters long.",
+    "status": "image_complete",
+    "batch": 13,
+    "game": {
+      "scaleMeters": 6,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 4,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_castle_wall_breach_01.png",
+    "seed": 7025
+  },
+  {
+    "id": "war_tower_ruin_01",
+    "name": "Toppled Tower",
+    "category": "warfront_human",
+    "family": "ruin",
+    "promptTemplate": "WARRUIN",
+    "promptDetails": "A round castle tower of grey stone snapped off two-thirds of the way up, the top gone, the break jagged and leaning to one side, a long crack running down the wall, its arrow slits scorched black. Approximately 11 meters tall.",
+    "status": "image_complete",
+    "batch": 13,
+    "game": {
+      "scaleMeters": 11,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_tower_ruin_01.png"
+  },
+  {
+    "id": "war_gatehouse_ruin_01",
+    "name": "Smashed Gatehouse",
+    "category": "warfront_human",
+    "family": "ruin",
+    "promptTemplate": "WARRUIN",
+    "promptDetails": "A castle gatehouse of two square stone towers flanking an arched gateway, the gate itself smashed inward and hanging from one hinge as one heavy slab, the battlements of one tower knocked off, the stone scorched and cracked around the arch. Approximately 12 meters tall.",
+    "status": "image_complete",
+    "batch": 13,
+    "game": {
+      "scaleMeters": 12,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_gatehouse_ruin_01.png"
+  },
+  {
+    "id": "war_market_stall_ruin_01",
+    "name": "Smashed Market Stall",
+    "category": "warfront_human",
+    "family": "ruin",
+    "promptTemplate": "WARRUIN",
+    "promptDetails": "A small wooden market stall knocked half over and SMASHED: a broken counter, a torn striped canvas awning hanging as one heavy fold, splintered posts, crushed crates spilling out. The whole small stall, free-standing. Approximately 2.6 meters tall.",
+    "status": "image_complete",
+    "batch": 13,
+    "game": {
+      "scaleMeters": 2.6,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "spawnWeight": 5,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_market_stall_ruin_01.png"
+  },
+  {
+    "id": "war_watchtower_wreck_01",
+    "name": "Fallen Watchtower",
+    "category": "warfront_human",
+    "family": "ruin",
+    "promptTemplate": "FIELD",
+    "promptDetails": "A wooden WATCHTOWER FALLEN OVER on its side, lying flat on the ground: four thick splayed legs snapped, the lookout platform crushed at one end, the timber scorched. A toppled structure lying down. Approximately 6 meters long and 2.5 meters tall.",
+    "status": "image_complete",
+    "batch": 13,
+    "game": {
+      "scaleMeters": 6,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_watchtower_wreck_01.png",
+    "seed": 7023
+  },
+  {
+    "id": "war_siege_tower_wreck_01",
+    "name": "Burnt Siege Tower",
+    "category": "warfront_human",
+    "family": "ruin",
+    "promptTemplate": "FIELD",
+    "promptDetails": "A tall wooden SIEGE TOWER on four huge solid wooden wheels, a war machine not a house: a narrow timber-frame tower with a hide-covered front, burnt black and leaning hard to one side, its top platform collapsed. Approximately 9 meters tall.",
+    "status": "image_complete",
+    "batch": 13,
+    "game": {
+      "scaleMeters": 9,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_siege_tower_wreck_01.png",
+    "seed": 7024
+  },
+  {
+    "id": "war_trebuchet_wreck_01",
+    "name": "Broken Trebuchet",
+    "category": "warfront_human",
+    "family": "ruin",
+    "promptTemplate": "WARRUIN",
+    "promptDetails": "A wooden trebuchet with its throwing arm snapped in half and lying across the heavy timber frame, the counterweight box split open spilling stone, one wheel broken, scorch marks along the frame. Approximately 7 meters tall.",
+    "status": "image_complete",
+    "batch": 13,
+    "game": {
+      "scaleMeters": 7,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_trebuchet_wreck_01.png"
+  },
+  {
+    "id": "war_ballista_01",
+    "name": "Ballista",
+    "category": "warfront_human",
+    "family": "ruin",
+    "promptTemplate": "FIELD",
+    "promptDetails": "A BALLISTA war machine, a giant crossbow on a stout four-legged wooden stand: two thick bow arms, a winch, a bolt as long as a spear in the groove, the wood scarred and muddy. Not a building. Approximately 3 meters tall.",
+    "status": "image_complete",
+    "batch": 13,
+    "game": {
+      "scaleMeters": 3,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 4,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_ballista_01.png",
+    "seed": 7015
+  },
+  {
+    "id": "war_supply_wagon_wreck_01",
+    "name": "Overturned Supply Wagon",
+    "category": "warfront_human",
+    "family": "ruin",
+    "promptTemplate": "WARRUIN",
+    "promptDetails": "A heavy covered supply wagon overturned onto its side, its canvas cover burnt away to the hoops, sacks and barrels spilled in a heap against it, one solid wheel snapped off and lying flat. Approximately 3 meters tall.",
+    "status": "image_complete",
+    "batch": 13,
+    "game": {
+      "scaleMeters": 3,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "spawnWeight": 5,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_supply_wagon_wreck_01.png"
+  },
+  {
+    "id": "war_field_tent_01",
+    "name": "Torn Army Tent",
+    "category": "warfront_human",
+    "family": "ruin",
+    "promptTemplate": "FIELD",
+    "promptDetails": "A soldiers' canvas RIDGE TENT, a triangular tent of faded cream canvas with a blue and gold stripe, pegged to the ground, one side torn open in a long flap and the ridge pole sagging, mud-splashed. Cloth, not a building. Approximately 3.5 meters tall.",
+    "status": "image_complete",
+    "batch": 13,
+    "game": {
+      "scaleMeters": 3.5,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "spawnWeight": 6,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_field_tent_01.png",
+    "seed": 7017
+  },
+  {
+    "id": "war_command_tent_01",
+    "name": "Command Pavilion",
+    "category": "warfront_human",
+    "family": "ruin",
+    "promptTemplate": "FIELD",
+    "promptDetails": "A large round canvas PAVILION TENT of blue and gold striped cloth with a peaked conical roof and a pennant on top, one section of the roof collapsed inward and scorched, the entrance flap tied back. Cloth, not a building. Approximately 5.5 meters tall.",
+    "status": "image_complete",
+    "batch": 13,
+    "game": {
+      "scaleMeters": 5.5,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_command_tent_01.png",
+    "seed": 7019
+  },
+  {
+    "id": "war_kingdom_banner_01",
+    "name": "Tattered Kingdom Banner",
+    "category": "warfront_human",
+    "family": "ruin",
+    "promptTemplate": "FIELD",
+    "promptDetails": "A single tall vertical FLAG: a long rectangular blue cloth banner with a gold lion emblem hanging from a crossbar on a tall wooden pole, the bottom edge of the cloth torn into ragged strips, the cloth swaying in heavy folds. Just a flag on a pole standing upright, nothing else. Approximately 4.5 meters tall.",
+    "status": "image_complete",
+    "batch": 13,
+    "game": {
+      "scaleMeters": 4.5,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 6,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_kingdom_banner_01.png",
+    "seed": 424242
+  },
+  {
+    "id": "war_knight_statue_fallen_01",
+    "name": "Fallen Knight Statue",
+    "category": "warfront_human",
+    "family": "ruin",
+    "promptTemplate": "WARRUIN",
+    "promptDetails": "A grey stone statue of an armoured knight that has been knocked off its plinth and lies broken on the ground, the head and one arm snapped off and resting beside it, the empty cracked plinth behind. Approximately 3 meters long and 1.5 meters tall.",
+    "status": "image_complete",
+    "batch": 13,
+    "game": {
+      "scaleMeters": 3,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_knight_statue_fallen_01.png"
+  },
+  {
+    "id": "war_shield_pile_01",
+    "name": "Heap of Shields",
+    "category": "warfront_human",
+    "family": "ruin",
+    "promptTemplate": "FIELD",
+    "promptDetails": "A HEAP OF SHIELDS AND HELMETS lying on the ground: dented kite shields and round shields in faded blue, red and gold heraldry piled together with a few battered steel helmets and a broken sword, one solid low mound. Not a building. Approximately 1.3 meters tall.",
+    "status": "image_complete",
+    "batch": 13,
+    "game": {
+      "scaleMeters": 1.3,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "spawnWeight": 7,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_shield_pile_01.png",
+    "seed": 7018
+  },
+  {
+    "id": "orc_fortress_gate_ruin_01",
+    "name": "Smashed Fortress Gate",
+    "category": "warfront_orc",
+    "family": "orc_ruin",
+    "promptTemplate": "ORCRUIN",
+    "promptDetails": "The main gate of an orc fortress: two massive square towers of huge stacked logs bound with black iron bands and studded with spikes, a wide gateway between them whose great iron-plated doors have been smashed, one door lying flat and one hanging askew as a heavy slab, the tops of the towers burnt and one torn open. Approximately 13 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 13,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_fortress_gate_ruin_01.png"
+  },
+  {
+    "id": "orc_fortress_wall_01",
+    "name": "Orc Palisade Wall",
+    "category": "warfront_orc",
+    "family": "orc_ruin",
+    "promptTemplate": "ORCRUIN",
+    "promptDetails": "A straight segment of orc fortress wall made of huge sharpened logs standing upright side by side, bound across with two black iron bands, studded with spikes, the tops scorched and a few logs split. A long solid block. Approximately 6 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 6,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 8,
+      "maxCluster": 6
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_fortress_wall_01.png"
+  },
+  {
+    "id": "orc_fortress_wall_broken_01",
+    "name": "Smashed Palisade",
+    "category": "warfront_orc",
+    "family": "orc_ruin",
+    "promptTemplate": "ORCRUIN",
+    "promptDetails": "A segment of orc palisade wall of huge upright logs that has been smashed through, the logs in the middle snapped off short and leaning outward, burnt black, the iron band torn and bent, a heap of broken log ends at the base. One solid mass. Approximately 5 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 5,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 5,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_fortress_wall_broken_01.png"
+  },
+  {
+    "id": "orc_watchtower_01",
+    "name": "Orc Watchtower",
+    "category": "warfront_orc",
+    "family": "orc_ruin",
+    "promptTemplate": "ORCRUIN",
+    "promptDetails": "A crude orc watchtower of huge lashed logs, four thick splayed legs, a boxed lookout platform at the top walled with hide and iron plates, a heavy ladder as shallow relief on one leg, spikes and a skull on the corner posts. Approximately 9 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 9,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 3,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_watchtower_01.png"
+  },
+  {
+    "id": "orc_watchtower_broken_01",
+    "name": "Burnt Watchtower",
+    "category": "warfront_orc",
+    "family": "orc_ruin",
+    "promptTemplate": "ORCRUIN",
+    "promptDetails": "A crude orc log watchtower burnt and broken, its lookout box collapsed and hanging off one side, two legs snapped so the whole tower leans hard, the timber charred black. Approximately 7 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 7,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 3,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_watchtower_broken_01.png"
+  },
+  {
+    "id": "orc_hut_ruin_01",
+    "name": "Caved-In Orc Hut",
+    "category": "warfront_orc",
+    "family": "orc_ruin",
+    "promptTemplate": "ORCRUIN",
+    "promptDetails": "A squat round orc hut of hide stretched over bone and log ribs, caved in on one side so the roof sags to the ground, the hide burnt through in a big ragged hole showing the charred ribs, a tusked skull over the low doorway. Approximately 3.8 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 3.8,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 6,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_hut_ruin_01.png"
+  },
+  {
+    "id": "orc_longhouse_01",
+    "name": "Orc Longhouse",
+    "category": "warfront_orc",
+    "family": "orc_ruin",
+    "promptTemplate": "ORCRUIN",
+    "promptDetails": "A long low orc hall built of massive logs with a ridged roof of overlapping hides weighted with stones, one end of the roof burnt away to the charred rafters, iron spikes along the ridge, a wide low doorway hung with a hide. Approximately 6.5 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 6.5,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_longhouse_01.png"
+  },
+  {
+    "id": "orc_war_drum_01",
+    "name": "War Drum",
+    "category": "warfront_orc",
+    "family": "orc_ruin",
+    "promptTemplate": "ORCRUIN",
+    "promptDetails": "A huge orc war drum, a fat barrel-shaped drum of black iron bands and stretched hide as tall as a man, standing on a crude timber frame, two heavy bone mallets resting against it, the hide scorched at one edge. Approximately 2.6 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 2.6,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "spawnWeight": 3,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_war_drum_01.png"
+  },
+  {
+    "id": "orc_catapult_wreck_01",
+    "name": "Broken Catapult",
+    "category": "warfront_orc",
+    "family": "orc_ruin",
+    "promptTemplate": "ORCRUIN",
+    "promptDetails": "A crude orc catapult of heavy logs and black iron, its throwing arm snapped and lying across the frame, the frame scorched and one solid wheel broken off, a pile of stone shot beside it as one lump. Approximately 4.5 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 4.5,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 3,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_catapult_wreck_01.png"
+  },
+  {
+    "id": "orc_battering_ram_01",
+    "name": "Battering Ram",
+    "category": "warfront_orc",
+    "family": "orc_ruin",
+    "promptTemplate": "ORCRUIN",
+    "promptDetails": "A BATTERING RAM siege engine: one huge tree-trunk log with a black iron head shaped like a boar snout, hanging on chains under a low wooden frame with a hide roof, the frame on four solid wooden wheels, scorched and dented. A wooden war machine on wheels. No people, no creatures, no monsters. Approximately 5 meters long and 3 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 5,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_battering_ram_01.png",
+    "seed": 8101
+  },
+  {
+    "id": "orc_war_banner_01",
+    "name": "Orc War Banner",
+    "category": "warfront_orc",
+    "family": "orc_ruin",
+    "promptTemplate": "ORCRUIN",
+    "promptDetails": "A tall crude banner pole of a stripped log with bone spikes, flying a long ragged banner of dark red hide painted with a white skull device, torn along the bottom and hanging in heavy folds, a skull on the pole top. Approximately 4.5 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 4.5,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 6,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_war_banner_01.png"
+  },
+  {
+    "id": "orc_spike_barricade_01",
+    "name": "Iron Spike Barricade",
+    "category": "warfront_orc",
+    "family": "orc_ruin",
+    "promptTemplate": "ORCRUIN",
+    "promptDetails": "A low orc barricade of a heavy log frame bristling with thick black iron spikes on all sides, bound with iron bands, scorched, one end smashed. Approximately 2 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 2,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "spawnWeight": 7,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_spike_barricade_01.png"
+  },
+  {
+    "id": "orc_idol_broken_01",
+    "name": "Toppled Orc Idol",
+    "category": "warfront_orc",
+    "family": "orc_ruin",
+    "promptTemplate": "ORCRUIN",
+    "promptDetails": "A crude squat stone idol of a tusked orc god that has been toppled and lies tilted against a heap of broken stone, its head cracked off and resting beside it, painted with faded red war marks. Approximately 4 meters long and 2.5 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 4,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_idol_broken_01.png"
+  },
+  {
+    "id": "orc_smithy_ruin_01",
+    "name": "Wrecked Orc Smithy",
+    "category": "warfront_orc",
+    "family": "orc_ruin",
+    "promptTemplate": "ORCRUIN",
+    "promptDetails": "A crude open-sided orc forge shed of logs and hide, its roof half collapsed, a big black iron forge hearth of stacked stone at the centre with a huge anvil in front, weapon blanks and a hammer as relief on the hearth, scorched all over. Approximately 4 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 4,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 1,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_smithy_ruin_01.png"
+  },
+  {
+    "id": "orc_watch_fire_01",
+    "name": "Iron Fire Basket",
+    "category": "warfront_orc",
+    "family": "orc_ruin",
+    "promptTemplate": "ORCRUIN",
+    "promptDetails": "A big crude orc fire basket: a wide black iron bowl of riveted plates on three thick bent iron legs, heaped with charred logs and dark coals, spikes around the rim. Approximately 2.2 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 2.2,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 8,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_watch_fire_01.png"
+  },
+  {
+    "id": "orc_loot_pile_01",
+    "name": "Plunder Heap",
+    "category": "warfront_orc",
+    "family": "orc_ruin",
+    "promptTemplate": "ORCRUIN",
+    "promptDetails": "A heap of plundered goods piled into one mound: a stolen blue and gold banner, an iron-bound chest, sacks, a dented helmet, a rolled tapestry and a few gold cups, all thrown together. Approximately 1.4 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 1.4,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "spawnWeight": 6,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_loot_pile_01.png"
+  },
+  {
+    "id": "orc_pen_01",
+    "name": "Broken Wolf Pen",
+    "category": "warfront_orc",
+    "family": "orc_ruin",
+    "promptTemplate": "ORCRUIN",
+    "promptDetails": "A small enclosure of crude thick stakes lashed together into a low fence, one side broken open and the stakes leaning, with a heavy hide shelter at the back, muddy and scorched. Approximately 2.4 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 2.4,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 2,
+      "maxCluster": 1
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_pen_01.png"
+  },
+  {
+    "id": "field_crater_rim_01",
+    "name": "Blast Crater",
+    "category": "warfront_field",
+    "family": "debris",
+    "promptTemplate": "FIELD",
+    "promptDetails": "A BLAST CRATER as a single low object: a wide shallow bowl of scorched black earth with a raised ragged ring of thrown-up dark dirt clods and broken stones all round its edge, seen from a high three-quarter angle so the whole round crater is visible. Earth only, no bowl, no pot, no cauldron. Approximately 1 meter tall and 6 meters across.",
+    "status": "rejected",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 1,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 8,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_crater_rim_01.png",
+    "seed": 8104,
+    "rejectedWhy": "SD returns a bowl of stones for a crater every time; craterScorch decals do the job"
+  },
+  {
+    "id": "field_siege_boulder_01",
+    "name": "Catapult Stone",
+    "category": "warfront_field",
+    "family": "debris",
+    "promptTemplate": "FIELD",
+    "promptDetails": "ONE huge round grey STONE BALL, a catapult shot as big as a cart wheel, cracked across, half sunk into a low mound of churned dark earth. Just a single big rough sphere of rock on a patch of dirt. Approximately 1.6 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 1.6,
+      "collision": "cylinder",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 7,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_siege_boulder_01.png",
+    "seed": 8102
+  },
+  {
+    "id": "field_broken_ladder_01",
+    "name": "Smashed Siege Ladder",
+    "category": "warfront_field",
+    "family": "debris",
+    "promptTemplate": "FIELD",
+    "promptDetails": "A heavy wooden siege ladder snapped in two and lying flat on the ground, its thick rails and rungs splintered, scorched at one end. Approximately 4 meters long and 0.9 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 0.9,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 6,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_broken_ladder_01.png"
+  },
+  {
+    "id": "field_charred_beam_pile_01",
+    "name": "Charred Beam Heap",
+    "category": "warfront_field",
+    "family": "debris",
+    "promptTemplate": "FIELD",
+    "promptDetails": "A heap of thick charred roof beams and burnt planks collapsed together into one black mound, ends splintered, a few clay roof tiles mixed in. Approximately 1.2 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 1.2,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "spawnWeight": 8,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_charred_beam_pile_01.png"
+  },
+  {
+    "id": "field_shield_wall_01",
+    "name": "Planted Shield Wall",
+    "category": "warfront_field",
+    "family": "debris",
+    "promptTemplate": "FIELD",
+    "promptDetails": "A row of five tall kite shields in faded blue and gold heraldry planted upright edge to edge in the mud as a barricade, dented and pierced by arrows shown as shallow relief, one shield fallen forward. One solid piece. Approximately 1.6 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 1.6,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "spawnWeight": 5,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_shield_wall_01.png"
+  },
+  {
+    "id": "field_grave_mound_01",
+    "name": "Soldier's Cairn",
+    "category": "warfront_field",
+    "family": "debris",
+    "promptTemplate": "FIELD",
+    "promptDetails": "A low rounded MOUND OF HEAPED EARTH AND STONES with a knight's sword stuck upright in the top and a dented steel helmet hung on the sword hilt, a broken shield leaning against the side of the mound. A burial cairn, low and wide. Approximately 1.4 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 1.4,
+      "collision": "none",
+      "solid": false,
+      "breakable": false,
+      "spawnWeight": 5,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_grave_mound_01.png",
+    "seed": 8103
+  },
+  {
+    "id": "field_broken_cart_burnt_01",
+    "name": "Burnt Wagon Wreck",
+    "category": "warfront_field",
+    "family": "debris",
+    "promptTemplate": "FIELD",
+    "promptDetails": "The burnt-out wreck of a farm wagon, charred black, its bed collapsed and one side gone, two solid wheels still on and one lying flat beside it. Approximately 2.2 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 2.2,
+      "collision": "box",
+      "solid": true,
+      "breakable": true,
+      "spawnWeight": 6,
+      "maxCluster": 2
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_broken_cart_burnt_01.png"
+  },
+  {
+    "id": "field_sandbag_wall_01",
+    "name": "Earthwork",
+    "category": "warfront_field",
+    "family": "debris",
+    "promptTemplate": "FIELD",
+    "promptDetails": "A short defensive earthwork of stacked earth-filled sacks and sods reinforced with a few thick logs, one end blown apart and slumped, muddy. One solid mass. Approximately 1.4 meters tall.",
+    "status": "image_complete",
+    "batch": 14,
+    "game": {
+      "scaleMeters": 1.4,
+      "collision": "box",
+      "solid": true,
+      "breakable": false,
+      "spawnWeight": 6,
+      "maxCluster": 3
+    },
+    "placement": {
+      "near": [],
+      "avoid": []
+    },
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_sandbag_wall_01.png"
   }
 ]

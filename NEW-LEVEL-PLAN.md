@@ -356,3 +356,72 @@ are kept because they read fine as swamp clutter, but not as what they are named
   Mirefen's green wisps cast orange pools. The texture is white now and tinted by
   `look.lantern.color`; white × 0xffb060 reproduces the old warm glow, so the
   other three maps are unchanged (verified with a Kingsfield capture).
+
+---
+
+# New Level — **Bloodmarch**, the War-Torn Field
+
+The fifth battlefield, built 2026-09-25. The morning after the two armies met:
+the human castle and its town in the north-west, the orc fortress and camp in
+the south-east, the King's Road corner to corner between them, and the field in
+the middle where it was decided. Everything on it is damaged, and most of it is
+on fire.
+
+## What is different about it
+
+The other four maps are places; this one is an event. Two things carry that:
+
+- **Fire is a map feature.** `map.bloodmarch.json` has a `fires` array
+  (`{x, z, r, y, h, s}` from `MapBuilder.fire()`); the game draws each as flames,
+  a smoke column, a pooled point light and a ground glow (`updateMapFires` →
+  `vfx.buildingFire` / `vfx.smokeColumn`). Emission is budgeted: the ten nearest
+  fires burn in full, the next ring is smoke only, the rest emit nothing, so a
+  town of sixty fires costs what a dozen do. No GLB contains a flame; the
+  prompt templates forbid it, so a mesh can burn or not burn per placement.
+- **Both armies' architecture on one map.** Kingsfield's buildings are here
+  battered and gutted (`tools/char-glb.mjs` grades `warTorn`, `gutted`,
+  `siegeStone`: twenty regrades, free), and the Emberreach ogre camp that was
+  never generated is generated now and stands as the orc side.
+
+## Assets
+
+- **Batch 13 (21, WARRUIN template):** the human side after the battle. Burnt
+  and breached cottages, a gutted tavern, collapsed barn, scorched farmhouse,
+  ruined chapel, curtain wall + breach + toppled tower + smashed gatehouse,
+  wrecked stall, fallen watchtower, burnt siege tower, broken trebuchet,
+  ballista, overturned wagon, torn tents and pavilion, tattered banner, fallen
+  knight statue, heap of shields.
+- **Batch 14 (25, ORCRUIN + FIELD):** smashed fortress gate, palisade + broken
+  palisade, watchtower + burnt watchtower, caved-in hut, longhouse, war drum,
+  broken catapult, battering ram, war banner, spike barricade, toppled idol,
+  wrecked smithy, iron fire basket, plunder heap, wolf pen; and the field:
+  crater rim, catapult stone, smashed ladder, charred beam heap, planted shield
+  wall, soldier's cairn, burnt wagon wreck, earthwork.
+- **Batches 9, 5, 10** (the Emberreach ogre camp, war debris and hero pieces,
+  40 meshes) run after, because this map wants the braziers, huts, spike walls,
+  totems, bone piles, arrows, swords and shields as much as Emberreach did.
+- **Ground art:** textures `churnedMud` (base), `scorchedEarth`, `battleGrass`,
+  `rubbleGround`, `ironMud`; decals `craterScorch`, `arrowStorm`,
+  `shieldScatter`, `charredBeams`, `bootChurn`, `warStain`, `rubbleSpill`;
+  sprite `trampledTuft`.
+
+All three templates carry Mirefen's solid-closed-mass rule and add a no-gore
+rule: damage without bodies, an all-ages battlefield.
+
+## The map — `tools/generate-bloodmarch.mjs`
+
+Castle at (-72,-72) inside an arc of curtain wall with a gatehouse on the road,
+two breaches and towers at the quarters; the town between the wall and the field,
+half of it burning; farms with burnt fields to the south-west; the king's siege
+line (pavilion, tents, ballistae, earthworks, shield walls) thirty units out.
+Orc keep at (74,74) inside a palisade arc with the smashed gate on the road,
+watchtowers, fire baskets and banners; the camp inside (huts, longhouse, drum,
+smithy, pens, plunder); the orc siege line (ram, catapults, spikes) facing the
+castle. The field between: craters, siege stones, ladders, wrecks, the siege
+tower and trebuchet that never reached the wall, shield walls, cairns, both
+sides' banners down. Burnt woods hold the north-east. Spawn in the middle.
+
+Look: a low red sun through smoke (key 0xffb083), brown-grey ambient, warm fog
+at 44–86, grade slightly desaturated with a heavy vignette; the fires and fire
+baskets are the only saturated colour. Enemy mix: archers 1.4, goblins 1.3,
+ogres 1.3, bombers 1.3, shamans 1.0; wolves, rats and bats keep clear of a war.

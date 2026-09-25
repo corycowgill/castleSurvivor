@@ -69,6 +69,17 @@ const GRADES = {
   bleached: { floor: 0.300, range: 0.44, gamma: 0.88, sat: 0.05, tint: [1.00, 1.00, 1.02], contrast: 1.05 },
   // Stone under algae: greener and lighter than bogMoss, for rock rather than bark.
   algaeStone: { floor: 0.150, range: 0.40, gamma: 0.95, sat: 0.18, tint: [0.86, 1.04, 0.80], contrast: 1.10 },
+
+  // ── Bloodmarch ──
+  // Battered, not burnt to a crisp: a building that has been fought over keeps
+  // most of its own colour under the soot, so the town still reads as the town
+  // the player knows from Kingsfield. Darker band than the originals, saturation
+  // half kept, a faint warm tint from the fires.
+  warTorn:  { floor: 0.060, range: 0.46, gamma: 1.18, sat: 0.45, tint: [1.04, 0.96, 0.90], contrast: 1.16 },
+  // Fire-gutted: the char grade with a little more of the wood colour left in.
+  gutted:   { floor: 0.045, range: 0.36, gamma: 1.30, sat: 0.22, tint: [1.05, 0.95, 0.88], contrast: 1.20 },
+  // Stone after a siege: cold, dusty, cracked-looking through contrast alone.
+  siegeStone: { floor: 0.110, range: 0.44, gamma: 1.05, sat: 0.15, tint: [0.98, 0.97, 0.96], contrast: 1.22 },
 };
 
 // source key → { key, name, grade }.  Scale, radius and breakability are inherited
@@ -121,6 +132,32 @@ const VARIANTS = [
   { from: 'prop_wood_crate_broken_01', key: 'bog_crate_01',   name: 'Swollen Crate',       grade: 'sunken' },
   { from: 'combat_barricade_01',   key: 'bog_barricade_01',   name: 'Rotted Barricade',    grade: 'sunken' },
   { from: 'combat_broken_cart_01', key: 'bog_cart_01',        name: 'Sunken Cart',         grade: 'sunken' },
+
+  // Bloodmarch. The human town and the orc keep are the buildings the player
+  // already knows, battered: every structure on the field is here twice, once
+  // war-torn (soot over its own colours) and once gutted (fire took it), so the
+  // map stands up before a single Trellis ruin lands and the ruins slot in
+  // beside the originals rather than replacing a style.
+  { from: 'house',        key: 'war_house_01',        name: 'Battered Cottage',      grade: 'warTorn' },
+  { from: 'house',        key: 'war_house_gutted_01', name: 'Gutted Cottage',        grade: 'gutted' },
+  { from: 'farmHouse',    key: 'war_farmhouse_01',    name: 'Battered Farmhouse',    grade: 'warTorn' },
+  { from: 'farmHouse',    key: 'war_farmhouse_gutted_01', name: 'Gutted Farmhouse',  grade: 'gutted' },
+  { from: 'tavern',       key: 'war_tavern_01',       name: 'Battered Tavern',       grade: 'warTorn' },
+  { from: 'tavern2',      key: 'war_tavern_gutted_01', name: 'Gutted Tavern',        grade: 'gutted' },
+  { from: 'blacksmith',   key: 'war_blacksmith_01',   name: 'Battered Smithy',       grade: 'warTorn' },
+  { from: 'apothecary',   key: 'war_apothecary_01',   name: 'Battered Apothecary',   grade: 'warTorn' },
+  { from: 'horseStable',  key: 'war_stable_gutted_01', name: 'Gutted Stable',        grade: 'gutted' },
+  { from: 'humanCastle',  key: 'war_castle_01',       name: 'Besieged Castle',       grade: 'siegeStone' },
+  { from: 'ogreCastle',   key: 'war_orc_keep_01',     name: 'Battered Orc Keep',     grade: 'warTorn' },
+  { from: 'wall',         key: 'war_wall_01',         name: 'Scarred Wall',          grade: 'siegeStone' },
+  { from: 'horseCart',    key: 'war_cart_gutted_01',  name: 'Burnt Cart',            grade: 'gutted' },
+  { from: 'townStatue',   key: 'war_statue_01',       name: 'Sooted Statue',         grade: 'siegeStone' },
+  { from: 'village_market_stall_01', key: 'war_stall_01', name: 'Wrecked Stall',     grade: 'gutted' },
+  { from: 'village_water_well_01',   key: 'war_well_01',  name: 'Cracked Well',      grade: 'siegeStone' },
+  { from: 'village_lantern_post_01', key: 'war_lantern_01', name: 'Bent Lantern Post', grade: 'warTorn' },
+  { from: 'village_rail_fence_straight_01', key: 'war_fence_01', name: 'Smashed Fence', grade: 'gutted' },
+  { from: 'oakTree',      key: 'war_oak_burnt_01',    name: 'Burnt Oak',             grade: 'charFoliage' },
+  { from: 'pineTree',     key: 'war_pine_burnt_01',   name: 'Burnt Pine',            grade: 'charFoliage' },
 ];
 
 // Source entries for the legacy (non-pipeline) assets that have no assets-extra.js row
@@ -129,6 +166,19 @@ const LEGACY_SRC = {
   boulder:   { file: 'boulder.glb',   category: 'nature', defaultScale: 3.2, obstacle: true, radius: 1.7, breakable: false },
   shrubbery: { file: 'shrubbery.glb', category: 'nature', defaultScale: 2.6, obstacle: false, radius: 0,  breakable: false },
   oakTree:   { file: 'oakTree.glb',   category: 'tree',   defaultScale: 8,   obstacle: true,  radius: 1.4, breakable: false },
+  // The hand-made buildings (scale / radius as maplib.LEGACY has them)
+  house:       { file: 'peasntHouse1WithMesh_00001_.glb', category: 'village', defaultScale: 6,  obstacle: true, radius: 3.5, breakable: false },
+  farmHouse:   { file: 'farmHouse.glb',            category: 'village', defaultScale: 6,  obstacle: true, radius: 3.5, breakable: false },
+  tavern:      { file: 'tavernBuilding.glb',       category: 'village', defaultScale: 6,  obstacle: true, radius: 4,   breakable: false },
+  tavern2:     { file: 'tavernBuilding_2.glb',     category: 'village', defaultScale: 6,  obstacle: true, radius: 4,   breakable: false },
+  blacksmith:  { file: 'blacksmithBuilding.glb',   category: 'village', defaultScale: 6,  obstacle: true, radius: 3.5, breakable: false },
+  apothecary:  { file: 'apothecaryBuilding.glb',   category: 'village', defaultScale: 6,  obstacle: true, radius: 3.5, breakable: false },
+  horseStable: { file: 'horseStable.glb',          category: 'village', defaultScale: 6,  obstacle: true, radius: 4,   breakable: false },
+  humanCastle: { file: 'HumanCastle.glb',          category: 'village', defaultScale: 17, obstacle: true, radius: 8,   breakable: false },
+  ogreCastle:  { file: 'OrgreCastle.glb',          category: 'village', defaultScale: 10, obstacle: true, radius: 6,   breakable: false },
+  wall:        { file: 'sonteWallWithMesh_00001_.glb', category: 'village', defaultScale: 5, obstacle: true, radius: 2.5, breakable: false },
+  horseCart:   { file: 'horseCart.glb',            category: 'props',   defaultScale: 4,  obstacle: true, radius: 2,   breakable: false },
+  townStatue:  { file: 'townStatue.glb',           category: 'village', defaultScale: 4.5, obstacle: true, radius: 1.8, breakable: false },
 };
 const ICONS = { props: '📦', village: '🏘', nature: '🌿', tree: '🌳' };
 

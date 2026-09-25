@@ -1424,6 +1424,7 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
       <button class="map-btn" data-map="darkwood"><img src="images/maps/darkwood.webp" alt="" onerror="this.remove()">Darkwood</button>
       <button class="map-btn" data-map="emberreach"><img src="images/maps/emberreach.webp" alt="" onerror="this.remove()">Emberreach</button>
       <button class="map-btn" data-map="mirefen"><img src="images/maps/mirefen.webp" alt="" onerror="this.remove()">Mirefen</button>
+      <button class="map-btn" data-map="bloodmarch"><img src="images/maps/bloodmarch.webp" alt="" onerror="this.remove()">Bloodmarch</button>
     </div>
     <div id="map-desc">The castle town and its farms. Walls to the north, fields and woods beyond, ogre keeps in every corner.</div>
   </div>
@@ -1674,7 +1675,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 // shipped in. `number` is the commit count this change will produce. Do not
 // hand-edit: the stamper matches the two marker lines exactly.
 /* BUILD:START */
-const BUILD = { number: 53, date: '2026-09-25' };
+const BUILD = { number: 54, date: '2026-09-25' };
 /* BUILD:END */
 for (const el of document.querySelectorAll('.build-badge')) el.textContent = `BUILD ${BUILD.number}`;
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -3551,6 +3552,50 @@ const MAPS = {
     // mechanically as well as in the weights.
     weights: { rat: 1.9, bat: 1.7, shaman: 1.5, goblin: 1.1, archer: 0.9, goblinBomb: 0.8, ogre: 0.7, wolf: 0.6 },
   },
+  bloodmarch: {
+    name: 'Bloodmarch', desc: 'The field where the two armies met. The castle burns on one side, the orc fortress on the other, and what is left of both lies between.',
+    // Authored by tools/generate-bloodmarch.mjs
+    load: async () => {
+      const r = await fetch('map.bloodmarch.json');
+      if (!r.ok) throw new Error('map.bloodmarch.json missing - run node tools/generate-bloodmarch.mjs');
+      return await r.json();
+    },
+    // Smoke-brown dusk. The fog is the smoke of a burning town, so it sits closer
+    // than Kingsfield's and warmer than Darkwood's; the ground under the splat is
+    // churned mud so anything unpainted still reads as trampled field.
+    bg: 0x2b2320, fog: [44, 86], ground: 0x3b2f26, ambient: 0.5, hemi: 0.34,
+    terrain: { base: 'churnedMud', layers: ['scorchedEarth', 'battleGrass', 'rubbleGround', 'ironMud'], splat: 'map.bloodmarch.splat.png',
+               tile: 4.4, layerScale: [1.0, 1.15, 1.3, 1.0], tufts: ['trampledTuft', 'ashTuft', 'cinderTuft', 'tuft3'] },
+    look: {
+      // The one light identity the other four do not own: a low red sun seen
+      // through smoke. Warm, weak, from the side, so the fires carry the frame.
+      // Ambient is a dull brown-grey, not orange -- Emberreach taught that the
+      // saturation belongs in what is actually burning, never in the air.
+      key: 0xffb083, keyIntensity: 1.25, ambient: 0x76685f, ambientIntensity: 0.9,
+      hemiSky: 0x9c7c68, hemiGround: 0x2e2824, hemiIntensity: 0.6, exposure: 1.02,
+      grade: { lift: [0.010, 0.004, 0.0], gain: [1.03, 0.98, 0.92], gamma: [1, 1, 1], saturation: 0.95, vignette: 0.5 },
+      lantern: { color: 0xff8a30, intensity: 20, distance: 14 }, forge: { color: 0xff7a30, intensity: 18, distance: 11 },
+      // Every fire basket, brazier and forge lights the scene; the burning
+      // buildings themselves are `fires` in the map JSON (see updateMapFires).
+      emitters: {
+        orc_watch_fire_01:       { color: 0xff8a2a, intensity: 22, distance: 15, y: 0.7, glow: 0.42 },
+        ogre_brazier_01:         { color: 0xff8a2a, intensity: 22, distance: 15, y: 0.75, glow: 0.42 },
+        ogre_cook_pot_01:        { color: 0xff7a20, intensity: 20, distance: 14, y: 0.40, glow: 0.40 },
+        orc_smithy_ruin_01:      { color: 0xff6a18, intensity: 22, distance: 14, y: 0.35, glow: 0.42 },
+        ogre_forge_01:           { color: 0xff6a18, intensity: 26, distance: 16, y: 0.45, glow: 0.46 },
+        blacksmith_forge_01:     { color: 0xff7a30, intensity: 18, distance: 11, y: 0.45, glow: 0.40 },
+        war_lantern_01:          { color: 0xffa040, intensity: 9,  distance: 10, y: 0.8, glow: 0.24 },
+        village_lantern_post_01: { color: 0xffa040, intensity: 12, distance: 12, y: 0.8, glow: 0.30 },
+      },
+      // Smoke haze rather than god rays: grey planes over the burning districts
+      shafts: { color: 0x9a8878, opacity: 0.06 },
+      ambientParticles: 'warsmoke',
+      ao: 0.9,
+    },
+    // Two armies' worth of soldiery: goblins and their archers in numbers, the
+    // ogres and their bombers behind them. The wild things keep clear of a war.
+    weights: { archer: 1.4, goblin: 1.3, ogre: 1.3, goblinBomb: 1.3, shaman: 1.0, wolf: 0.7, rat: 0.5, bat: 0.5 },
+  },
 };
 // Shared time uniform for the animated materials (water scroll, grass sway)
 const lookUniforms = { uTime: { value: 0 } };
@@ -3899,6 +3944,31 @@ function generateDarkwoodMap() {
   return { version: 1, worldSize: 100, spawnX: 0, spawnZ: 0, enemySpawnDistance: 45, objects };
 }
 
+// ─── MAP FIRES ───
+// Bloodmarch's burning buildings, from the map JSON `fires` array. Emission is
+// budgeted: the fires nearest the player burn in full, the next ring is a smoke
+// column only, and beyond that nothing is emitted, so a town of sixty fires
+// costs what a dozen do.
+const mapFires = [];
+const FIRE_FULL_SQ = 42 * 42, FIRE_FAR_SQ = 80 * 80, FIRE_FULL_BUDGET = 10;
+function updateMapFires(dt) {
+  if (!mapFires.length || !playerMesh || !_renderEnabled) return;
+  const px = playerMesh.position.x, pz = playerMesh.position.z;
+  let near = 0;
+  for (let i = 0; i < mapFires.length; i++) {
+    const f = mapFires[i];
+    const dx = f.x - px, dz = f.z - pz;
+    f._d = dx * dx + dz * dz;
+    if (f._d < FIRE_FULL_SQ) near++;
+  }
+  const mul = near > FIRE_FULL_BUDGET ? FIRE_FULL_BUDGET / near : 1;
+  for (let i = 0; i < mapFires.length; i++) {
+    const f = mapFires[i];
+    if (f._d < FIRE_FULL_SQ) vfx.buildingFire(f, dt, mul);
+    else if (f._d < FIRE_FAR_SQ) vfx.smokeColumn(f, dt, 0.6);
+  }
+}
+
 function unloadMap() {
   for (let i = 0; i < mapMeshes.length; i++) scene.remove(mapMeshes[i]);
   mapMeshes.length = 0;
@@ -3906,6 +3976,7 @@ function unloadMap() {
   _nearbyObstacles.length = 0;
   breakables.length = 0;
   lanternSources.length = 0;
+  mapFires.length = 0;
   loadedMap = null;
 }
 
@@ -4129,6 +4200,16 @@ async function loadMap(mapId) {
   // rather than a punishment, and a dash clears one outright.
   mires.length = 0;
   if (mapData.mires?.length) for (const m of mapData.mires) mires.push({ x: m.x, z: m.z, r: m.r, r2: m.r * m.r });
+  // Fires: Bloodmarch's burning town. Each is flames + smoke (drawn every frame by
+  // updateMapFires through vfx.buildingFire), a pooled point light like any other
+  // emitter, and a glow disc on the ground. Nothing is placed for them here.
+  if (mapData.fires?.length) {
+    for (const f of mapData.fires) {
+      mapFires.push({ x: f.x, z: f.z, r: f.r ?? 1.2, y: f.y ?? 0.3, h: f.h ?? 8, s: f.s ?? 1, _d: 0 });
+      lanternSources.push({ x: f.x, y: (f.y ?? 0.3) + 1.2 + (f.r ?? 1.2) * 0.4, z: f.z, color: 0xff8a30, intensity: 16 + 10 * (f.s ?? 1) * (f.r ?? 1.2), distance: 10 + 6 * (f.r ?? 1.2) });
+      glows.push({ x: f.x, z: f.z, rotY: 0, scale: 3 + (f.r ?? 1.2) * 3.5 });
+    }
+  }
   if (contacts.length) addInstanced(contacts, _decalGeo, new THREE.MeshBasicMaterial({ map: _contactTex, transparent: true, depthWrite: false }), 0.045, 19);
   if (canopies.length) addInstanced(canopies, _decalGeo, new THREE.MeshBasicMaterial({ map: _canopyTex, transparent: true, depthWrite: false }), 0.05, 20);
   if (glows.length) addInstanced(glows, _decalGeo, new THREE.MeshBasicMaterial({ map: _glowTex, color: new THREE.Color(def.look?.lantern?.color ?? 0xffb060), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: def.look?.lantern?.intensity >= 12 ? 0.42 : 0.18 }), 0.06, 21);
@@ -10092,6 +10173,7 @@ function gameLoop() {
     dirLight.target.updateMatrixWorld();
   }
   updateLanternLights(dt);
+  updateMapFires(dt);
   lookUniforms.uTime.value = state.time;
   // Each player's ring follows its own knight.
   const _ringPulse = 0.55 + Math.sin(state.time * 2.2) * 0.1;
@@ -10248,6 +10330,10 @@ function updateGame(dt, rawDt = dt) {
       const amb = MAPS[loadedMap]?.look?.ambientParticles;
       if (amb === 'embers') {
         vfx.ambientEmbers(playerMesh.position);
+      } else if (amb === 'warsmoke') {
+        // A burning field: embers on the wind and a steady fall of ash
+        vfx.ambientEmbers(playerMesh.position);
+        vfx.ambientAsh(playerMesh.position);
       } else if (amb === 'spores') {
         vfx.ambientSpores(playerMesh.position);
       } else {
@@ -12616,6 +12702,7 @@ init().then(() => {
       players, nearestPlayer, alivePlayers, joinPlayer, makePlayer, createPlayer, partyFocus, AudioSystem, projectiles, CHARACTER_PRIMARY,
       get companion() { return companion; }, spawnCompanion, disposeCompanion, companionReact, LUPIN,
       get horse() { return horse; }, spawnHorse, disposeHorse, mountHorse, dismountHorse, HORSE, RIDE_POSE,
+      mapFires, updateMapFires,
       spawnCreature, disposeCreature, playCreatureAnim, moveCreature, shoveEnemy,
       openAudit, closeAudit, collectAudit, renderAudit,
       setLowQuality, applyQualityMode, detectMobile,

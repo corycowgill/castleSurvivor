@@ -1,79 +1,100 @@
 {
-  "village_clutter": {
-    "name": "Village Clutter",
-    "description": "Small props scattered throughout the village",
-    "promptTemplate": "PROP",
-    "defaultTextureSize": 512,
-    "priority": 1
-  },
-  "village_infrastructure": {
-    "name": "Village Infrastructure",
-    "description": "Functional village structures and fixtures",
-    "promptTemplate": "PROP",
-    "defaultTextureSize": 1024,
-    "priority": 2
-  },
-  "blacksmith_kit": {
-    "name": "Blacksmith Kit",
-    "description": "Props for blacksmith area decoration",
-    "promptTemplate": "PROP",
-    "defaultTextureSize": 512,
-    "priority": 3
-  },
-  "farm_kit": {
-    "name": "Farm Kit",
-    "description": "Props for farm area decoration",
-    "promptTemplate": "PROP",
-    "defaultTextureSize": 512,
-    "priority": 4
-  },
-  "tavern_kit": {
-    "name": "Tavern Kit",
-    "description": "Props for tavern area decoration",
-    "promptTemplate": "PROP",
-    "defaultTextureSize": 512,
-    "priority": 5
-  },
-  "nature": {
-    "name": "Nature",
-    "description": "Trees, bushes, rocks, ground cover",
-    "promptTemplate": "TREE",
-    "defaultTextureSize": 1024,
-    "priority": 6
-  },
-  "combat": {
-    "name": "Combat / Destruction",
-    "description": "Battle damage, barricades, war debris",
-    "promptTemplate": "PROP",
-    "defaultTextureSize": 512,
-    "priority": 7
-  },
-  "terrain": {
-    "name": "Terrain",
-    "description": "Modular ground tiles and terrain features",
-    "promptTemplate": "TERRAIN",
-    "defaultTextureSize": 1024,
-    "priority": 8
-  },
-  "landmarks": {
-    "name": "Landmarks",
-    "description": "Hero pieces and unique structures",
-    "promptTemplate": "BUILDING",
-    "defaultTextureSize": 1024,
-    "priority": 9
-  },
-  "volcanic": {
-    "name": "Volcanic Terrain",
-    "description": "Basalt, cooled lava, ash and obsidian for the Emberreach map",
-    "promptTemplate": "VOLCANIC",
-    "defaultTextureSize": 512,
-    "priority": 10
-  },
-  "ogre_camp": {
-    "name": "Ogre Camp",
-    "description": "Crude ogre-built structures, fires and war gear",
-    "promptTemplate": "OGRE",
-    "defaultTextureSize": 512,
-    "priority": 11
-  }
+ "village_clutter": {
+  "name": "Village Clutter",
+  "description": "Small props scattered throughout the village",
+  "promptTemplate": "PROP",
+  "defaultTextureSize": 512,
+  "priority": 1
+ },
+ "village_infrastructure": {
+  "name": "Village Infrastructure",
+  "description": "Functional village structures and fixtures",
+  "promptTemplate": "PROP",
+  "defaultTextureSize": 1024,
+  "priority": 2
+ },
+ "blacksmith_kit": {
+  "name": "Blacksmith Kit",
+  "description": "Props for blacksmith area decoration",
+  "promptTemplate": "PROP",
+  "defaultTextureSize": 512,
+  "priority": 3
+ },
+ "farm_kit": {
+  "name": "Farm Kit",
+  "description": "Props for farm area decoration",
+  "promptTemplate": "PROP",
+  "defaultTextureSize": 512,
+  "priority": 4
+ },
+ "tavern_kit": {
+  "name": "Tavern Kit",
+  "description": "Props for tavern area decoration",
+  "promptTemplate": "PROP",
+  "defaultTextureSize": 512,
+  "priority": 5
+ },
+ "nature": {
+  "name": "Nature",
+  "description": "Trees, bushes, rocks, ground cover",
+  "promptTemplate": "TREE",
+  "defaultTextureSize": 1024,
+  "priority": 6
+ },
+ "combat": {
+  "name": "Combat / Destruction",
+  "description": "Battle damage, barricades, war debris",
+  "promptTemplate": "PROP",
+  "defaultTextureSize": 512,
+  "priority": 7
+ },
+ "terrain": {
+  "name": "Terrain",
+  "description": "Modular ground tiles and terrain features",
+  "promptTemplate": "TERRAIN",
+  "defaultTextureSize": 1024,
+  "priority": 8
+ },
+ "landmarks": {
+  "name": "Landmarks",
+  "description": "Hero pieces and unique structures",
+  "promptTemplate": "BUILDING",
+  "defaultTextureSize": 1024,
+  "priority": 9
+ },
+ "volcanic": {
+  "name": "Volcanic Terrain",
+  "description": "Basalt, cooled lava, ash and obsidian for the Emberreach map",
+  "promptTemplate": "VOLCANIC",
+  "defaultTextureSize": 512,
+  "priority": 10
+ },
+ "ogre_camp": {
+  "name": "Ogre Camp",
+  "description": "Crude ogre-built structures, fires and war gear",
+  "promptTemplate": "OGRE",
+  "defaultTextureSize": 512,
+  "priority": 11
+ },
+ "warfront_human": {
+  "name": "Warfront: Human Side",
+  "description": "Battle-damaged castle, town and siege gear",
+  "promptTemplate": "WARRUIN",
+  "defaultTextureSize": 1024,
+  "priority": 13
+ },
+ "warfront_orc": {
+  "name": "Warfront: Orc Side",
+  "description": "Battered orc fortress, camp and war engines",
+  "promptTemplate": "ORCRUIN",
+  "defaultTextureSize": 1024,
+  "priority": 14
+ },
+ "warfront_field": {
+  "name": "Warfront: The Field",
+  "description": "Craters, wrecks and debris of the battle",
+  "promptTemplate": "FIELD",
+  "defaultTextureSize": 512,
+  "priority": 15
+ }
 }

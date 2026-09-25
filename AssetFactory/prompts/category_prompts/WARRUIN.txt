@@ -1,0 +1,23 @@
+Stylized medieval fantasy game asset concept art of a RUINED, WAR-DAMAGED building, burnt out and breached: {asset_description} The complete ruin from foundation to broken roofline, seen from outside in a three-quarter view, centered and small in the frame with empty space all round, on a plain flat neutral background, no scenery, no ground, no sky. Painterly stylized game art, not a photograph.
+
+A human-built medieval fantasy structure that has just survived a battle and lost: battered, breached, burnt-out or half collapsed.
+
+Show the damage as bold readable shapes: a caved-in roof, a wall blown open into a ragged gap of rubble, charred black timber framing exposed where the plaster fell away, a tower snapped off at an angle.
+
+Materials are fieldstone and mortar, oak beams, lime-washed plaster and clay tile, all scorched, soot-streaked and cracked. Clean unburnt surfaces only where the fire did not reach.
+
+Chunky stylized construction with a strong silhouette, hand-painted game texture, warm wood and pale stone against deep soot black.
+
+Build the object as a SOLID CLOSED MASS of chunky simplified volumes.
+
+Every part must be thick enough to hold its own shape: no thin strands, no loose splinters, no dangling threads, no open lattice, no fine sticks, no delicate edges, no separated fragments floating apart from the main mass.
+
+Where something would really be fine or broken loose, show it as one heavy lump or as shallow surface relief carved into the solid form instead.
+
+Damage but no gore: no blood, no bodies, suitable for an all-ages fantasy game.
+
+No fire, no flames, no smoke, no glowing embers, no particles: the fire is added by the game.
+
+{extra_details}
+
+{base_prompt}

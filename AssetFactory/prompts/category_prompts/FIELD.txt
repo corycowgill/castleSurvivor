@@ -1,0 +1,23 @@
+Stylized fantasy game asset concept art of BATTLEFIELD WRECKAGE, broken, burnt and muddy: {asset_description} The complete object, seen in a three-quarter view, centered and small in the frame with empty space all round, on a plain flat neutral background, no scenery, no ground, no sky. Painterly stylized game art, not a photograph.
+
+Debris left on a medieval fantasy battlefield after a great battle between knights and orcs: wrecked siege engines, broken war gear, thrown-up earth and scorched timber.
+
+Battered, muddy, scorched and splintered, but chunky and readable.
+
+Materials are oak timber, dented steel and black iron, torn canvas, churned dark earth and broken stone.
+
+Chunky stylized construction with a strong silhouette, hand-painted game texture, muted mud browns and steel greys with a few notes of faded red and gold heraldry.
+
+Build the object as a SOLID CLOSED MASS of chunky simplified volumes.
+
+Every part must be thick enough to hold its own shape: no thin strands, no loose splinters, no dangling threads, no open lattice, no thin poles, no fine sticks, no delicate edges, no separated fragments floating apart from the main mass.
+
+Where something would really be fine or broken loose, show it as one heavy lump or as shallow surface relief carved into the solid form instead.
+
+Damage but no gore: no blood, no bodies, no corpses, suitable for an all-ages fantasy game.
+
+No fire, no flames, no smoke, no glowing embers, no particles: the fire is added by the game.
+
+{extra_details}
+
+{base_prompt}

@@ -10,8 +10,8 @@
     "enemies": "node tools/playtest.mjs enemies",
     "creatures": "node tools/playtest.mjs creatures",
     "icons": "node AssetFactory/scripts/gen-icons.mjs",
-    "maps": "node tools/generate-kingsfield.mjs && node tools/generate-darkwood.mjs && node tools/generate-emberreach.mjs && node tools/generate-mirefen.mjs",
-    "overhead": "node tools/playtest.mjs overhead --map kingsfield && node tools/playtest.mjs overhead --map darkwood && node tools/playtest.mjs overhead --map emberreach && node tools/playtest.mjs overhead --map mirefen",
+    "maps": "node tools/generate-kingsfield.mjs && node tools/generate-darkwood.mjs && node tools/generate-emberreach.mjs && node tools/generate-mirefen.mjs && node tools/generate-bloodmarch.mjs",
+    "overhead": "node tools/playtest.mjs overhead --map kingsfield && node tools/playtest.mjs overhead --map darkwood && node tools/playtest.mjs overhead --map emberreach && node tools/playtest.mjs overhead --map mirefen && node tools/playtest.mjs overhead --map bloodmarch",
     "thumbs": "node tools/map-thumbs.mjs",
     "charred": "node tools/char-glb.mjs && node tools/add-assets.mjs"
   },

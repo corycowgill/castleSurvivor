@@ -79,6 +79,9 @@ CATEGORY_DIRS = {
     "landmarks": "landmarks",
     "volcanic": "volcanic",
     "ogre_camp": "ogre",
+    "warfront_human": "warfront",
+    "warfront_orc": "warfront",
+    "warfront_field": "warfront",
 }
 
 # ═══════════════════════════════════════════════════════
@@ -139,8 +142,15 @@ def build_prompt(asset):
     prompt = prompt.replace("{extra_details}", "")
     return prompt.strip()
 
-def get_negative_prompt():
-    return load_text(os.path.join(PROMPTS_DIR, "negative_prompt.txt"))
+def get_negative_prompt(asset=None):
+    neg = load_text(os.path.join(PROMPTS_DIR, "negative_prompt.txt"))
+    # A template may carry its own negatives (category_prompts/<T>.negative.txt):
+    # the war-torn set needs "intact, pristine" or SDXL rebuilds the ruin.
+    if asset:
+        extra = os.path.join(PROMPTS_DIR, "category_prompts", f"{asset.get('promptTemplate', 'PROP')}.negative.txt")
+        if os.path.exists(extra):
+            neg = neg + ", " + load_text(extra)
+    return neg
 
 
 # ═══════════════════════════════════════════════════════
@@ -274,8 +284,8 @@ def generate_sd_image(asset, attempt=0):
     """Generate an SD image via ComfyUI. Returns path to the image or None."""
     asset_id = asset["id"]
     positive = build_prompt(asset)
-    negative = get_negative_prompt()
-    seed = hash_seed(asset_id) + attempt * 1000
+    negative = get_negative_prompt(asset)
+    seed = asset.get("seed", hash_seed(asset_id)) + attempt * 1000   # a catalog `seed` re-rolls one asset
     prefix = asset_id
 
     print(f"    Generating image (attempt {attempt+1}, seed {seed})...")
