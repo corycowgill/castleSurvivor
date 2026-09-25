@@ -2296,7 +2296,7 @@
     "family": "war",
     "promptTemplate": "PROP",
     "promptDetails": "Smashed medieval barrel. Iron bands loose, staves broken and scattered.",
-    "status": "pending",
+    "status": "glb_optimized",
     "batch": 5,
     "game": {
       "scaleMeters": 0.7,
@@ -2310,7 +2310,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_broken_barrel_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_broken_barrel_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\combat_broken_barrel_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/combat_broken_barrel_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/combat_broken_barrel_01.glb",
+    "glbGame": "Game3DAssets/combat_broken_barrel_01.glb"
   },
   {
     "id": "combat_wall_rubble_01",
@@ -2391,7 +2395,7 @@
     "family": "war",
     "promptTemplate": "PROP",
     "promptDetails": "Damaged medieval shield lying on the ground. Dented, scratched, partially broken. Simple heraldic design.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 5,
     "game": {
       "scaleMeters": 0.7,
@@ -2407,7 +2411,11 @@
       ],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_abandoned_shield_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_abandoned_shield_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\combat_abandoned_shield_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/combat_abandoned_shield_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/combat_abandoned_shield_01.glb",
+    "glbGame": "Game3DAssets/combat_abandoned_shield_01.glb"
   },
   {
     "id": "combat_arrow_cluster_01",
@@ -2468,7 +2476,7 @@
     "family": "war",
     "promptTemplate": "PROP",
     "promptDetails": "Single human skull on the ground. Stylized fantasy game skull, not photorealistic.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 5,
     "game": {
       "scaleMeters": 0.2,
@@ -2487,7 +2495,11 @@
         "house"
       ]
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_skull_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_skull_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\combat_skull_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/combat_skull_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/combat_skull_01.glb",
+    "glbGame": "Game3DAssets/combat_skull_01.glb"
   },
   {
     "id": "combat_enemy_totem_01",
@@ -2496,7 +2508,7 @@
     "family": "war",
     "promptTemplate": "PROP",
     "promptDetails": "Menacing primitive totem pole made of bones, skulls, and rough wood. Enemy territory marker. Approximately 3.0 meters tall.",
-    "status": "image_complete",
+    "status": "rejected",
     "batch": 5,
     "game": {
       "scaleMeters": 3,
@@ -2516,7 +2528,12 @@
         "tavern"
       ]
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_enemy_totem_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_enemy_totem_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\combat_enemy_totem_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/combat_enemy_totem_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/combat_enemy_totem_01.glb",
+    "glbGame": "Game3DAssets/combat_enemy_totem_01.glb",
+    "rejectedWhy": "2026-09-25 validate: splinter or empty geometry"
   },
   {
     "id": "combat_skull_stake_01",
@@ -2525,7 +2542,7 @@
     "family": "war",
     "promptTemplate": "PROP",
     "promptDetails": "Human skull impaled on a wooden stake. Warning marker. Approximately 2.0 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 5,
     "game": {
       "scaleMeters": 2,
@@ -2545,7 +2562,11 @@
         "house"
       ]
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_skull_stake_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_skull_stake_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\combat_skull_stake_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/combat_skull_stake_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/combat_skull_stake_01.glb",
+    "glbGame": "Game3DAssets/combat_skull_stake_01.glb"
   },
   {
     "id": "combat_burned_tree_01",
@@ -2582,7 +2603,7 @@
     "family": "war",
     "promptTemplate": "PROP",
     "promptDetails": "Charred remains of a medieval cart. Burned and blackened wood, collapsed structure.",
-    "status": "pending",
+    "status": "glb_optimized",
     "batch": 5,
     "game": {
       "scaleMeters": 1,
@@ -2596,7 +2617,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_burned_cart_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_burned_cart_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\combat_burned_cart_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/combat_burned_cart_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/combat_burned_cart_01.glb",
+    "glbGame": "Game3DAssets/combat_burned_cart_01.glb"
   },
   {
     "id": "terrain_dirt_01",
@@ -3388,7 +3413,7 @@
     "family": "rock",
     "promptTemplate": "VOLCANIC",
     "promptDetails": "A tall jagged spire of columnar basalt thrusting straight up out of the ground, narrowing to a broken point. Hexagonal column facets down the sides, pale ash caught in the crevices, a few thin orange fissures near the base. Approximately 5 meters tall.",
-    "status": "image_complete",
+    "status": "rejected",
     "batch": 9,
     "game": {
       "scaleMeters": 5,
@@ -3402,7 +3427,12 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_spire_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_spire_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\volcanic_spire_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/volcanic_spire_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/volcanic_spire_01.glb",
+    "glbGame": "Game3DAssets/volcanic_spire_01.glb",
+    "rejectedWhy": "2026-09-25 validate: splinter or empty geometry"
   },
   {
     "id": "volcanic_spire_02",
@@ -3459,7 +3489,7 @@
     "family": "rock",
     "promptTemplate": "VOLCANIC",
     "promptDetails": "A single big rounded boulder of dark volcanic rock, pocked and bubbled like cooled lava, split by one wide crack that glows orange deep inside. Ash dusted on top. Approximately 2.4 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 9,
     "game": {
       "scaleMeters": 2.4,
@@ -3473,7 +3503,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_boulder_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_boulder_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\volcanic_boulder_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/volcanic_boulder_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/volcanic_boulder_01.glb",
+    "glbGame": "Game3DAssets/volcanic_boulder_01.glb"
   },
   {
     "id": "volcanic_lava_rock_01",
@@ -3506,7 +3540,7 @@
     "family": "rock",
     "promptTemplate": "VOLCANIC",
     "promptDetails": "A small squat volcanic vent cone: a ring of crusted yellow-stained rock built up around a dark open hole in the middle, the rim caked in pale sulphur, the throat glowing dull orange. No smoke plume. Approximately 1.6 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 9,
     "game": {
       "scaleMeters": 1.6,
@@ -3520,7 +3554,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_vent_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_vent_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\volcanic_vent_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/volcanic_vent_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/volcanic_vent_01.glb",
+    "glbGame": "Game3DAssets/volcanic_vent_01.glb"
   },
   {
     "id": "volcanic_obsidian_shards_01",
@@ -3577,7 +3615,7 @@
     "family": "rock",
     "promptTemplate": "VOLCANIC",
     "promptDetails": "A low crusty patch of bright yellow sulphur deposit built up over dark rock, knobbly and mineral, with pale white-yellow crystalline edges. Approximately 0.6 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 9,
     "game": {
       "scaleMeters": 0.6,
@@ -3591,7 +3629,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_sulfur_crust_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_sulfur_crust_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\volcanic_sulfur_crust_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/volcanic_sulfur_crust_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/volcanic_sulfur_crust_01.glb",
+    "glbGame": "Game3DAssets/volcanic_sulfur_crust_01.glb"
   },
   {
     "id": "volcanic_crater_slab_01",
@@ -3624,7 +3666,7 @@
     "family": "ogre",
     "promptTemplate": "OGRE",
     "promptDetails": "A huge crude brazier: a heavy black iron bowl on three bent iron legs, heaped with glowing orange coals and charred wood. Riveted iron, soot-blackened, a bone charm hanging from one leg. Approximately 1.8 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 9,
     "game": {
       "scaleMeters": 1.8,
@@ -3640,7 +3682,11 @@
       ],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_brazier_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_brazier_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\ogre_brazier_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/ogre_brazier_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/ogre_brazier_01.glb",
+    "glbGame": "Game3DAssets/ogre_brazier_01.glb"
   },
   {
     "id": "ogre_cook_pot_01",
@@ -3649,7 +3695,7 @@
     "family": "ogre",
     "promptTemplate": "OGRE",
     "promptDetails": "An enormous dented black iron cooking cauldron slung from a crude tripod of lashed timber over a bed of glowing coals. Thick iron rim, rivets, soup slopped down the side, a giant wooden ladle hooked on the rim. Approximately 2.2 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 9,
     "game": {
       "scaleMeters": 2.2,
@@ -3665,7 +3711,11 @@
       ],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_cook_pot_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_cook_pot_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\ogre_cook_pot_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/ogre_cook_pot_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/ogre_cook_pot_01.glb",
+    "glbGame": "Game3DAssets/ogre_cook_pot_01.glb"
   },
   {
     "id": "ogre_totem_01",
@@ -3674,7 +3724,7 @@
     "family": "ogre",
     "promptTemplate": "OGRE",
     "promptDetails": "A tall crude totem pole of rough dark timber, lashed with rawhide, mounted with stylized animal and goblin skulls and hung with feathers, teeth and strips of hide. Carved with harsh angular ogre marks daubed in red. Approximately 3.4 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 9,
     "game": {
       "scaleMeters": 3.4,
@@ -3691,7 +3741,11 @@
       ],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_totem_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_totem_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\ogre_totem_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/ogre_totem_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/ogre_totem_01.glb",
+    "glbGame": "Game3DAssets/ogre_totem_01.glb"
   },
   {
     "id": "ogre_bone_pile_01",
@@ -3700,7 +3754,7 @@
     "family": "ogre",
     "promptTemplate": "OGRE",
     "promptDetails": "A heaped pile of big pale yellowed animal bones, ribs and leg bones, tossed together with one large cartoon-stylized horned skull on top. Clean dry bones, no blood, no gore. Approximately 1.1 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 9,
     "game": {
       "scaleMeters": 1.1,
@@ -3717,7 +3771,11 @@
       ],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_bone_pile_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_bone_pile_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\ogre_bone_pile_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/ogre_bone_pile_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/ogre_bone_pile_01.glb",
+    "glbGame": "Game3DAssets/ogre_bone_pile_01.glb"
   },
   {
     "id": "ogre_spike_wall_01",
@@ -3726,7 +3784,7 @@
     "family": "ogre",
     "promptTemplate": "OGRE",
     "promptDetails": "A straight section of crude defensive wall made of thick tree trunks sharpened to points at the top, driven into the ground shoulder to shoulder and lashed together with two horizontal rails of rope-bound timber. Scorched and weathered. A straight modular segment with clean flat ends. Approximately 2.4 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 9,
     "game": {
       "scaleMeters": 2.4,
@@ -3742,7 +3800,11 @@
       ],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_spike_wall_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_spike_wall_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\ogre_spike_wall_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/ogre_spike_wall_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/ogre_spike_wall_01.glb",
+    "glbGame": "Game3DAssets/ogre_spike_wall_01.glb"
   },
   {
     "id": "ogre_banner_01",
@@ -3751,7 +3813,7 @@
     "family": "ogre",
     "promptTemplate": "OGRE",
     "promptDetails": "A tall crude banner pole of rough timber topped with a stylized iron skull finial, flying a big ragged torn banner of dark red hide with a harsh angular ogre rune daubed on it in black. Rope lashings, tattered edges. Approximately 3.8 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 9,
     "game": {
       "scaleMeters": 3.8,
@@ -3768,7 +3830,11 @@
       ],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_banner_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_banner_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\ogre_banner_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/ogre_banner_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/ogre_banner_01.glb",
+    "glbGame": "Game3DAssets/ogre_banner_01.glb"
   },
   {
     "id": "ogre_cage_01",
@@ -3858,7 +3924,7 @@
     "family": "ogre",
     "promptTemplate": "BUILDING",
     "promptDetails": "A large crude ogre dwelling: a domed frame of huge curved bones and rough timber poles lashed together and covered with stitched brown animal hides, a low dark doorway hung with a hide flap, skulls and antlers fixed above it, a crooked stone chimney at the back. Approximately 4.5 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 9,
     "game": {
       "scaleMeters": 4.5,
@@ -3874,7 +3940,11 @@
       ],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_hut_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_hut_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\ogre_hut_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/ogre_hut_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/ogre_hut_01.glb",
+    "glbGame": "Game3DAssets/ogre_hut_01.glb"
   },
   {
     "id": "ogre_forge_01",
@@ -3883,7 +3953,7 @@
     "family": "ogre",
     "promptTemplate": "OGRE",
     "promptDetails": "A brutal open forge built of stacked black basalt blocks and iron plate, its firebox packed with glowing orange coals, a huge crude bellows of hide and timber strapped to one side and a soot-stained iron chimney hood above. Slag and cinder heaped at the base. Approximately 2.6 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 10,
     "game": {
       "scaleMeters": 2.6,
@@ -3899,7 +3969,11 @@
       ],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_forge_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_forge_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\ogre_forge_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/ogre_forge_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/ogre_forge_01.glb",
+    "glbGame": "Game3DAssets/ogre_forge_01.glb"
   },
   {
     "id": "ogre_barricade_01",
@@ -3908,7 +3982,7 @@
     "family": "ogre",
     "promptTemplate": "OGRE",
     "promptDetails": "A crude portable barricade: a heavy frame of rough timber crossed with black iron bars and bristling with outward-pointing iron spikes, braced by two angled legs, bound with rope and chain. Approximately 1.8 meters tall.",
-    "status": "image_complete",
+    "status": "rejected",
     "batch": 10,
     "game": {
       "scaleMeters": 1.8,
@@ -3925,7 +3999,12 @@
       ],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_barricade_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_barricade_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\ogre_barricade_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/ogre_barricade_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/ogre_barricade_01.glb",
+    "glbGame": "Game3DAssets/ogre_barricade_01.glb",
+    "rejectedWhy": "2026-09-25 validate: splinter or empty geometry"
   },
   {
     "id": "ogre_skull_pile_01",
@@ -3934,7 +4013,7 @@
     "family": "ogre",
     "promptTemplate": "OGRE",
     "promptDetails": "A cairn of stylized pale skulls stacked into a rough pyramid on a base of dark volcanic stones, bound with a strand of rope and topped with one large horned skull. Clean dry bone, cartoon fantasy style, no blood, no gore. Approximately 1.4 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 10,
     "game": {
       "scaleMeters": 1.4,
@@ -3951,7 +4030,11 @@
       ],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_skull_pile_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_skull_pile_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\ogre_skull_pile_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/ogre_skull_pile_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/ogre_skull_pile_01.glb",
+    "glbGame": "Game3DAssets/ogre_skull_pile_01.glb"
   },
   {
     "id": "burnt_tree_giant_01",
@@ -3959,7 +4042,7 @@
     "category": "volcanic",
     "family": "tree",
     "promptTemplate": "DEADTREE",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 10,
     "promptDetails": "An enormous ancient dead tree, burnt black, with a massive buttressed trunk and huge twisted clawing branches reaching upward and outward. Deeply fissured charred bark with pale ash-grey wood showing in the splits. Approximately 9 meters tall.",
     "game": {
@@ -3974,7 +4057,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\burnt_tree_giant_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\burnt_tree_giant_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\burnt_tree_giant_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/burnt_tree_giant_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/burnt_tree_giant_01.glb",
+    "glbGame": "Game3DAssets/burnt_tree_giant_01.glb"
   },
   {
     "id": "landmark_ogre_gate",
@@ -3983,7 +4070,7 @@
     "family": "landmark",
     "promptTemplate": "BUILDING",
     "promptDetails": "A colossal fortress gateway built by ogres: two massive square towers of rough black basalt blocks flanking a huge pair of iron-banded timber doors, the lintel mounted with giant horned skulls, iron spikes along the battlements, tattered red banners hanging either side. Scorched, battle-scarred, monumental. Approximately 14 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 10,
     "game": {
       "scaleMeters": 14,
@@ -3997,7 +4084,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_ogre_gate.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_ogre_gate.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\landmark_ogre_gate.glb",
+    "glbRaw": "AssetFactory/glb_raw/landmark_ogre_gate.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/landmark_ogre_gate.glb",
+    "glbGame": "Game3DAssets/landmark_ogre_gate.glb"
   },
   {
     "id": "landmark_volcano_cone_01",
@@ -4030,7 +4121,7 @@
     "family": "landmark",
     "promptTemplate": "VOLCANIC",
     "promptDetails": "A natural arch of glossy black volcanic rock, two thick weathered legs meeting in a heavy span overhead, the stone faceted and glassy with sharp bright edge highlights and pale ash dusting the top of the span. Approximately 10 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 10,
     "game": {
       "scaleMeters": 10,
@@ -4044,7 +4135,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_obsidian_arch_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_obsidian_arch_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\landmark_obsidian_arch_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/landmark_obsidian_arch_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/landmark_obsidian_arch_01.glb",
+    "glbGame": "Game3DAssets/landmark_obsidian_arch_01.glb"
   },
   {
     "id": "landmark_ogre_idol_01",
@@ -4053,7 +4148,7 @@
     "family": "landmark",
     "promptTemplate": "BUILDING",
     "promptDetails": "A colossal crude idol carved from a single block of dark volcanic stone: a squat brutish ogre figure, seated, with a heavy jaw and tusks, oversized fists resting on its knees, harsh angular chisel marks all over it and glowing orange gemstones set in the eye sockets. Chipped, weathered, half sunk in ash. Approximately 9 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 10,
     "game": {
       "scaleMeters": 9,
@@ -4067,7 +4162,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_ogre_idol_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_ogre_idol_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\landmark_ogre_idol_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/landmark_ogre_idol_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/landmark_ogre_idol_01.glb",
+    "glbGame": "Game3DAssets/landmark_ogre_idol_01.glb"
   },
   {
     "id": "swamp_cypress_01",

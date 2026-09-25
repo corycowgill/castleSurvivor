@@ -591,7 +591,10 @@ the asset-run post-mortem in `NEW-LEVEL-PLAN.md`.
 - [x] 32.8 **Verify.** `tools/bloodmarch-verify.mjs --gpu` (map loads, 54 fires, fires emit,
   spawn open, enemies spawn, Kingsfield has none); `npm test`; `npm run creatures`; overhead +
   thumbnail; 12-minute kite run
-- [ ] 32.9 Open: batches 9, 5, 10 (the Emberreach ogre camp, war debris and hero pieces, 27
-  meshes with reviewed concept art) still to mesh; three ground textures to re-roll; the
+- [x] 32.9 **Batches 9, 5, 10 meshed** (the Emberreach ogre camp, war debris and hero pieces):
+  25 generated, 22 valid (enemy totem splinters, spire and barricade rendered nothing). This
+  closes PLAN 17.4: Emberreach's warcamp, black gate, idol, arch and giant burnt tree are real
+  meshes now, and Bloodmarch's orc side shares them. 194 registered assets
+- [ ] 32.10 Open: three ground textures to re-roll; the
   gatehouse / fortress gate are large enough that the tour camera lands inside them (cosmetic,
   the keep-outs hold); enemy readability on the dark field not yet judged in play

@@ -1,0 +1,783 @@
+{
+  "generated": "2026-09-25T22:26:30.807Z",
+  "results": [
+    {
+      "file": "Game3DAssets/combat_broken_cart_01.glb",
+      "name": "combat_broken_cart_01.glb",
+      "bytes": 344964,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 89903,
+      "vertices": 69701,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.562,
+        0.459,
+        1
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.562,
+          0.459,
+          1
+        ],
+        "drawnFrac": 0.16
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/combat_broken_barrel_01.glb",
+      "name": "combat_broken_barrel_01.glb",
+      "bytes": 382036,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 88519,
+      "vertices": 63760,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.813,
+        1,
+        0.812
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.813,
+          1,
+          0.812
+        ],
+        "drawnFrac": 0.451
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/combat_abandoned_shield_01.glb",
+      "name": "combat_abandoned_shield_01.glb",
+      "bytes": 298876,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 97792,
+      "vertices": 62272,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.62,
+        1,
+        0.193
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.62,
+          1,
+          0.193
+        ],
+        "drawnFrac": 0.171
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/combat_skull_01.glb",
+      "name": "combat_skull_01.glb",
+      "bytes": 323084,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 69377,
+      "vertices": 60592,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.703,
+        0.951,
+        1
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.703,
+          0.951,
+          1
+        ],
+        "drawnFrac": 0.366
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/combat_enemy_totem_01.glb",
+      "name": "combat_enemy_totem_01.glb",
+      "bytes": 206220,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 15267,
+      "vertices": 29130,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.314,
+        0.621,
+        0.372
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": false,
+        "meshes": 1,
+        "size": [
+          0.314,
+          0.621,
+          0.372
+        ],
+        "drawnFrac": 0.017,
+        "error": "splinter geometry (drawnFrac 0.017)"
+      },
+      "valid": false
+    },
+    {
+      "file": "Game3DAssets/combat_skull_stake_01.glb",
+      "name": "combat_skull_stake_01.glb",
+      "bytes": 327880,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 93918,
+      "vertices": 72665,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.293,
+        1,
+        0.377
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.293,
+          1,
+          0.377
+        ],
+        "drawnFrac": 0.1
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/combat_burned_cart_01.glb",
+      "name": "combat_burned_cart_01.glb",
+      "bytes": 361752,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 91452,
+      "vertices": 72490,
+      "materials": 1,
+      "textures": 1,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.593,
+        0.533
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.593,
+          0.533
+        ],
+        "drawnFrac": 0.206
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/volcanic_spire_01.glb",
+      "name": "volcanic_spire_01.glb",
+      "bytes": 109260,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 15434,
+      "vertices": 27595,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.893,
+        0.349,
+        0.979
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": false,
+        "meshes": 1,
+        "size": [
+          0.893,
+          0.349,
+          0.979
+        ],
+        "drawnFrac": 0,
+        "error": "rendered nothing (drawnFrac 0)"
+      },
+      "valid": false
+    },
+    {
+      "file": "Game3DAssets/volcanic_boulder_01.glb",
+      "name": "volcanic_boulder_01.glb",
+      "bytes": 360808,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 91844,
+      "vertices": 63915,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.574,
+        1,
+        0.502
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.574,
+          1,
+          0.502
+        ],
+        "drawnFrac": 0.193
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/volcanic_vent_01.glb",
+      "name": "volcanic_vent_01.glb",
+      "bytes": 351744,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 58728,
+      "vertices": 55344,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.981,
+        0.573
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.981,
+          0.573
+        ],
+        "drawnFrac": 0.387
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/volcanic_sulfur_crust_01.glb",
+      "name": "volcanic_sulfur_crust_01.glb",
+      "bytes": 314832,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 95402,
+      "vertices": 59432,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.938,
+        0.448,
+        1
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.938,
+          0.448,
+          1
+        ],
+        "drawnFrac": 0.229
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/ogre_brazier_01.glb",
+      "name": "ogre_brazier_01.glb",
+      "bytes": 404576,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 81460,
+      "vertices": 68621,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.954,
+        0.8
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.954,
+          0.8
+        ],
+        "drawnFrac": 0.226
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/ogre_cook_pot_01.glb",
+      "name": "ogre_cook_pot_01.glb",
+      "bytes": 382820,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 92716,
+      "vertices": 69638,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.876,
+        0.644,
+        1
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.876,
+          0.644,
+          1
+        ],
+        "drawnFrac": 0.198
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/ogre_totem_01.glb",
+      "name": "ogre_totem_01.glb",
+      "bytes": 360828,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 75216,
+      "vertices": 66873,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.999,
+        0.544
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.999,
+          0.544
+        ],
+        "drawnFrac": 0.268
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/ogre_bone_pile_01.glb",
+      "name": "ogre_bone_pile_01.glb",
+      "bytes": 414880,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 94064,
+      "vertices": 69714,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.851,
+        1,
+        0.645
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.851,
+          1,
+          0.645
+        ],
+        "drawnFrac": 0.223
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/ogre_spike_wall_01.glb",
+      "name": "ogre_spike_wall_01.glb",
+      "bytes": 162368,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 19077,
+      "vertices": 25871,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.395,
+        0.938,
+        0.748
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.395,
+          0.938,
+          0.748
+        ],
+        "drawnFrac": 0.254
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/ogre_banner_01.glb",
+      "name": "ogre_banner_01.glb",
+      "bytes": 310216,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 50900,
+      "vertices": 54970,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.786,
+        1,
+        0.346
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.786,
+          1,
+          0.346
+        ],
+        "drawnFrac": 0.16
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/ogre_hut_01.glb",
+      "name": "ogre_hut_01.glb",
+      "bytes": 334792,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 73873,
+      "vertices": 59606,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.956,
+        0.799,
+        1
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.956,
+          0.799,
+          1
+        ],
+        "drawnFrac": 0.371
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/ogre_forge_01.glb",
+      "name": "ogre_forge_01.glb",
+      "bytes": 332872,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 85169,
+      "vertices": 66615,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.72,
+        1,
+        0.485
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.72,
+          1,
+          0.485
+        ],
+        "drawnFrac": 0.346
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/ogre_barricade_01.glb",
+      "name": "ogre_barricade_01.glb",
+      "bytes": 33048,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 2227,
+      "vertices": 6055,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.981,
+        0.112,
+        0.261
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": false,
+        "meshes": 1,
+        "size": [
+          0.983,
+          0.112,
+          0.261
+        ],
+        "drawnFrac": 0,
+        "error": "rendered nothing (drawnFrac 0)"
+      },
+      "valid": false
+    },
+    {
+      "file": "Game3DAssets/ogre_skull_pile_01.glb",
+      "name": "ogre_skull_pile_01.glb",
+      "bytes": 210932,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 35063,
+      "vertices": 36346,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.511,
+        1,
+        0.54
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.511,
+          1,
+          0.54
+        ],
+        "drawnFrac": 0.163
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/burnt_tree_giant_01.glb",
+      "name": "burnt_tree_giant_01.glb",
+      "bytes": 179972,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 25164,
+      "vertices": 28717,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.911,
+        0.961,
+        0.874
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.911,
+          0.961,
+          0.874
+        ],
+        "drawnFrac": 0.219
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/landmark_ogre_gate.glb",
+      "name": "landmark_ogre_gate.glb",
+      "bytes": 499988,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 66578,
+      "vertices": 59777,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.956,
+        0.445
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.956,
+          0.445
+        ],
+        "drawnFrac": 0.392
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/landmark_obsidian_arch_01.glb",
+      "name": "landmark_obsidian_arch_01.glb",
+      "bytes": 437784,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 96810,
+      "vertices": 59901,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.731,
+        0.519
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.731,
+          0.519
+        ],
+        "drawnFrac": 0.281
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/landmark_ogre_idol_01.glb",
+      "name": "landmark_ogre_idol_01.glb",
+      "bytes": 564212,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 90594,
+      "vertices": 67298,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.935,
+        0.614
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.935,
+          0.614
+        ],
+        "drawnFrac": 0.353
+      },
+      "valid": true
+    }
+  ]
+}

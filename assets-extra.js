@@ -336,6 +336,39 @@ export const EXTRA_ASSETS = [
     "icon": "🌿"
   },
   {
+    "key": "volcanic_boulder_01",
+    "name": "Volcanic Boulder",
+    "file": "volcanic_boulder_01.glb",
+    "category": "nature",
+    "defaultScale": 3.24,
+    "obstacle": true,
+    "radius": 0.9,
+    "breakable": false,
+    "icon": "🌿"
+  },
+  {
+    "key": "volcanic_sulfur_crust_01",
+    "name": "Sulfur Crust",
+    "file": "volcanic_sulfur_crust_01.glb",
+    "category": "nature",
+    "defaultScale": 0.9,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🌿"
+  },
+  {
+    "key": "volcanic_vent_01",
+    "name": "Fumarole Vent",
+    "file": "volcanic_vent_01.glb",
+    "category": "nature",
+    "defaultScale": 2.4,
+    "obstacle": true,
+    "radius": 1.2,
+    "breakable": false,
+    "icon": "🌿"
+  },
+  {
     "key": "bog_barricade_01",
     "name": "Rotted Barricade",
     "file": "bog_barricade_01.glb",
@@ -432,6 +465,17 @@ export const EXTRA_ASSETS = [
     "charredFrom": "prop_tree_stump_02"
   },
   {
+    "key": "combat_abandoned_shield_01",
+    "name": "Abandoned Shield",
+    "file": "combat_abandoned_shield_01.glb",
+    "category": "props",
+    "defaultScale": 1.05,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "📦"
+  },
+  {
     "key": "combat_barricade_01",
     "name": "Wooden Barricade",
     "file": "combat_barricade_01.glb",
@@ -443,6 +487,17 @@ export const EXTRA_ASSETS = [
     "icon": "📦"
   },
   {
+    "key": "combat_broken_barrel_01",
+    "name": "Broken Barrel",
+    "file": "combat_broken_barrel_01.glb",
+    "category": "props",
+    "defaultScale": 1.05,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "📦"
+  },
+  {
     "key": "combat_broken_cart_01",
     "name": "Broken Cart",
     "file": "combat_broken_cart_01.glb",
@@ -451,6 +506,39 @@ export const EXTRA_ASSETS = [
     "obstacle": true,
     "radius": 0.9,
     "breakable": false,
+    "icon": "📦"
+  },
+  {
+    "key": "combat_burned_cart_01",
+    "name": "Burned Cart",
+    "file": "combat_burned_cart_01.glb",
+    "category": "props",
+    "defaultScale": 1.5,
+    "obstacle": true,
+    "radius": 0.8,
+    "breakable": false,
+    "icon": "📦"
+  },
+  {
+    "key": "combat_skull_01",
+    "name": "Skull",
+    "file": "combat_skull_01.glb",
+    "category": "props",
+    "defaultScale": 0.3,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "📦"
+  },
+  {
+    "key": "combat_skull_stake_01",
+    "name": "Skull on Stake",
+    "file": "combat_skull_stake_01.glb",
+    "category": "props",
+    "defaultScale": 3,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": true,
     "icon": "📦"
   },
   {
@@ -811,6 +899,17 @@ export const EXTRA_ASSETS = [
     "charredFrom": "oakTree"
   },
   {
+    "key": "burnt_tree_giant_01",
+    "name": "Great Charred Tree",
+    "file": "burnt_tree_giant_01.glb",
+    "category": "tree",
+    "defaultScale": 11.7,
+    "obstacle": true,
+    "radius": 5.5,
+    "breakable": false,
+    "icon": "🌳"
+  },
+  {
     "key": "char_dead_tree_01",
     "name": "Charred Dead Tree",
     "file": "char_dead_tree_01.glb",
@@ -1136,6 +1235,39 @@ export const EXTRA_ASSETS = [
     "icon": "🏘"
   },
   {
+    "key": "landmark_obsidian_arch_01",
+    "name": "Obsidian Arch",
+    "file": "landmark_obsidian_arch_01.glb",
+    "category": "village",
+    "defaultScale": 13.5,
+    "obstacle": true,
+    "radius": 6.8,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "landmark_ogre_gate",
+    "name": "The Black Gate",
+    "file": "landmark_ogre_gate.glb",
+    "category": "village",
+    "defaultScale": 18.9,
+    "obstacle": true,
+    "radius": 9.4,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "landmark_ogre_idol_01",
+    "name": "Ogre Idol",
+    "file": "landmark_ogre_idol_01.glb",
+    "category": "village",
+    "defaultScale": 12.15,
+    "obstacle": true,
+    "radius": 6.1,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
     "key": "landmark_ruined_tower",
     "name": "Ivy Watchtower",
     "file": "landmark_ruined_tower.glb",
@@ -1177,6 +1309,105 @@ export const EXTRA_ASSETS = [
     "obstacle": true,
     "radius": 5.9,
     "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "ogre_banner_01",
+    "name": "Ogre War Banner",
+    "file": "ogre_banner_01.glb",
+    "category": "village",
+    "defaultScale": 5.13,
+    "obstacle": true,
+    "radius": 2,
+    "breakable": true,
+    "icon": "🏘"
+  },
+  {
+    "key": "ogre_bone_pile_01",
+    "name": "Bone Heap",
+    "file": "ogre_bone_pile_01.glb",
+    "category": "village",
+    "defaultScale": 1.65,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": true,
+    "icon": "🏘"
+  },
+  {
+    "key": "ogre_brazier_01",
+    "name": "Ogre Brazier",
+    "file": "ogre_brazier_01.glb",
+    "category": "village",
+    "defaultScale": 2.7,
+    "obstacle": true,
+    "radius": 1.4,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "ogre_cook_pot_01",
+    "name": "Ogre Cauldron",
+    "file": "ogre_cook_pot_01.glb",
+    "category": "village",
+    "defaultScale": 2.97,
+    "obstacle": true,
+    "radius": 1.5,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "ogre_forge_01",
+    "name": "Ogre Slag Forge",
+    "file": "ogre_forge_01.glb",
+    "category": "village",
+    "defaultScale": 3.51,
+    "obstacle": true,
+    "radius": 1.3,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "ogre_hut_01",
+    "name": "Ogre Hide Hut",
+    "file": "ogre_hut_01.glb",
+    "category": "village",
+    "defaultScale": 6.08,
+    "obstacle": true,
+    "radius": 3,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "ogre_skull_pile_01",
+    "name": "Skull Cairn",
+    "file": "ogre_skull_pile_01.glb",
+    "category": "village",
+    "defaultScale": 2.1,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": true,
+    "icon": "🏘"
+  },
+  {
+    "key": "ogre_spike_wall_01",
+    "name": "Ogre Stake Wall",
+    "file": "ogre_spike_wall_01.glb",
+    "category": "village",
+    "defaultScale": 3.24,
+    "obstacle": true,
+    "radius": 1.3,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "ogre_totem_01",
+    "name": "Ogre Skull Totem",
+    "file": "ogre_totem_01.glb",
+    "category": "village",
+    "defaultScale": 4.59,
+    "obstacle": true,
+    "radius": 2.3,
+    "breakable": true,
     "icon": "🏘"
   },
   {

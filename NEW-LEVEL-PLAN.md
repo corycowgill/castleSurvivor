@@ -208,6 +208,14 @@ node tools/add-assets.mjs && node tools/generate-emberreach.mjs
 npm run overhead && npm run thumbs
 ```
 
+**2026-09-25 update:** batches 5, 9 and 10 finally ran (as part of the Bloodmarch asset run,
+two-phase with concept review). 22 of the 28 are in: the warcamp huts, braziers, cauldron,
+totems, banners, spike walls, bone piles, forge, skull pile, the black gate, the idol, the
+obsidian arch, the giant burnt tree, and the war debris (carts, barrel, shield, skull, stake).
+Rejected at the image stage: the volcanic textures-not-objects (spire 2, rock cluster, lava
+rock, obsidian shards, ash mound, crater slab), cage, butcher block, weapon rack, the cone;
+at the mesh stage: enemy totem, spire 1, barricade.
+
 ## 7. Risks
 
 - **Disk**: 9.9 GB free on C:, and `ComfyUI/output` is already 4.1 GB of spent
