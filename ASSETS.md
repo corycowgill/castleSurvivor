@@ -94,3 +94,7 @@ All GLB files are located in `Game3DAssets/`
 - All filenames with typos (`goblineWithAnimations`, `orgreWithAnimations`, `peasntHouse1`, `sonteWall`, `arros`, `pumpkingPatch`) are the real filenames from the original asset creation
 - All GLBs have been optimized with Draco mesh compression, WebP texture conversion, and texture resizing (character models max 2048px, everything else max 1024px)
 - Enemy models use `keepBuffer: true` so they can be parsed fresh for each spawn via `loader.parse()`
+
+## Bloodmarch (2026-09-25)
+
+The war-torn map's meshes are catalog batches 13 and 14 (`war_*`, `orc_*`, `field_*`, see `AssetFactory/scripts/add-bloodmarch-assets.mjs`) plus twenty `war_*` regrades of the buildings above (`tools/char-glb.mjs`). All are registered through `assets-extra.js`; `tools/shots/glb-sheet-bloodmarch.png` is their contact sheet.

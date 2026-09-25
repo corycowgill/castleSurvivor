@@ -42,7 +42,7 @@ const checks = await page.evaluate(async () => {
   r.hasFires = cs.mapFires.length >= 40;
   // The nearest fires burn: step and count live particles before/after
   const before = cs.vfx.stats().live;
-  cs.step(1.5);
+  cs.step(1.0);
   const after = cs.vfx.stats().live;
   r.firesEmit = after > before + 20;
   // Spawn is clear ground: the knight can walk out in every direction

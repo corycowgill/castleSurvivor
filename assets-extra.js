@@ -465,6 +465,83 @@ export const EXTRA_ASSETS = [
     "icon": "📦"
   },
   {
+    "key": "field_broken_cart_burnt_01",
+    "name": "Burnt Wagon Wreck",
+    "file": "field_broken_cart_burnt_01.glb",
+    "category": "props",
+    "defaultScale": 2.97,
+    "obstacle": true,
+    "radius": 1.5,
+    "breakable": true,
+    "icon": "📦"
+  },
+  {
+    "key": "field_broken_ladder_01",
+    "name": "Smashed Siege Ladder",
+    "file": "field_broken_ladder_01.glb",
+    "category": "props",
+    "defaultScale": 1.35,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "📦"
+  },
+  {
+    "key": "field_charred_beam_pile_01",
+    "name": "Charred Beam Heap",
+    "file": "field_charred_beam_pile_01.glb",
+    "category": "props",
+    "defaultScale": 1.8,
+    "obstacle": true,
+    "radius": 0.9,
+    "breakable": true,
+    "icon": "📦"
+  },
+  {
+    "key": "field_grave_mound_01",
+    "name": "Soldier's Cairn",
+    "file": "field_grave_mound_01.glb",
+    "category": "props",
+    "defaultScale": 2.1,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "📦"
+  },
+  {
+    "key": "field_sandbag_wall_01",
+    "name": "Earthwork",
+    "file": "field_sandbag_wall_01.glb",
+    "category": "props",
+    "defaultScale": 2.1,
+    "obstacle": true,
+    "radius": 1.1,
+    "breakable": false,
+    "icon": "📦"
+  },
+  {
+    "key": "field_shield_wall_01",
+    "name": "Planted Shield Wall",
+    "file": "field_shield_wall_01.glb",
+    "category": "props",
+    "defaultScale": 2.4,
+    "obstacle": true,
+    "radius": 1.2,
+    "breakable": true,
+    "icon": "📦"
+  },
+  {
+    "key": "field_siege_boulder_01",
+    "name": "Catapult Stone",
+    "file": "field_siege_boulder_01.glb",
+    "category": "props",
+    "defaultScale": 2.4,
+    "obstacle": true,
+    "radius": 1.2,
+    "breakable": false,
+    "icon": "📦"
+  },
+  {
     "key": "hayBales",
     "name": "Hay Bales",
     "file": "hayBales.glb",
@@ -1103,6 +1180,182 @@ export const EXTRA_ASSETS = [
     "icon": "🏘"
   },
   {
+    "key": "orc_battering_ram_01",
+    "name": "Battering Ram",
+    "file": "orc_battering_ram_01.glb",
+    "category": "village",
+    "defaultScale": 6.75,
+    "obstacle": true,
+    "radius": 3.4,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "orc_catapult_wreck_01",
+    "name": "Broken Catapult",
+    "file": "orc_catapult_wreck_01.glb",
+    "category": "village",
+    "defaultScale": 6.08,
+    "obstacle": true,
+    "radius": 3,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "orc_fortress_gate_ruin_01",
+    "name": "Smashed Fortress Gate",
+    "file": "orc_fortress_gate_ruin_01.glb",
+    "category": "village",
+    "defaultScale": 17.55,
+    "obstacle": true,
+    "radius": 8.7,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "orc_fortress_wall_01",
+    "name": "Orc Palisade Wall",
+    "file": "orc_fortress_wall_01.glb",
+    "category": "village",
+    "defaultScale": 8.1,
+    "obstacle": true,
+    "radius": 3.6,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "orc_fortress_wall_broken_01",
+    "name": "Smashed Palisade",
+    "file": "orc_fortress_wall_broken_01.glb",
+    "category": "village",
+    "defaultScale": 6.75,
+    "obstacle": true,
+    "radius": 3.1,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "orc_hut_ruin_01",
+    "name": "Caved-In Orc Hut",
+    "file": "orc_hut_ruin_01.glb",
+    "category": "village",
+    "defaultScale": 5.13,
+    "obstacle": true,
+    "radius": 2.4,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "orc_idol_broken_01",
+    "name": "Toppled Orc Idol",
+    "file": "orc_idol_broken_01.glb",
+    "category": "village",
+    "defaultScale": 5.4,
+    "obstacle": true,
+    "radius": 2.7,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "orc_longhouse_01",
+    "name": "Orc Longhouse",
+    "file": "orc_longhouse_01.glb",
+    "category": "village",
+    "defaultScale": 8.78,
+    "obstacle": true,
+    "radius": 3.9,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "orc_loot_pile_01",
+    "name": "Plunder Heap",
+    "file": "orc_loot_pile_01.glb",
+    "category": "village",
+    "defaultScale": 2.1,
+    "obstacle": true,
+    "radius": 1,
+    "breakable": true,
+    "icon": "🏘"
+  },
+  {
+    "key": "orc_smithy_ruin_01",
+    "name": "Wrecked Orc Smithy",
+    "file": "orc_smithy_ruin_01.glb",
+    "category": "village",
+    "defaultScale": 5.4,
+    "obstacle": true,
+    "radius": 2.7,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "orc_spike_barricade_01",
+    "name": "Iron Spike Barricade",
+    "file": "orc_spike_barricade_01.glb",
+    "category": "village",
+    "defaultScale": 3,
+    "obstacle": true,
+    "radius": 1.5,
+    "breakable": true,
+    "icon": "🏘"
+  },
+  {
+    "key": "orc_war_banner_01",
+    "name": "Orc War Banner",
+    "file": "orc_war_banner_01.glb",
+    "category": "village",
+    "defaultScale": 6.08,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "orc_war_drum_01",
+    "name": "War Drum",
+    "file": "orc_war_drum_01.glb",
+    "category": "village",
+    "defaultScale": 3.51,
+    "obstacle": true,
+    "radius": 1.1,
+    "breakable": true,
+    "icon": "🏘"
+  },
+  {
+    "key": "orc_watch_fire_01",
+    "name": "Iron Fire Basket",
+    "file": "orc_watch_fire_01.glb",
+    "category": "village",
+    "defaultScale": 2.97,
+    "obstacle": true,
+    "radius": 1.4,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "orc_watchtower_01",
+    "name": "Orc Watchtower",
+    "file": "orc_watchtower_01.glb",
+    "category": "village",
+    "defaultScale": 12.15,
+    "obstacle": true,
+    "radius": 4.3,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "orc_watchtower_broken_01",
+    "name": "Burnt Watchtower",
+    "file": "orc_watchtower_broken_01.glb",
+    "category": "village",
+    "defaultScale": 9.45,
+    "obstacle": true,
+    "radius": 4.3,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
     "key": "swordShrine",
     "name": "Sword Shrine",
     "file": "swordShrine.glb",
@@ -1291,6 +1544,28 @@ export const EXTRA_ASSETS = [
     "charredFrom": "apothecary"
   },
   {
+    "key": "war_ballista_01",
+    "name": "Ballista",
+    "file": "war_ballista_01.glb",
+    "category": "village",
+    "defaultScale": 4.05,
+    "obstacle": true,
+    "radius": 2,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "war_barn_ruin_01",
+    "name": "Collapsed Barn",
+    "file": "war_barn_ruin_01.glb",
+    "category": "village",
+    "defaultScale": 8.1,
+    "obstacle": true,
+    "radius": 4,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
     "key": "war_blacksmith_01",
     "name": "Battered Smithy",
     "file": "war_blacksmith_01.glb",
@@ -1313,6 +1588,50 @@ export const EXTRA_ASSETS = [
     "breakable": false,
     "icon": "🏘",
     "charredFrom": "humanCastle"
+  },
+  {
+    "key": "war_castle_wall_01",
+    "name": "Battered Curtain Wall",
+    "file": "war_castle_wall_01.glb",
+    "category": "village",
+    "defaultScale": 8.1,
+    "obstacle": true,
+    "radius": 3.6,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "war_castle_wall_breach_01",
+    "name": "Breached Wall",
+    "file": "war_castle_wall_breach_01.glb",
+    "category": "village",
+    "defaultScale": 8.1,
+    "obstacle": true,
+    "radius": 4,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "war_chapel_ruin_01",
+    "name": "Ruined Chapel",
+    "file": "war_chapel_ruin_01.glb",
+    "category": "village",
+    "defaultScale": 10.8,
+    "obstacle": true,
+    "radius": 5.4,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "war_command_tent_01",
+    "name": "Command Pavilion",
+    "file": "war_command_tent_01.glb",
+    "category": "village",
+    "defaultScale": 7.43,
+    "obstacle": true,
+    "radius": 3.7,
+    "breakable": false,
+    "icon": "🏘"
   },
   {
     "key": "war_farmhouse_01",
@@ -1339,6 +1658,17 @@ export const EXTRA_ASSETS = [
     "charredFrom": "farmHouse"
   },
   {
+    "key": "war_farmhouse_ruin_01",
+    "name": "Scorched Farmhouse",
+    "file": "war_farmhouse_ruin_01.glb",
+    "category": "village",
+    "defaultScale": 8.1,
+    "obstacle": true,
+    "radius": 3.5,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
     "key": "war_fence_01",
     "name": "Smashed Fence",
     "file": "war_fence_01.glb",
@@ -1349,6 +1679,28 @@ export const EXTRA_ASSETS = [
     "breakable": true,
     "icon": "🏘",
     "charredFrom": "village_rail_fence_straight_01"
+  },
+  {
+    "key": "war_field_tent_01",
+    "name": "Torn Army Tent",
+    "file": "war_field_tent_01.glb",
+    "category": "village",
+    "defaultScale": 4.73,
+    "obstacle": true,
+    "radius": 2.4,
+    "breakable": true,
+    "icon": "🏘"
+  },
+  {
+    "key": "war_gatehouse_ruin_01",
+    "name": "Smashed Gatehouse",
+    "file": "war_gatehouse_ruin_01.glb",
+    "category": "village",
+    "defaultScale": 16.2,
+    "obstacle": true,
+    "radius": 8.1,
+    "breakable": false,
+    "icon": "🏘"
   },
   {
     "key": "war_house_01",
@@ -1375,6 +1727,39 @@ export const EXTRA_ASSETS = [
     "charredFrom": "house"
   },
   {
+    "key": "war_house_ruin_01",
+    "name": "Burnt-Out Cottage",
+    "file": "war_house_ruin_01.glb",
+    "category": "village",
+    "defaultScale": 6.75,
+    "obstacle": true,
+    "radius": 3.4,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "war_house_ruin_02",
+    "name": "Breached Cottage",
+    "file": "war_house_ruin_02.glb",
+    "category": "village",
+    "defaultScale": 6.08,
+    "obstacle": true,
+    "radius": 2.5,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "war_kingdom_banner_01",
+    "name": "Tattered Kingdom Banner",
+    "file": "war_kingdom_banner_01.glb",
+    "category": "village",
+    "defaultScale": 6.08,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
     "key": "war_lantern_01",
     "name": "Bent Lantern Post",
     "file": "war_lantern_01.glb",
@@ -1387,6 +1772,17 @@ export const EXTRA_ASSETS = [
     "charredFrom": "village_lantern_post_01"
   },
   {
+    "key": "war_market_stall_ruin_01",
+    "name": "Smashed Market Stall",
+    "file": "war_market_stall_ruin_01.glb",
+    "category": "village",
+    "defaultScale": 3.51,
+    "obstacle": true,
+    "radius": 1.8,
+    "breakable": true,
+    "icon": "🏘"
+  },
+  {
     "key": "war_orc_keep_01",
     "name": "Battered Orc Keep",
     "file": "war_orc_keep_01.glb",
@@ -1397,6 +1793,28 @@ export const EXTRA_ASSETS = [
     "breakable": false,
     "icon": "🏘",
     "charredFrom": "ogreCastle"
+  },
+  {
+    "key": "war_shield_pile_01",
+    "name": "Heap of Shields",
+    "file": "war_shield_pile_01.glb",
+    "category": "village",
+    "defaultScale": 1.95,
+    "obstacle": true,
+    "radius": 1,
+    "breakable": true,
+    "icon": "🏘"
+  },
+  {
+    "key": "war_siege_tower_wreck_01",
+    "name": "Burnt Siege Tower",
+    "file": "war_siege_tower_wreck_01.glb",
+    "category": "village",
+    "defaultScale": 12.15,
+    "obstacle": true,
+    "radius": 5.8,
+    "breakable": false,
+    "icon": "🏘"
   },
   {
     "key": "war_stable_gutted_01",
@@ -1435,6 +1853,17 @@ export const EXTRA_ASSETS = [
     "charredFrom": "townStatue"
   },
   {
+    "key": "war_supply_wagon_wreck_01",
+    "name": "Overturned Supply Wagon",
+    "file": "war_supply_wagon_wreck_01.glb",
+    "category": "village",
+    "defaultScale": 4.05,
+    "obstacle": true,
+    "radius": 2,
+    "breakable": true,
+    "icon": "🏘"
+  },
+  {
     "key": "war_tavern_01",
     "name": "Battered Tavern",
     "file": "war_tavern_01.glb",
@@ -1459,6 +1888,39 @@ export const EXTRA_ASSETS = [
     "charredFrom": "tavern2"
   },
   {
+    "key": "war_tavern_ruin_01",
+    "name": "Gutted Tavern",
+    "file": "war_tavern_ruin_01.glb",
+    "category": "village",
+    "defaultScale": 9.45,
+    "obstacle": true,
+    "radius": 4.7,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "war_tower_ruin_01",
+    "name": "Toppled Tower",
+    "file": "war_tower_ruin_01.glb",
+    "category": "village",
+    "defaultScale": 14.85,
+    "obstacle": true,
+    "radius": 7.4,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
+    "key": "war_trebuchet_wreck_01",
+    "name": "Broken Trebuchet",
+    "file": "war_trebuchet_wreck_01.glb",
+    "category": "village",
+    "defaultScale": 9.45,
+    "obstacle": true,
+    "radius": 4.7,
+    "breakable": false,
+    "icon": "🏘"
+  },
+  {
     "key": "war_wall_01",
     "name": "Scarred Wall",
     "file": "war_wall_01.glb",
@@ -1469,6 +1931,17 @@ export const EXTRA_ASSETS = [
     "breakable": false,
     "icon": "🏘",
     "charredFrom": "wall"
+  },
+  {
+    "key": "war_watchtower_wreck_01",
+    "name": "Fallen Watchtower",
+    "file": "war_watchtower_wreck_01.glb",
+    "category": "village",
+    "defaultScale": 8.1,
+    "obstacle": true,
+    "radius": 4,
+    "breakable": false,
+    "icon": "🏘"
   },
   {
     "key": "war_well_01",

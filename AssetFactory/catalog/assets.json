@@ -4851,7 +4851,7 @@
     "family": "ruin",
     "promptTemplate": "WARRUIN",
     "promptDetails": "A two-storey timber-framed tavern GUTTED BY FIRE and half collapsed: the whole upper floor and roof fallen in leaving a jagged black ridge of charred beams, one end wall gone into a heap of stone, the ground floor walls sooted black above every window, a heavy stone chimney standing alone at one end. Approximately 7 meters tall.",
-    "status": "trellis_generating",
+    "status": "glb_optimized",
     "batch": 13,
     "game": {
       "scaleMeters": 7,
@@ -4865,7 +4865,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_tavern_ruin_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_tavern_ruin_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\war_tavern_ruin_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/war_tavern_ruin_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/war_tavern_ruin_01.glb",
+    "glbGame": "Game3DAssets/war_tavern_ruin_01.glb"
   },
   {
     "id": "war_barn_ruin_01",
@@ -4874,7 +4878,7 @@
     "family": "ruin",
     "promptTemplate": "WARRUIN",
     "promptDetails": "ONE single large wooden barn collapsed on one side: half the plank roof slid down to the ground in one heavy scorched slab, the other half still up on blackened posts, the hayloft doors hanging open, walls charred dark. A single building. Approximately 6 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 13,
     "game": {
       "scaleMeters": 6,
@@ -4889,7 +4893,11 @@
       "avoid": []
     },
     "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_barn_ruin_01.png",
-    "seed": 31337
+    "seed": 31337,
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\war_barn_ruin_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/war_barn_ruin_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/war_barn_ruin_01.glb",
+    "glbGame": "Game3DAssets/war_barn_ruin_01.glb"
   },
   {
     "id": "war_farmhouse_ruin_01",
@@ -4898,7 +4906,7 @@
     "family": "ruin",
     "promptTemplate": "WARRUIN",
     "promptDetails": "A stone farmhouse BURNT OUT: the roof gone except for thick blackened rafters, the two stone gable ends standing open to the sky, one gable cracked and leaning, the front porch smashed flat, the walls sooted black above the windows. Approximately 6 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 13,
     "game": {
       "scaleMeters": 6,
@@ -4912,7 +4920,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_farmhouse_ruin_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_farmhouse_ruin_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\war_farmhouse_ruin_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/war_farmhouse_ruin_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/war_farmhouse_ruin_01.glb",
+    "glbGame": "Game3DAssets/war_farmhouse_ruin_01.glb"
   },
   {
     "id": "war_chapel_ruin_01",
@@ -4921,7 +4933,7 @@
     "family": "ruin",
     "promptTemplate": "WARRUIN",
     "promptDetails": "A small stone village chapel with its roof burnt away, leaving the stone walls and a pointed bell gable standing open to the sky, one side wall breached into rubble, a round window cracked, soot streaking the pale stone. Approximately 8 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 13,
     "game": {
       "scaleMeters": 8,
@@ -4935,7 +4947,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_chapel_ruin_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_chapel_ruin_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\war_chapel_ruin_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/war_chapel_ruin_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/war_chapel_ruin_01.glb",
+    "glbGame": "Game3DAssets/war_chapel_ruin_01.glb"
   },
   {
     "id": "war_castle_wall_01",
@@ -4944,7 +4960,7 @@
     "family": "ruin",
     "promptTemplate": "WARRUIN",
     "promptDetails": "A short FREE-STANDING segment of castle curtain wall, the whole segment visible with both cut ends and the walkway on top, built of heavy grey stone blocks about three storeys high, its crenellations half smashed away, deep gouges and cracks across the face, scorched black in patches. One long solid block seen from outside. Approximately 6 meters tall and 10 meters long.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 13,
     "game": {
       "scaleMeters": 6,
@@ -4958,7 +4974,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_castle_wall_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_castle_wall_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\war_castle_wall_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/war_castle_wall_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/war_castle_wall_01.glb",
+    "glbGame": "Game3DAssets/war_castle_wall_01.glb"
   },
   {
     "id": "war_castle_wall_breach_01",
@@ -4967,7 +4987,7 @@
     "family": "ruin",
     "promptTemplate": "FIELD",
     "promptDetails": "A short free-standing section of grey stone castle wall smashed through the middle: two jagged standing stubs of wall with a wide heap of broken blocks between them, both cut ends visible, the whole piece small in the frame. Approximately 6 meters tall and 10 meters long.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 13,
     "game": {
       "scaleMeters": 6,
@@ -4982,7 +5002,11 @@
       "avoid": []
     },
     "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_castle_wall_breach_01.png",
-    "seed": 7025
+    "seed": 7025,
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\war_castle_wall_breach_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/war_castle_wall_breach_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/war_castle_wall_breach_01.glb",
+    "glbGame": "Game3DAssets/war_castle_wall_breach_01.glb"
   },
   {
     "id": "war_tower_ruin_01",
@@ -4991,7 +5015,7 @@
     "family": "ruin",
     "promptTemplate": "WARRUIN",
     "promptDetails": "A round castle tower of grey stone snapped off two-thirds of the way up, the top gone, the break jagged and leaning to one side, a long crack running down the wall, its arrow slits scorched black. Approximately 11 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 13,
     "game": {
       "scaleMeters": 11,
@@ -5005,7 +5029,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_tower_ruin_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_tower_ruin_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\war_tower_ruin_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/war_tower_ruin_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/war_tower_ruin_01.glb",
+    "glbGame": "Game3DAssets/war_tower_ruin_01.glb"
   },
   {
     "id": "war_gatehouse_ruin_01",
@@ -5014,7 +5042,7 @@
     "family": "ruin",
     "promptTemplate": "WARRUIN",
     "promptDetails": "A castle gatehouse of two square stone towers flanking an arched gateway, the gate itself smashed inward and hanging from one hinge as one heavy slab, the battlements of one tower knocked off, the stone scorched and cracked around the arch. Approximately 12 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 13,
     "game": {
       "scaleMeters": 12,
@@ -5028,7 +5056,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_gatehouse_ruin_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_gatehouse_ruin_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\war_gatehouse_ruin_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/war_gatehouse_ruin_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/war_gatehouse_ruin_01.glb",
+    "glbGame": "Game3DAssets/war_gatehouse_ruin_01.glb"
   },
   {
     "id": "war_market_stall_ruin_01",
@@ -5037,7 +5069,7 @@
     "family": "ruin",
     "promptTemplate": "WARRUIN",
     "promptDetails": "A small wooden market stall knocked half over and SMASHED: a broken counter, a torn striped canvas awning hanging as one heavy fold, splintered posts, crushed crates spilling out. The whole small stall, free-standing. Approximately 2.6 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 13,
     "game": {
       "scaleMeters": 2.6,
@@ -5051,7 +5083,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_market_stall_ruin_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_market_stall_ruin_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\war_market_stall_ruin_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/war_market_stall_ruin_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/war_market_stall_ruin_01.glb",
+    "glbGame": "Game3DAssets/war_market_stall_ruin_01.glb"
   },
   {
     "id": "war_watchtower_wreck_01",
@@ -5060,7 +5096,7 @@
     "family": "ruin",
     "promptTemplate": "FIELD",
     "promptDetails": "A wooden WATCHTOWER FALLEN OVER on its side, lying flat on the ground: four thick splayed legs snapped, the lookout platform crushed at one end, the timber scorched. A toppled structure lying down. Approximately 6 meters long and 2.5 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 13,
     "game": {
       "scaleMeters": 6,
@@ -5075,7 +5111,11 @@
       "avoid": []
     },
     "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_watchtower_wreck_01.png",
-    "seed": 7023
+    "seed": 7023,
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\war_watchtower_wreck_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/war_watchtower_wreck_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/war_watchtower_wreck_01.glb",
+    "glbGame": "Game3DAssets/war_watchtower_wreck_01.glb"
   },
   {
     "id": "war_siege_tower_wreck_01",
@@ -5084,7 +5124,7 @@
     "family": "ruin",
     "promptTemplate": "FIELD",
     "promptDetails": "A tall wooden SIEGE TOWER on four huge solid wooden wheels, a war machine not a house: a narrow timber-frame tower with a hide-covered front, burnt black and leaning hard to one side, its top platform collapsed. Approximately 9 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 13,
     "game": {
       "scaleMeters": 9,
@@ -5099,7 +5139,11 @@
       "avoid": []
     },
     "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_siege_tower_wreck_01.png",
-    "seed": 7024
+    "seed": 7024,
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\war_siege_tower_wreck_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/war_siege_tower_wreck_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/war_siege_tower_wreck_01.glb",
+    "glbGame": "Game3DAssets/war_siege_tower_wreck_01.glb"
   },
   {
     "id": "war_trebuchet_wreck_01",
@@ -5108,7 +5152,7 @@
     "family": "ruin",
     "promptTemplate": "WARRUIN",
     "promptDetails": "A wooden trebuchet with its throwing arm snapped in half and lying across the heavy timber frame, the counterweight box split open spilling stone, one wheel broken, scorch marks along the frame. Approximately 7 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 13,
     "game": {
       "scaleMeters": 7,
@@ -5122,7 +5166,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_trebuchet_wreck_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_trebuchet_wreck_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\war_trebuchet_wreck_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/war_trebuchet_wreck_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/war_trebuchet_wreck_01.glb",
+    "glbGame": "Game3DAssets/war_trebuchet_wreck_01.glb"
   },
   {
     "id": "war_ballista_01",
@@ -5131,7 +5179,7 @@
     "family": "ruin",
     "promptTemplate": "FIELD",
     "promptDetails": "A BALLISTA war machine, a giant crossbow on a stout four-legged wooden stand: two thick bow arms, a winch, a bolt as long as a spear in the groove, the wood scarred and muddy. Not a building. Approximately 3 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 13,
     "game": {
       "scaleMeters": 3,
@@ -5146,7 +5194,11 @@
       "avoid": []
     },
     "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_ballista_01.png",
-    "seed": 7015
+    "seed": 7015,
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\war_ballista_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/war_ballista_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/war_ballista_01.glb",
+    "glbGame": "Game3DAssets/war_ballista_01.glb"
   },
   {
     "id": "war_supply_wagon_wreck_01",
@@ -5155,7 +5207,7 @@
     "family": "ruin",
     "promptTemplate": "WARRUIN",
     "promptDetails": "A heavy covered supply wagon overturned onto its side, its canvas cover burnt away to the hoops, sacks and barrels spilled in a heap against it, one solid wheel snapped off and lying flat. Approximately 3 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 13,
     "game": {
       "scaleMeters": 3,
@@ -5169,7 +5221,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_supply_wagon_wreck_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_supply_wagon_wreck_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\war_supply_wagon_wreck_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/war_supply_wagon_wreck_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/war_supply_wagon_wreck_01.glb",
+    "glbGame": "Game3DAssets/war_supply_wagon_wreck_01.glb"
   },
   {
     "id": "war_field_tent_01",
@@ -5178,7 +5234,7 @@
     "family": "ruin",
     "promptTemplate": "FIELD",
     "promptDetails": "A soldiers' canvas RIDGE TENT, a triangular tent of faded cream canvas with a blue and gold stripe, pegged to the ground, one side torn open in a long flap and the ridge pole sagging, mud-splashed. Cloth, not a building. Approximately 3.5 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 13,
     "game": {
       "scaleMeters": 3.5,
@@ -5193,7 +5249,11 @@
       "avoid": []
     },
     "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_field_tent_01.png",
-    "seed": 7017
+    "seed": 7017,
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\war_field_tent_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/war_field_tent_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/war_field_tent_01.glb",
+    "glbGame": "Game3DAssets/war_field_tent_01.glb"
   },
   {
     "id": "war_command_tent_01",
@@ -5202,7 +5262,7 @@
     "family": "ruin",
     "promptTemplate": "FIELD",
     "promptDetails": "A large round canvas PAVILION TENT of blue and gold striped cloth with a peaked conical roof and a pennant on top, one section of the roof collapsed inward and scorched, the entrance flap tied back. Cloth, not a building. Approximately 5.5 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 13,
     "game": {
       "scaleMeters": 5.5,
@@ -5217,7 +5277,11 @@
       "avoid": []
     },
     "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_command_tent_01.png",
-    "seed": 7019
+    "seed": 7019,
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\war_command_tent_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/war_command_tent_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/war_command_tent_01.glb",
+    "glbGame": "Game3DAssets/war_command_tent_01.glb"
   },
   {
     "id": "war_kingdom_banner_01",
@@ -5226,7 +5290,7 @@
     "family": "ruin",
     "promptTemplate": "FIELD",
     "promptDetails": "A single tall vertical FLAG: a long rectangular blue cloth banner with a gold lion emblem hanging from a crossbar on a tall wooden pole, the bottom edge of the cloth torn into ragged strips, the cloth swaying in heavy folds. Just a flag on a pole standing upright, nothing else. Approximately 4.5 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 13,
     "game": {
       "scaleMeters": 4.5,
@@ -5241,7 +5305,11 @@
       "avoid": []
     },
     "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_kingdom_banner_01.png",
-    "seed": 424242
+    "seed": 424242,
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\war_kingdom_banner_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/war_kingdom_banner_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/war_kingdom_banner_01.glb",
+    "glbGame": "Game3DAssets/war_kingdom_banner_01.glb"
   },
   {
     "id": "war_knight_statue_fallen_01",
@@ -5250,7 +5318,7 @@
     "family": "ruin",
     "promptTemplate": "WARRUIN",
     "promptDetails": "A grey stone statue of an armoured knight that has been knocked off its plinth and lies broken on the ground, the head and one arm snapped off and resting beside it, the empty cracked plinth behind. Approximately 3 meters long and 1.5 meters tall.",
-    "status": "image_complete",
+    "status": "rejected",
     "batch": 13,
     "game": {
       "scaleMeters": 3,
@@ -5264,7 +5332,12 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_knight_statue_fallen_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_knight_statue_fallen_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\war_knight_statue_fallen_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/war_knight_statue_fallen_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/war_knight_statue_fallen_01.glb",
+    "glbGame": "Game3DAssets/war_knight_statue_fallen_01.glb",
+    "rejectedWhy": "2026-09-25 validate: black ground slab under the mesh"
   },
   {
     "id": "war_shield_pile_01",
@@ -5273,7 +5346,7 @@
     "family": "ruin",
     "promptTemplate": "FIELD",
     "promptDetails": "A HEAP OF SHIELDS AND HELMETS lying on the ground: dented kite shields and round shields in faded blue, red and gold heraldry piled together with a few battered steel helmets and a broken sword, one solid low mound. Not a building. Approximately 1.3 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 13,
     "game": {
       "scaleMeters": 1.3,
@@ -5288,7 +5361,11 @@
       "avoid": []
     },
     "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_shield_pile_01.png",
-    "seed": 7018
+    "seed": 7018,
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\war_shield_pile_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/war_shield_pile_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/war_shield_pile_01.glb",
+    "glbGame": "Game3DAssets/war_shield_pile_01.glb"
   },
   {
     "id": "orc_fortress_gate_ruin_01",
@@ -5297,7 +5374,7 @@
     "family": "orc_ruin",
     "promptTemplate": "ORCRUIN",
     "promptDetails": "The main gate of an orc fortress: two massive square towers of huge stacked logs bound with black iron bands and studded with spikes, a wide gateway between them whose great iron-plated doors have been smashed, one door lying flat and one hanging askew as a heavy slab, the tops of the towers burnt and one torn open. Approximately 13 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 14,
     "game": {
       "scaleMeters": 13,
@@ -5311,7 +5388,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_fortress_gate_ruin_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_fortress_gate_ruin_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\orc_fortress_gate_ruin_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/orc_fortress_gate_ruin_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/orc_fortress_gate_ruin_01.glb",
+    "glbGame": "Game3DAssets/orc_fortress_gate_ruin_01.glb"
   },
   {
     "id": "orc_fortress_wall_01",
@@ -5320,7 +5401,7 @@
     "family": "orc_ruin",
     "promptTemplate": "ORCRUIN",
     "promptDetails": "A straight segment of orc fortress wall made of huge sharpened logs standing upright side by side, bound across with two black iron bands, studded with spikes, the tops scorched and a few logs split. A long solid block. Approximately 6 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 14,
     "game": {
       "scaleMeters": 6,
@@ -5334,7 +5415,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_fortress_wall_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_fortress_wall_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\orc_fortress_wall_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/orc_fortress_wall_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/orc_fortress_wall_01.glb",
+    "glbGame": "Game3DAssets/orc_fortress_wall_01.glb"
   },
   {
     "id": "orc_fortress_wall_broken_01",
@@ -5343,7 +5428,7 @@
     "family": "orc_ruin",
     "promptTemplate": "ORCRUIN",
     "promptDetails": "A segment of orc palisade wall of huge upright logs that has been smashed through, the logs in the middle snapped off short and leaning outward, burnt black, the iron band torn and bent, a heap of broken log ends at the base. One solid mass. Approximately 5 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 14,
     "game": {
       "scaleMeters": 5,
@@ -5357,7 +5442,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_fortress_wall_broken_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_fortress_wall_broken_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\orc_fortress_wall_broken_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/orc_fortress_wall_broken_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/orc_fortress_wall_broken_01.glb",
+    "glbGame": "Game3DAssets/orc_fortress_wall_broken_01.glb"
   },
   {
     "id": "orc_watchtower_01",
@@ -5366,7 +5455,7 @@
     "family": "orc_ruin",
     "promptTemplate": "ORCRUIN",
     "promptDetails": "A crude orc watchtower of huge lashed logs, four thick splayed legs, a boxed lookout platform at the top walled with hide and iron plates, a heavy ladder as shallow relief on one leg, spikes and a skull on the corner posts. Approximately 9 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 14,
     "game": {
       "scaleMeters": 9,
@@ -5380,7 +5469,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_watchtower_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_watchtower_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\orc_watchtower_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/orc_watchtower_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/orc_watchtower_01.glb",
+    "glbGame": "Game3DAssets/orc_watchtower_01.glb"
   },
   {
     "id": "orc_watchtower_broken_01",
@@ -5389,7 +5482,7 @@
     "family": "orc_ruin",
     "promptTemplate": "ORCRUIN",
     "promptDetails": "A crude orc log watchtower burnt and broken, its lookout box collapsed and hanging off one side, two legs snapped so the whole tower leans hard, the timber charred black. Approximately 7 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 14,
     "game": {
       "scaleMeters": 7,
@@ -5403,7 +5496,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_watchtower_broken_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_watchtower_broken_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\orc_watchtower_broken_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/orc_watchtower_broken_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/orc_watchtower_broken_01.glb",
+    "glbGame": "Game3DAssets/orc_watchtower_broken_01.glb"
   },
   {
     "id": "orc_hut_ruin_01",
@@ -5412,7 +5509,7 @@
     "family": "orc_ruin",
     "promptTemplate": "ORCRUIN",
     "promptDetails": "A squat round orc hut of hide stretched over bone and log ribs, caved in on one side so the roof sags to the ground, the hide burnt through in a big ragged hole showing the charred ribs, a tusked skull over the low doorway. Approximately 3.8 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 14,
     "game": {
       "scaleMeters": 3.8,
@@ -5426,7 +5523,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_hut_ruin_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_hut_ruin_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\orc_hut_ruin_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/orc_hut_ruin_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/orc_hut_ruin_01.glb",
+    "glbGame": "Game3DAssets/orc_hut_ruin_01.glb"
   },
   {
     "id": "orc_longhouse_01",
@@ -5435,7 +5536,7 @@
     "family": "orc_ruin",
     "promptTemplate": "ORCRUIN",
     "promptDetails": "A long low orc hall built of massive logs with a ridged roof of overlapping hides weighted with stones, one end of the roof burnt away to the charred rafters, iron spikes along the ridge, a wide low doorway hung with a hide. Approximately 6.5 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 14,
     "game": {
       "scaleMeters": 6.5,
@@ -5449,7 +5550,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_longhouse_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_longhouse_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\orc_longhouse_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/orc_longhouse_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/orc_longhouse_01.glb",
+    "glbGame": "Game3DAssets/orc_longhouse_01.glb"
   },
   {
     "id": "orc_war_drum_01",
@@ -5458,7 +5563,7 @@
     "family": "orc_ruin",
     "promptTemplate": "ORCRUIN",
     "promptDetails": "A huge orc war drum, a fat barrel-shaped drum of black iron bands and stretched hide as tall as a man, standing on a crude timber frame, two heavy bone mallets resting against it, the hide scorched at one edge. Approximately 2.6 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 14,
     "game": {
       "scaleMeters": 2.6,
@@ -5472,7 +5577,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_war_drum_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_war_drum_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\orc_war_drum_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/orc_war_drum_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/orc_war_drum_01.glb",
+    "glbGame": "Game3DAssets/orc_war_drum_01.glb"
   },
   {
     "id": "orc_catapult_wreck_01",
@@ -5481,7 +5590,7 @@
     "family": "orc_ruin",
     "promptTemplate": "ORCRUIN",
     "promptDetails": "A crude orc catapult of heavy logs and black iron, its throwing arm snapped and lying across the frame, the frame scorched and one solid wheel broken off, a pile of stone shot beside it as one lump. Approximately 4.5 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 14,
     "game": {
       "scaleMeters": 4.5,
@@ -5495,7 +5604,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_catapult_wreck_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_catapult_wreck_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\orc_catapult_wreck_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/orc_catapult_wreck_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/orc_catapult_wreck_01.glb",
+    "glbGame": "Game3DAssets/orc_catapult_wreck_01.glb"
   },
   {
     "id": "orc_battering_ram_01",
@@ -5504,7 +5617,7 @@
     "family": "orc_ruin",
     "promptTemplate": "ORCRUIN",
     "promptDetails": "A BATTERING RAM siege engine: one huge tree-trunk log with a black iron head shaped like a boar snout, hanging on chains under a low wooden frame with a hide roof, the frame on four solid wooden wheels, scorched and dented. A wooden war machine on wheels. No people, no creatures, no monsters. Approximately 5 meters long and 3 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 14,
     "game": {
       "scaleMeters": 5,
@@ -5519,7 +5632,11 @@
       "avoid": []
     },
     "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_battering_ram_01.png",
-    "seed": 8101
+    "seed": 8101,
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\orc_battering_ram_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/orc_battering_ram_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/orc_battering_ram_01.glb",
+    "glbGame": "Game3DAssets/orc_battering_ram_01.glb"
   },
   {
     "id": "orc_war_banner_01",
@@ -5528,7 +5645,7 @@
     "family": "orc_ruin",
     "promptTemplate": "ORCRUIN",
     "promptDetails": "A tall crude banner pole of a stripped log with bone spikes, flying a long ragged banner of dark red hide painted with a white skull device, torn along the bottom and hanging in heavy folds, a skull on the pole top. Approximately 4.5 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 14,
     "game": {
       "scaleMeters": 4.5,
@@ -5542,7 +5659,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_war_banner_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_war_banner_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\orc_war_banner_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/orc_war_banner_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/orc_war_banner_01.glb",
+    "glbGame": "Game3DAssets/orc_war_banner_01.glb"
   },
   {
     "id": "orc_spike_barricade_01",
@@ -5551,7 +5672,7 @@
     "family": "orc_ruin",
     "promptTemplate": "ORCRUIN",
     "promptDetails": "A low orc barricade of a heavy log frame bristling with thick black iron spikes on all sides, bound with iron bands, scorched, one end smashed. Approximately 2 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 14,
     "game": {
       "scaleMeters": 2,
@@ -5565,7 +5686,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_spike_barricade_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_spike_barricade_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\orc_spike_barricade_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/orc_spike_barricade_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/orc_spike_barricade_01.glb",
+    "glbGame": "Game3DAssets/orc_spike_barricade_01.glb"
   },
   {
     "id": "orc_idol_broken_01",
@@ -5574,7 +5699,7 @@
     "family": "orc_ruin",
     "promptTemplate": "ORCRUIN",
     "promptDetails": "A crude squat stone idol of a tusked orc god that has been toppled and lies tilted against a heap of broken stone, its head cracked off and resting beside it, painted with faded red war marks. Approximately 4 meters long and 2.5 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 14,
     "game": {
       "scaleMeters": 4,
@@ -5588,7 +5713,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_idol_broken_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_idol_broken_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\orc_idol_broken_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/orc_idol_broken_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/orc_idol_broken_01.glb",
+    "glbGame": "Game3DAssets/orc_idol_broken_01.glb"
   },
   {
     "id": "orc_smithy_ruin_01",
@@ -5597,7 +5726,7 @@
     "family": "orc_ruin",
     "promptTemplate": "ORCRUIN",
     "promptDetails": "A crude open-sided orc forge shed of logs and hide, its roof half collapsed, a big black iron forge hearth of stacked stone at the centre with a huge anvil in front, weapon blanks and a hammer as relief on the hearth, scorched all over. Approximately 4 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 14,
     "game": {
       "scaleMeters": 4,
@@ -5611,7 +5740,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_smithy_ruin_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_smithy_ruin_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\orc_smithy_ruin_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/orc_smithy_ruin_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/orc_smithy_ruin_01.glb",
+    "glbGame": "Game3DAssets/orc_smithy_ruin_01.glb"
   },
   {
     "id": "orc_watch_fire_01",
@@ -5620,7 +5753,7 @@
     "family": "orc_ruin",
     "promptTemplate": "ORCRUIN",
     "promptDetails": "A big crude orc fire basket: a wide black iron bowl of riveted plates on three thick bent iron legs, heaped with charred logs and dark coals, spikes around the rim. Approximately 2.2 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 14,
     "game": {
       "scaleMeters": 2.2,
@@ -5634,7 +5767,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_watch_fire_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_watch_fire_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\orc_watch_fire_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/orc_watch_fire_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/orc_watch_fire_01.glb",
+    "glbGame": "Game3DAssets/orc_watch_fire_01.glb"
   },
   {
     "id": "orc_loot_pile_01",
@@ -5643,7 +5780,7 @@
     "family": "orc_ruin",
     "promptTemplate": "ORCRUIN",
     "promptDetails": "A heap of plundered goods piled into one mound: a stolen blue and gold banner, an iron-bound chest, sacks, a dented helmet, a rolled tapestry and a few gold cups, all thrown together. Approximately 1.4 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 14,
     "game": {
       "scaleMeters": 1.4,
@@ -5657,7 +5794,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_loot_pile_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_loot_pile_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\orc_loot_pile_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/orc_loot_pile_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/orc_loot_pile_01.glb",
+    "glbGame": "Game3DAssets/orc_loot_pile_01.glb"
   },
   {
     "id": "orc_pen_01",
@@ -5666,7 +5807,7 @@
     "family": "orc_ruin",
     "promptTemplate": "ORCRUIN",
     "promptDetails": "A small enclosure of crude thick stakes lashed together into a low fence, one side broken open and the stakes leaning, with a heavy hide shelter at the back, muddy and scorched. Approximately 2.4 meters tall.",
-    "status": "image_complete",
+    "status": "rejected",
     "batch": 14,
     "game": {
       "scaleMeters": 2.4,
@@ -5680,7 +5821,12 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_pen_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_pen_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\orc_pen_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/orc_pen_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/orc_pen_01.glb",
+    "glbGame": "Game3DAssets/orc_pen_01.glb",
+    "rejectedWhy": "2026-09-25 validate: splinter geometry"
   },
   {
     "id": "field_crater_rim_01",
@@ -5714,7 +5860,7 @@
     "family": "debris",
     "promptTemplate": "FIELD",
     "promptDetails": "ONE huge round grey STONE BALL, a catapult shot as big as a cart wheel, cracked across, half sunk into a low mound of churned dark earth. Just a single big rough sphere of rock on a patch of dirt. Approximately 1.6 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 14,
     "game": {
       "scaleMeters": 1.6,
@@ -5729,7 +5875,11 @@
       "avoid": []
     },
     "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_siege_boulder_01.png",
-    "seed": 8102
+    "seed": 8102,
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\field_siege_boulder_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/field_siege_boulder_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/field_siege_boulder_01.glb",
+    "glbGame": "Game3DAssets/field_siege_boulder_01.glb"
   },
   {
     "id": "field_broken_ladder_01",
@@ -5738,7 +5888,7 @@
     "family": "debris",
     "promptTemplate": "FIELD",
     "promptDetails": "A heavy wooden siege ladder snapped in two and lying flat on the ground, its thick rails and rungs splintered, scorched at one end. Approximately 4 meters long and 0.9 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 14,
     "game": {
       "scaleMeters": 0.9,
@@ -5752,7 +5902,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_broken_ladder_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_broken_ladder_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\field_broken_ladder_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/field_broken_ladder_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/field_broken_ladder_01.glb",
+    "glbGame": "Game3DAssets/field_broken_ladder_01.glb"
   },
   {
     "id": "field_charred_beam_pile_01",
@@ -5761,7 +5915,7 @@
     "family": "debris",
     "promptTemplate": "FIELD",
     "promptDetails": "A heap of thick charred roof beams and burnt planks collapsed together into one black mound, ends splintered, a few clay roof tiles mixed in. Approximately 1.2 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 14,
     "game": {
       "scaleMeters": 1.2,
@@ -5775,7 +5929,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_charred_beam_pile_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_charred_beam_pile_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\field_charred_beam_pile_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/field_charred_beam_pile_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/field_charred_beam_pile_01.glb",
+    "glbGame": "Game3DAssets/field_charred_beam_pile_01.glb"
   },
   {
     "id": "field_shield_wall_01",
@@ -5784,7 +5942,7 @@
     "family": "debris",
     "promptTemplate": "FIELD",
     "promptDetails": "A row of five tall kite shields in faded blue and gold heraldry planted upright edge to edge in the mud as a barricade, dented and pierced by arrows shown as shallow relief, one shield fallen forward. One solid piece. Approximately 1.6 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 14,
     "game": {
       "scaleMeters": 1.6,
@@ -5798,7 +5956,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_shield_wall_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_shield_wall_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\field_shield_wall_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/field_shield_wall_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/field_shield_wall_01.glb",
+    "glbGame": "Game3DAssets/field_shield_wall_01.glb"
   },
   {
     "id": "field_grave_mound_01",
@@ -5807,7 +5969,7 @@
     "family": "debris",
     "promptTemplate": "FIELD",
     "promptDetails": "A low rounded MOUND OF HEAPED EARTH AND STONES with a knight's sword stuck upright in the top and a dented steel helmet hung on the sword hilt, a broken shield leaning against the side of the mound. A burial cairn, low and wide. Approximately 1.4 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 14,
     "game": {
       "scaleMeters": 1.4,
@@ -5822,7 +5984,11 @@
       "avoid": []
     },
     "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_grave_mound_01.png",
-    "seed": 8103
+    "seed": 8103,
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\field_grave_mound_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/field_grave_mound_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/field_grave_mound_01.glb",
+    "glbGame": "Game3DAssets/field_grave_mound_01.glb"
   },
   {
     "id": "field_broken_cart_burnt_01",
@@ -5831,7 +5997,7 @@
     "family": "debris",
     "promptTemplate": "FIELD",
     "promptDetails": "The burnt-out wreck of a farm wagon, charred black, its bed collapsed and one side gone, two solid wheels still on and one lying flat beside it. Approximately 2.2 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 14,
     "game": {
       "scaleMeters": 2.2,
@@ -5845,7 +6011,11 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_broken_cart_burnt_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_broken_cart_burnt_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\field_broken_cart_burnt_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/field_broken_cart_burnt_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/field_broken_cart_burnt_01.glb",
+    "glbGame": "Game3DAssets/field_broken_cart_burnt_01.glb"
   },
   {
     "id": "field_sandbag_wall_01",
@@ -5854,7 +6024,7 @@
     "family": "debris",
     "promptTemplate": "FIELD",
     "promptDetails": "A short defensive earthwork of stacked earth-filled sacks and sods reinforced with a few thick logs, one end blown apart and slumped, muddy. One solid mass. Approximately 1.4 meters tall.",
-    "status": "image_complete",
+    "status": "glb_optimized",
     "batch": 14,
     "game": {
       "scaleMeters": 1.4,
@@ -5868,6 +6038,10 @@
       "near": [],
       "avoid": []
     },
-    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_sandbag_wall_01.png"
+    "image": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_sandbag_wall_01.png",
+    "glb": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\glb_raw\\field_sandbag_wall_01.glb",
+    "glbRaw": "AssetFactory/glb_raw/field_sandbag_wall_01.glb",
+    "glbOptimized": "AssetFactory/glb_optimized/field_sandbag_wall_01.glb",
+    "glbGame": "Game3DAssets/field_sandbag_wall_01.glb"
   }
 ]

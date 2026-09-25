@@ -1,0 +1,1401 @@
+{
+  "generated": "2026-09-25T20:29:42.960Z",
+  "results": [
+    {
+      "file": "Game3DAssets/field_broken_cart_burnt_01.glb",
+      "name": "field_broken_cart_burnt_01.glb",
+      "bytes": 351740,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 82894,
+      "vertices": 68449,
+      "materials": 1,
+      "textures": 1,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.697,
+        0.462,
+        1
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.697,
+          0.462,
+          1
+        ],
+        "drawnFrac": 0.253
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/field_broken_ladder_01.glb",
+      "name": "field_broken_ladder_01.glb",
+      "bytes": 330724,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 90389,
+      "vertices": 68762,
+      "materials": 1,
+      "textures": 1,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.731,
+        0.828,
+        1
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.731,
+          0.828,
+          1
+        ],
+        "drawnFrac": 0.28
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/field_charred_beam_pile_01.glb",
+      "name": "field_charred_beam_pile_01.glb",
+      "bytes": 357780,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 87291,
+      "vertices": 66602,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.37,
+        0.903
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.37,
+          0.903
+        ],
+        "drawnFrac": 0.261
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/field_grave_mound_01.glb",
+      "name": "field_grave_mound_01.glb",
+      "bytes": 360984,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 93853,
+      "vertices": 64143,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.733,
+        0.997
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.733,
+          0.997
+        ],
+        "drawnFrac": 0.296
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/field_sandbag_wall_01.glb",
+      "name": "field_sandbag_wall_01.glb",
+      "bytes": 343492,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 92583,
+      "vertices": 71973,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.991,
+        0.477,
+        1
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.991,
+          0.477,
+          1
+        ],
+        "drawnFrac": 0.217
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/field_shield_wall_01.glb",
+      "name": "field_shield_wall_01.glb",
+      "bytes": 386124,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 96356,
+      "vertices": 69457,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.959,
+        1,
+        0.728
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.959,
+          1,
+          0.728
+        ],
+        "drawnFrac": 0.318
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/field_siege_boulder_01.glb",
+      "name": "field_siege_boulder_01.glb",
+      "bytes": 355544,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 84098,
+      "vertices": 65499,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.997,
+        0.75,
+        1
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.997,
+          0.75,
+          1
+        ],
+        "drawnFrac": 0.351
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/orc_battering_ram_01.glb",
+      "name": "orc_battering_ram_01.glb",
+      "bytes": 330116,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 70183,
+      "vertices": 63340,
+      "materials": 1,
+      "textures": 1,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.86,
+        0.643
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.86,
+          0.643
+        ],
+        "drawnFrac": 0.31
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/orc_catapult_wreck_01.glb",
+      "name": "orc_catapult_wreck_01.glb",
+      "bytes": 344008,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 73113,
+      "vertices": 65766,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.817,
+        0.987
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.817,
+          0.987
+        ],
+        "drawnFrac": 0.34
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/orc_fortress_gate_ruin_01.glb",
+      "name": "orc_fortress_gate_ruin_01.glb",
+      "bytes": 396112,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 93351,
+      "vertices": 76035,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.995,
+        1,
+        0.722
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.995,
+          1,
+          0.722
+        ],
+        "drawnFrac": 0.481
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/orc_fortress_wall_01.glb",
+      "name": "orc_fortress_wall_01.glb",
+      "bytes": 354296,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 69883,
+      "vertices": 60384,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.803,
+        1,
+        0.899
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.803,
+          1,
+          0.899
+        ],
+        "drawnFrac": 0.429
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/orc_fortress_wall_broken_01.glb",
+      "name": "orc_fortress_wall_broken_01.glb",
+      "bytes": 301440,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 55339,
+      "vertices": 53442,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.93,
+        1,
+        0.9
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.93,
+          1,
+          0.9
+        ],
+        "drawnFrac": 0.462
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/orc_hut_ruin_01.glb",
+      "name": "orc_hut_ruin_01.glb",
+      "bytes": 328876,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 70088,
+      "vertices": 60601,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.952,
+        1,
+        0.951
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.952,
+          1,
+          0.951
+        ],
+        "drawnFrac": 0.455
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/orc_idol_broken_01.glb",
+      "name": "orc_idol_broken_01.glb",
+      "bytes": 329280,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 82262,
+      "vertices": 65277,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.78,
+        0.754,
+        1
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.78,
+          0.754,
+          1
+        ],
+        "drawnFrac": 0.339
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/orc_longhouse_01.glb",
+      "name": "orc_longhouse_01.glb",
+      "bytes": 373572,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 72784,
+      "vertices": 66891,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.898,
+        1,
+        0.877
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.899,
+          1,
+          0.877
+        ],
+        "drawnFrac": 0.46
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/orc_loot_pile_01.glb",
+      "name": "orc_loot_pile_01.glb",
+      "bytes": 340900,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 90837,
+      "vertices": 66499,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.87,
+        1,
+        0.948
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.87,
+          1,
+          0.948
+        ],
+        "drawnFrac": 0.366
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/orc_pen_01.glb",
+      "name": "orc_pen_01.glb",
+      "bytes": 264636,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 15235,
+      "vertices": 28639,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.833,
+        0.87,
+        0.83
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": false,
+        "meshes": 1,
+        "size": [
+          0.833,
+          0.87,
+          0.83
+        ],
+        "drawnFrac": 0.017,
+        "error": "splinter geometry (drawnFrac 0.017)"
+      },
+      "valid": false
+    },
+    {
+      "file": "Game3DAssets/orc_smithy_ruin_01.glb",
+      "name": "orc_smithy_ruin_01.glb",
+      "bytes": 371520,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 77398,
+      "vertices": 64865,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.96,
+        0.992
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.96,
+          0.992
+        ],
+        "drawnFrac": 0.484
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/orc_spike_barricade_01.glb",
+      "name": "orc_spike_barricade_01.glb",
+      "bytes": 377452,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 90624,
+      "vertices": 69790,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.742,
+        0.656,
+        1
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.742,
+          0.656,
+          1
+        ],
+        "drawnFrac": 0.178
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/orc_war_banner_01.glb",
+      "name": "orc_war_banner_01.glb",
+      "bytes": 339376,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 81885,
+      "vertices": 71825,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.519,
+        1,
+        0.872
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.519,
+          1,
+          0.872
+        ],
+        "drawnFrac": 0.185
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/orc_war_drum_01.glb",
+      "name": "orc_war_drum_01.glb",
+      "bytes": 390888,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 86601,
+      "vertices": 68112,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.626,
+        1,
+        0.613
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.626,
+          1,
+          0.613
+        ],
+        "drawnFrac": 0.251
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/orc_watch_fire_01.glb",
+      "name": "orc_watch_fire_01.glb",
+      "bytes": 340532,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 49689,
+      "vertices": 48978,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.958,
+        1,
+        0.886
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.958,
+          1,
+          0.886
+        ],
+        "drawnFrac": 0.36
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/orc_watchtower_01.glb",
+      "name": "orc_watchtower_01.glb",
+      "bytes": 387256,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 89570,
+      "vertices": 76502,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.665,
+        1,
+        0.716
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.665,
+          1,
+          0.716
+        ],
+        "drawnFrac": 0.241
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/orc_watchtower_broken_01.glb",
+      "name": "orc_watchtower_broken_01.glb",
+      "bytes": 365844,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 89894,
+      "vertices": 70726,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.905,
+        1,
+        0.769
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.905,
+          1,
+          0.769
+        ],
+        "drawnFrac": 0.384
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/war_ballista_01.glb",
+      "name": "war_ballista_01.glb",
+      "bytes": 394848,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 95048,
+      "vertices": 74181,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.525,
+        0.567
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.525,
+          0.567
+        ],
+        "drawnFrac": 0.132
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/war_barn_ruin_01.glb",
+      "name": "war_barn_ruin_01.glb",
+      "bytes": 380220,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 80870,
+      "vertices": 68970,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        1,
+        0.961
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          1,
+          0.961
+        ],
+        "drawnFrac": 0.537
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/war_castle_wall_01.glb",
+      "name": "war_castle_wall_01.glb",
+      "bytes": 332504,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 77607,
+      "vertices": 65961,
+      "materials": 1,
+      "textures": 1,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.898,
+        1,
+        0.724
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.898,
+          1,
+          0.724
+        ],
+        "drawnFrac": 0.227
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/war_castle_wall_breach_01.glb",
+      "name": "war_castle_wall_breach_01.glb",
+      "bytes": 379700,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 96325,
+      "vertices": 74773,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.754,
+        0.682,
+        1
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.753,
+          0.682,
+          1
+        ],
+        "drawnFrac": 0.297
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/war_chapel_ruin_01.glb",
+      "name": "war_chapel_ruin_01.glb",
+      "bytes": 371092,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 89836,
+      "vertices": 77178,
+      "materials": 1,
+      "textures": 1,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.824,
+        0.525
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.824,
+          0.525
+        ],
+        "drawnFrac": 0.228
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/war_command_tent_01.glb",
+      "name": "war_command_tent_01.glb",
+      "bytes": 369656,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 85439,
+      "vertices": 68805,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.97,
+        0.856,
+        1
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.97,
+          0.856,
+          1
+        ],
+        "drawnFrac": 0.383
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/war_farmhouse_ruin_01.glb",
+      "name": "war_farmhouse_ruin_01.glb",
+      "bytes": 373044,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 92944,
+      "vertices": 69971,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.858,
+        1,
+        0.833
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.858,
+          1,
+          0.833
+        ],
+        "drawnFrac": 0.465
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/war_field_tent_01.glb",
+      "name": "war_field_tent_01.glb",
+      "bytes": 274984,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 53869,
+      "vertices": 51855,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.949,
+        0.838,
+        1
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.949,
+          0.838,
+          1
+        ],
+        "drawnFrac": 0.352
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/war_gatehouse_ruin_01.glb",
+      "name": "war_gatehouse_ruin_01.glb",
+      "bytes": 384764,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 88335,
+      "vertices": 74479,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.998,
+        1,
+        0.746
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.998,
+          1,
+          0.746
+        ],
+        "drawnFrac": 0.522
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/war_house_ruin_01.glb",
+      "name": "war_house_ruin_01.glb",
+      "bytes": 347828,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 65490,
+      "vertices": 63776,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.822,
+        0.963,
+        1
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.822,
+          0.963,
+          1
+        ],
+        "drawnFrac": 0.409
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/war_house_ruin_02.glb",
+      "name": "war_house_ruin_02.glb",
+      "bytes": 375836,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 95521,
+      "vertices": 73330,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.694,
+        1,
+        0.806
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.694,
+          1,
+          0.806
+        ],
+        "drawnFrac": 0.342
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/war_kingdom_banner_01.glb",
+      "name": "war_kingdom_banner_01.glb",
+      "bytes": 421696,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 73800,
+      "vertices": 63920,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.843,
+        1,
+        0.683
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.842,
+          1,
+          0.683
+        ],
+        "drawnFrac": 0.258
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/war_knight_statue_fallen_01.glb",
+      "name": "war_knight_statue_fallen_01.glb",
+      "bytes": 364288,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 91493,
+      "vertices": 64938,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.193,
+        1
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.193,
+          1
+        ],
+        "drawnFrac": 0.26
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/war_market_stall_ruin_01.glb",
+      "name": "war_market_stall_ruin_01.glb",
+      "bytes": 352432,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 67832,
+      "vertices": 60617,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.912,
+        0.846,
+        1
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.912,
+          0.846,
+          1
+        ],
+        "drawnFrac": 0.466
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/war_shield_pile_01.glb",
+      "name": "war_shield_pile_01.glb",
+      "bytes": 369632,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 79929,
+      "vertices": 62085,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.451,
+        0.959
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.451,
+          0.959
+        ],
+        "drawnFrac": 0.15
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/war_siege_tower_wreck_01.glb",
+      "name": "war_siege_tower_wreck_01.glb",
+      "bytes": 364352,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 86646,
+      "vertices": 71906,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.696,
+        1,
+        0.952
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.696,
+          1,
+          0.952
+        ],
+        "drawnFrac": 0.268
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/war_supply_wagon_wreck_01.glb",
+      "name": "war_supply_wagon_wreck_01.glb",
+      "bytes": 363240,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 91815,
+      "vertices": 76434,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.736,
+        0.855
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.736,
+          0.855
+        ],
+        "drawnFrac": 0.267
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/war_tavern_ruin_01.glb",
+      "name": "war_tavern_ruin_01.glb",
+      "bytes": 282900,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 34332,
+      "vertices": 41351,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        0.988,
+        0.783,
+        1
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          0.988,
+          0.783,
+          1
+        ],
+        "drawnFrac": 0.424
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/war_tower_ruin_01.glb",
+      "name": "war_tower_ruin_01.glb",
+      "bytes": 323504,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 68922,
+      "vertices": 65475,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.975,
+        0.459
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.975,
+          0.459
+        ],
+        "drawnFrac": 0.272
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/war_trebuchet_wreck_01.glb",
+      "name": "war_trebuchet_wreck_01.glb",
+      "bytes": 339864,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 85272,
+      "vertices": 71644,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.924,
+        0.888
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.923,
+          0.888
+        ],
+        "drawnFrac": 0.265
+      },
+      "valid": true
+    },
+    {
+      "file": "Game3DAssets/war_watchtower_wreck_01.glb",
+      "name": "war_watchtower_wreck_01.glb",
+      "bytes": 341392,
+      "ok": true,
+      "meshes": 1,
+      "primitives": 1,
+      "triangles": 83693,
+      "vertices": 66892,
+      "materials": 1,
+      "textures": 2,
+      "animations": 0,
+      "skins": 0,
+      "size": [
+        1,
+        0.753,
+        0.749
+      ],
+      "problems": [],
+      "viewer": {
+        "ok": true,
+        "meshes": 1,
+        "size": [
+          1,
+          0.753,
+          0.749
+        ],
+        "drawnFrac": 0.28
+      },
+      "valid": true
+    }
+  ]
+}

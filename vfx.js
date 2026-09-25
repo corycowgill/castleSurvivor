@@ -3927,21 +3927,26 @@ const manager = {
   buildingFire(f, dt, mul = 1) {
     const s = (f.s ?? 1) * mul * quality.particleMul;
     const r = f.r ?? 1.2, y0 = f.y ?? 0.3, h = f.h ?? 8;
-    const flames = getGroup('flame', THREE.NormalBlending);
-    const heart = getGroup('flame', THREE.AdditiveBlending);
-    const smoke = getGroup('smoke', THREE.NormalBlending);
+    // Flames additive like burningGround (normal-blended flame sprites read as pale
+    // puffs from the game camera); the smoke is the only normal-blended layer.
+    // The `smoke` atlas frames are wisps and read as torn black rags at building
+    // size; smokeSoft is the round puff a smoke column is made of.
+    const flames = getGroup('flame', THREE.AdditiveBlending);
+    const heart = getGroup('softCircle', THREE.AdditiveBlending);
+    const smoke = getGroup('smokeSoft', THREE.NormalBlending);
     const sparks = getGroup('softCircle', THREE.AdditiveBlending);
-    let want = (14 + 8 * r) * s * dt, n = Math.floor(want); if (Math.random() < want - n) n++;
+    let want = (30 + 14 * r) * s * dt, n = Math.floor(want); if (Math.random() < want - n) n++;
     for (let i = 0; i < n; i++) {
       const a = Math.random() * 6.283, d = Math.sqrt(Math.random()) * r;
-      const big = 0.55 + r * 0.35;
+      // Sizes are authored x0.28 (PARTICLE_WORLD_SCALE): 4 here is ~1.1 world units
+      const big = 3.2 + r * 1.8;
       flames.emit({
         x: f.x + Math.cos(a) * d, y: y0 + Math.random() * 0.4, z: f.z + Math.sin(a) * d,
         vx: (Math.random() - 0.5) * 0.8, vy: 2.4 + Math.random() * 2.4, vz: (Math.random() - 0.5) * 0.8,
-        colorStops: [0xffe0a0, 0xff9a2e, 0xe0400a, 0x4a0e00],
-        sizeStart: big * (0.8 + Math.random() * 0.5), sizeEnd: 0.1,
-        life: 0.55 + Math.random() * 0.5, opacityStart: 0.9, opacityEnd: 0,
-        turbulence: 1.3, drag: 1.1, sizeEase: 0.7, erode: 0.8, rotation: (Math.random() - 0.5) * 0.6,
+        colorStops: [0xffc050, 0xff8a1c, 0xe0400a, 0x4a0e00],
+        sizeStart: big * (0.7 + Math.random() * 0.6), sizeEnd: 0.8,
+        life: 0.6 + Math.random() * 0.6, opacityStart: 0.55, opacityEnd: 0,
+        turbulence: 1.4, drag: 1.1, sizeEase: 0.7, erode: 0.9, rotation: (Math.random() - 0.5) * 0.6,
       });
     }
     want = (4 + 2 * r) * s * dt; n = Math.floor(want); if (Math.random() < want - n) n++;
@@ -3949,22 +3954,22 @@ const manager = {
       const a = Math.random() * 6.283, d = Math.sqrt(Math.random()) * r * 0.6;
       heart.emit({
         x: f.x + Math.cos(a) * d, y: y0 + 0.2, z: f.z + Math.sin(a) * d,
-        vy: 3 + Math.random() * 2, color: 0xfff2c0, colorEnd: 0xffa030,
-        sizeStart: 0.35 + r * 0.15, sizeEnd: 0.05, life: 0.3 + Math.random() * 0.25,
-        opacityStart: 0.9, opacityEnd: 0, turbulence: 0.8, drag: 1.2,
+        vy: 3 + Math.random() * 2, color: 0xffd080, colorEnd: 0xff8020,
+        sizeStart: 1.6 + r * 0.6, sizeEnd: 0.3, life: 0.35 + Math.random() * 0.3,
+        opacityStart: 0.45, opacityEnd: 0, turbulence: 0.8, drag: 1.2,
       });
     }
     // Smoke: few, large, long-lived, leaning with the wind
-    want = (2.2 + r * 0.8) * s * dt; n = Math.floor(want); if (Math.random() < want - n) n++;
+    want = (5 + r * 2) * s * dt; n = Math.floor(want); if (Math.random() < want - n) n++;
     for (let i = 0; i < n; i++) {
       const a = Math.random() * 6.283, d = Math.sqrt(Math.random()) * r * 0.7;
       smoke.emit({
-        x: f.x + Math.cos(a) * d, y: y0 + 1.2 + Math.random() * 0.8, z: f.z + Math.sin(a) * d,
-        vx: 0.5 + Math.random() * 0.4, vy: 1.6 + Math.random() * 1.2, vz: (Math.random() - 0.5) * 0.3,
-        colorStops: [0x5a4a40, 0x3a322c, 0x2a2521, 0x1a1715],
-        sizeStart: 0.9 + r * 0.5, sizeEnd: 3.2 + r * 1.2 + h * 0.15,
-        life: 2.2 + h * 0.28 + Math.random() * 1.2, opacityStart: 0.36, opacityEnd: 0,
-        drag: 0.9, rotSpeed: (Math.random() - 0.5) * 0.8,
+        x: f.x + Math.cos(a) * d, y: y0 + 1.6 + Math.random() * 1.0, z: f.z + Math.sin(a) * d,
+        vx: 0.35 + Math.random() * 0.3, vy: 0.7 + Math.random() * 0.6, vz: (Math.random() - 0.5) * 0.25,
+        colorStops: [0x2a2320, 0x1c1815, 0x141110, 0x0c0a09],
+        sizeStart: 5 + r * 2, sizeEnd: 15 + r * 4 + h * 0.6,
+        life: 3.5 + h * 0.3 + Math.random() * 1.5, opacityStart: 0.62, opacityEnd: 0,
+        drag: 0.9, rotSpeed: (Math.random() - 0.5) * 0.5, fadeIn: 0.15,
       });
     }
     // Embers thrown up and carried off
@@ -3974,7 +3979,7 @@ const manager = {
       sparks.emit({
         x: f.x + Math.cos(a) * d, y: y0 + 0.5, z: f.z + Math.sin(a) * d,
         vx: (Math.random() - 0.3) * 1.6, vy: 3 + Math.random() * 3.5, vz: (Math.random() - 0.5) * 1.6,
-        color: Math.random() > 0.5 ? 0xffd070 : 0xff7a20, sizeStart: 0.07 + Math.random() * 0.06, sizeEnd: 0.01,
+        color: Math.random() > 0.5 ? 0xffd070 : 0xff7a20, sizeStart: 0.25 + Math.random() * 0.2, sizeEnd: 0.05,
         life: 1.2 + Math.random() * 1.6, opacityStart: 0.9, opacityEnd: 0, gravity: 0.6, drag: 0.7,
       });
     }
@@ -3987,14 +3992,14 @@ const manager = {
     const r = f.r ?? 1.2, y0 = f.y ?? 0.3, h = f.h ?? 8;
     const want = 0.9 * s * dt; let n = Math.floor(want); if (Math.random() < want - n) n++;
     if (!n) return;
-    const smoke = getGroup('smoke', THREE.NormalBlending);
+    const smoke = getGroup('smokeSoft', THREE.NormalBlending);
     for (let i = 0; i < n; i++) {
       smoke.emit({
         x: f.x + (Math.random() - 0.5) * r, y: y0 + 1.5 + Math.random() * h * 0.3, z: f.z + (Math.random() - 0.5) * r,
-        vx: 0.6 + Math.random() * 0.4, vy: 1.4 + Math.random() * 0.8, vz: (Math.random() - 0.5) * 0.3,
-        colorStops: [0x4a403a, 0x2e2925, 0x1e1a18, 0x141211],
-        sizeStart: 1.6 + r * 0.6, sizeEnd: 4.5 + r + h * 0.2,
-        life: 3 + h * 0.3, opacityStart: 0.3, opacityEnd: 0, drag: 0.9,
+        vx: 0.4 + Math.random() * 0.3, vy: 0.7 + Math.random() * 0.5, vz: (Math.random() - 0.5) * 0.25,
+        colorStops: [0x241f1c, 0x181412, 0x100e0d, 0x0a0908],
+        sizeStart: 7 + r * 2, sizeEnd: 18 + r * 4 + h * 0.8,
+        life: 4 + h * 0.4, opacityStart: 0.5, opacityEnd: 0, drag: 0.9, fadeIn: 0.25,
       });
     }
   },

@@ -62,7 +62,7 @@ const TEXTURES = {
   scorchedEarth: { subject: 'burnt black scorched earth and grey ash with a few charred sticks and a scatter of dull dark embers, matte, seen straight from above', seed: 402 },
   battleGrass:   { subject: 'trampled dead grass, flattened yellow-brown and grey stalks pressed into dark mud with bare patches, seen straight from above', seed: 403 },
   rubbleGround:  { subject: 'a ground of broken grey stone chips, mortar dust and small chunks of masonry over dark earth, fine scale, no large blocks, seen straight from above', seed: 404 },
-  ironMud:       { subject: 'wet dark mud stained rust red-brown in streaks and patches, with iron-grey pebbles and a faint sheen of standing water, seen straight from above', seed: 405 },
+  rustMud:       { subject: 'wet dark mud stained rust red-brown in streaks and patches, with iron-grey pebbles and a faint sheen of standing water, seen straight from above', seed: 405 },
 };
 const DECALS = {
   puddle:     { subject: 'a single shallow muddy rain puddle, seen straight from above' },

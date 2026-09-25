@@ -90,7 +90,8 @@ const WATCHFIRE = () => P('orc_watch_fire_01', 'ogre_brazier_01', 'village_lante
 const LOOT = () => P('orc_loot_pile_01', 'prop_wood_crate_large_01');
 const PEN = () => P('orc_pen_01', 'bog_fence_01', 'village_fence_broken_01');
 const TOTEM = () => P('ogre_totem_01', 'combat_enemy_totem_01', 'combat_skull_stake_01', 'fen_totem_01');
-const BONES = () => P('ogre_bone_pile_01', 'combat_bones_01', 'combat_skull_01', 'nature_rock_small_02');
+// nature_rock_small_02 is a MOSSY rock and read as bright green lozenges all over the field
+const BONES = () => P('ogre_bone_pile_01', 'combat_skull_01', 'basalt_small_02');
 const CAGE = () => P('ogre_cage_01', 'orc_pen_01', 'war_fence_01');
 // ── the field
 const CRATER = () => P('field_crater_rim_01', 'basalt_cluster_01', 'nature_rock_cluster_02');
@@ -431,8 +432,12 @@ m.paintFn(GRASS, (x, z) => {
   const d = Math.min(Math.hypot(x, z) / 60, 1);
   return (0.25 + d * 0.7) * (0.6 + noise(x, z) * 0.6) - woods(x, z) * 0.8;
 }, 2);
-m.paintFn(IRON, (x, z) => (inField(x, z) ? 0.45 + churn(x, z) * 0.6 : 0.2 - Math.hypot(x, z) / 120 + churn(x, z) * 0.3), 2);
-m.paintCircle(IRON, 0, 0, 30, 0.75, 0.6);
+// Rust mud is an accent in the worst-fought ground, not the field's floor: at full
+// strength the whole middle of the map read as red cobbles from the air.
+m.paintFn(IRON, (x, z) => (inField(x, z) ? (churn(x, z) - 0.45) * 1.1 : (churn(x, z) - 0.7) * 0.8), 2);
+m.paintCircle(IRON, 0, 0, 14, 0.35, 0.7);
+// Scorched patches through the field as well, so the ground carries the burning
+m.paintFn(SCORCH, (x, z) => (inField(x, z) ? (noise(x, z) - 0.55) * 1.2 : 0), 2);
 m.paintCircle(RUB, KEEP.x, KEEP.z, PAL_R + 6, 0.5, 0.7);
 m.paintCircle(SCORCH, KEEP.x, KEEP.z, PAL_R + 2, 0.45, 0.7);
 for (let z = -66; z <= -16; z += 6) for (let x = -66; x <= -16; x += 6)

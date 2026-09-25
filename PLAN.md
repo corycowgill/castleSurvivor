@@ -371,6 +371,7 @@ rather than out of props we already had. Full design in `NEW-LEVEL-PLAN.md`.
   26.6's own fixes are **not yet seen rendered**
 
 ## Changelog
+- 2026-09-25 - Phase 32: Bloodmarch, the war-torn field. Fifth map: human castle and town burning in the north-west, the orc fortress in the south-east, the field between. 45 new Trellis meshes (two-phase asset run with concept-art review), 20 war-torn regrades, fires as a map feature (flames, smoke, light), a smoke-choked dusk look, tools/bloodmarch-verify.mjs.
 - 2026-09-25 - Phase 31: creature follow-ups. One shared creature helper under Lupin and Thunderhoof (spawn, dispose, crossfade, move, detour round props, damage-free shove), a hop into the saddle and a drop out of it, trample while riding, a Codex Allies tab with live previews, and `npm run creatures` as the regression (19 checks).
 - 2026-09-25 - Phase 30: the rideable horse. horse.glb rigged through the same Blender auto-rig (Idle/Walk/Run), three Stable Audio 3 voice slots; a horse gallops in every two minutes, walk into it to ride one minute at double foot speed with a HUD countdown, then it bolts.
 - 2026-09-25 - Phase 29: Lupin, the companion dog. Trellis mesh from the user's art, auto-rigged and animated headless in Blender (tools/rig-quadruped.py), four Stable Audio 3 voice slots, heels to the nearest knight, bites for 3 + 0.6/wave, barks at waves and howls at bosses. Settings toggle `Lupin`.
@@ -553,3 +554,44 @@ the asset-run post-mortem in `NEW-LEVEL-PLAN.md`.
   checks (heel, bite, credit, howl, arrive, mount, lift, follow, run clip, trample, HUD
   countdown, bolt, drop, despawn, double speed, teardown) plus a Codex Allies screenshot;
   exit 1 on any failure. Passes twice in a row; `npm test` clean
+
+## Phase 32 - Bloodmarch, the war-torn field (2026-09-25)
+- [x] 32.1 **Catalog and templates.** 46 entries in batches 13 (human ruins, WARRUIN) and 14
+  (orc fortress + the field, ORCRUIN/FIELD); `AssetFactory/scripts/add-bloodmarch-assets.mjs`.
+  Templates carry the solid-mass rule, a no-gore rule and a no-fire rule (fire is VFX).
+  `run_pipeline.get_negative_prompt(asset)` appends `<TEMPLATE>.negative.txt`; a catalog
+  `seed` re-rolls one asset
+- [x] 32.2 **Two-phase asset run** (`tools/run-bloodmarch-assets.sh [--images|--meshes]`): all
+  SD images for a batch, then all Trellis meshes, ~45 s + ~4 min instead of ~8 min per asset
+  with the models swapping per asset. `tools/image-sheet.mjs` writes a contact sheet per batch
+  so concept art is reviewed BEFORE Trellis time. 77 images reviewed, 24 re-rolled, 17
+  rejected. Batches 13 and 14: 45 of 45 meshes generated, 43 valid (orc_pen splinters,
+  knight statue kept its ground slab)
+- [x] 32.3 **SDXL word order.** Base prompt first gave pristine cottages for "ruined"; damage
+  lead first lost the framing (close-ups of one arch). What works is one compact lead with
+  BOTH ("concept art of a RUINED building: {desc} The complete ruin from foundation to
+  roofline, three-quarter view, small in frame, plain background, not a photograph") and
+  the base prompt last. Non-building items (tents, banners, ballista) must use the FIELD
+  template or the building template turns them into houses
+- [x] 32.4 **Free art.** char-glb grades `warTorn` / `gutted` / `siegeStone`, twenty `war_*`
+  regrades of the Kingsfield buildings (the map stood on these before a mesh landed)
+- [x] 32.5 **Fires as a map feature.** `MapBuilder.fire()` -> `fires[]` -> `updateMapFires`
+  (in updateGame: freezes on pause, steps in the harness), budgeted: 10 nearest burn in full
+  via `vfx.buildingFire`, next ring `vfx.smokeColumn`, beyond 80 units nothing. Each fire is
+  also a pooled point light and a ground glow. 54 fires on the map. Lessons: particle sizes
+  are x0.28 so a building fire needs sizeStart ~5-9; the `smoke` atlas frames read as torn
+  rags at that size (smokeSoft is the puff); flames must be additive
+- [x] 32.6 **Ground.** The generated churnedMud / scorchedEarth / battleGrass / ironMud came back
+  as cracked clay, ember gravel, yellow bamboo and red lava blobs; Kingsfield's `mud` is
+  orange cracked clay too. In use: base `dirt`, layers cinder / grassDry / rubbleGround /
+  `rustMud` (Mirefen's peat tinted rust with sharp). Re-roll the SD set when ComfyUI is next
+  up. The harness browser profile caches textures by URL: rename, do not overwrite
+- [x] 32.7 **Look.** Low red sun through brown-grey smoke; first pass was one orange frame
+  (warm key + warm ambient + warm gain), the warmth now lives in the fires only
+- [x] 32.8 **Verify.** `tools/bloodmarch-verify.mjs --gpu` (map loads, 54 fires, fires emit,
+  spawn open, enemies spawn, Kingsfield has none); `npm test`; `npm run creatures`; overhead +
+  thumbnail; 12-minute kite run
+- [ ] 32.9 Open: batches 9, 5, 10 (the Emberreach ogre camp, war debris and hero pieces, 27
+  meshes with reviewed concept art) still to mesh; three ground textures to re-roll; the
+  gatehouse / fortress gate are large enough that the tour camera lands inside them (cosmetic,
+  the keep-outs hold); enemy readability on the dark field not yet judged in play

@@ -2128,5 +2128,1493 @@
     "stage": "optimize",
     "metadata": {},
     "timestamp": "2026-09-24T08:15:54"
+  },
+  {
+    "id": "war_house_ruin_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_house_ruin_01.png"
+    },
+    "timestamp": "2026-09-25T10:50:23"
+  },
+  {
+    "id": "war_house_ruin_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T10:56:22"
+  },
+  {
+    "id": "war_house_ruin_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T10:56:23"
+  },
+  {
+    "id": "war_house_ruin_02",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_house_ruin_02.png"
+    },
+    "timestamp": "2026-09-25T10:56:59"
+  },
+  {
+    "id": "war_house_ruin_02",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T11:04:53"
+  },
+  {
+    "id": "war_house_ruin_02",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T11:04:53"
+  },
+  {
+    "id": "war_tavern_ruin_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_tavern_ruin_01.png"
+    },
+    "timestamp": "2026-09-25T11:05:30"
+  },
+  {
+    "id": "war_tavern_ruin_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T11:10:50"
+  },
+  {
+    "id": "war_tavern_ruin_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T11:10:51"
+  },
+  {
+    "id": "war_house_ruin_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_house_ruin_01.png"
+    },
+    "timestamp": "2026-09-25T11:11:23"
+  },
+  {
+    "id": "war_house_ruin_02",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_house_ruin_02.png"
+    },
+    "timestamp": "2026-09-25T11:11:49"
+  },
+  {
+    "id": "war_tavern_ruin_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_tavern_ruin_01.png"
+    },
+    "timestamp": "2026-09-25T11:12:15"
+  },
+  {
+    "id": "war_barn_ruin_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_barn_ruin_01.png"
+    },
+    "timestamp": "2026-09-25T11:13:07"
+  },
+  {
+    "id": "war_house_ruin_02",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_house_ruin_02.png"
+    },
+    "timestamp": "2026-09-25T11:13:28"
+  },
+  {
+    "id": "war_farmhouse_ruin_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_farmhouse_ruin_01.png"
+    },
+    "timestamp": "2026-09-25T11:13:53"
+  },
+  {
+    "id": "war_tavern_ruin_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_tavern_ruin_01.png"
+    },
+    "timestamp": "2026-09-25T11:14:14"
+  },
+  {
+    "id": "war_chapel_ruin_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_chapel_ruin_01.png"
+    },
+    "timestamp": "2026-09-25T11:14:39"
+  },
+  {
+    "id": "war_castle_wall_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_castle_wall_01.png"
+    },
+    "timestamp": "2026-09-25T11:15:05"
+  },
+  {
+    "id": "war_castle_wall_breach_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_castle_wall_breach_01.png"
+    },
+    "timestamp": "2026-09-25T11:15:31"
+  },
+  {
+    "id": "war_house_ruin_02",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_house_ruin_02.png"
+    },
+    "timestamp": "2026-09-25T11:15:56"
+  },
+  {
+    "id": "war_tower_ruin_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_tower_ruin_01.png"
+    },
+    "timestamp": "2026-09-25T11:16:17"
+  },
+  {
+    "id": "war_tavern_ruin_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_tavern_ruin_01.png"
+    },
+    "timestamp": "2026-09-25T11:16:37"
+  },
+  {
+    "id": "war_gatehouse_ruin_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_gatehouse_ruin_01.png"
+    },
+    "timestamp": "2026-09-25T11:17:03"
+  },
+  {
+    "id": "war_barn_ruin_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_barn_ruin_01.png"
+    },
+    "timestamp": "2026-09-25T11:17:23"
+  },
+  {
+    "id": "war_market_stall_ruin_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_market_stall_ruin_01.png"
+    },
+    "timestamp": "2026-09-25T11:17:44"
+  },
+  {
+    "id": "war_farmhouse_ruin_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_farmhouse_ruin_01.png"
+    },
+    "timestamp": "2026-09-25T11:18:09"
+  },
+  {
+    "id": "war_house_ruin_02",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_house_ruin_02.png"
+    },
+    "timestamp": "2026-09-25T11:19:36"
+  },
+  {
+    "id": "war_tavern_ruin_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_tavern_ruin_01.png"
+    },
+    "timestamp": "2026-09-25T11:20:02"
+  },
+  {
+    "id": "war_barn_ruin_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_barn_ruin_01.png"
+    },
+    "timestamp": "2026-09-25T11:20:28"
+  },
+  {
+    "id": "war_farmhouse_ruin_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_farmhouse_ruin_01.png"
+    },
+    "timestamp": "2026-09-25T11:20:54"
+  },
+  {
+    "id": "war_castle_wall_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_castle_wall_01.png"
+    },
+    "timestamp": "2026-09-25T11:21:20"
+  },
+  {
+    "id": "war_castle_wall_breach_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_castle_wall_breach_01.png"
+    },
+    "timestamp": "2026-09-25T11:21:46"
+  },
+  {
+    "id": "war_market_stall_ruin_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_market_stall_ruin_01.png"
+    },
+    "timestamp": "2026-09-25T11:22:12"
+  },
+  {
+    "id": "war_watchtower_wreck_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_watchtower_wreck_01.png"
+    },
+    "timestamp": "2026-09-25T11:22:38"
+  },
+  {
+    "id": "war_siege_tower_wreck_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_siege_tower_wreck_01.png"
+    },
+    "timestamp": "2026-09-25T11:23:04"
+  },
+  {
+    "id": "war_trebuchet_wreck_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_trebuchet_wreck_01.png"
+    },
+    "timestamp": "2026-09-25T11:23:30"
+  },
+  {
+    "id": "war_ballista_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_ballista_01.png"
+    },
+    "timestamp": "2026-09-25T11:23:56"
+  },
+  {
+    "id": "war_supply_wagon_wreck_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_supply_wagon_wreck_01.png"
+    },
+    "timestamp": "2026-09-25T11:24:22"
+  },
+  {
+    "id": "war_field_tent_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_field_tent_01.png"
+    },
+    "timestamp": "2026-09-25T11:24:48"
+  },
+  {
+    "id": "war_command_tent_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_command_tent_01.png"
+    },
+    "timestamp": "2026-09-25T11:25:14"
+  },
+  {
+    "id": "war_kingdom_banner_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_kingdom_banner_01.png"
+    },
+    "timestamp": "2026-09-25T11:25:40"
+  },
+  {
+    "id": "war_knight_statue_fallen_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_knight_statue_fallen_01.png"
+    },
+    "timestamp": "2026-09-25T11:26:06"
+  },
+  {
+    "id": "war_shield_pile_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_shield_pile_01.png"
+    },
+    "timestamp": "2026-09-25T11:26:32"
+  },
+  {
+    "id": "orc_fortress_gate_ruin_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_fortress_gate_ruin_01.png"
+    },
+    "timestamp": "2026-09-25T11:27:00"
+  },
+  {
+    "id": "orc_fortress_wall_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_fortress_wall_01.png"
+    },
+    "timestamp": "2026-09-25T11:27:26"
+  },
+  {
+    "id": "war_barn_ruin_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_barn_ruin_01.png"
+    },
+    "timestamp": "2026-09-25T11:27:47"
+  },
+  {
+    "id": "orc_fortress_wall_broken_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_fortress_wall_broken_01.png"
+    },
+    "timestamp": "2026-09-25T11:28:12"
+  },
+  {
+    "id": "war_castle_wall_breach_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_castle_wall_breach_01.png"
+    },
+    "timestamp": "2026-09-25T11:28:33"
+  },
+  {
+    "id": "orc_watchtower_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_watchtower_01.png"
+    },
+    "timestamp": "2026-09-25T11:28:58"
+  },
+  {
+    "id": "war_watchtower_wreck_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_watchtower_wreck_01.png"
+    },
+    "timestamp": "2026-09-25T11:29:19"
+  },
+  {
+    "id": "orc_watchtower_broken_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_watchtower_broken_01.png"
+    },
+    "timestamp": "2026-09-25T11:29:44"
+  },
+  {
+    "id": "war_siege_tower_wreck_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_siege_tower_wreck_01.png"
+    },
+    "timestamp": "2026-09-25T11:30:05"
+  },
+  {
+    "id": "orc_hut_ruin_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_hut_ruin_01.png"
+    },
+    "timestamp": "2026-09-25T11:30:25"
+  },
+  {
+    "id": "war_ballista_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_ballista_01.png"
+    },
+    "timestamp": "2026-09-25T11:30:52"
+  },
+  {
+    "id": "orc_longhouse_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_longhouse_01.png"
+    },
+    "timestamp": "2026-09-25T11:31:11"
+  },
+  {
+    "id": "war_field_tent_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_field_tent_01.png"
+    },
+    "timestamp": "2026-09-25T11:31:33"
+  },
+  {
+    "id": "orc_war_drum_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_war_drum_01.png"
+    },
+    "timestamp": "2026-09-25T11:31:57"
+  },
+  {
+    "id": "war_command_tent_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_command_tent_01.png"
+    },
+    "timestamp": "2026-09-25T11:32:19"
+  },
+  {
+    "id": "orc_catapult_wreck_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_catapult_wreck_01.png"
+    },
+    "timestamp": "2026-09-25T11:32:43"
+  },
+  {
+    "id": "war_kingdom_banner_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_kingdom_banner_01.png"
+    },
+    "timestamp": "2026-09-25T11:33:05"
+  },
+  {
+    "id": "orc_battering_ram_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_battering_ram_01.png"
+    },
+    "timestamp": "2026-09-25T11:33:24"
+  },
+  {
+    "id": "war_shield_pile_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_shield_pile_01.png"
+    },
+    "timestamp": "2026-09-25T11:33:51"
+  },
+  {
+    "id": "orc_war_banner_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_war_banner_01.png"
+    },
+    "timestamp": "2026-09-25T11:34:10"
+  },
+  {
+    "id": "orc_spike_barricade_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_spike_barricade_01.png"
+    },
+    "timestamp": "2026-09-25T11:34:37"
+  },
+  {
+    "id": "war_kingdom_banner_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\war_kingdom_banner_01.png"
+    },
+    "timestamp": "2026-09-25T11:34:58"
+  },
+  {
+    "id": "orc_idol_broken_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_idol_broken_01.png"
+    },
+    "timestamp": "2026-09-25T11:35:23"
+  },
+  {
+    "id": "orc_smithy_ruin_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_smithy_ruin_01.png"
+    },
+    "timestamp": "2026-09-25T11:35:49"
+  },
+  {
+    "id": "orc_watch_fire_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_watch_fire_01.png"
+    },
+    "timestamp": "2026-09-25T11:36:15"
+  },
+  {
+    "id": "orc_loot_pile_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_loot_pile_01.png"
+    },
+    "timestamp": "2026-09-25T11:36:41"
+  },
+  {
+    "id": "orc_pen_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_pen_01.png"
+    },
+    "timestamp": "2026-09-25T11:37:07"
+  },
+  {
+    "id": "field_crater_rim_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_crater_rim_01.png"
+    },
+    "timestamp": "2026-09-25T11:37:33"
+  },
+  {
+    "id": "field_siege_boulder_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_siege_boulder_01.png"
+    },
+    "timestamp": "2026-09-25T11:37:59"
+  },
+  {
+    "id": "field_broken_ladder_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_broken_ladder_01.png"
+    },
+    "timestamp": "2026-09-25T11:38:25"
+  },
+  {
+    "id": "field_charred_beam_pile_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_charred_beam_pile_01.png"
+    },
+    "timestamp": "2026-09-25T11:38:51"
+  },
+  {
+    "id": "field_shield_wall_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_shield_wall_01.png"
+    },
+    "timestamp": "2026-09-25T11:39:17"
+  },
+  {
+    "id": "field_grave_mound_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_grave_mound_01.png"
+    },
+    "timestamp": "2026-09-25T11:39:43"
+  },
+  {
+    "id": "field_broken_cart_burnt_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_broken_cart_burnt_01.png"
+    },
+    "timestamp": "2026-09-25T11:40:09"
+  },
+  {
+    "id": "field_sandbag_wall_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_sandbag_wall_01.png"
+    },
+    "timestamp": "2026-09-25T11:40:35"
+  },
+  {
+    "id": "volcanic_spire_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_spire_01.png"
+    },
+    "timestamp": "2026-09-25T11:41:02"
+  },
+  {
+    "id": "volcanic_spire_02",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_spire_02.png"
+    },
+    "timestamp": "2026-09-25T11:41:28"
+  },
+  {
+    "id": "orc_battering_ram_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\orc_battering_ram_01.png"
+    },
+    "timestamp": "2026-09-25T11:41:48"
+  },
+  {
+    "id": "volcanic_rock_cluster_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_rock_cluster_01.png"
+    },
+    "timestamp": "2026-09-25T11:42:15"
+  },
+  {
+    "id": "field_crater_rim_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_crater_rim_01.png"
+    },
+    "timestamp": "2026-09-25T11:42:34"
+  },
+  {
+    "id": "volcanic_boulder_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_boulder_01.png"
+    },
+    "timestamp": "2026-09-25T11:42:56"
+  },
+  {
+    "id": "field_siege_boulder_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_siege_boulder_01.png"
+    },
+    "timestamp": "2026-09-25T11:43:21"
+  },
+  {
+    "id": "volcanic_lava_rock_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_lava_rock_01.png"
+    },
+    "timestamp": "2026-09-25T11:43:42"
+  },
+  {
+    "id": "field_grave_mound_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\warfront\\field_grave_mound_01.png"
+    },
+    "timestamp": "2026-09-25T11:44:07"
+  },
+  {
+    "id": "volcanic_vent_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_vent_01.png"
+    },
+    "timestamp": "2026-09-25T11:44:28"
+  },
+  {
+    "id": "volcanic_obsidian_shards_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_obsidian_shards_01.png"
+    },
+    "timestamp": "2026-09-25T11:44:54"
+  },
+  {
+    "id": "volcanic_ash_mound_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_ash_mound_01.png"
+    },
+    "timestamp": "2026-09-25T11:45:20"
+  },
+  {
+    "id": "volcanic_sulfur_crust_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_sulfur_crust_01.png"
+    },
+    "timestamp": "2026-09-25T11:45:46"
+  },
+  {
+    "id": "volcanic_crater_slab_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\volcanic_crater_slab_01.png"
+    },
+    "timestamp": "2026-09-25T11:46:12"
+  },
+  {
+    "id": "ogre_brazier_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_brazier_01.png"
+    },
+    "timestamp": "2026-09-25T11:46:38"
+  },
+  {
+    "id": "ogre_cook_pot_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_cook_pot_01.png"
+    },
+    "timestamp": "2026-09-25T11:47:04"
+  },
+  {
+    "id": "ogre_totem_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_totem_01.png"
+    },
+    "timestamp": "2026-09-25T11:47:30"
+  },
+  {
+    "id": "ogre_bone_pile_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_bone_pile_01.png"
+    },
+    "timestamp": "2026-09-25T11:47:56"
+  },
+  {
+    "id": "ogre_spike_wall_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_spike_wall_01.png"
+    },
+    "timestamp": "2026-09-25T11:48:22"
+  },
+  {
+    "id": "ogre_banner_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_banner_01.png"
+    },
+    "timestamp": "2026-09-25T11:48:48"
+  },
+  {
+    "id": "ogre_cage_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_cage_01.png"
+    },
+    "timestamp": "2026-09-25T11:49:14"
+  },
+  {
+    "id": "ogre_butcher_block_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_butcher_block_01.png"
+    },
+    "timestamp": "2026-09-25T11:49:40"
+  },
+  {
+    "id": "ogre_weapon_rack_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_weapon_rack_01.png"
+    },
+    "timestamp": "2026-09-25T11:50:06"
+  },
+  {
+    "id": "ogre_hut_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_hut_01.png"
+    },
+    "timestamp": "2026-09-25T11:50:32"
+  },
+  {
+    "id": "combat_wall_rubble_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_wall_rubble_01.png"
+    },
+    "timestamp": "2026-09-25T11:51:00"
+  },
+  {
+    "id": "combat_wall_destroyed_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_wall_destroyed_01.png"
+    },
+    "timestamp": "2026-09-25T11:51:26"
+  },
+  {
+    "id": "combat_abandoned_sword_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_abandoned_sword_01.png"
+    },
+    "timestamp": "2026-09-25T11:51:52"
+  },
+  {
+    "id": "combat_abandoned_shield_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_abandoned_shield_01.png"
+    },
+    "timestamp": "2026-09-25T11:52:18"
+  },
+  {
+    "id": "combat_arrow_cluster_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_arrow_cluster_01.png"
+    },
+    "timestamp": "2026-09-25T11:52:44"
+  },
+  {
+    "id": "combat_bones_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_bones_01.png"
+    },
+    "timestamp": "2026-09-25T11:53:10"
+  },
+  {
+    "id": "combat_skull_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_skull_01.png"
+    },
+    "timestamp": "2026-09-25T11:53:36"
+  },
+  {
+    "id": "combat_enemy_totem_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_enemy_totem_01.png"
+    },
+    "timestamp": "2026-09-25T11:54:02"
+  },
+  {
+    "id": "combat_skull_stake_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_skull_stake_01.png"
+    },
+    "timestamp": "2026-09-25T11:54:28"
+  },
+  {
+    "id": "combat_burned_tree_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\combat\\combat_burned_tree_01.png"
+    },
+    "timestamp": "2026-09-25T11:54:54"
+  },
+  {
+    "id": "ogre_forge_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_forge_01.png"
+    },
+    "timestamp": "2026-09-25T11:55:21"
+  },
+  {
+    "id": "ogre_barricade_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_barricade_01.png"
+    },
+    "timestamp": "2026-09-25T11:55:47"
+  },
+  {
+    "id": "ogre_skull_pile_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\ogre\\ogre_skull_pile_01.png"
+    },
+    "timestamp": "2026-09-25T11:56:13"
+  },
+  {
+    "id": "burnt_tree_giant_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\volcanic\\burnt_tree_giant_01.png"
+    },
+    "timestamp": "2026-09-25T11:56:39"
+  },
+  {
+    "id": "landmark_ogre_gate",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_ogre_gate.png"
+    },
+    "timestamp": "2026-09-25T11:57:05"
+  },
+  {
+    "id": "landmark_volcano_cone_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_volcano_cone_01.png"
+    },
+    "timestamp": "2026-09-25T11:57:32"
+  },
+  {
+    "id": "landmark_obsidian_arch_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_obsidian_arch_01.png"
+    },
+    "timestamp": "2026-09-25T11:57:58"
+  },
+  {
+    "id": "landmark_ogre_idol_01",
+    "stage": "image",
+    "metadata": {
+      "path": "C:\\Users\\coryc\\castleSurvivor\\AssetFactory\\source_images\\landmarks\\landmark_ogre_idol_01.png"
+    },
+    "timestamp": "2026-09-25T11:58:24"
+  },
+  {
+    "id": "war_house_ruin_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:05:00"
+  },
+  {
+    "id": "war_house_ruin_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:05:01"
+  },
+  {
+    "id": "war_house_ruin_02",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:09:19"
+  },
+  {
+    "id": "war_house_ruin_02",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:09:20"
+  },
+  {
+    "id": "war_tavern_ruin_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:14:49"
+  },
+  {
+    "id": "war_tavern_ruin_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:14:49"
+  },
+  {
+    "id": "war_barn_ruin_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:21:14"
+  },
+  {
+    "id": "war_barn_ruin_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:21:15"
+  },
+  {
+    "id": "war_farmhouse_ruin_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:26:32"
+  },
+  {
+    "id": "war_farmhouse_ruin_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:26:32"
+  },
+  {
+    "id": "war_chapel_ruin_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:29:52"
+  },
+  {
+    "id": "war_chapel_ruin_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:29:52"
+  },
+  {
+    "id": "war_castle_wall_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:34:28"
+  },
+  {
+    "id": "war_castle_wall_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:34:28"
+  },
+  {
+    "id": "war_castle_wall_breach_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:38:55"
+  },
+  {
+    "id": "war_castle_wall_breach_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:38:55"
+  },
+  {
+    "id": "war_tower_ruin_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:42:08"
+  },
+  {
+    "id": "war_tower_ruin_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:42:09"
+  },
+  {
+    "id": "war_gatehouse_ruin_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:48:06"
+  },
+  {
+    "id": "war_gatehouse_ruin_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:48:07"
+  },
+  {
+    "id": "war_market_stall_ruin_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:54:36"
+  },
+  {
+    "id": "war_market_stall_ruin_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:54:37"
+  },
+  {
+    "id": "war_watchtower_wreck_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:58:23"
+  },
+  {
+    "id": "war_watchtower_wreck_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T12:58:24"
+  },
+  {
+    "id": "war_siege_tower_wreck_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:02:20"
+  },
+  {
+    "id": "war_siege_tower_wreck_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:02:21"
+  },
+  {
+    "id": "war_trebuchet_wreck_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:06:21"
+  },
+  {
+    "id": "war_trebuchet_wreck_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:06:22"
+  },
+  {
+    "id": "war_ballista_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:09:13"
+  },
+  {
+    "id": "war_ballista_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:09:14"
+  },
+  {
+    "id": "war_supply_wagon_wreck_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:13:14"
+  },
+  {
+    "id": "war_supply_wagon_wreck_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:13:14"
+  },
+  {
+    "id": "war_field_tent_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:17:19"
+  },
+  {
+    "id": "war_field_tent_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:17:20"
+  },
+  {
+    "id": "war_command_tent_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:22:16"
+  },
+  {
+    "id": "war_command_tent_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:22:16"
+  },
+  {
+    "id": "war_kingdom_banner_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:25:30"
+  },
+  {
+    "id": "war_kingdom_banner_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:25:31"
+  },
+  {
+    "id": "war_knight_statue_fallen_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:28:25"
+  },
+  {
+    "id": "war_knight_statue_fallen_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:28:26"
+  },
+  {
+    "id": "war_shield_pile_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:31:38"
+  },
+  {
+    "id": "war_shield_pile_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:31:39"
+  },
+  {
+    "id": "orc_fortress_gate_ruin_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:38:00"
+  },
+  {
+    "id": "orc_fortress_gate_ruin_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:38:00"
+  },
+  {
+    "id": "orc_fortress_wall_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:43:42"
+  },
+  {
+    "id": "orc_fortress_wall_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:43:42"
+  },
+  {
+    "id": "orc_fortress_wall_broken_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:49:31"
+  },
+  {
+    "id": "orc_fortress_wall_broken_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:49:32"
+  },
+  {
+    "id": "orc_watchtower_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:53:14"
+  },
+  {
+    "id": "orc_watchtower_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:53:15"
+  },
+  {
+    "id": "orc_watchtower_broken_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:59:07"
+  },
+  {
+    "id": "orc_watchtower_broken_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T13:59:07"
+  },
+  {
+    "id": "orc_hut_ruin_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:05:48"
+  },
+  {
+    "id": "orc_hut_ruin_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:05:48"
+  },
+  {
+    "id": "orc_longhouse_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:11:50"
+  },
+  {
+    "id": "orc_longhouse_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:11:50"
+  },
+  {
+    "id": "orc_war_drum_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:15:34"
+  },
+  {
+    "id": "orc_war_drum_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:15:34"
+  },
+  {
+    "id": "orc_catapult_wreck_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:20:24"
+  },
+  {
+    "id": "orc_catapult_wreck_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:20:25"
+  },
+  {
+    "id": "orc_battering_ram_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:25:12"
+  },
+  {
+    "id": "orc_battering_ram_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:25:13"
+  },
+  {
+    "id": "orc_war_banner_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:28:24"
+  },
+  {
+    "id": "orc_war_banner_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:28:24"
+  },
+  {
+    "id": "orc_spike_barricade_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:32:11"
+  },
+  {
+    "id": "orc_spike_barricade_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:32:12"
+  },
+  {
+    "id": "orc_idol_broken_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:37:34"
+  },
+  {
+    "id": "orc_idol_broken_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:37:35"
+  },
+  {
+    "id": "orc_smithy_ruin_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:43:51"
+  },
+  {
+    "id": "orc_smithy_ruin_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:43:52"
+  },
+  {
+    "id": "orc_watch_fire_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:49:50"
+  },
+  {
+    "id": "orc_watch_fire_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:49:51"
+  },
+  {
+    "id": "orc_loot_pile_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:54:21"
+  },
+  {
+    "id": "orc_loot_pile_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:54:22"
+  },
+  {
+    "id": "orc_pen_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:59:21"
+  },
+  {
+    "id": "orc_pen_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T14:59:21"
+  },
+  {
+    "id": "field_siege_boulder_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T15:05:04"
+  },
+  {
+    "id": "field_siege_boulder_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T15:05:04"
+  },
+  {
+    "id": "field_broken_ladder_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T15:08:39"
+  },
+  {
+    "id": "field_broken_ladder_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T15:08:39"
+  },
+  {
+    "id": "field_charred_beam_pile_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T15:12:39"
+  },
+  {
+    "id": "field_charred_beam_pile_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T15:12:39"
+  },
+  {
+    "id": "field_shield_wall_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T15:16:01"
+  },
+  {
+    "id": "field_shield_wall_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T15:16:02"
+  },
+  {
+    "id": "field_grave_mound_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T15:20:37"
+  },
+  {
+    "id": "field_grave_mound_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T15:20:38"
+  },
+  {
+    "id": "field_broken_cart_burnt_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T15:24:46"
+  },
+  {
+    "id": "field_broken_cart_burnt_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T15:24:47"
+  },
+  {
+    "id": "field_sandbag_wall_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T15:28:48"
+  },
+  {
+    "id": "field_sandbag_wall_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T15:28:48"
   }
 ]
