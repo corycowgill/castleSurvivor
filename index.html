@@ -1482,6 +1482,7 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
     <span class="setting-label">Screen Shake</span><input type="range" id="set-shake" min="0" max="100" step="10"><span class="setting-value" id="set-shake-val"></span>
     <span class="setting-label">Damage Numbers</span><button class="setting-toggle" id="set-dmgnums"></button><span></span>
     <span class="setting-label">Hit Freeze</span><button class="setting-toggle" id="set-hitfreeze"></button><span></span>
+    <span class="setting-label" title="Lupin the dog heels to the knights, nips at the horde and barks at the waves">Lupin</span><button class="setting-toggle" id="set-companion"></button><span></span>
     <span class="setting-label" title="Only the Knight Commander is selectable; the other knights are hidden">Private Mode</span><button class="setting-toggle" id="set-private"></button><span class="setting-value" id="set-private-state"></span>
   </div>
   <div id="private-unlock-row" style="display:none;grid-template-columns:180px 260px 1fr;gap:12px 16px;align-items:center;margin:8px 0 0">
@@ -1667,7 +1668,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 // shipped in. `number` is the commit count this change will produce. Do not
 // hand-edit: the stamper matches the two marker lines exactly.
 /* BUILD:START */
-const BUILD = { number: 49, date: '2026-09-24' };
+const BUILD = { number: 50, date: '2026-09-25' };
 /* BUILD:END */
 for (const el of document.querySelectorAll('.build-badge')) el.textContent = `BUILD ${BUILD.number}`;
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -2523,6 +2524,7 @@ function triggerPlayerDeath(p) {
   if (pl.mesh) pl.mesh.visible = true;
   AudioSystem.play('playerDeath', { volume: 0.7 });
   playPlayerAnimFor(pl, 'Death_C', false);
+  companionReact('mourn');
   triggerShake(1.0, 0.8);
   if (pl.mesh) vfx.deathBurst(pl.mesh.position);
 
@@ -2640,6 +2642,8 @@ const assetList = [
   { key: 'goblin', file: 'goblineWithAnimations.glb', keepBuffer: true },
   { key: 'ogre', file: 'orgreWithAnimations.glb', keepBuffer: true },
   { key: 'wolf', file: 'wolfWithAnimation.glb', keepBuffer: true },
+  // Lupin, the party's dog (tools/rig-quadruped.py output; cloned once per run)
+  { key: 'lupin', file: 'lupinCompanion.glb' },
   { key: 'dragonOgre', file: 'dragonOgreHybridBossWithAnimation.glb', keepBuffer: true },
   { key: 'ogreWizard', file: 'ogreWizardWithAnimation.glb', keepBuffer: true },
   { key: 'ogreKing', file: 'ogreKingRigged.glb', keepBuffer: true },
@@ -2951,6 +2955,20 @@ const AudioSystem = (() => {
       case 'swordSwing':
         noiseBurst(t, 0.16, { freq: 1400 * p, freqEnd: 300 * p, q: 0.8, gain: 0.5, out });
         break;
+      case 'dogBark':
+        tone(t, 0.09, { type: 'sawtooth', freq: 520 * p, freqEnd: 260 * p, gain: 0.35, out });
+        tone(t + 0.16, 0.09, { type: 'sawtooth', freq: 560 * p, freqEnd: 270 * p, gain: 0.3, out });
+        break;
+      case 'dogHowl':
+        tone(t, 1.4, { type: 'triangle', freq: 330 * p, freqEnd: 520 * p, gain: 0.3, attack: 0.25, out });
+        break;
+      case 'dogAttack':
+        noiseBurst(t, 0.12, { freq: 900 * p, freqEnd: 300 * p, q: 1.2, gain: 0.4, out });
+        tone(t + 0.08, 0.06, { type: 'square', freq: 420 * p, freqEnd: 200 * p, gain: 0.25, out });
+        break;
+      case 'dogHappy':
+        tone(t, 0.12, { type: 'sine', freq: 700 * p, freqEnd: 1100 * p, gain: 0.3, out });
+        break;
       case 'swordHit':
         noiseBurst(t, 0.07, { type: 'highpass', freq: 1800 * p, gain: 0.5, out });
         tone(t, 0.09, { type: 'sine', freq: 140 * p, freqEnd: 60 * p, gain: 0.5, out });
@@ -3104,6 +3122,10 @@ const AudioSystem = (() => {
       blast:       ['audio/blast-1.wav','audio/blast-2.wav'],
       bossRoar:    ['audio/boss-roar-1.wav','audio/boss-roar-2.wav'],
       arrowLoose:  ['audio/arrow-loose-1.wav','audio/arrow-loose-2.wav','audio/arrow-loose-3.wav'],
+      dogBark:     ['audio/dog-bark-1.wav','audio/dog-bark-2.wav','audio/dog-bark-3.wav'],
+      dogHowl:     ['audio/dog-howl-1.wav','audio/dog-howl-2.wav'],
+      dogAttack:   ['audio/dog-attack-1.wav','audio/dog-attack-2.wav','audio/dog-attack-3.wav'],
+      dogHappy:    ['audio/dog-happy-1.wav','audio/dog-happy-2.wav'],
     };
     const loads = [];
     for (const [name, url] of Object.entries(singles)) {
@@ -3132,7 +3154,7 @@ const SETTINGS_KEY = 'castleSurvivor_settings';
 // the public title plate. It only comes off with PRIVATE_CODE, and turning it
 // back on re-locks, so the code is needed again next time.
 const PRIVATE_CODE = 'Castle1000!';
-const settings = { master: 70, sfx: 80, music: 40, shake: 100, dmgNumbers: true, hitFreeze: true, privateMode: true, privateUnlocked: false, ambientOcc: false, gfx: {} };
+const settings = { master: 70, sfx: 80, music: 40, shake: 100, dmgNumbers: true, hitFreeze: true, companion: true, privateMode: true, privateUnlocked: false, ambientOcc: false, gfx: {} };
 // Live look-dev controls. Each entry is null/absent until the user moves that
 // slider, in which case it overrides the active map's MAPS[].look value.
 // fallback is used before any map has loaded.
@@ -3177,7 +3199,7 @@ function applyGfx(look) {
   dirLight.intensity = _gfx.key;
   hemiLight.intensity = _gfx.fill;
 }
-const SETTING_TOGGLES = [['dmgNumbers', 'set-dmgnums'], ['hitFreeze', 'set-hitfreeze']];
+const SETTING_TOGGLES = [['dmgNumbers', 'set-dmgnums'], ['hitFreeze', 'set-hitfreeze'], ['companion', 'set-companion']];
 function loadSettings() {
   try {
     const d = JSON.parse(localStorage.getItem(SETTINGS_KEY));
@@ -5054,6 +5076,7 @@ function spawnBoss(wave) {
   // Boss entrance VFX
   vfx.bossEntrance(mesh.position, false);
   AudioSystem.play('bossRoar', { volume: 0.8 });
+  companionReact('boss');
 
   // Show boss bar
   document.getElementById('boss-name').textContent = bossName;
@@ -5157,6 +5180,7 @@ function spawnDragonOgreBoss(wave, isFinal = false) {
   // Dragon ogre entrance VFX
   vfx.bossEntrance(mesh.position, true);
   AudioSystem.play('bossRoar', { volume: 1.0, pitch: isFinal ? 0.7 : 0.9 });
+  companionReact('boss');
 
   // Show boss bar
   document.getElementById('boss-name').textContent = bossName;
@@ -6308,6 +6332,7 @@ function updatePlayer(p, dt) {
 
 // Damage sources, for the per-weapon breakdown on the run-end screen
 const SOURCE_NAMES = {
+  lupin: 'Lupin',
   sword: 'Sword', spear: 'Spear', quickblade: 'Quickblade',
   dagger: 'Throwing Daggers', holyAura: 'Holy Aura', arrowVolley: 'Arrow Volley',
   orbitalBomb: 'Arcane Bomb', thorns: 'Mantle of Thorns', shockwave: 'Shockwave',
@@ -6474,6 +6499,7 @@ function triggerVictory() {
   triggerShake(1.0, 0.8);
   AudioSystem.play('levelUp', { volume: 1.0, pitch: 0.6 });
   AudioSystem.stopMusic(2.0);
+  companionReact('victory');
   const announce = getWaveAnnounce();
   announce.textContent = 'THE OGRE KING FALLS';
   announce.style.color = '#ffcc33';
@@ -7760,6 +7786,7 @@ async function triggerSwarm() {
   announce.style.color = '#ff4444';
   announce.style.opacity = '1';
   AudioSystem.play('waveStart', { volume: 0.8 });
+  companionReact('wave');
   triggerShake(0.5, 0.3);
   setTimeout(() => { announce.style.opacity = '0'; announce.style.color = ''; }, 2500);
 
@@ -7959,6 +7986,7 @@ function updateWaves(dt) {
       triggerSwarm();
     } else {
       AudioSystem.play('waveStart', { volume: 0.6 });
+      companionReact('wave');
       if (playerMesh) vfx.waveFlash(playerMesh.position);
       const announce = getWaveAnnounce();
       const waveMessages = [
@@ -8131,6 +8159,7 @@ function gainXP(amount) {
       if (p.mesh) vfx.levelUpBurst(p.mesh.position);
     }
     triggerShake(0.2, 0.15);
+    companionReact('levelup');
   }
   if (pendingPickCount() > 0 && !_upgradeScreenOpen && _victoryTimer <= 0) presentNextLevelUp();
 }
@@ -9827,6 +9856,7 @@ function clearRun() {
   banishedUpgrades.clear();
   _banishMode = false;
   resetPartyToSolo();
+  disposeCompanion();
   _pickingPlayer = null;
   _lastPickerIndex = -1;
   for (const p of players) p.picks = [];
@@ -9905,6 +9935,7 @@ function clearRun() {
 function startRun() {
   playerMesh.position.set(PLAYER_SPAWN_X, 0, PLAYER_SPAWN_Z);
   playPlayerAnim('Idle_A', true);
+  spawnCompanion();
   AudioSystem.setMusicMuffle(0);
   AudioSystem.playMusic('battleMusic');
   document.getElementById('game-over-screen').style.display = 'none';
@@ -10139,6 +10170,7 @@ function updateGame(dt, rawDt = dt) {
     _vfxDeathsThisFrame = 0;
     updateEnemies(dt);
     applySeparation();
+    updateCompanion(dt);
     updateEnemyProjectiles(dt);
     updateBossBoulders(dt);
     for (const pl of players) updateWeapons(pl, dt);
@@ -10221,6 +10253,203 @@ function updateGame(dt, rawDt = dt) {
     // Player animation mixers (one per co-op player)
     if (_renderEnabled) for (const p of players) if (p.mixer) p.mixer.update(dt);
   }
+}
+
+// ─── COMPANION: LUPIN ───
+// Lupin is the party's dog. She is not a player (no HP, no XP share, no camera
+// framing, no picks) and not an enemy (never in enemies[] or the grid): one
+// scene entity that heels to the nearest knight, nips at whatever crowds them
+// for a little damage and a shove, and barks or howls at the run's beats.
+// Relief, not firepower: the bite finishes fodder, it never carries a wave.
+const LUPIN = {
+  model: 'lupin', scale: 1.3, radius: 0.35,
+  runSpeed: 10.5, walkSpeed: 4.8,
+  heelBack: 1.4, heelSide: 1.6,   // where she stands relative to her knight's facing
+  settleDist: 0.7, walkRange: 4.5, teleportRange: 24,
+  engageRange: 7.5,                // enemies farther than this from her knight are not her problem
+  biteRange: 1.4, biteCooldown: 1.8, knockback: 2.2,
+  biteDamage: (wave) => 3 + wave * 0.6,
+  idleHowl: [30, 50],              // seconds of calm between unprompted howls
+};
+const LUPIN_ONESHOT = { Jump: 0.8, Attack: 0.5, Howl: 2.0, Bark: 0.6 };
+let companion = null;
+
+function spawnCompanion() {
+  disposeCompanion();
+  if (!settings.companion || !assets[LUPIN.model] || !playerMesh) return null;
+  const gltf = cloneEnemyModel(LUPIN.model);
+  if (!gltf) return null;
+  const mesh = gltf.scene;
+  mesh.scale.setScalar(LUPIN.scale);
+  mesh.traverse(c => { if (c.isMesh) { c.castShadow = true; c.receiveShadow = true; } });
+  mesh.position.set(playerMesh.position.x - 1.8, 0, playerMesh.position.z + 1.4);
+  scene.add(mesh);
+  alignToGround(mesh);
+  const mixer = new THREE.AnimationMixer(mesh);
+  const anims = {};
+  for (const clip of gltf.animations) anims[clip.name] = mixer.clipAction(clip);
+  companion = {
+    mesh, mixer, anims, currentAnim: '',
+    busy: 0, pendingBite: null, pendingBiteAt: 0,
+    biteTimer: 2.0, barkTimer: 0, howlTimer: LUPIN.idleHowl[0] + Math.random() * (LUPIN.idleHowl[1] - LUPIN.idleHowl[0]),
+    owner: null, ownerTimer: 0, side: 1, moving: false, bites: 0,
+  };
+  playCompanionAnim('Idle', true);
+  return companion;
+}
+
+function disposeCompanion() {
+  if (!companion) return;
+  scene.remove(companion.mesh);
+  companion.mixer.stopAllAction();
+  companion.mixer.uncacheRoot(companion.mesh);
+  disposeSkeletons(companion.mesh);
+  companion = null;
+}
+
+function playCompanionAnim(name, loop = true) {
+  const c = companion;
+  if (!c || c.currentAnim === name || !c.anims[name]) return;
+  if (c.anims[c.currentAnim]) c.anims[c.currentAnim].fadeOut(0.15);
+  c.currentAnim = name;
+  const action = c.anims[name];
+  action.reset();
+  action.setLoop(loop ? THREE.LoopRepeat : THREE.LoopOnce);
+  action.clampWhenFinished = !loop;
+  action.fadeIn(0.15);
+  action.play();
+  if (!loop) c.busy = LUPIN_ONESHOT[name] || 0.5;
+}
+
+// Something happened in the run that a dog has an opinion about.
+//   wave: bark   boss/victory/mourn: howl   levelup: jump
+function companionReact(kind) {
+  const c = companion;
+  if (!c || c.pendingBite) return;
+  if (kind === 'wave') {
+    if (c.barkTimer > 0) return;
+    c.barkTimer = 4;
+    playCompanionAnim('Bark', false);
+    AudioSystem.play('dogBark', { volume: 0.5, pitch: 0.95 + Math.random() * 0.1 });
+  } else if (kind === 'boss' || kind === 'victory' || kind === 'mourn') {
+    playCompanionAnim('Howl', false);
+    AudioSystem.play('dogHowl', { volume: kind === 'mourn' ? 0.45 : 0.6, pitch: kind === 'mourn' ? 0.85 : 1.0 });
+    c.howlTimer = LUPIN.idleHowl[1];
+  } else if (kind === 'levelup') {
+    playCompanionAnim('Jump', false);
+    AudioSystem.play('dogHappy', { volume: 0.45, pitch: 1.0 + Math.random() * 0.15 });
+  }
+}
+
+function companionBite(c) {
+  const e = c.pendingBite;
+  c.pendingBite = null;
+  if (!e || e.isDying || !enemies.includes(e)) return;
+  const reach = LUPIN.biteRange * 1.6 + enemyBodyRadius(e);
+  if (distSqXZ(e.mesh.position, c.mesh.position) > reach * reach) return;
+  c.bites++;
+  applyDamage(e, LUPIN.biteDamage(state.wave), {
+    source: 'lupin', by: c.owner || players[0], canCrit: false,
+    knockback: LUPIN.knockback, kbFrom: c.mesh.position, flash: 0.1, hitReaction: true, color: '#f0d890',
+  });
+}
+
+function updateCompanion(dt) {
+  const c = companion;
+  if (!c) return;
+  if (_renderEnabled) c.mixer.update(dt);
+  c.biteTimer -= dt; c.barkTimer -= dt; c.howlTimer -= dt;
+
+  // Her knight: the nearest one still standing, re-checked twice a second.
+  c.ownerTimer -= dt;
+  if (c.ownerTimer <= 0 || !c.owner || !c.owner.mesh || c.owner.state.isDead) {
+    c.ownerTimer = 0.5;
+    c.owner = nearestLivePlayer(c.mesh.position.x, c.mesh.position.z) || players[0];
+  }
+  const om = c.owner.mesh;
+  if (!om) return;
+  const pos = c.mesh.position;
+
+  // One-shot clips play out in place; the bite lands part-way through the lunge.
+  if (c.busy > 0) {
+    c.busy -= dt;
+    if (c.pendingBite && c.busy <= c.pendingBiteAt) companionBite(c);
+    if (c.busy <= 0) { c.pendingBite = null; playCompanionAnim('Idle', true); }
+    return;
+  }
+
+  // Lost her (teleport, revive, a long dash): pop back to heel.
+  const dOwnSq = distSqXZ(pos, om.position);
+  if (dOwnSq > LUPIN.teleportRange * LUPIN.teleportRange) {
+    pos.x = om.position.x + 1.5; pos.z = om.position.z + 1.5;
+  }
+
+  // Pick a target only when the bite is ready: the nearest enemy that is close
+  // to her knight, so she never leaves the party to go hunting.
+  let target = null, best = Infinity;
+  let threat = 0;
+  if (c.biteTimer <= 0 || c.howlTimer <= 0) {
+    const near = queryEnemies(om.position.x, om.position.z, LUPIN.engageRange);
+    const engSq = LUPIN.engageRange * LUPIN.engageRange;
+    for (let i = 0; i < near.length; i++) {
+      const e = near[i];
+      if (e.isDying) continue;
+      if (distSqXZ(e.mesh.position, om.position) > engSq) continue;
+      threat++;
+      const dC = distSqXZ(e.mesh.position, pos);
+      if (dC < best) { best = dC; target = e; }
+    }
+    if (c.biteTimer > 0) target = null;
+  }
+
+  let goalX, goalZ, speed;
+  if (target) {
+    const reach = LUPIN.biteRange + enemyBodyRadius(target);
+    if (best < reach * reach) {
+      c.mesh.rotation.y = Math.atan2(target.mesh.position.x - pos.x, target.mesh.position.z - pos.z);
+      c.pendingBite = target; c.pendingBiteAt = LUPIN_ONESHOT.Attack * 0.5;
+      c.biteTimer = LUPIN.biteCooldown;
+      playCompanionAnim('Attack', false);
+      AudioSystem.play('dogAttack', { volume: 0.42, pitch: 0.95 + Math.random() * 0.1 });
+      return;
+    }
+    goalX = target.mesh.position.x; goalZ = target.mesh.position.z; speed = LUPIN.runSpeed;
+  } else {
+    // Heel spot: behind and to one side of the knight's facing; she swaps sides
+    // when the knight turns through her so she is never underfoot.
+    const yaw = om.rotation.y;
+    const fx = Math.sin(yaw), fz = Math.cos(yaw);
+    const rx = fz, rz = -fx;
+    const sideDot = (pos.x - om.position.x) * rx + (pos.z - om.position.z) * rz;
+    if (Math.abs(sideDot) > 0.4) c.side = sideDot > 0 ? 1 : -1;
+    goalX = om.position.x - fx * LUPIN.heelBack + rx * c.side * LUPIN.heelSide;
+    goalZ = om.position.z - fz * LUPIN.heelBack + rz * c.side * LUPIN.heelSide;
+    const dGoal = Math.sqrt((goalX - pos.x) * (goalX - pos.x) + (goalZ - pos.z) * (goalZ - pos.z));
+    if (dGoal < LUPIN.settleDist) {
+      c.moving = false;
+      if (c.howlTimer <= 0 && threat === 0) {
+        c.howlTimer = LUPIN.idleHowl[0] + Math.random() * (LUPIN.idleHowl[1] - LUPIN.idleHowl[0]);
+        playCompanionAnim('Howl', false);
+        AudioSystem.play('dogHowl', { volume: 0.35, pitch: 0.95 + Math.random() * 0.1 });
+      } else {
+        playCompanionAnim('Idle', true);
+      }
+      return;
+    }
+    speed = dGoal > LUPIN.walkRange ? LUPIN.runSpeed : LUPIN.walkSpeed;
+  }
+
+  const dx = goalX - pos.x, dz = goalZ - pos.z;
+  const dist = Math.sqrt(dx * dx + dz * dz) || 1;
+  const step = Math.min(dist, speed * dt);
+  let nx = pos.x + (dx / dist) * step, nz = pos.z + (dz / dist) * step;
+  nx = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, nx));
+  nz = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, nz));
+  resolveObstacles(nx, nz, LUPIN.radius);
+  pos.x = _colOut.x; pos.z = _colOut.z;
+  c.mesh.rotation.y = Math.atan2(dx, dz);
+  c.moving = true;
+  playCompanionAnim(speed === LUPIN.runSpeed ? 'Run' : 'Walk', true);
 }
 
 // ─── GAMEPAD ───
@@ -12029,6 +12258,7 @@ init().then(() => {
       state, enemies, pickups, runStats, keys, weaponTimers,
       UPGRADES, WEAPON_STATS, MAPS, OGRE_LEVELS, FINAL_WAVE,
       players, nearestPlayer, alivePlayers, joinPlayer, makePlayer, createPlayer, partyFocus, AudioSystem, projectiles, CHARACTER_PRIMARY,
+      get companion() { return companion; }, spawnCompanion, disposeCompanion, companionReact, LUPIN,
       openAudit, closeAudit, collectAudit, renderAudit,
       setLowQuality, applyQualityMode, detectMobile,
       get lowQuality() { return LOW_QUALITY; },

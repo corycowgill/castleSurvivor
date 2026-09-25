@@ -20,6 +20,11 @@
     { "slot": "arrowLoose",    "file": "arrow-loose",    "seconds": 2, "variations": 3, "trim": 0.5,  "prompt": "Wooden longbow releasing an arrow, taut string twang and a quick arrow whoosh, close-up, dry, very short. Length: 2 seconds" },
     { "slot": "shamanHeal",    "file": "shaman-heal",    "seconds": 2, "variations": 1, "trim": 0.9,  "prompt": "Dark magic healing pulse, a low eerie hum swelling into a soft crystalline shimmer and fading, otherworldly, medium reverb. Length: 2 seconds" },
     { "slot": "bossMusic",     "file": "boss-music",     "seconds": 40, "variations": 1, "music": true, "loop": true, "prompt": "Dark epic orchestral battle music loop, pounding taiko drums, low brass ostinato, urgent string tremolo, menacing choir swell, 120 bpm, seamless loop, no intro, no ending" },
-    { "slot": "menuMusic",     "file": "menu-music",     "seconds": 40, "variations": 1, "music": true, "loop": true, "prompt": "Calm medieval fantasy tavern music loop, plucked lute and harp, soft wooden flute melody, gentle hand drum, warm and hopeful, 80 bpm, seamless loop, no intro, no ending" }
+    { "slot": "menuMusic",     "file": "menu-music",     "seconds": 40, "variations": 1, "music": true, "loop": true, "prompt": "Calm medieval fantasy tavern music loop, plucked lute and harp, soft wooden flute melody, gentle hand drum, warm and hopeful, 80 bpm, seamless loop, no intro, no ending" },
+    { "slot": "dogBark",       "file": "dog-bark",       "seconds": 2, "variations": 3, "trim": 0.9,  "prompt": "A small fluffy terrier dog barking twice, sharp bright yappy bark with a short breathy tail, close-up, outdoor courtyard, dry, no echo. Length: 2 seconds" },
+    { "slot": "dogHowl",       "file": "dog-howl",       "seconds": 4, "variations": 2, "trim": 3.2,  "prompt": "A small dog howling at the moon, a rising sustained melodic howl that wavers and trails off, close-up, open field at night, natural. Length: 4 seconds" },
+    { "slot": "dogAttack",     "file": "dog-attack",     "seconds": 2, "variations": 3, "trim": 0.9,  "prompt": "A small dog snarling and snapping its jaws in a quick bite, low growl into a sharp snap, close-up, dry, very short. Length: 2 seconds" },
+    { "slot": "dogHappy",      "file": "dog-happy",      "seconds": 2, "variations": 2, "trim": 0.9,  "prompt": "A small excited dog panting and giving a happy high-pitched yip, playful, close-up, dry, short. Length: 2 seconds" }
+
   ]
 }

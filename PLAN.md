@@ -371,6 +371,7 @@ rather than out of props we already had. Full design in `NEW-LEVEL-PLAN.md`.
   26.6's own fixes are **not yet seen rendered**
 
 ## Changelog
+- 2026-09-25 - Phase 29: Lupin, the companion dog. Trellis mesh from the user's art, auto-rigged and animated headless in Blender (tools/rig-quadruped.py), four Stable Audio 3 voice slots, heels to the nearest knight, bites for 3 + 0.6/wave, barks at waves and howls at bosses. Settings toggle `Lupin`.
 - 2026-09-23 - Phase 26: Emberreach, a volcanic ogre-homeland map built end to end through the asset pipeline. New VOLCANIC/OGRE prompt templates, 6 ground textures, 12 free charred prop variants, per-map light emitters, impassable lava ribbons, and tools/generate-emberreach.mjs. Asset batches 5/9/10 running.
 - 2026-09-23 - Phase 25: per-knight profiles. Gold and Forge ranks are per knight, unlocks and leaderboards stay shared, and a co-op run pays every knight in full. v1 saves migrate by copying the old wallet to all three.
 - 2026-09-23 - Phase 24: co-op legibility - named companion HP rows, the level-up picker moved bottom-centre and attributed to a knight, and on-screen revive instructions. 18.1b audio signed off.
@@ -472,3 +473,33 @@ the asset-run post-mortem in `NEW-LEVEL-PLAN.md`.
   `fen_wicker_trap_01`, `landmark_great_cypress`) and four are mislabels that read fine as
   swamp clutter but are not what they are named (`fen_fish_rack_01` is a porch swing,
   `fen_coracle_01` a mossy box, `swamp_reed_cluster_01` and `swamp_rotten_log_01` ground mats)
+
+## Phase 29 - Lupin, the companion dog (2026-09-25)
+- [x] 29.1 **Mesh.** `Downloads/lupinArt1.png` -> rembg -> the pipeline's Trellis graph
+  (`run_pipeline.build_trellis_workflow`, 2 min on the 4060) -> `AssetFactory/glb_raw/companion_lupin.glb`
+  (59k faces). Source image kept at `AssetFactory/source_images/characters/companion_lupin.png`
+- [x] 29.2 **Rig and clips, no hand animation.** `tools/rig-quadruped.py` runs in headless
+  Blender 5.2 (the Store build: `blender-launcher.exe -b --python ...`, stdout is swallowed so
+  it takes `--log`). It decimates to 16k faces, measures the mesh (paw clusters, spine top
+  line, nose, tail tip), builds a 20-bone armature, weights by distance to bone segments
+  (bone heat fails on Trellis shells) and keys Idle/Walk/Run/Jump/Attack/Howl/Bark by
+  formula. `tools/view-anim.mjs` renders a per-clip contact sheet to judge the result;
+  `tools/inspect-anim.mjs` lists joints, clips and bounds. Compressed with
+  `tools/compress-models.mjs` to 0.95 MB
+- [x] 29.3 **Voice.** Four Stable Audio 3 slots in `sfx-catalog.json`: `dogBark` x3,
+  `dogHowl` x2, `dogAttack` x3, `dogHappy` x2, with Web Audio patches as the last fallback.
+  Not yet listened to by the user
+- [x] 29.4 **In the game.** `LUPIN` table + `spawnCompanion/updateCompanion/companionReact`
+  in index.html. She is neither a player nor an enemy: she heels behind and beside the
+  nearest standing knight (swaps sides when walked through), runs when far, bites the
+  nearest enemy within 7.5 of her knight for 3 + 0.6/wave with a 2.2 shove every 1.8 s,
+  barks on wave start, howls on boss arrival / victory / a knight going down, jumps on a
+  level-up, and howls on her own every 30-50 s of calm. Damage is credited to her knight
+  (`source: 'lupin'`, shown as "Lupin" in the run-end breakdown). Settings toggle `Lupin`
+  (`settings.companion`, default on). Harness: `cs.companion`, `cs.companionReact(kind)`
+- [x] 29.5 **Verify:** `npm test` clean on the compressed model; probe shows heel distance
+  1.3-3.5, Idle/Walk/Run switching, 3 bites in 30 s at wave 1 (12 of 132 damage); co-op
+  join keeps her on player 1, boss spawn howls, return-to-menu disposes her; a 10-minute
+  kite run survives to wave 13 with 0% snag
+- [ ] 29.6 Open: the user has not seen her move or heard the clips; the Howl is the weakest
+  clip (a fluffy Trellis head has little neck to lift); no Sit/Death clips (she cannot die)
