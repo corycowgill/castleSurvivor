@@ -3616,5 +3616,293 @@
     "stage": "optimize",
     "metadata": {},
     "timestamp": "2026-09-25T15:28:48"
+  },
+  {
+    "id": "volcanic_spire_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T15:53:47"
+  },
+  {
+    "id": "volcanic_spire_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T15:53:48"
+  },
+  {
+    "id": "volcanic_boulder_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T15:57:04"
+  },
+  {
+    "id": "volcanic_boulder_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T15:57:04"
+  },
+  {
+    "id": "volcanic_vent_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:03:58"
+  },
+  {
+    "id": "volcanic_vent_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:03:58"
+  },
+  {
+    "id": "volcanic_sulfur_crust_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:08:15"
+  },
+  {
+    "id": "volcanic_sulfur_crust_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:08:15"
+  },
+  {
+    "id": "ogre_brazier_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:11:51"
+  },
+  {
+    "id": "ogre_brazier_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:11:51"
+  },
+  {
+    "id": "ogre_cook_pot_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:15:16"
+  },
+  {
+    "id": "ogre_cook_pot_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:15:17"
+  },
+  {
+    "id": "ogre_totem_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:19:20"
+  },
+  {
+    "id": "ogre_totem_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:19:20"
+  },
+  {
+    "id": "ogre_bone_pile_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:23:20"
+  },
+  {
+    "id": "ogre_bone_pile_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:23:21"
+  },
+  {
+    "id": "ogre_spike_wall_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:27:59"
+  },
+  {
+    "id": "ogre_spike_wall_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:28:00"
+  },
+  {
+    "id": "ogre_banner_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:30:48"
+  },
+  {
+    "id": "ogre_banner_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:30:49"
+  },
+  {
+    "id": "ogre_hut_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:36:02"
+  },
+  {
+    "id": "ogre_hut_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:36:02"
+  },
+  {
+    "id": "combat_broken_barrel_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:41:23"
+  },
+  {
+    "id": "combat_broken_barrel_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:41:24"
+  },
+  {
+    "id": "combat_abandoned_shield_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:44:06"
+  },
+  {
+    "id": "combat_abandoned_shield_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:44:06"
+  },
+  {
+    "id": "combat_skull_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:49:07"
+  },
+  {
+    "id": "combat_skull_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:49:07"
+  },
+  {
+    "id": "combat_enemy_totem_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:51:48"
+  },
+  {
+    "id": "combat_enemy_totem_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:51:48"
+  },
+  {
+    "id": "combat_skull_stake_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:54:35"
+  },
+  {
+    "id": "combat_skull_stake_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:54:35"
+  },
+  {
+    "id": "combat_burned_cart_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:58:05"
+  },
+  {
+    "id": "combat_burned_cart_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T16:58:05"
+  },
+  {
+    "id": "ogre_forge_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T17:02:41"
+  },
+  {
+    "id": "ogre_forge_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T17:02:42"
+  },
+  {
+    "id": "ogre_barricade_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T17:06:10"
+  },
+  {
+    "id": "ogre_barricade_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T17:06:10"
+  },
+  {
+    "id": "ogre_skull_pile_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T17:09:45"
+  },
+  {
+    "id": "ogre_skull_pile_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T17:09:46"
+  },
+  {
+    "id": "burnt_tree_giant_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T17:13:32"
+  },
+  {
+    "id": "burnt_tree_giant_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T17:13:32"
+  },
+  {
+    "id": "landmark_ogre_gate",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T17:16:49"
+  },
+  {
+    "id": "landmark_ogre_gate",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T17:16:50"
+  },
+  {
+    "id": "landmark_obsidian_arch_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T17:21:07"
+  },
+  {
+    "id": "landmark_obsidian_arch_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T17:21:08"
+  },
+  {
+    "id": "landmark_ogre_idol_01",
+    "stage": "glb",
+    "metadata": {},
+    "timestamp": "2026-09-25T17:26:05"
+  },
+  {
+    "id": "landmark_ogre_idol_01",
+    "stage": "optimize",
+    "metadata": {},
+    "timestamp": "2026-09-25T17:26:06"
   }
 ]
