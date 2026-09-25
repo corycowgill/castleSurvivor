@@ -371,6 +371,7 @@ rather than out of props we already had. Full design in `NEW-LEVEL-PLAN.md`.
   26.6's own fixes are **not yet seen rendered**
 
 ## Changelog
+- 2026-09-25 - Phase 31: creature follow-ups. One shared creature helper under Lupin and Thunderhoof (spawn, dispose, crossfade, move, detour round props, damage-free shove), a hop into the saddle and a drop out of it, trample while riding, a Codex Allies tab with live previews, and `npm run creatures` as the regression (19 checks).
 - 2026-09-25 - Phase 30: the rideable horse. horse.glb rigged through the same Blender auto-rig (Idle/Walk/Run), three Stable Audio 3 voice slots; a horse gallops in every two minutes, walk into it to ride one minute at double foot speed with a HUD countdown, then it bolts.
 - 2026-09-25 - Phase 29: Lupin, the companion dog. Trellis mesh from the user's art, auto-rigged and animated headless in Blender (tools/rig-quadruped.py), four Stable Audio 3 voice slots, heels to the nearest knight, bites for 3 + 0.6/wave, barks at waves and howls at bosses. Settings toggle `Lupin`.
 - 2026-09-23 - Phase 26: Emberreach, a volcanic ogre-homeland map built end to end through the asset pipeline. New VOLCANIC/OGRE prompt templates, 6 ground textures, 12 free charred prop variants, per-map light emitters, impassable lava ribbons, and tools/generate-emberreach.mjs. Asset batches 5/9/10 running.
@@ -531,3 +532,24 @@ the asset-run post-mortem in `NEW-LEVEL-PLAN.md`.
   close-up in `tools/shots/pose-kingsfield-1.png`
 - [ ] 30.6 Open: the user has not ridden it; the legs are judged from the top-down camera only;
   no mount/dismount transition animation (it is a cut)
+
+## Phase 31 - Creature follow-ups (2026-09-25)
+- [x] 31.1 **Shared creature helper.** `spawnCreature / disposeCreature / playCreatureAnim /
+  moveCreature / approachGoal / shoveEnemy` replace the two copies Lupin and the horse
+  carried. One-shot clip length now comes from the clip itself (no timer table to drift).
+  `approachGoal` swings 75 degrees to a side when a prop blocks the way and, after `giveUp`
+  seconds of no progress, places the creature at its goal; the regression found the horse
+  grinding on a Kingsfield wall for 20 s before this existed
+- [x] 31.2 **Trample.** While a knight rides and moves, fodder within `trampleRadius` of the
+  horse is shoved (`trampleShove` 2.6, no damage, bosses immune, ogres 30%) at most every
+  0.5 s per enemy, with a dust puff. It is an escape, not a weapon
+- [x] 31.3 **Transitions.** Mount: an eased 0.35 s lift with a small overshoot. Dismount: a
+  0.3 s drop with a landing puff while the horse is already bolting. Still cuts in the
+  knight's own animation (no clip exists for either)
+- [x] 31.4 **Codex: Allies tab.** Lupin and Thunderhoof (the horse now has a name in-game:
+  arrival banner and bolt text use it) with the same live rotating previews the Enemies tab
+  has. Stats read from the `LUPIN` and `HORSE` tables so they cannot drift
+- [x] 31.5 **Regression.** `node tools/playtest.mjs creatures` / `npm run creatures`: 19 named
+  checks (heel, bite, credit, howl, arrive, mount, lift, follow, run clip, trample, HUD
+  countdown, bolt, drop, despawn, double speed, teardown) plus a Codex Allies screenshot;
+  exit 1 on any failure. Passes twice in a row; `npm test` clean

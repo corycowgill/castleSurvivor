@@ -8,6 +8,7 @@
  *       --chars dad,brennan,parker   --maps kingsfield,darkwood   --ogre 0   --bot kite|still
  *       --minutes 20                 --headed (show the browser)
  *   node tools/playtest.mjs shot <name>        screenshot the title screen
+ *   node tools/playtest.mjs creatures         regression: Lupin heels and bites, Thunderhoof arrives, carries, tramples and bolts; Codex Allies tab shot
  *
  * Screenshots land in tools/shots/. Needs Chrome or Edge installed (no download).
  */
@@ -478,6 +479,75 @@ async function main() {
     const info = await g.page.evaluate(() => ({ wave: window.__cs.state.wave, particles: window.__cs.vfxStats ? window.__cs.vfxStats() : null, counts: window.__cs.counts() }));
     console.log(JSON.stringify(info));
     await g.close(); return;
+  }
+  if (mode === 'creatures') {
+    // Regression for the run's animals. Each check is a named boolean from the
+    // hook; any false fails the run (exit 1). Also screenshots the Codex Allies tab.
+    const g = await openGame(headed);
+    await g.page.click('#help-btn');
+    await g.page.click('.help-tab[data-tab="allies"]');
+    await new Promise(r => setTimeout(r, 3500));
+    console.log('allies tab:', await shot(g.page, 'codex-allies'));
+    await g.page.click('#help-close-btn');
+    await g.page.evaluate(async () => { await window.__cs.startRun({ character: 'dad', map: 'kingsfield', ogre: 0 }); });
+    const checks = await g.page.evaluate(() => {
+      const cs = window.__cs; const r = {};
+      cs.setLoopUpdates(false); cs.setInvulnerable(true); cs.players[0].state.xpToNext = 1e9;
+      const p = cs.players[0], pm = cs.playerMesh;
+      const dist = (a, b) => Math.hypot(a.x - b.x, a.z - b.z);
+      // A chest or a wave event can open a card mid-check and pause the sim; take the first card.
+      const unpause = () => { const b = document.querySelector('.upgrade-btn'); if (b && cs.upgradeScreenOpen) b.click(); };
+      // Speed is measured from the open plaza at spawn, along +x, over half a second.
+      const measure = () => { cs.teleport(0, -8); cs.step(0.1); cs.keys['KeyD'] = true; const x0 = pm.position.x; cs.step(0.5); cs.keys['KeyD'] = false; return pm.position.x - x0; };
+      // Lupin
+      const c = cs.companion;
+      r.lupinSpawned = !!c;
+      if (c) {
+        let far = 0, n = 0;
+        for (let i = 0; i < 12; i++) { cs.step(2.5); unpause(); n++; if (dist(c.mesh.position, pm.position) > 6) far++; }
+        r.lupinHeels = far <= 2;
+        r.lupinBites = c.bites > 0;
+        r.lupinDamageCredited = (cs.runStats.damageBySource.lupin || 0) > 0;
+        cs.companionReact('boss'); cs.step(0.3); r.lupinHowls = c.currentAnim === 'Howl';
+        cs.step(3); r.lupinRecovers = c.currentAnim !== 'Howl';
+      }
+      // Thunderhoof
+      cs.spawnHorse(); const h = cs.horse;
+      r.horseSpawned = !!h;
+      if (h) {
+        let t = 0; while (h.phase === 'arriving' && t < 20) { cs.step(0.5); t += 0.5; }
+        r.horseArrives = h.phase === 'waiting' && dist(h.mesh.position, pm.position) < 12;
+        cs.teleport(h.mesh.position.x + 1, h.mesh.position.z); cs.step(0.1);
+        r.horseMounts = p.riding === true && h.phase === 'ridden';
+        cs.step(0.5); r.riderLifted = pm.position.y > 0.5;
+        const ridden = measure();
+        r.horseFollows = dist(h.mesh.position, pm.position) < 0.6;
+        cs.keys['KeyD'] = true; cs.step(0.2);
+        r.horseRunAnim = h.currentAnim === 'Run';
+        // Trample: line up fodder ahead of the horse and ride through it
+        for (let i = 0; i < 6; i++) cs.spawnEnemy('goblin', 0, { at: { x: pm.position.x + 3 + i * 0.5, z: pm.position.z } });
+        cs.step(1.0); r.horseTramples = h.tramples > 0;
+        cs.keys['KeyD'] = false;
+        r.hudCountdown = /Riding\s+0:\d\d/.test(document.getElementById('ride-timer').textContent);
+        for (let i = 0; i < 12; i++) { cs.step(5); unpause(); }
+        r.horseBolts = p.riding === false && (h.phase === 'fleeing' || cs.horse === null);
+        cs.step(0.5); r.riderDropped = pm.position.y < 0.05;
+        cs.step(7); unpause(); r.horseDespawns = cs.horse === null;
+        const walked = measure();
+        r.doubleSpeed = ridden > walked * 1.7 && ridden < walked * 2.3;
+        r.detail = { ridden: +ridden.toFixed(1), walked: +walked.toFixed(1), tramples: h.tramples, bites: c ? c.bites : 0 };
+      }
+      cs.returnToMenu(); r.cleanTeardown = cs.companion === null && cs.horse === null;
+      return r;
+    });
+    const detail = checks.detail; delete checks.detail;
+    let failed = 0;
+    for (const [k, v] of Object.entries(checks)) { console.log(`${v ? 'PASS' : 'FAIL'}  ${k}`); if (!v) failed++; }
+    console.log('detail:', JSON.stringify(detail));
+    console.log(g.errors.length ? `JS ERRORS (${g.errors.length}):\n  ` + [...new Set(g.errors)].slice(0, 15).join('\n  ') : 'no JS errors');
+    await g.close();
+    if (failed || g.errors.length) process.exit(1);
+    return;
   }
   if (mode === 'probe') {
     // Start a run and evaluate a JS expression against the debug hook: --map, --js "cs => ..." (function body with `cs`)

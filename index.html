@@ -1514,12 +1514,14 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
       <button class="help-tab active" data-tab="powerups">Power-Ups</button>
       <button class="help-tab" data-tab="weapons">Weapons</button>
       <button class="help-tab" data-tab="enemies">Enemies</button>
+      <button class="help-tab" data-tab="allies">Allies</button>
       <button class="help-tab" data-tab="advanced">Advanced</button>
     </div>
     <div id="help-content">
       <div id="help-tab-powerups" class="help-tab-content active"></div>
       <div id="help-tab-weapons" class="help-tab-content"></div>
       <div id="help-tab-enemies" class="help-tab-content"></div>
+      <div id="help-tab-allies" class="help-tab-content"></div>
       <div id="help-tab-advanced" class="help-tab-content"></div>
     </div>
   </div>
@@ -1672,7 +1674,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 // shipped in. `number` is the commit count this change will produce. Do not
 // hand-edit: the stamper matches the two marker lines exactly.
 /* BUILD:START */
-const BUILD = { number: 52, date: '2026-09-25' };
+const BUILD = { number: 53, date: '2026-09-25' };
 /* BUILD:END */
 for (const el of document.querySelectorAll('.build-badge')) el.textContent = `BUILD ${BUILD.number}`;
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -10279,12 +10281,111 @@ function updateGame(dt, rawDt = dt) {
   }
 }
 
+// ─── CREATURES ───
+// Shared plumbing for the run's animals (Lupin, the horse). They are neither
+// players nor enemies: one clone of a loaded rig, a mixer, crossfaded clips,
+// obstacle-aware movement and a dispose that frees the skeleton. Anything new
+// that walks around the party (a cat, a cart, a wandering merchant) starts here.
+function spawnCreature(modelKey, scale, x, z) {
+  if (!assets[modelKey]) return null;
+  const gltf = cloneEnemyModel(modelKey);
+  if (!gltf) return null;
+  const mesh = gltf.scene;
+  mesh.scale.setScalar(scale);
+  mesh.traverse(c => { if (c.isMesh) { c.castShadow = true; c.receiveShadow = true; } });
+  mesh.position.set(Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, x)), 0, Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, z)));
+  scene.add(mesh);
+  alignToGround(mesh);
+  const mixer = new THREE.AnimationMixer(mesh);
+  const anims = {};
+  for (const clip of gltf.animations) anims[clip.name] = mixer.clipAction(clip);
+  return { mesh, mixer, anims, currentAnim: '', groundY: mesh.position.y, busy: 0 };
+}
+
+function disposeCreature(c) {
+  if (!c) return;
+  scene.remove(c.mesh);
+  c.mixer.stopAllAction();
+  c.mixer.uncacheRoot(c.mesh);
+  disposeSkeletons(c.mesh);
+}
+
+// Crossfade to a clip. A one-shot sets `busy` to its length so the caller can
+// wait it out; the clip's own duration is the timer, no table to keep in sync.
+function playCreatureAnim(c, name, loop = true) {
+  if (!c || c.currentAnim === name || !c.anims[name]) return;
+  if (c.anims[c.currentAnim]) c.anims[c.currentAnim].fadeOut(0.15);
+  c.currentAnim = name;
+  const action = c.anims[name];
+  action.reset();
+  action.setLoop(loop ? THREE.LoopRepeat : THREE.LoopOnce);
+  action.clampWhenFinished = !loop;
+  action.fadeIn(0.15);
+  action.play();
+  if (!loop) c.busy = action.getClip().duration;
+}
+
+// Step toward (dx, dz) at `speed`, clamped to the world and pushed out of props.
+// Returns true when a prop ate most of the step, so the caller can go around.
+function moveCreature(c, dx, dz, speed, dt, radius) {
+  const pos = c.mesh.position;
+  const ox = pos.x, oz = pos.z;
+  let nx = pos.x + dx * speed * dt, nz = pos.z + dz * speed * dt;
+  nx = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, nx));
+  nz = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, nz));
+  resolveObstacles(nx, nz, radius);
+  pos.x = _colOut.x; pos.z = _colOut.z;
+  c.mesh.rotation.y = Math.atan2(dx, dz);
+  const want = speed * dt;
+  return want > 1e-6 && ((pos.x - ox) * dx + (pos.z - oz) * dz) < want * 0.5;
+}
+
+// Walk toward a goal, and when a prop blocks the way, swing 75 degrees to one
+// side for a moment and try again. `c.detour` / `c.stuck` are the state; a
+// creature stuck for `giveUp` seconds is placed at the goal (it came round the
+// far side while nobody was looking). Returns the remaining distance.
+function approachGoal(c, goalX, goalZ, speed, dt, radius, giveUp = 6) {
+  const pos = c.mesh.position;
+  let dx = goalX - pos.x, dz = goalZ - pos.z;
+  const d = Math.hypot(dx, dz);
+  if (d < 1e-6) return 0;
+  dx /= d; dz /= d;
+  if (c.detour && c.detour.t > 0) {
+    c.detour.t -= dt;
+    const a = c.detour.sign * 75 * Math.PI / 180, ca = Math.cos(a), sa = Math.sin(a);
+    const rx = dx * ca - dz * sa, rz = dx * sa + dz * ca;
+    dx = rx; dz = rz;
+  }
+  const blocked = moveCreature(c, dx, dz, speed, dt, radius);
+  if (blocked) {
+    c.stuck = (c.stuck || 0) + dt;
+    if (!c.detour || c.detour.t <= 0) c.detour = { t: 0.8, sign: Math.random() < 0.5 ? -1 : 1 };
+    if (c.stuck > giveUp) { pos.x = goalX; pos.z = goalZ; c.stuck = 0; c.detour = null; return 0; }
+  } else if (!c.detour || c.detour.t <= 0) {
+    c.stuck = 0;
+  }
+  return Math.hypot(goalX - pos.x, goalZ - pos.z);
+}
+
+// A shove with no damage: the same knockback applyDamage gives, minus the hit.
+// Bosses do not budge; ogres barely do. Returns true if the enemy moved.
+function shoveEnemy(enemy, fromX, fromZ, amount, timer = 0.15) {
+  const resist = enemy.isBoss ? 0 : enemy.type === 'ogre' ? 0.3 : 1;
+  if (resist === 0 || enemy.isDying) return false;
+  let dx = enemy.mesh.position.x - fromX, dz = enemy.mesh.position.z - fromZ;
+  const len = Math.hypot(dx, dz);
+  if (len > 0.01) { dx /= len; dz /= len; } else { dx = 1; dz = 0; }
+  if (!enemy.knockback) enemy.knockback = { dx: 0, dz: 0, timer: 0 };
+  enemy.knockback.dx = dx * amount * resist;
+  enemy.knockback.dz = dz * amount * resist;
+  enemy.knockback.timer = timer;
+  return true;
+}
+
 // ─── COMPANION: LUPIN ───
-// Lupin is the party's dog. She is not a player (no HP, no XP share, no camera
-// framing, no picks) and not an enemy (never in enemies[] or the grid): one
-// scene entity that heels to the nearest knight, nips at whatever crowds them
-// for a little damage and a shove, and barks or howls at the run's beats.
-// Relief, not firepower: the bite finishes fodder, it never carries a wave.
+// Lupin is the party's dog. She heels to the nearest knight, nips at whatever
+// crowds them for a little damage and a shove, and barks or howls at the run's
+// beats. Relief, not firepower: the bite finishes fodder, it never carries a wave.
 const LUPIN = {
   model: 'lupin', scale: 1.3, radius: 0.35,
   runSpeed: 10.5, walkSpeed: 4.8,
@@ -10295,54 +10396,27 @@ const LUPIN = {
   biteDamage: (wave) => 3 + wave * 0.6,
   idleHowl: [30, 50],              // seconds of calm between unprompted howls
 };
-const LUPIN_ONESHOT = { Jump: 0.8, Attack: 0.5, Howl: 2.0, Bark: 0.6 };
 let companion = null;
 
 function spawnCompanion() {
   disposeCompanion();
-  if (!settings.companion || !assets[LUPIN.model] || !playerMesh) return null;
-  const gltf = cloneEnemyModel(LUPIN.model);
-  if (!gltf) return null;
-  const mesh = gltf.scene;
-  mesh.scale.setScalar(LUPIN.scale);
-  mesh.traverse(c => { if (c.isMesh) { c.castShadow = true; c.receiveShadow = true; } });
-  mesh.position.set(playerMesh.position.x - 1.8, 0, playerMesh.position.z + 1.4);
-  scene.add(mesh);
-  alignToGround(mesh);
-  const mixer = new THREE.AnimationMixer(mesh);
-  const anims = {};
-  for (const clip of gltf.animations) anims[clip.name] = mixer.clipAction(clip);
-  companion = {
-    mesh, mixer, anims, currentAnim: '',
-    busy: 0, pendingBite: null, pendingBiteAt: 0,
+  if (!settings.companion || !playerMesh) return null;
+  const c = spawnCreature(LUPIN.model, LUPIN.scale, playerMesh.position.x - 1.8, playerMesh.position.z + 1.4);
+  if (!c) return null;
+  Object.assign(c, {
+    pendingBite: null, pendingBiteAt: 0,
     biteTimer: 2.0, barkTimer: 0, howlTimer: LUPIN.idleHowl[0] + Math.random() * (LUPIN.idleHowl[1] - LUPIN.idleHowl[0]),
     owner: null, ownerTimer: 0, side: 1, moving: false, bites: 0,
-  };
-  playCompanionAnim('Idle', true);
-  return companion;
+  });
+  companion = c;
+  playCreatureAnim(c, 'Idle', true);
+  return c;
 }
 
 function disposeCompanion() {
   if (!companion) return;
-  scene.remove(companion.mesh);
-  companion.mixer.stopAllAction();
-  companion.mixer.uncacheRoot(companion.mesh);
-  disposeSkeletons(companion.mesh);
+  disposeCreature(companion);
   companion = null;
-}
-
-function playCompanionAnim(name, loop = true) {
-  const c = companion;
-  if (!c || c.currentAnim === name || !c.anims[name]) return;
-  if (c.anims[c.currentAnim]) c.anims[c.currentAnim].fadeOut(0.15);
-  c.currentAnim = name;
-  const action = c.anims[name];
-  action.reset();
-  action.setLoop(loop ? THREE.LoopRepeat : THREE.LoopOnce);
-  action.clampWhenFinished = !loop;
-  action.fadeIn(0.15);
-  action.play();
-  if (!loop) c.busy = LUPIN_ONESHOT[name] || 0.5;
 }
 
 // Something happened in the run that a dog has an opinion about.
@@ -10353,14 +10427,14 @@ function companionReact(kind) {
   if (kind === 'wave') {
     if (c.barkTimer > 0) return;
     c.barkTimer = 4;
-    playCompanionAnim('Bark', false);
+    playCreatureAnim(c, 'Bark', false);
     AudioSystem.play('dogBark', { volume: 0.5, pitch: 0.95 + Math.random() * 0.1 });
   } else if (kind === 'boss' || kind === 'victory' || kind === 'mourn') {
-    playCompanionAnim('Howl', false);
+    playCreatureAnim(c, 'Howl', false);
     AudioSystem.play('dogHowl', { volume: kind === 'mourn' ? 0.45 : 0.6, pitch: kind === 'mourn' ? 0.85 : 1.0 });
     c.howlTimer = LUPIN.idleHowl[1];
   } else if (kind === 'levelup') {
-    playCompanionAnim('Jump', false);
+    playCreatureAnim(c, 'Jump', false);
     AudioSystem.play('dogHappy', { volume: 0.45, pitch: 1.0 + Math.random() * 0.15 });
   }
 }
@@ -10398,7 +10472,7 @@ function updateCompanion(dt) {
   if (c.busy > 0) {
     c.busy -= dt;
     if (c.pendingBite && c.busy <= c.pendingBiteAt) companionBite(c);
-    if (c.busy <= 0) { c.pendingBite = null; playCompanionAnim('Idle', true); }
+    if (c.busy <= 0) { c.pendingBite = null; playCreatureAnim(c, 'Idle', true); }
     return;
   }
 
@@ -10431,9 +10505,9 @@ function updateCompanion(dt) {
     const reach = LUPIN.biteRange + enemyBodyRadius(target);
     if (best < reach * reach) {
       c.mesh.rotation.y = Math.atan2(target.mesh.position.x - pos.x, target.mesh.position.z - pos.z);
-      c.pendingBite = target; c.pendingBiteAt = LUPIN_ONESHOT.Attack * 0.5;
+      playCreatureAnim(c, 'Attack', false);
+      c.pendingBite = target; c.pendingBiteAt = c.busy * 0.5;
       c.biteTimer = LUPIN.biteCooldown;
-      playCompanionAnim('Attack', false);
       AudioSystem.play('dogAttack', { volume: 0.42, pitch: 0.95 + Math.random() * 0.1 });
       return;
     }
@@ -10453,34 +10527,27 @@ function updateCompanion(dt) {
       c.moving = false;
       if (c.howlTimer <= 0 && threat === 0) {
         c.howlTimer = LUPIN.idleHowl[0] + Math.random() * (LUPIN.idleHowl[1] - LUPIN.idleHowl[0]);
-        playCompanionAnim('Howl', false);
+        playCreatureAnim(c, 'Howl', false);
         AudioSystem.play('dogHowl', { volume: 0.35, pitch: 0.95 + Math.random() * 0.1 });
       } else {
-        playCompanionAnim('Idle', true);
+        playCreatureAnim(c, 'Idle', true);
       }
       return;
     }
     speed = dGoal > LUPIN.walkRange ? LUPIN.runSpeed : LUPIN.walkSpeed;
   }
 
-  const dx = goalX - pos.x, dz = goalZ - pos.z;
-  const dist = Math.sqrt(dx * dx + dz * dz) || 1;
-  const step = Math.min(dist, speed * dt);
-  let nx = pos.x + (dx / dist) * step, nz = pos.z + (dz / dist) * step;
-  nx = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, nx));
-  nz = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, nz));
-  resolveObstacles(nx, nz, LUPIN.radius);
-  pos.x = _colOut.x; pos.z = _colOut.z;
-  c.mesh.rotation.y = Math.atan2(dx, dz);
+  const dist = Math.hypot(goalX - pos.x, goalZ - pos.z) || 1;
+  approachGoal(c, goalX, goalZ, Math.min(speed, dist / dt), dt, LUPIN.radius, 3);
   c.moving = true;
-  playCompanionAnim(speed === LUPIN.runSpeed ? 'Run' : 'Walk', true);
+  playCreatureAnim(c, speed === LUPIN.runSpeed ? 'Run' : 'Walk', true);
 }
 
-// ─── MOUNT: THE HORSE ───
+// ─── MOUNT: THUNDERHOOF THE HORSE ───
 // Every so often a saddled horse gallops in from the edge and waits near the
 // party. Walk into it to ride: one minute at double foot speed, weapons still
-// working, then the knight is set down and the horse bolts. One horse at a time,
-// any knight can take it. Like Lupin it is neither a player nor an enemy.
+// working, fodder shoved out of the way, then the knight is set down and the
+// horse bolts. One horse at a time, any knight can take it.
 const HORSE = {
   model: 'horseMount', scale: 3.4, radius: 0.9,
   spawnEvery: 120, firstSpawn: 45,   // seconds between horses; the first comes early
@@ -10489,6 +10556,8 @@ const HORSE = {
   arriveDist: 7, mountRadius: 2.3,
   arriveSpeed: 15, fleeSpeed: 17, fleeSeconds: 6,
   riderY: 0.75, riderBack: 0.1,      // knight lift into the saddle, and a nudge rearward
+  mountTime: 0.35, dropTime: 0.3,    // hop up / drop down transitions
+  trampleRadius: 1.7, trampleShove: 2.6, trampleEvery: 0.5, // fodder in the horse's path is shoved aside, no damage
 };
 // Where each leg bone should point while in the saddle, in the knight's own
 // frame (facing +Z, +X his left): thighs forward-down and spread, shins hanging.
@@ -10504,74 +10573,53 @@ const _rideQ = new THREE.Quaternion(), _rideQ2 = new THREE.Quaternion(), _rideV 
 
 function spawnHorse() {
   disposeHorse();
-  if (!assets[HORSE.model] || !playerMesh) return null;
-  const gltf = cloneEnemyModel(HORSE.model);
-  if (!gltf) return null;
-  const mesh = gltf.scene;
-  mesh.scale.setScalar(HORSE.scale);
-  mesh.traverse(c => { if (c.isMesh) { c.castShadow = true; c.receiveShadow = true; } });
+  if (!playerMesh) return null;
   // Comes in from the arena edge toward a spot beside the party.
   const focus = partyFocus().center;
   const a = Math.random() * Math.PI * 2;
-  const goalX = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, focus.x + Math.cos(a) * HORSE.arriveDist));
-  const goalZ = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, focus.z + Math.sin(a) * HORSE.arriveDist));
   const startDist = ENEMY_SPAWN_DISTANCE * 0.8;
-  mesh.position.set(
-    Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, focus.x + Math.cos(a) * startDist)), 0,
-    Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, focus.z + Math.sin(a) * startDist)));
-  scene.add(mesh);
-  alignToGround(mesh);
-  const mixer = new THREE.AnimationMixer(mesh);
-  const anims = {};
-  for (const clip of gltf.animations) anims[clip.name] = mixer.clipAction(clip);
-  horse = { mesh, mixer, anims, currentAnim: '', groundY: mesh.position.y, phase: 'arriving', timer: 0, rider: null,
-            goalX, goalZ, fleeX: 0, fleeZ: 0, snortTimer: 3, hoofTimer: 0, hudTimer: 0 };
-  playHorseAnim('Run', true);
-  return horse;
+  const h = spawnCreature(HORSE.model, HORSE.scale, focus.x + Math.cos(a) * startDist, focus.z + Math.sin(a) * startDist);
+  if (!h) return null;
+  Object.assign(h, {
+    phase: 'arriving', timer: 0, rider: null,
+    goalX: Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, focus.x + Math.cos(a) * HORSE.arriveDist)),
+    goalZ: Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, focus.z + Math.sin(a) * HORSE.arriveDist)),
+    fleeX: 0, fleeZ: 0, snortTimer: 3, hoofTimer: 0, hudTimer: 0, trampleTimer: 0, tramples: 0,
+    mountT: 0, drop: null,
+  });
+  horse = h;
+  playCreatureAnim(h, 'Run', true);
+  return h;
 }
 
 function disposeHorse() {
   if (!horse) return;
   if (horse.rider) dismountHorse(false);
-  scene.remove(horse.mesh);
-  horse.mixer.stopAllAction();
-  horse.mixer.uncacheRoot(horse.mesh);
-  disposeSkeletons(horse.mesh);
+  if (horse.drop) { horse.drop.p.mesh.position.y = horse.drop.groundY; horse.drop = null; }
+  disposeCreature(horse);
   horse = null;
   const el = document.getElementById('ride-timer');
   if (el) el.textContent = '';
 }
 
-function playHorseAnim(name, loop = true) {
-  const h = horse;
-  if (!h || h.currentAnim === name || !h.anims[name]) return;
-  if (h.anims[h.currentAnim]) h.anims[h.currentAnim].fadeOut(0.15);
-  h.currentAnim = name;
-  const action = h.anims[name];
-  action.reset();
-  action.setLoop(loop ? THREE.LoopRepeat : THREE.LoopOnce);
-  action.clampWhenFinished = !loop;
-  action.fadeIn(0.15);
-  action.play();
-}
-
 function mountHorse(p) {
   const h = horse;
   if (!h || h.rider || !p.mesh) return;
-  h.rider = p; h.phase = 'ridden'; h.timer = HORSE.rideSeconds;
+  h.rider = p; h.phase = 'ridden'; h.timer = HORSE.rideSeconds; h.mountT = 0;
   p.riding = true;
   p._groundY = p.mesh.position.y;
   p._rideBones = {};
   p.mesh.traverse(c => { if (c.isBone && /^(thigh|calf|foot)_[lr]$/.test(c.name)) p._rideBones[c.name] = c; });
   h.mesh.rotation.y = p.mesh.rotation.y;
-  playHorseAnim('Idle', true);
+  playCreatureAnim(h, 'Idle', true);
   AudioSystem.play('horseNeigh', { volume: 0.55, pitch: 1.0 + Math.random() * 0.1 });
   spawnDamageNumber(p.mesh.position, 'MOUNTED!', '#e8c860');
   vfx.collectEffect(p.mesh.position, 'speed');
   triggerShake(0.15, 0.1);
 }
 
-// `flee`: the horse runs off (time up, rider down); false just clears the rider.
+// `flee`: the horse runs off (time up, rider down) and the knight drops to the
+// ground over `dropTime`; false just clears the rider (run teardown).
 function dismountHorse(flee = true) {
   const h = horse;
   if (!h || !h.rider) return;
@@ -10579,10 +10627,11 @@ function dismountHorse(flee = true) {
   h.rider = null;
   p.riding = false;
   p._rideBones = null;
-  if (p.mesh) p.mesh.position.y = p._groundY != null ? p._groundY : 0;
+  const groundY = p._groundY != null ? p._groundY : 0;
   const el = document.getElementById('ride-timer');
   if (el) el.textContent = '';
-  if (!flee) return;
+  if (!flee) { if (p.mesh) p.mesh.position.y = groundY; return; }
+  h.drop = { p, groundY, fromY: p.mesh.position.y, t: HORSE.dropTime };
   h.phase = 'fleeing'; h.timer = HORSE.fleeSeconds;
   // Straight away from the knight, starting from just beside them.
   const a = Math.random() * Math.PI * 2;
@@ -10590,19 +10639,30 @@ function dismountHorse(flee = true) {
   h.mesh.position.x += h.fleeX * 1.2; h.mesh.position.z += h.fleeZ * 1.2;
   h.mesh.position.y = h.groundY;
   h.mesh.rotation.y = Math.atan2(h.fleeX, h.fleeZ);
-  playHorseAnim('Run', true);
+  playCreatureAnim(h, 'Run', true);
   AudioSystem.play('horseNeigh', { volume: 0.5, pitch: 0.9 + Math.random() * 0.1 });
-  if (p.mesh) spawnDamageNumber(p.mesh.position, 'THE HORSE BOLTS', '#c8b090');
+  if (p.mesh) spawnDamageNumber(p.mesh.position, 'THUNDERHOOF BOLTS', '#c8b090');
 }
 
-function moveHorse(h, dx, dz, speed, dt) {
+// Enemies in the horse's path are shoved aside while it is moving under a
+// knight. No damage: it is an escape, not a weapon.
+function trampleUnder(h, dt) {
+  h.trampleTimer -= dt;
+  if (h.trampleTimer > 0) return;
+  h.trampleTimer = HORSE.trampleEvery * 0.25;
   const pos = h.mesh.position;
-  let nx = pos.x + dx * speed * dt, nz = pos.z + dz * speed * dt;
-  nx = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, nx));
-  nz = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, nz));
-  resolveObstacles(nx, nz, HORSE.radius);
-  pos.x = _colOut.x; pos.z = _colOut.z;
-  h.mesh.rotation.y = Math.atan2(dx, dz);
+  const near = queryEnemies(pos.x, pos.z, HORSE.trampleRadius + 1.5);
+  for (let i = 0; i < near.length; i++) {
+    const e = near[i];
+    if (e.isDying || e.isBoss || (e._trampledAt != null && state.time - e._trampledAt < HORSE.trampleEvery)) continue;
+    const r = HORSE.trampleRadius + enemyBodyRadius(e);
+    if (distSqXZ(e.mesh.position, pos) > r * r) continue;
+    if (shoveEnemy(e, pos.x, pos.z, HORSE.trampleShove, 0.2)) {
+      e._trampledAt = state.time;
+      h.tramples++;
+      if (_renderEnabled) vfx.footstepDust(e.mesh.position, 1.5);
+    }
+  }
 }
 
 function updateHorse(dt) {
@@ -10615,21 +10675,31 @@ function updateHorse(dt) {
   if (_renderEnabled) h.mixer.update(dt);
   const pos = h.mesh.position;
 
+  // A knight just set down: ease him to the ground with a small bounce.
+  if (h.drop) {
+    const d = h.drop;
+    d.t -= dt;
+    const k = Math.max(0, d.t / HORSE.dropTime);            // 1 -> 0
+    if (d.p.mesh) d.p.mesh.position.y = d.groundY + (d.fromY - d.groundY) * k * k;
+    if (d.t <= 0) {
+      if (d.p.mesh) { d.p.mesh.position.y = d.groundY; if (_renderEnabled) vfx.footstepDust(d.p.mesh.position, 2); }
+      h.drop = null;
+    }
+  }
+
   if (h.phase === 'arriving') {
-    const dx = h.goalX - pos.x, dz = h.goalZ - pos.z;
-    const d = Math.hypot(dx, dz);
+    const d = approachGoal(h, h.goalX, h.goalZ, HORSE.arriveSpeed, dt, HORSE.radius);
     if (d < 1.0) {
       h.phase = 'waiting'; h.timer = HORSE.waitSeconds;
-      playHorseAnim('Idle', true);
+      playCreatureAnim(h, 'Idle', true);
       AudioSystem.play('horseNeigh', { volume: 0.6 });
-      spawnDamageNumber(pos, 'A HORSE!', '#e8c860');
+      spawnDamageNumber(pos, 'THUNDERHOOF!', '#e8c860');
       const announce = getWaveAnnounce();
-      announce.textContent = 'A horse waits nearby: ride it for a minute at double speed';
+      announce.textContent = 'Thunderhoof waits nearby: ride him for a minute at double speed';
       announce.style.color = '#e0b862';
       announce.style.opacity = '1';
-      setTimeout(() => { if (announce.textContent.startsWith('A horse')) announce.style.opacity = '0'; }, 3000);
+      setTimeout(() => { if (announce.textContent.startsWith('Thunderhoof')) announce.style.opacity = '0'; }, 3000);
     } else {
-      moveHorse(h, dx / d, dz / d, HORSE.arriveSpeed, dt);
       h.hoofTimer -= dt;
       if (h.hoofTimer <= 0) { h.hoofTimer = 1.2; AudioSystem.play('horseGallop', { volume: 0.25 }); }
     }
@@ -10647,21 +10717,26 @@ function updateHorse(dt) {
       const ax = near ? pos.x - near.mesh.position.x : 1, az = near ? pos.z - near.mesh.position.z : 0;
       const al = Math.hypot(ax, az) || 1;
       h.fleeX = ax / al; h.fleeZ = az / al;
-      playHorseAnim('Run', true);
+      playCreatureAnim(h, 'Run', true);
     }
   } else if (h.phase === 'ridden') {
     const p = h.rider;
     if (!p || !p.mesh || p.state.isDead) { dismountHorse(true); return; }
     h.timer -= dt;
+    h.mountT = Math.min(HORSE.mountTime, h.mountT + dt);
     // The horse is glued under the knight: same spot, same facing.
     const yaw = p.mesh.rotation.y;
     pos.x = p.mesh.position.x - Math.sin(yaw) * HORSE.riderBack;
     pos.z = p.mesh.position.z - Math.cos(yaw) * HORSE.riderBack;
     pos.y = h.groundY;
     h.mesh.rotation.y = yaw;
-    p.mesh.position.y = (p._groundY || 0) + HORSE.riderY;
-    playHorseAnim(p.state._moving ? 'Run' : 'Idle', true);
+    // Hop into the saddle: an eased lift with a little overshoot at the top.
+    const k = h.mountT / HORSE.mountTime;
+    const lift = k * k * (3 - 2 * k) + Math.sin(k * Math.PI) * 0.35;
+    p.mesh.position.y = (p._groundY || 0) + HORSE.riderY * lift;
+    playCreatureAnim(h, p.state._moving ? 'Run' : 'Idle', true);
     if (p.state._moving) {
+      trampleUnder(h, dt);
       h.hoofTimer -= dt;
       if (h.hoofTimer <= 0) { h.hoofTimer = 1.1; AudioSystem.play('horseGallop', { volume: 0.3, pitch: 0.95 + Math.random() * 0.1 }); }
     }
@@ -10674,8 +10749,9 @@ function updateHorse(dt) {
     if (h.timer <= 0) dismountHorse(true);
   } else if (h.phase === 'fleeing') {
     h.timer -= dt;
-    moveHorse(h, h.fleeX, h.fleeZ, HORSE.fleeSpeed, dt);
-    if (h.timer <= 0) disposeHorse();
+    // A wall in the way ends the exit early: he is gone either way.
+    if (moveCreature(h, h.fleeX, h.fleeZ, HORSE.fleeSpeed, dt, HORSE.radius)) h.timer = Math.min(h.timer, 0.4);
+    if (h.timer <= 0 && !h.drop) disposeHorse();
   }
 }
 
@@ -12175,6 +12251,32 @@ function populateHelpScreen() {
   }
   document.getElementById('help-tab-enemies').innerHTML = enemyHtml;
 
+  // --- ALLIES TAB ---
+  // Numbers come from the LUPIN and HORSE tables so the Codex cannot drift from the game
+  const allyData = [
+    { id: 'lupin', name: 'Lupin', color: '#f0d890',
+      desc: 'The knights’ dog: a small fluffy terrier in plate, fleur-de-lis on her chest. She heels behind the nearest knight, swapping sides when he turns through her, and nips at whatever crowds him with a bite and a shove. She barks when a wave breaks, howls when a boss arrives or a knight falls, and jumps for joy at every level-up. Relief, not firepower: her bite finishes fodder, it never carries a wave. Nothing can hurt her.',
+      stats: `Bite: ${LUPIN.biteDamage(0)} + ${+(LUPIN.biteDamage(1) - LUPIN.biteDamage(0)).toFixed(2)}×wave &bull; Bite every ${LUPIN.biteCooldown}s &bull; Shove: ${LUPIN.knockback} &bull; Guards within ${LUPIN.engageRange} of her knight &bull; Speed: ${LUPIN.runSpeed} &bull; HP: none, she cannot be hurt &bull; Toggle: Settings › Lupin` },
+    { id: 'thunderhoof', name: 'Thunderhoof', color: '#e8c860',
+      desc: 'The horse. Every couple of minutes he gallops in from the edge of the field, neighs, and waits beside the party for half a minute. Walk into him to ride: one full minute at double foot speed with every weapon still swinging, and any fodder in his path shoved aside. When the minute is up he sets you down and bolts. One horse at a time; any knight can take him, and a knight who falls from the saddle is set down at once.',
+      stats: `Ride: ${HORSE.rideSeconds}s &bull; Speed: ${HORSE.speedMul}× on foot &bull; First arrives: ${HORSE.firstSpawn}s, then every ${HORSE.spawnEvery}s &bull; Waits: ${HORSE.waitSeconds}s &bull; Mount radius: ${HORSE.mountRadius} &bull; Trample shove: ${HORSE.trampleShove}, no damage &bull; Gallop: ${HORSE.arriveSpeed}` },
+  ];
+  let allyHtml = '<div class="help-section-title">Companions</div>';
+  allyHtml += '<div class="help-item"><div class="help-item-info"><div class="help-item-desc">Allies fight beside the knights but are neither knights nor foes: they take no share of the XP, draw no camera, and cannot die. They are a little relief, not a build.</div></div></div>';
+  for (const a of allyData) {
+    const aDescEsc = a.desc.replace(/"/g, '&quot;');
+    const aStatsEsc = a.stats.replace(/"/g, '&quot;');
+    allyHtml += `<div class="help-item" data-modal-name="${a.name}" data-modal-desc="${aDescEsc}" data-modal-stats="${aStatsEsc}" data-modal-color="${a.color}" data-modal-enemy="${a.id}">
+      <canvas class="help-item-canvas" id="help-enemy-${a.id}" width="160" height="160"></canvas>
+      <div class="help-item-info">
+        <div class="help-item-name" style="color:${a.color}">${a.name}</div>
+        <div class="help-item-desc">${a.desc}</div>
+        <div class="help-item-stats">${a.stats.replace(/(\d+(?:\.\d+)?)/g, '<span>$1</span>')}</div>
+      </div>
+    </div>`;
+  }
+  document.getElementById('help-tab-allies').innerHTML = allyHtml;
+
   // --- ADVANCED TAB ---
   let advHtml = '<div class="help-section-title">Weapon Evolutions</div>';
   advHtml += '<div class="help-item"><div class="help-item-info"><div class="help-item-desc">Evolutions come from <span style="color:#e8c860">treasure chests</span>, which elites and bosses drop. When a weapon is at Level 5 and you own its matching stat upgrade, the next chest you open <span style="color:#ffdd00">EVOLVES</span> it:</div></div></div>';
@@ -12259,6 +12361,9 @@ async function setupHelpEnemyPreviews() {
     { id: 'boss', modelKey: 'ogreBoss', scale: 1.8 },
     { id: 'dragonOgre', modelKey: 'dragonOgre', scale: 1.8 },
     { id: 'ogreKing', modelKey: 'ogreKing', scale: 1.8 },
+    // Allies: their models keep no raw buffer, so they are cloned instead of re-parsed
+    { id: 'lupin', modelKey: 'lupin', scale: 2.2 },
+    { id: 'thunderhoof', modelKey: 'horseMount', scale: 2.0 },
   ];
   // Single offscreen renderer shared by all previews (avoids WebGL context limits)
   const offCanvas = document.createElement('canvas');
@@ -12279,7 +12384,8 @@ async function setupHelpEnemyPreviews() {
     dl.position.set(3, 5, 4);
     sc.add(dl);
     try {
-      const gltf = await parseEnemyModel(et.modelKey);
+      const gltf = enemyBuffers[et.modelKey] ? await parseEnemyModel(et.modelKey) : cloneEnemyModel(et.modelKey);
+      if (!gltf) throw new Error('no model ' + et.modelKey);
       const model = gltf.scene;
       model.scale.setScalar(et.scale);
       const box = new THREE.Box3().setFromObject(model);
@@ -12510,6 +12616,7 @@ init().then(() => {
       players, nearestPlayer, alivePlayers, joinPlayer, makePlayer, createPlayer, partyFocus, AudioSystem, projectiles, CHARACTER_PRIMARY,
       get companion() { return companion; }, spawnCompanion, disposeCompanion, companionReact, LUPIN,
       get horse() { return horse; }, spawnHorse, disposeHorse, mountHorse, dismountHorse, HORSE, RIDE_POSE,
+      spawnCreature, disposeCreature, playCreatureAnim, moveCreature, shoveEnemy,
       openAudit, closeAudit, collectAudit, renderAudit,
       setLowQuality, applyQualityMode, detectMobile,
       get lowQuality() { return LOW_QUALITY; },

@@ -8,6 +8,7 @@
     "balance": "node tools/playtest.mjs balance",
     "profile": "node tools/playtest.mjs profile",
     "enemies": "node tools/playtest.mjs enemies",
+    "creatures": "node tools/playtest.mjs creatures",
     "icons": "node AssetFactory/scripts/gen-icons.mjs",
     "maps": "node tools/generate-kingsfield.mjs && node tools/generate-darkwood.mjs && node tools/generate-emberreach.mjs && node tools/generate-mirefen.mjs",
     "overhead": "node tools/playtest.mjs overhead --map kingsfield && node tools/playtest.mjs overhead --map darkwood && node tools/playtest.mjs overhead --map emberreach && node tools/playtest.mjs overhead --map mirefen",
