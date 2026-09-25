@@ -371,6 +371,7 @@ rather than out of props we already had. Full design in `NEW-LEVEL-PLAN.md`.
   26.6's own fixes are **not yet seen rendered**
 
 ## Changelog
+- 2026-09-25 - Phase 33: the Epic Air Guitar easter egg. A Blender-keyed clip on the dad knight's own skeleton (tools/anim-air-guitar.py), a Stable Audio 3 guitar solo, and a stage show in the Codex Allies tab.
 - 2026-09-25 - Phase 32: Bloodmarch, the war-torn field. Fifth map: human castle and town burning in the north-west, the orc fortress in the south-east, the field between. 45 new Trellis meshes (two-phase asset run with concept-art review), 20 war-torn regrades, fires as a map feature (flames, smoke, light), a smoke-choked dusk look, tools/bloodmarch-verify.mjs.
 - 2026-09-25 - Phase 31: creature follow-ups. One shared creature helper under Lupin and Thunderhoof (spawn, dispose, crossfade, move, detour round props, damage-free shove), a hop into the saddle and a drop out of it, trample while riding, a Codex Allies tab with live previews, and `npm run creatures` as the regression (19 checks).
 - 2026-09-25 - Phase 30: the rideable horse. horse.glb rigged through the same Blender auto-rig (Idle/Walk/Run), three Stable Audio 3 voice slots; a horse gallops in every two minutes, walk into it to ride one minute at double foot speed with a HUD countdown, then it bolts.
@@ -598,3 +599,19 @@ the asset-run post-mortem in `NEW-LEVEL-PLAN.md`.
 - [ ] 32.10 Open: three ground textures to re-roll; the
   gatehouse / fortress gate are large enough that the tour camera lands inside them (cosmetic,
   the keep-outs hold); enemy readability on the dark field not yet judged in play
+
+## Phase 33 - Epic Air Guitar (2026-09-25)
+- [x] 33.1 **The clip.** `tools/anim-air-guitar.py` (headless Blender) reads `dadwrig.glb`, keys a
+  4 s loop by formula on the knight's own bones (fretting hand out on the neck with vibrato,
+  strumming at 4 Hz, head-bang at 2 Hz, knees on the beat, one windmill with a lean-back and
+  a hop) and exports `Game3DAssets/dadAirGuitar.glb` as the ARMATURE ONLY (158 KB). Posing is
+  by world direction (rotate each bone's current direction onto the wanted one), so the
+  UE-mannequin rest axes never matter. three.js binds the clip to the dad mesh by bone name
+- [x] 33.2 **The riff.** `airGuitarRiff` in `sfx-catalog.json`, Stable Audio 3 Small Music,
+  10 s: shredding lead, power chords, stadium drums, a dive-bomb at the end. Not yet heard
+- [x] 33.3 **The Codex.** Bottom of the Allies tab under a faded "???" heading: "Epic Air
+  Guitar!", "Click him. Turn it up." The modal plays the riff, adds three strobing coloured
+  stage lights pulsing at 140 bpm, leans the camera in on the beat, sways the knight to face
+  the crowd, and cycles the title's hue; close stops the riff and removes the lights.
+  Preview entries can now name `clip` and `clipsFrom` (a clip borrowed from another asset)
+- [ ] 33.4 Open: nobody has heard the riff or seen the show at full frame rate

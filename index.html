@@ -1675,7 +1675,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 // shipped in. `number` is the commit count this change will produce. Do not
 // hand-edit: the stamper matches the two marker lines exactly.
 /* BUILD:START */
-const BUILD = { number: 57, date: '2026-09-25' };
+const BUILD = { number: 58, date: '2026-09-25' };
 /* BUILD:END */
 for (const el of document.querySelectorAll('.build-badge')) el.textContent = `BUILD ${BUILD.number}`;
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -2654,6 +2654,8 @@ const assetList = [
   { key: 'lupin', file: 'lupinCompanion.glb' },
   // The rideable horse (horse.glb rigged by tools/rig-quadruped.py: Idle, Walk, Run)
   { key: 'horseMount', file: 'horseMount.glb' },
+  // The Codex easter egg: an armature-only clip (tools/anim-air-guitar.py) the dad mesh borrows
+  { key: 'airGuitar', file: 'dadAirGuitar.glb' },
   { key: 'dragonOgre', file: 'dragonOgreHybridBossWithAnimation.glb', keepBuffer: true },
   { key: 'ogreWizard', file: 'ogreWizardWithAnimation.glb', keepBuffer: true },
   { key: 'ogreKing', file: 'ogreKingRigged.glb', keepBuffer: true },
@@ -3120,6 +3122,7 @@ const AudioSystem = (() => {
     // Single-file slots
     const singles = {
       playerDeath:   'audio/player-death.wav',
+      airGuitarRiff: 'audio/air-guitar-riff.wav',
       foodPickup:    'audio/food-pickup.wav',
       levelUp:       'audio/level-up.wav',
       waveStart:     'audio/wave-start.wav',
@@ -12368,6 +12371,15 @@ function populateHelpScreen() {
       </div>
     </div>`;
   }
+  // The easter egg. Sits at the bottom of the Allies tab under a quiet heading.
+  allyHtml += '<div class="help-section-title" style="opacity:0.55">???</div>';
+  allyHtml += `<div class="help-item" id="help-airguitar" data-modal-name="Epic Air Guitar!" data-modal-desc="When the last ogre falls and the field goes quiet, the Knight Commander has one more duty. He plants his feet. He raises his left hand to a neck that is not there. And he SHREDS." data-modal-stats="Riff: 11/10 &bull; Windmills per set: 1 &bull; Head-bangs per bar: 2 &bull; Strings: 0 &bull; Damage: to the ears of the ogre horde only" data-modal-color="#ff4fd8" data-modal-enemy="airguitar">
+    <canvas class="help-item-canvas" id="help-enemy-airguitar" width="160" height="160"></canvas>
+    <div class="help-item-info">
+      <div class="help-item-name" style="color:#ff4fd8">Epic Air Guitar!</div>
+      <div class="help-item-desc">Click him. Turn it up.</div>
+    </div>
+  </div>`;
   document.getElementById('help-tab-allies').innerHTML = allyHtml;
 
   // --- ADVANCED TAB ---
@@ -12457,6 +12469,8 @@ async function setupHelpEnemyPreviews() {
     // Allies: their models keep no raw buffer, so they are cloned instead of re-parsed
     { id: 'lupin', modelKey: 'lupin', scale: 2.2 },
     { id: 'thunderhoof', modelKey: 'horseMount', scale: 2.0 },
+    // Easter egg: the dad mesh playing the clip from dadAirGuitar.glb (bone names match)
+    { id: 'airguitar', modelKey: 'charDad', scale: 1.9, clip: 'Air_Guitar', clipsFrom: 'airGuitar', face: true },
   ];
   // Single offscreen renderer shared by all previews (avoids WebGL context limits)
   const offCanvas = document.createElement('canvas');
@@ -12484,12 +12498,14 @@ async function setupHelpEnemyPreviews() {
       const box = new THREE.Box3().setFromObject(model);
       model.position.y -= box.min.y;
       const mixer = new THREE.AnimationMixer(model);
-      for (const clip of gltf.animations) {
-        if (clip.name === 'Idle_A' || clip.name === 'idle' || clip.name === 'Idle') {
+      const clips = et.clipsFrom && assets[et.clipsFrom] ? assets[et.clipsFrom].animations : gltf.animations;
+      for (const clip of clips) {
+        if (et.clip ? clip.name === et.clip : (clip.name === 'Idle_A' || clip.name === 'idle' || clip.name === 'Idle')) {
           mixer.clipAction(clip).play();
           break;
         }
       }
+      if (et.face) model.userData.face = true;
       sc.add(model);
       const ctx = canvas.getContext('2d');
       helpEnemyPreviews[et.id] = { scene: sc, model, mixer, canvas, ctx };
@@ -12504,7 +12520,7 @@ async function setupHelpEnemyPreviews() {
     const dt = helpClock.getDelta();
     for (const prev of Object.values(helpEnemyPreviews)) {
       if (prev.mixer) prev.mixer.update(dt);
-      if (prev.model) prev.model.rotation.y += 0.01;
+      if (prev.model) prev.model.rotation.y = prev.model.userData.face ? Math.sin(performance.now() * 0.0012) * 0.35 : prev.model.rotation.y + 0.01;
       helpRenderer.render(prev.scene, helpCam);
       prev.ctx.clearRect(0, 0, 160, 160);
       prev.ctx.drawImage(offCanvas, 0, 0, 160, 160);
@@ -12579,16 +12595,39 @@ function openHelpModal(item) {
     const cam = new THREE.PerspectiveCamera(30, 1, 0.1, 50);
     cam.position.set(0, 1.2, 4.0);
     cam.lookAt(0, 0.7, 0);
-    _helpModalData = { prev, canvas, cam, ctx: canvas.getContext('2d') };
+    _helpModalData = { prev, canvas, cam, ctx: canvas.getContext('2d'), show: null };
+    // The easter egg gets a stage: the riff, three strobing coloured lights, a
+    // camera that leans in on the beat, and the name flashing in time.
+    if (item.enemyId === 'airguitar') {
+      const lights = [0xff2a6a, 0x2a8aff, 0xffd02a].map((c, i) => {
+        const l = new THREE.PointLight(c, 0, 12, 1.6);
+        l.position.set(Math.cos(i * 2.09) * 2.2, 2.2 + i * 0.3, Math.sin(i * 2.09) * 2.2 + 1);
+        prev.scene.add(l); return l;
+      });
+      const riff = AudioSystem.play('airGuitarRiff', { volume: 0.85 });
+      _helpModalData.show = { lights, riff, t: 0 };
+      if (prev.mixer) prev.mixer.setTime(0);
+    }
     const clock = new THREE.Clock();
     function animModal() {
       _helpModalAnimId = requestAnimationFrame(animModal);
       const dt = clock.getDelta();
-      if (_helpModalData.prev.mixer) _helpModalData.prev.mixer.update(dt);
-      if (_helpModalData.prev.model) _helpModalData.prev.model.rotation.y += 0.012;
-      _helpModalRenderer.render(_helpModalData.prev.scene, _helpModalData.cam);
-      _helpModalData.ctx.clearRect(0, 0, 480, 480);
-      _helpModalData.ctx.drawImage(_helpModalRenderer.domElement, 0, 0, 480, 480);
+      const d = _helpModalData;
+      if (d.prev.mixer) d.prev.mixer.update(dt);
+      if (d.show) {
+        d.show.t += dt;
+        const beat = d.show.t * 2.333;                              // 140 bpm
+        const pulse = Math.pow(1 - (beat % 1), 3);
+        d.show.lights.forEach((l, i) => { l.intensity = 8 + 30 * Math.max(0, Math.sin(beat * Math.PI * 2 + i * 2.09)) + 20 * pulse; });
+        if (d.prev.model) d.prev.model.rotation.y = Math.sin(d.show.t * 1.3) * 0.35;
+        d.cam.position.set(Math.sin(d.show.t * 0.7) * 0.6, 1.15 + pulse * 0.08, 3.6 - pulse * 0.35);
+        d.cam.lookAt(0, 0.75, 0);
+        _helpModalName.style.color = `hsl(${(d.show.t * 160) % 360}, 95%, ${62 + pulse * 25}%)`;
+        _helpModalName.style.transform = `scale(${1 + pulse * 0.12})`;
+      } else if (d.prev.model) d.prev.model.rotation.y += 0.012;
+      _helpModalRenderer.render(d.prev.scene, d.cam);
+      d.ctx.clearRect(0, 0, 480, 480);
+      d.ctx.drawImage(_helpModalRenderer.domElement, 0, 0, 480, 480);
     }
     clock.start();
     animModal();
@@ -12607,6 +12646,12 @@ function openHelpModal(item) {
 function closeHelpModal() {
   _helpModal.classList.remove('active');
   if (_helpModalAnimId) { cancelAnimationFrame(_helpModalAnimId); _helpModalAnimId = null; }
+  const show = _helpModalData && _helpModalData.show;
+  if (show) {
+    for (const l of show.lights) _helpModalData.prev.scene.remove(l);
+    try { if (show.riff && show.riff.source) show.riff.source.stop(); } catch (e) {}
+    _helpModalName.style.transform = '';
+  }
   _helpModalData = null;
 }
 
