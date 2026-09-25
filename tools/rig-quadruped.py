@@ -8,6 +8,8 @@ Options
   --forward DIR    which way the nose points after import: auto | +x | -x | +y | -y
   --log FILE       progress log (the Store launcher swallows stdout)
   --dump FILE      write the landmark JSON (bounds, paws, spine) for inspection
+  --clips a,b,c    keep only these clips (default: all seven)
+  --scale-legs F   multiply leg swing amplitudes (a horse strides less than a terrier)
 
 Built for Lupin (companion dog) but nothing in here is dog-specific: it measures the
 mesh, drops a 22-bone armature on it, weights it by distance to bone segments (bone
@@ -30,6 +32,8 @@ TARGET_FACES = int(opt('--faces', '16000'))
 FORWARD = opt('--forward', 'auto')
 LOG_PATH = opt('--log', None)
 DUMP_PATH = opt('--dump', None)
+CLIPS = opt('--clips', 'Idle,Walk,Run,Jump,Attack,Howl,Bark').split(',')
+LEG_MUL = float(opt('--scale-legs', '1'))
 _log = open(LOG_PATH, 'w', encoding='utf-8') if LOG_PATH else None
 def log(*a):
     s = ' '.join(str(x) for x in a)
@@ -333,9 +337,9 @@ try:
             lo = 'f_lower_' if leg[0] == 'F' else 'b_lower_'
             pw = 'f_paw_' if leg[0] == 'F' else 'b_paw_'
             side = leg[1]
-            out[up + side] = [P(amp_u * s)]
-            out[lo + side] = [P(-amp_l * lift)]
-            out[pw + side] = [P(amp_l * 0.5 * lift)]
+            out[up + side] = [P(amp_u * LEG_MUL * s)]
+            out[lo + side] = [P(-amp_l * LEG_MUL * lift)]
+            out[pw + side] = [P(amp_l * LEG_MUL * 0.5 * lift)]
         return out
 
     def merge(*ds):
@@ -486,6 +490,15 @@ try:
         pose(f, bp['rot'], loc={'root': bp['loc']})
     finish_action(act, F, False); clips.append('Bark')
 
+    # Drop the clips the caller did not ask for (their NLA tracks and actions).
+    adt = arm.animation_data
+    for tr in list(adt.nla_tracks):
+        if tr.name not in CLIPS:
+            adt.nla_tracks.remove(tr)
+    for a in list(bpy.data.actions):
+        if a.name not in CLIPS:
+            bpy.data.actions.remove(a)
+    clips = [c for c in clips if c in CLIPS]
     log('clips', clips)
 
     # ─── 9. export ───────────────────────────────────────────────────────────

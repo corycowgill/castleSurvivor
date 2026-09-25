@@ -371,6 +371,7 @@ rather than out of props we already had. Full design in `NEW-LEVEL-PLAN.md`.
   26.6's own fixes are **not yet seen rendered**
 
 ## Changelog
+- 2026-09-25 - Phase 30: the rideable horse. horse.glb rigged through the same Blender auto-rig (Idle/Walk/Run), three Stable Audio 3 voice slots; a horse gallops in every two minutes, walk into it to ride one minute at double foot speed with a HUD countdown, then it bolts.
 - 2026-09-25 - Phase 29: Lupin, the companion dog. Trellis mesh from the user's art, auto-rigged and animated headless in Blender (tools/rig-quadruped.py), four Stable Audio 3 voice slots, heels to the nearest knight, bites for 3 + 0.6/wave, barks at waves and howls at bosses. Settings toggle `Lupin`.
 - 2026-09-23 - Phase 26: Emberreach, a volcanic ogre-homeland map built end to end through the asset pipeline. New VOLCANIC/OGRE prompt templates, 6 ground textures, 12 free charred prop variants, per-map light emitters, impassable lava ribbons, and tools/generate-emberreach.mjs. Asset batches 5/9/10 running.
 - 2026-09-23 - Phase 25: per-knight profiles. Gold and Forge ranks are per knight, unlocks and leaderboards stay shared, and a co-op run pays every knight in full. v1 saves migrate by copying the old wallet to all three.
@@ -503,3 +504,30 @@ the asset-run post-mortem in `NEW-LEVEL-PLAN.md`.
   kite run survives to wave 13 with 0% snag
 - [ ] 29.6 Open: the user has not seen her move or heard the clips; the Howl is the weakest
   clip (a fluffy Trellis head has little neck to lift); no Sit/Death clips (she cannot die)
+
+## Phase 30 - The horse (2026-09-25)
+- [x] 30.1 **Rig.** `AssetFactory/glb_precompress/horse.glb` (the pre-Draco original) through
+  `tools/rig-quadruped.py --clips Idle,Walk,Run --scale-legs 0.85`; new `--clips` and
+  `--scale-legs` options. Ships as `Game3DAssets/horseMount.glb` (0.65 MB). `horse.glb` stays
+  the static prop the map generators place
+- [x] 30.2 **Voice.** `horseNeigh` x2, `horseGallop` x2, `horseSnort` x2 in `sfx-catalog.json`,
+  Web Audio patches as the last fallback. Not yet listened to by the user
+- [x] 30.3 **In the game.** `HORSE` table + `spawnHorse/updateHorse/mountHorse/dismountHorse`.
+  First horse at 45 s, then every 120 s: it gallops in from the spawn ring to a spot 7 units
+  from the party, neighs, announces itself, and waits 30 s. Any standing knight who walks
+  within 2.3 units mounts. Riding: 60 s, `HORSE.speedMul` 2x on the stride only (dash,
+  weapons, mire all unchanged), the horse glued under the knight and turning with him, Run/Idle
+  by the knight's own moving flag, a `#ride-timer` HUD strip counting down (orange under 10 s).
+  Time up or knight downed: the knight is set back on the ground and the horse bolts for 6 s
+  and despawns. Unmounted after 30 s it wanders off the same way
+- [x] 30.4 **The straddle.** No riding clip exists for the knight, so `applyRidePose` runs after
+  the player mixers each frame while mounted: for thigh->calf and calf->foot it reads the
+  bone's current world direction, rotates it onto the `RIDE_POSE` direction (knight frame,
+  facing +Z) with `setFromUnitVectors`, and writes the result back bone-local. Holds through
+  Sword_Attack. Rider sits at `riderY` 0.75 on a 3.4-scale horse
+- [x] 30.5 **Verify:** probe: arrival in 2.5 s at 8 units, mount on touch, 14.9 units/s mounted
+  vs 8.0 on foot, HUD `Riding 0:31` at the half, dismount at 60 s with the knight back at y 0,
+  horse gone 7 s later, remount on the next horse, death dismounts. `npm test` clean. Side
+  close-up in `tools/shots/pose-kingsfield-1.png`
+- [ ] 30.6 Open: the user has not ridden it; the legs are judged from the top-down camera only;
+  no mount/dismount transition animation (it is a cut)

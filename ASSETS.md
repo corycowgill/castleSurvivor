@@ -15,6 +15,7 @@ All GLB files are located in `Game3DAssets/`
 | 7 | dadKnightRigged | Dad Rigged | `dadKnightRigged.glb` | Intermediate Dad rig |
 | 8 | knightAnims | Knight Animations | `knightWithAnimations.glb` | Shared knight animation source |
 | 9 | lupin | Lupin | `lupinCompanion.glb` | Companion dog: Trellis mesh from `lupinArt1.png`, rigged and animated by `tools/rig-quadruped.py` (Idle, Walk, Run, Jump, Attack, Howl, Bark) |
+| 10 | horseMount | Horse (rideable) | `horseMount.glb` | `horse.glb` rigged and animated by `tools/rig-quadruped.py --clips Idle,Walk,Run`; the static `horse.glb` prop is unchanged |
 
 ## Enemies
 

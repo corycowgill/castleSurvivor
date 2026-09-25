@@ -938,6 +938,9 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
   transition: opacity 0.3s, transform 0.15s;
 }
 #streak-display.active { opacity: 1; }
+#ride-timer { top: 64px; font-size: 15px; color: #e8c860; z-index: 100; }
+#ride-timer:empty { display: none; }
+#ride-timer.ending { color: #ff9955; }
 
 /* ─── WAVE EVENT BANNER ─── */
 #wave-event-banner {
@@ -1634,6 +1637,7 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
 <div class="dmg-dir dmg-dir-right" id="dmg-right"><svg viewBox="0 0 80 80"><polygon points="40,0 10,40 70,40" fill="rgba(200,20,0,0.6)"/></svg></div>
 <div id="streak-display" class="hud-strip"></div>
 <div id="wave-event-banner" class="hud-strip"><span id="wave-event-text"></span><span id="wave-event-desc"></span></div>
+<div id="ride-timer" class="hud-strip"></div>
 <canvas id="minimap"></canvas>
 <div id="touch-controls">
   <div id="touch-stick-zone"><div id="touch-stick-base"></div><div id="touch-stick-knob"></div></div>
@@ -1668,7 +1672,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 // shipped in. `number` is the commit count this change will produce. Do not
 // hand-edit: the stamper matches the two marker lines exactly.
 /* BUILD:START */
-const BUILD = { number: 50, date: '2026-09-25' };
+const BUILD = { number: 52, date: '2026-09-25' };
 /* BUILD:END */
 for (const el of document.querySelectorAll('.build-badge')) el.textContent = `BUILD ${BUILD.number}`;
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -2525,6 +2529,7 @@ function triggerPlayerDeath(p) {
   AudioSystem.play('playerDeath', { volume: 0.7 });
   playPlayerAnimFor(pl, 'Death_C', false);
   companionReact('mourn');
+  if (pl.riding) dismountHorse(true);
   triggerShake(1.0, 0.8);
   if (pl.mesh) vfx.deathBurst(pl.mesh.position);
 
@@ -2644,6 +2649,8 @@ const assetList = [
   { key: 'wolf', file: 'wolfWithAnimation.glb', keepBuffer: true },
   // Lupin, the party's dog (tools/rig-quadruped.py output; cloned once per run)
   { key: 'lupin', file: 'lupinCompanion.glb' },
+  // The rideable horse (horse.glb rigged by tools/rig-quadruped.py: Idle, Walk, Run)
+  { key: 'horseMount', file: 'horseMount.glb' },
   { key: 'dragonOgre', file: 'dragonOgreHybridBossWithAnimation.glb', keepBuffer: true },
   { key: 'ogreWizard', file: 'ogreWizardWithAnimation.glb', keepBuffer: true },
   { key: 'ogreKing', file: 'ogreKingRigged.glb', keepBuffer: true },
@@ -2969,6 +2976,15 @@ const AudioSystem = (() => {
       case 'dogHappy':
         tone(t, 0.12, { type: 'sine', freq: 700 * p, freqEnd: 1100 * p, gain: 0.3, out });
         break;
+      case 'horseNeigh':
+        tone(t, 0.7, { type: 'sawtooth', freq: 900 * p, freqEnd: 350 * p, gain: 0.22, attack: 0.05, out });
+        break;
+      case 'horseGallop':
+        for (let i = 0; i < 4; i++) noiseBurst(t + i * 0.13, 0.05, { type: 'lowpass', freq: 400 * p, gain: 0.35, out });
+        break;
+      case 'horseSnort':
+        noiseBurst(t, 0.25, { type: 'lowpass', freq: 700 * p, freqEnd: 200 * p, gain: 0.3, out });
+        break;
       case 'swordHit':
         noiseBurst(t, 0.07, { type: 'highpass', freq: 1800 * p, gain: 0.5, out });
         tone(t, 0.09, { type: 'sine', freq: 140 * p, freqEnd: 60 * p, gain: 0.5, out });
@@ -3126,6 +3142,9 @@ const AudioSystem = (() => {
       dogHowl:     ['audio/dog-howl-1.wav','audio/dog-howl-2.wav'],
       dogAttack:   ['audio/dog-attack-1.wav','audio/dog-attack-2.wav','audio/dog-attack-3.wav'],
       dogHappy:    ['audio/dog-happy-1.wav','audio/dog-happy-2.wav'],
+      horseNeigh:  ['audio/horse-neigh-1.wav','audio/horse-neigh-2.wav'],
+      horseGallop: ['audio/horse-gallop-1.wav','audio/horse-gallop-2.wav'],
+      horseSnort:  ['audio/horse-snort-1.wav','audio/horse-snort-2.wav'],
     };
     const loads = [];
     for (const [name, url] of Object.entries(singles)) {
@@ -4252,6 +4271,7 @@ function makePlayer(index) {
     banishCharges: 1,
     // Which device drives this player; assigned at join (Phase B).
     input: index === 0 ? 'primary' : null,
+    riding: false,
   };
 }
 // players[0] exists from boot so nothing has to null-check it.
@@ -6133,8 +6153,9 @@ function updatePlayer(p, dt) {
 
     const wade = mires.length && inMire(pmesh.position.x, pmesh.position.z) ? MIRE_PLAYER : 1;
     ps._inMire = wade < 1;
-    let newX = pmesh.position.x + dx * ps.speed * wade * dt;
-    let newZ = pmesh.position.z + dz * ps.speed * wade * dt;
+    const stride = ps.speed * wade * (p.riding ? HORSE.speedMul : 1);
+    let newX = pmesh.position.x + dx * stride * dt;
+    let newZ = pmesh.position.z + dz * stride * dt;
 
     // Clamp to world bounds
     newX = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, newX));
@@ -9857,6 +9878,8 @@ function clearRun() {
   _banishMode = false;
   resetPartyToSolo();
   disposeCompanion();
+  disposeHorse();
+  horseSpawnTimer = HORSE.spawnEvery - HORSE.firstSpawn;
   _pickingPlayer = null;
   _lastPickerIndex = -1;
   for (const p of players) p.picks = [];
@@ -10174,6 +10197,7 @@ function updateGame(dt, rawDt = dt) {
     updateEnemyProjectiles(dt);
     updateBossBoulders(dt);
     for (const pl of players) updateWeapons(pl, dt);
+    updateHorse(dt);   // after weapons: an auto-attack may turn the knight, and the horse must turn with him
     updateProjectiles(dt);
     updateOrbitalBombs(dt);
     updateBurnPatches(dt);
@@ -10251,7 +10275,7 @@ function updateGame(dt, rawDt = dt) {
     if (_swarmIndicatorTimer > 0) _swarmIndicatorTimer -= dt;
 
     // Player animation mixers (one per co-op player)
-    if (_renderEnabled) for (const p of players) if (p.mixer) p.mixer.update(dt);
+    if (_renderEnabled) for (const p of players) if (p.mixer) { p.mixer.update(dt); if (p.riding) applyRidePose(p); }
   }
 }
 
@@ -10450,6 +10474,232 @@ function updateCompanion(dt) {
   c.mesh.rotation.y = Math.atan2(dx, dz);
   c.moving = true;
   playCompanionAnim(speed === LUPIN.runSpeed ? 'Run' : 'Walk', true);
+}
+
+// ─── MOUNT: THE HORSE ───
+// Every so often a saddled horse gallops in from the edge and waits near the
+// party. Walk into it to ride: one minute at double foot speed, weapons still
+// working, then the knight is set down and the horse bolts. One horse at a time,
+// any knight can take it. Like Lupin it is neither a player nor an enemy.
+const HORSE = {
+  model: 'horseMount', scale: 3.4, radius: 0.9,
+  spawnEvery: 120, firstSpawn: 45,   // seconds between horses; the first comes early
+  waitSeconds: 30,                   // how long it stands around before wandering off
+  rideSeconds: 60, speedMul: 2,
+  arriveDist: 7, mountRadius: 2.3,
+  arriveSpeed: 15, fleeSpeed: 17, fleeSeconds: 6,
+  riderY: 0.75, riderBack: 0.1,      // knight lift into the saddle, and a nudge rearward
+};
+// Where each leg bone should point while in the saddle, in the knight's own
+// frame (facing +Z, +X his left): thighs forward-down and spread, shins hanging.
+// Applied after the animation each frame, so it holds through a sword swing too.
+const RIDE_POSE = {
+  thigh_l: [0.30, -0.55, 0.78], thigh_r: [-0.30, -0.55, 0.78],
+  calf_l: [0.18, -0.96, -0.15], calf_r: [-0.18, -0.96, -0.15],
+};
+const RIDE_CHAIN = [['thigh_l', 'calf_l'], ['calf_l', 'foot_l'], ['thigh_r', 'calf_r'], ['calf_r', 'foot_r']];
+let horse = null;
+let horseSpawnTimer = 0;
+const _rideQ = new THREE.Quaternion(), _rideQ2 = new THREE.Quaternion(), _rideV = new THREE.Vector3(), _rideV2 = new THREE.Vector3();
+
+function spawnHorse() {
+  disposeHorse();
+  if (!assets[HORSE.model] || !playerMesh) return null;
+  const gltf = cloneEnemyModel(HORSE.model);
+  if (!gltf) return null;
+  const mesh = gltf.scene;
+  mesh.scale.setScalar(HORSE.scale);
+  mesh.traverse(c => { if (c.isMesh) { c.castShadow = true; c.receiveShadow = true; } });
+  // Comes in from the arena edge toward a spot beside the party.
+  const focus = partyFocus().center;
+  const a = Math.random() * Math.PI * 2;
+  const goalX = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, focus.x + Math.cos(a) * HORSE.arriveDist));
+  const goalZ = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, focus.z + Math.sin(a) * HORSE.arriveDist));
+  const startDist = ENEMY_SPAWN_DISTANCE * 0.8;
+  mesh.position.set(
+    Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, focus.x + Math.cos(a) * startDist)), 0,
+    Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, focus.z + Math.sin(a) * startDist)));
+  scene.add(mesh);
+  alignToGround(mesh);
+  const mixer = new THREE.AnimationMixer(mesh);
+  const anims = {};
+  for (const clip of gltf.animations) anims[clip.name] = mixer.clipAction(clip);
+  horse = { mesh, mixer, anims, currentAnim: '', groundY: mesh.position.y, phase: 'arriving', timer: 0, rider: null,
+            goalX, goalZ, fleeX: 0, fleeZ: 0, snortTimer: 3, hoofTimer: 0, hudTimer: 0 };
+  playHorseAnim('Run', true);
+  return horse;
+}
+
+function disposeHorse() {
+  if (!horse) return;
+  if (horse.rider) dismountHorse(false);
+  scene.remove(horse.mesh);
+  horse.mixer.stopAllAction();
+  horse.mixer.uncacheRoot(horse.mesh);
+  disposeSkeletons(horse.mesh);
+  horse = null;
+  const el = document.getElementById('ride-timer');
+  if (el) el.textContent = '';
+}
+
+function playHorseAnim(name, loop = true) {
+  const h = horse;
+  if (!h || h.currentAnim === name || !h.anims[name]) return;
+  if (h.anims[h.currentAnim]) h.anims[h.currentAnim].fadeOut(0.15);
+  h.currentAnim = name;
+  const action = h.anims[name];
+  action.reset();
+  action.setLoop(loop ? THREE.LoopRepeat : THREE.LoopOnce);
+  action.clampWhenFinished = !loop;
+  action.fadeIn(0.15);
+  action.play();
+}
+
+function mountHorse(p) {
+  const h = horse;
+  if (!h || h.rider || !p.mesh) return;
+  h.rider = p; h.phase = 'ridden'; h.timer = HORSE.rideSeconds;
+  p.riding = true;
+  p._groundY = p.mesh.position.y;
+  p._rideBones = {};
+  p.mesh.traverse(c => { if (c.isBone && /^(thigh|calf|foot)_[lr]$/.test(c.name)) p._rideBones[c.name] = c; });
+  h.mesh.rotation.y = p.mesh.rotation.y;
+  playHorseAnim('Idle', true);
+  AudioSystem.play('horseNeigh', { volume: 0.55, pitch: 1.0 + Math.random() * 0.1 });
+  spawnDamageNumber(p.mesh.position, 'MOUNTED!', '#e8c860');
+  vfx.collectEffect(p.mesh.position, 'speed');
+  triggerShake(0.15, 0.1);
+}
+
+// `flee`: the horse runs off (time up, rider down); false just clears the rider.
+function dismountHorse(flee = true) {
+  const h = horse;
+  if (!h || !h.rider) return;
+  const p = h.rider;
+  h.rider = null;
+  p.riding = false;
+  p._rideBones = null;
+  if (p.mesh) p.mesh.position.y = p._groundY != null ? p._groundY : 0;
+  const el = document.getElementById('ride-timer');
+  if (el) el.textContent = '';
+  if (!flee) return;
+  h.phase = 'fleeing'; h.timer = HORSE.fleeSeconds;
+  // Straight away from the knight, starting from just beside them.
+  const a = Math.random() * Math.PI * 2;
+  h.fleeX = Math.cos(a); h.fleeZ = Math.sin(a);
+  h.mesh.position.x += h.fleeX * 1.2; h.mesh.position.z += h.fleeZ * 1.2;
+  h.mesh.position.y = h.groundY;
+  h.mesh.rotation.y = Math.atan2(h.fleeX, h.fleeZ);
+  playHorseAnim('Run', true);
+  AudioSystem.play('horseNeigh', { volume: 0.5, pitch: 0.9 + Math.random() * 0.1 });
+  if (p.mesh) spawnDamageNumber(p.mesh.position, 'THE HORSE BOLTS', '#c8b090');
+}
+
+function moveHorse(h, dx, dz, speed, dt) {
+  const pos = h.mesh.position;
+  let nx = pos.x + dx * speed * dt, nz = pos.z + dz * speed * dt;
+  nx = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, nx));
+  nz = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, nz));
+  resolveObstacles(nx, nz, HORSE.radius);
+  pos.x = _colOut.x; pos.z = _colOut.z;
+  h.mesh.rotation.y = Math.atan2(dx, dz);
+}
+
+function updateHorse(dt) {
+  if (!horse) {
+    horseSpawnTimer += dt;
+    if (horseSpawnTimer >= HORSE.spawnEvery) { horseSpawnTimer = 0; spawnHorse(); }
+    return;
+  }
+  const h = horse;
+  if (_renderEnabled) h.mixer.update(dt);
+  const pos = h.mesh.position;
+
+  if (h.phase === 'arriving') {
+    const dx = h.goalX - pos.x, dz = h.goalZ - pos.z;
+    const d = Math.hypot(dx, dz);
+    if (d < 1.0) {
+      h.phase = 'waiting'; h.timer = HORSE.waitSeconds;
+      playHorseAnim('Idle', true);
+      AudioSystem.play('horseNeigh', { volume: 0.6 });
+      spawnDamageNumber(pos, 'A HORSE!', '#e8c860');
+      const announce = getWaveAnnounce();
+      announce.textContent = 'A horse waits nearby: ride it for a minute at double speed';
+      announce.style.color = '#e0b862';
+      announce.style.opacity = '1';
+      setTimeout(() => { if (announce.textContent.startsWith('A horse')) announce.style.opacity = '0'; }, 3000);
+    } else {
+      moveHorse(h, dx / d, dz / d, HORSE.arriveSpeed, dt);
+      h.hoofTimer -= dt;
+      if (h.hoofTimer <= 0) { h.hoofTimer = 1.2; AudioSystem.play('horseGallop', { volume: 0.25 }); }
+    }
+  } else if (h.phase === 'waiting') {
+    h.timer -= dt;
+    h.snortTimer -= dt;
+    if (h.snortTimer <= 0) { h.snortTimer = 5 + Math.random() * 5; AudioSystem.play('horseSnort', { volume: 0.35 }); }
+    for (const pl of players) {
+      if (!pl.mesh || pl.state.isDead || pl.riding) continue;
+      if (distSqXZ(pl.mesh.position, pos) < HORSE.mountRadius * HORSE.mountRadius) { mountHorse(pl); return; }
+    }
+    if (h.timer <= 0) {
+      h.phase = 'fleeing'; h.timer = HORSE.fleeSeconds;
+      const near = nearestLivePlayer(pos.x, pos.z);
+      const ax = near ? pos.x - near.mesh.position.x : 1, az = near ? pos.z - near.mesh.position.z : 0;
+      const al = Math.hypot(ax, az) || 1;
+      h.fleeX = ax / al; h.fleeZ = az / al;
+      playHorseAnim('Run', true);
+    }
+  } else if (h.phase === 'ridden') {
+    const p = h.rider;
+    if (!p || !p.mesh || p.state.isDead) { dismountHorse(true); return; }
+    h.timer -= dt;
+    // The horse is glued under the knight: same spot, same facing.
+    const yaw = p.mesh.rotation.y;
+    pos.x = p.mesh.position.x - Math.sin(yaw) * HORSE.riderBack;
+    pos.z = p.mesh.position.z - Math.cos(yaw) * HORSE.riderBack;
+    pos.y = h.groundY;
+    h.mesh.rotation.y = yaw;
+    p.mesh.position.y = (p._groundY || 0) + HORSE.riderY;
+    playHorseAnim(p.state._moving ? 'Run' : 'Idle', true);
+    if (p.state._moving) {
+      h.hoofTimer -= dt;
+      if (h.hoofTimer <= 0) { h.hoofTimer = 1.1; AudioSystem.play('horseGallop', { volume: 0.3, pitch: 0.95 + Math.random() * 0.1 }); }
+    }
+    h.hudTimer -= dt;
+    if (h.hudTimer <= 0) {
+      h.hudTimer = 0.2;
+      const el = document.getElementById('ride-timer');
+      if (el) { const s = Math.max(0, Math.ceil(h.timer)); el.textContent = `Riding  ${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; el.classList.toggle('ending', h.timer < 10); }
+    }
+    if (h.timer <= 0) dismountHorse(true);
+  } else if (h.phase === 'fleeing') {
+    h.timer -= dt;
+    moveHorse(h, h.fleeX, h.fleeZ, HORSE.fleeSpeed, dt);
+    if (h.timer <= 0) disposeHorse();
+  }
+}
+
+// Straddle: bend the knight's legs around the saddle after the animation has
+// posed them. Runs only while mounted, right after the player mixers tick.
+function applyRidePose(p) {
+  const bones = p._rideBones;
+  if (!bones) return;
+  p.mesh.updateMatrixWorld(true);
+  for (let i = 0; i < RIDE_CHAIN.length; i++) {
+    const bone = bones[RIDE_CHAIN[i][0]], child = bones[RIDE_CHAIN[i][1]];
+    if (!bone || !child) continue;
+    // Current world direction of the bone (toward its child) vs the one we want.
+    bone.getWorldPosition(_rideV); child.getWorldPosition(_rideV2);
+    _rideV2.sub(_rideV).normalize();
+    const d = RIDE_POSE[RIDE_CHAIN[i][0]];
+    _rideV.set(d[0], d[1], d[2]).applyQuaternion(p.mesh.quaternion);
+    _rideQ.setFromUnitVectors(_rideV2, _rideV);           // world-space correction
+    bone.getWorldQuaternion(_rideQ2);
+    _rideQ.multiply(_rideQ2);                              // new world rotation
+    bone.parent.getWorldQuaternion(_rideQ2).invert();
+    bone.quaternion.copy(_rideQ2.multiply(_rideQ));        // back to bone-local
+    bone.updateWorldMatrix(false, true);
+  }
 }
 
 // ─── GAMEPAD ───
@@ -12259,6 +12509,7 @@ init().then(() => {
       UPGRADES, WEAPON_STATS, MAPS, OGRE_LEVELS, FINAL_WAVE,
       players, nearestPlayer, alivePlayers, joinPlayer, makePlayer, createPlayer, partyFocus, AudioSystem, projectiles, CHARACTER_PRIMARY,
       get companion() { return companion; }, spawnCompanion, disposeCompanion, companionReact, LUPIN,
+      get horse() { return horse; }, spawnHorse, disposeHorse, mountHorse, dismountHorse, HORSE, RIDE_POSE,
       openAudit, closeAudit, collectAudit, renderAudit,
       setLowQuality, applyQualityMode, detectMobile,
       get lowQuality() { return LOW_QUALITY; },

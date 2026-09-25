@@ -24,7 +24,10 @@
     { "slot": "dogBark",       "file": "dog-bark",       "seconds": 2, "variations": 3, "trim": 0.9,  "prompt": "A small fluffy terrier dog barking twice, sharp bright yappy bark with a short breathy tail, close-up, outdoor courtyard, dry, no echo. Length: 2 seconds" },
     { "slot": "dogHowl",       "file": "dog-howl",       "seconds": 4, "variations": 2, "trim": 3.2,  "prompt": "A small dog howling at the moon, a rising sustained melodic howl that wavers and trails off, close-up, open field at night, natural. Length: 4 seconds" },
     { "slot": "dogAttack",     "file": "dog-attack",     "seconds": 2, "variations": 3, "trim": 0.9,  "prompt": "A small dog snarling and snapping its jaws in a quick bite, low growl into a sharp snap, close-up, dry, very short. Length: 2 seconds" },
-    { "slot": "dogHappy",      "file": "dog-happy",      "seconds": 2, "variations": 2, "trim": 0.9,  "prompt": "A small excited dog panting and giving a happy high-pitched yip, playful, close-up, dry, short. Length: 2 seconds" }
+    { "slot": "dogHappy",      "file": "dog-happy",      "seconds": 2, "variations": 2, "trim": 0.9,  "prompt": "A small excited dog panting and giving a happy high-pitched yip, playful, close-up, dry, short. Length: 2 seconds" },
+    { "slot": "horseNeigh",    "file": "horse-neigh",    "seconds": 3, "variations": 2, "trim": 2.0,  "prompt": "A horse whinnying and neighing once, bright and spirited, close-up, outdoor village yard, dry, natural. Length: 3 seconds" },
+    { "slot": "horseGallop",   "file": "horse-gallop",   "seconds": 3, "variations": 2, "trim": 1.6,  "prompt": "A single horse galloping past on packed dirt, fast rhythmic hoofbeats, close-up, outdoor, dry, no music. Length: 3 seconds" },
+    { "slot": "horseSnort",    "file": "horse-snort",    "seconds": 2, "variations": 2, "trim": 0.9,  "prompt": "A horse snorting and blowing through its nostrils with a soft bridle jingle, close-up, dry, short. Length: 2 seconds" }
 
   ]
 }
