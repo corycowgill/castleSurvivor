@@ -732,3 +732,35 @@ than inspection.
   sting needs a prior user gesture and would be dropped on a cold load
 - [x] 36.3 **Verified** with `tools/intro-shot.mjs`: ident at 0.3-3.6 s over the loading screen,
   title at 6 s, no JS errors. Frames in `tools/shots/intro-*.png`
+
+## Phase 37 - Prop geometry budget (2026-09-26)
+- [x] 37.1 **Measured the scene, not the code.** `tools/glb-tris.mjs` reports triangles per GLB and
+  a probe sums the live scene: **66.9 M triangles, 99.5% of them map props**. Trellis emits at a
+  fixed marching-cubes density, so a lantern post (99,558) and a bush (99,560) cost the same as a
+  castle. 197 of 284 files were over 50k
+- [x] 37.2 **`tools/decimate-props.mjs`.** Welds first (Trellis split vertices stop the simplifier),
+  then meshopt `simplify` to a per-file triangle budget, then dedup/prune/Draco so file size holds.
+  Skips any GLB containing a skin — every rigged character, enemy and creature — because those are
+  seen close up and skinning does not decimate cleanly. Originals copied to
+  `AssetFactory/glb_predecimate/` (gitignored; also recoverable from git history), never overwritten
+- [x] 37.3 **Applied** at `--budget 4000 --min-tris 12000`: 242 files, 18.06 M → 3.74 M triangles.
+  The simplifier kept 20.7% rather than the 5.4% asked, because `error: 0.02` caps how far it will
+  go — deliberate, to protect silhouettes
+
+  | | before | after |
+  |---|---|---|
+  | prop geometry on disk | 18.06 M tris | 3.74 M |
+  | Kingsfield scene | 66.9 M tris | 17.8 M |
+  | drawn per frame, wave 12 | 19.26 M | 11.69 M |
+  | heap | 603 MB | 465 MB |
+  | mean / p99.9 | 16.7 ms / 22.0 ms | 16.7 ms / 22.0 ms (already at the 60 Hz cap) |
+  | frames over 50 ms (6 min) | 5 | 3 |
+
+- [x] 37.4 **Verified.** `predec-kingsfield-*.png` vs `postdec-kingsfield-*.png` are
+  indistinguishable at the gameplay camera (cart, hay bales, pot, stool, cottage identical); all
+  five maps load; `npm test` clean; profile at wave 12 clean. The 138 MB heap drop matters as much
+  as the triangles for Phase 20's phone build
+- [ ] 37.5 Open: a looser `error` would reach the 4k budget properly (another ~2.8 M triangles) but
+  needs its own visual pass; the 20 rigged files (2.8 M triangles, `parkerKnightFinal` alone is
+  377,874) want a skin-aware decimation or an LOD; `simplify` should move into the AssetFactory
+  pipeline so new assets never ship raw

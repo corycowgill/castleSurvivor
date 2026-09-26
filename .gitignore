@@ -25,3 +25,5 @@ tools/reports/mirefen-*.json
 tools/reports/*.out
 # Frame-trace captures (regenerable, ~1.4 MB each)
 tools/reports/frame-trace-*.json
+# Pre-decimation originals (recoverable from git history too)
+AssetFactory/glb_predecimate/
