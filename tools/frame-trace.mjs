@@ -67,6 +67,10 @@ const browser = await puppeteer.launch({
   executablePath: findBrowser(), headless: !flag('headed'), protocolTimeout: 900000,
   args: [...(flag('gpu') ? ['--use-gl=angle', '--use-angle=d3d11', '--enable-gpu-rasterization', '--ignore-gpu-blocklist', '--headless=new']
     : ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist']),
+    // --uncapped removes the 60 Hz presentation cap. Capped runs answer "does it
+    // hold 60?"; uncapped answers "how much headroom is left", which is what a
+    // weaker machine or a heavier wave actually spends.
+    ...(flag('uncapped') ? ['--disable-gpu-vsync', '--disable-frame-rate-limit'] : []),
     '--autoplay-policy=no-user-gesture-required', '--window-size=1280,800', '--mute-audio'],
   defaultViewport: { width: 1280, height: 800 },
 });

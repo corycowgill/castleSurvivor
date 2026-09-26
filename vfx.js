@@ -1146,6 +1146,19 @@ class ParticleGroup {
     this.geo.instanceCount = writeIdx;
     this.points.visible = writeIdx > 0;
     if (writeIdx > 0) {
+      // Upload only the live slice. A BufferAttribute with the default
+      // updateRange (count -1) re-uploads the WHOLE array, so a group holding
+      // five particles still sent all 800 instances: 57,600 bytes per group per
+      // frame, ~34 MB/s across the active groups at 60 fps. Live counts are
+      // normally a small fraction of the capacity.
+      // (three 0.164 uses the updateRange object; addUpdateRange arrived in r166.)
+      this.posAttr.updateRange.offset = 0; this.posAttr.updateRange.count = writeIdx * 3;
+      this.scaleAttr.updateRange.offset = 0; this.scaleAttr.updateRange.count = writeIdx * 2;
+      this.rotAttr.updateRange.offset = 0; this.rotAttr.updateRange.count = writeIdx * 1;
+      this.colorAttr.updateRange.offset = 0; this.colorAttr.updateRange.count = writeIdx * 3;
+      this.paramAttr.updateRange.offset = 0; this.paramAttr.updateRange.count = writeIdx * 4;
+      this.stretchAttr.updateRange.offset = 0; this.stretchAttr.updateRange.count = writeIdx * 3;
+      this.frameAttr.updateRange.offset = 0; this.frameAttr.updateRange.count = writeIdx * 2;
       this.posAttr.needsUpdate = true;
       this.scaleAttr.needsUpdate = true;
       this.rotAttr.needsUpdate = true;
