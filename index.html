@@ -6,6 +6,10 @@
 <title>Castle Survivor</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@700;900&display=swap" rel="stylesheet">
+<!-- Studio ident. Vendored from gameCentral/intro/hallucinated-intro.js so this
+     game stays a self-contained deploy; re-copy that file to take an update.
+     Plain script, not a module: it defines window.HallucinatedIntro. -->
+<script src="intro/hallucinated-intro.js"></script>
 <style>
 /* Title art. The public plate is the default so the loading screen is already
    correct before any script runs; Private Mode off swaps in the family art. */
@@ -1719,6 +1723,29 @@ body.boss-active #wave-event-banner { top: 62px; }
 </head>
 <body>
 
+<!-- Start the studio ident before anything else paints. This has to be a
+     classic script at the top of <body>, not the module below: a module is
+     deferred until the document has parsed and its imports have resolved, which
+     let the loading screen show for a beat first. Body exists by here, so the
+     overlay can attach immediately. -->
+<script>
+  window.__studioIntro = (function () {
+    try {
+      var q = new URLSearchParams(location.search);
+      // Every harness in tools/ boots with ?debug and would otherwise wait out
+      // the ident, and its overlay would swallow the first synthetic click.
+      if (q.has('debug') || q.has('nointro') || !window.HallucinatedIntro) return Promise.resolve();
+      return window.HallucinatedIntro.play({
+        skippable: true,
+        // A sting needs a prior user gesture; on a cold load there is none, so
+        // it would be dropped silently. Turn on if the ident ever moves behind
+        // a click-to-start.
+        sound: false,
+      }).catch(function () {});
+    } catch (e) { return Promise.resolve(); }
+  })();
+</script>
+
 <div id="loading-screen">
   <h1>Castle Survivor</h1>
   <div class="subtitle">A Tale of Steel and Sorcery</div>
@@ -2041,7 +2068,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 // shipped in. `number` is the commit count this change will produce. Do not
 // hand-edit: the stamper matches the two marker lines exactly.
 /* BUILD:START */
-const BUILD = { number: 59, date: '2026-09-26' };
+const BUILD = { number: 60, date: '2026-09-26' };
 /* BUILD:END */
 for (const el of document.querySelectorAll('.build-badge')) el.textContent = `BUILD ${BUILD.number}`;
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -5489,6 +5516,10 @@ function createHPBarSprite(barColor = '#cc2222') {
   const cvs = document.createElement('canvas');
   cvs.width = 64; cvs.height = 8;
   const tex = new THREE.CanvasTexture(cvs);
+  // These re-upload on every HP change (up to ~480/s at wave 12). A mipmap
+  // chain would be rebuilt on each one and the bar is never minified.
+  tex.generateMipmaps = false;
+  tex.minFilter = THREE.LinearFilter;
   const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false });
   const sprite = new THREE.Sprite(mat);
   sprite.scale.set(1.8, 0.25, 1);
@@ -6317,6 +6348,9 @@ function spawnDamageNumber(position, amount, color = '#c9a253', big = false) {
   // Text popups ("+15 HP", "SLOWED") always show; numeric ones honour the setting
   const numeric = typeof amount !== 'string';
   if (numeric && !settings.dmgNumbers) return;
+  // A merge re-draws the canvas and re-uploads the texture, so it has to sit
+  // under the same per-frame ceiling as a fresh number.
+  if (numeric && _dmgNumThisFrame >= _DMG_NUM_PER_FRAME) return;
   if (numeric) {
     for (let i = damageNumbers.length - 1; i >= 0; i--) {
       const e = damageNumbers[i];
@@ -6324,6 +6358,7 @@ function spawnDamageNumber(position, amount, color = '#c9a253', big = false) {
       const dx = e.sprite.position.x - position.x, dz = e.sprite.position.z - position.z;
       if (dx * dx + dz * dz > 0.8) continue;
       e.amount += amount; e.big = e.big || big; e.lifetime = 1.0;
+      _dmgNumThisFrame++;
       _drawDmgText(e.sprite.material.map.image.getContext('2d'), String(Math.round(e.amount)), color, e.big);
       e.sprite.material.map.needsUpdate = true;
       e.sprite.scale.set(e.big ? 2.6 : 2, e.big ? 1.3 : 1, 1);
@@ -6347,6 +6382,8 @@ function spawnDamageNumber(position, amount, color = '#c9a253', big = false) {
     cvs.width = 128; cvs.height = 64;
     _drawDmgText(cvs.getContext('2d'), text, color, big);
     const texture = new THREE.CanvasTexture(cvs);
+    texture.generateMipmaps = false;           // re-uploaded on every reuse and merge
+    texture.minFilter = THREE.LinearFilter;
     const sprite = new THREE.Sprite(
       new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: false })
     );
@@ -10687,8 +10724,11 @@ function gameLoop() {
   }
 
   // Adaptive quality — sample frame times, adjust every 2s
-  _aqFrameTimes.push(dt);
-  _aqTimer += dt;
+  // Sample REAL elapsed time, not the scaled dt: death slow-mo multiplies dt by
+  // as little as 0.15, which reads as ~6x the true frame rate and ratchets
+  // quality back up while the machine is actually struggling.
+  _aqFrameTimes.push(rawDt);
+  _aqTimer += rawDt;
   if (_aqTimer >= 2.0) {
     _aqTimer = 0;
     const avgDt = _aqFrameTimes.reduce((a, b) => a + b, 0) / _aqFrameTimes.length;
@@ -10698,10 +10738,15 @@ function gameLoop() {
       _aqLevel++;
       if (_aqLevel === 1) { bloomPass.strength = BLOOM_STRENGTH * 0.4; }
       if (_aqLevel === 2) { bloomPass.strength = 0; dirLight.shadow.mapSize.set(512, 512); dirLight.shadow.map?.dispose(); dirLight.shadow.map = null; }
-      if (_aqLevel === 3) { dirLight.castShadow = false; }
+      // Shrink the shadow map rather than switching shadows off. castShadow is
+      // part of three.js's program cache key (numDirLightShadows), so toggling
+      // it re-links EVERY material in the scene -- the 400-900 ms class of
+      // stall Phase 23.1 removed -- and it would fire exactly when the frame
+      // rate is already bad.
+      if (_aqLevel === 3) { dirLight.shadow.mapSize.set(256, 256); dirLight.shadow.map?.dispose(); dirLight.shadow.map = null; }
     } else if (avgFps > 45 && _aqLevel > 0) {
       _aqLevel--;
-      if (_aqLevel === 2) { dirLight.castShadow = true; dirLight.shadow.mapSize.set(512, 512); dirLight.shadow.map?.dispose(); dirLight.shadow.map = null; }
+      if (_aqLevel === 2) { dirLight.shadow.mapSize.set(512, 512); dirLight.shadow.map?.dispose(); dirLight.shadow.map = null; }
       if (_aqLevel === 1) { bloomPass.strength = BLOOM_STRENGTH * 0.4; }
       if (_aqLevel === 0) { bloomPass.strength = BLOOM_STRENGTH; dirLight.shadow.mapSize.set(1024, 1024); dirLight.shadow.map?.dispose(); dirLight.shadow.map = null; }
     }
@@ -13330,6 +13375,10 @@ const LOADING_QUOTES = [
 async function init() {
   await loadAssets();
   await AudioSystem.loadAll();
+  // Hold the title until the studio ident has finished, so it is never cut off.
+  // It was started at the top of <body> and ran while the assets loaded, so on
+  // a warm cache this usually resolves immediately.
+  await (window.__studioIntro || Promise.resolve());
 
   document.getElementById('loading-screen').style.display = 'none';
   document.getElementById('start-screen').style.display = 'flex';

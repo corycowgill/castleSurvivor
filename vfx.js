@@ -1774,13 +1774,49 @@ const TRAIL_STYLES = {
 
 
 // ═══════════════════════════════════════════════════════════════════════════
+// MATERIAL POOLS — frame pacing
+// ═══════════════════════════════════════════════════════════════════════════
+// three.js deletes a WebGLProgram as soon as its last material is disposed, and
+// building it again blocks the render thread inside getUniforms → onFirstUse
+// while the driver links. Effects here are created per swing, per kill and per
+// explosion and were disposed the moment they expired, so a program died every
+// time the screen went quiet and was re-linked on the next hit.
+//
+// A 2026-09-26 trace measured 1,507 program links in one run and put 33 of 40
+// hitches over 50 ms on that path (PLAN Phase 35). Returning the material to a
+// free list instead of disposing keeps the program resident for the session and
+// removes the allocation. Pools are per effect because each effect's shader
+// source is its own cache key.
+const _matPools = new Map();
+const _MAT_POOL_MAX = 48;
+function takeMat(key) {
+  const p = _matPools.get(key);
+  return p && p.length ? p.pop() : null;
+}
+function freeMat(key, mat) {
+  let p = _matPools.get(key);
+  if (!p) _matPools.set(key, p = []);
+  // Past the ceiling the material really is surplus; one of its kind is still
+  // held by the pool, so the program stays alive either way.
+  if (p.length < _MAT_POOL_MAX) p.push(mat); else mat.dispose();
+}
+// Called from disposeAll/teardown: the pools belong to the session, not a run,
+// but a full teardown should still hand the memory back.
+function disposeMatPools() {
+  for (const p of _matPools.values()) for (const m of p) m.dispose();
+  _matPools.clear();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 // PHASE 6 — IMPACT FLASH SYSTEM
 // ═══════════════════════════════════════════════════════════════════════════
 
 const impactFlashes = [];
 
 function spawnImpactFlash(pos, color = 0xffffff, size = 1.5, duration = 0.1) {
-  const mat = new THREE.SpriteMaterial({
+  let mat = takeMat('flash');
+  if (mat) { mat.color.set(color); mat.opacity = 1; }
+  else mat = new THREE.SpriteMaterial({
     map: VFXTextures.flash,
     color,
     transparent: true,
@@ -1811,7 +1847,7 @@ function updateImpactFlashes(dt) {
     f.sprite.scale.set(grow * 1.25, grow * 0.95, 1);
     if (f.life <= 0) {
       scene.remove(f.sprite);
-      f.mat.dispose();
+      freeMat('flash', f.mat);
       impactFlashes.splice(i, 1);
     }
   }
@@ -1825,18 +1861,26 @@ function updateImpactFlashes(dt) {
 const decals = [];
 const MAX_DECALS = 60;
 
+let _decalGeo = null;
+function getDecalGeo() {
+  return _decalGeo || (_decalGeo = new THREE.PlaneGeometry(1, 1));
+}
+
 function spawnGroundDecal(pos, color = 0x880000, size = 1, textureName = 'bloodSplat') {
   if (decals.length >= (quality.maxDecals || MAX_DECALS)) {
     // Remove oldest
     const old = decals.shift();
     scene.remove(old.mesh);
-    old.geo.dispose();
-    old.mat.dispose();
+    freeMat('decal', old.mat);
   }
 
-  const geo = new THREE.PlaneGeometry(size, size);
-  const mat = new THREE.MeshBasicMaterial({
-    map: VFXTextures[textureName] || VFXTextures.bloodSplat,
+  // One unit plane for every decal; `size` rides on the mesh scale.
+  const geo = getDecalGeo();
+  const tex = VFXTextures[textureName] || VFXTextures.bloodSplat;
+  let mat = takeMat('decal');
+  if (mat) { mat.map = tex; mat.color.set(color); mat.opacity = 0.6; mat.needsUpdate = true; }
+  else mat = new THREE.MeshBasicMaterial({
+    map: tex,
     color,
     transparent: true,
     opacity: 0.6,
@@ -1846,9 +1890,10 @@ function spawnGroundDecal(pos, color = 0x880000, size = 1, textureName = 'bloodS
   const mesh = new THREE.Mesh(geo, mat);
   mesh.rotation.x = -Math.PI / 2;
   mesh.rotation.z = Math.random() * Math.PI * 2;
+  mesh.scale.set(size, size, 1);
   mesh.position.set(pos.x, 0.05, pos.z);
   scene.add(mesh);
-  decals.push({ mesh, geo, mat, life: 15.0 }); // 15s lifetime
+  decals.push({ mesh, mat, life: 15.0 }); // 15s lifetime
 }
 
 function updateDecals(dt) {
@@ -1861,8 +1906,7 @@ function updateDecals(dt) {
     }
     if (d.life <= 0) {
       scene.remove(d.mesh);
-      d.geo.dispose();
-      d.mat.dispose();
+      freeMat('decal', d.mat);       // geometry is the shared unit plane
       decals.splice(i, 1);
     }
   }
@@ -1993,10 +2037,21 @@ const shockwaveFragmentShader = `
   }
 `;
 
+// Every shockwave was building the same 48-segment ring. One shared geometry
+// serves them all; the mesh scale already carries the radius.
+let _shockRingGeo = null;
+function getShockRingGeo() {
+  return _shockRingGeo || (_shockRingGeo = new THREE.RingGeometry(0.6, 1.0, 48));
+}
+
 function spawnShockwave(pos, color = 0xffaa44, maxRadius = 5, duration = 0.5, yOffset = 0.15) {
-  const geo = new THREE.RingGeometry(0.6, 1.0, 48);
   const c = new THREE.Color(color);
-  const mat = new THREE.ShaderMaterial({
+  let mat = takeMat('shockwave');
+  if (mat) {
+    mat.uniforms.uColor.value.set(c.r, c.g, c.b);
+    mat.uniforms.uOpacity.value = 0.8;
+    mat.uniforms.uProgress.value = 0.0;
+  } else mat = new THREE.ShaderMaterial({
     uniforms: {
       uColor: { value: new THREE.Vector3(c.r, c.g, c.b) },
       uOpacity: { value: 0.8 },
@@ -2009,11 +2064,11 @@ function spawnShockwave(pos, color = 0xffaa44, maxRadius = 5, duration = 0.5, yO
     depthWrite: false,
     side: THREE.DoubleSide,
   });
-  const mesh = new THREE.Mesh(geo, mat);
+  const mesh = new THREE.Mesh(getShockRingGeo(), mat);
   mesh.rotation.x = -Math.PI / 2;
   mesh.position.set(pos.x, yOffset, pos.z);
   scene.add(mesh);
-  shockwaves.push({ mesh, geo, mat, life: duration, maxLife: duration, maxRadius });
+  shockwaves.push({ mesh, mat, life: duration, maxLife: duration, maxRadius });
 }
 
 // Staggered effects. Layering a second ring or burst a few frames behind the
@@ -2054,8 +2109,7 @@ function updateShockwaves(dt) {
     s.mat.uniforms.uProgress.value = t;
     if (s.life <= 0) {
       scene.remove(s.mesh);
-      s.geo.dispose();
-      s.mat.dispose();
+      freeMat('shockwave', s.mat);   // geometry is shared, never disposed
       shockwaves.splice(i, 1);
     }
   }
@@ -2102,7 +2156,16 @@ const runeFragmentShader = `
 
 function makeRuneLayer(textureName, color, radius, spin) {
   if (!runeGeo) runeGeo = new THREE.PlaneGeometry(1, 1);
-  const mat = new THREE.ShaderMaterial({
+  let mat = takeMat('rune');
+  if (mat) {
+    mat.uniforms.uMap.value = VFXTextures[textureName];
+    mat.uniforms.uColor.value.set(color);
+    mat.uniforms.uOpacity.value = 0;
+    mat.uniforms.uSweep.value = 1;
+    mat.uniforms.uPulse.value = 0;
+    return finishRuneLayer(mat, radius, spin);
+  }
+  mat = new THREE.ShaderMaterial({
     uniforms: {
       uMap: { value: VFXTextures[textureName] },
       uColor: { value: new THREE.Color(color) },
@@ -2124,6 +2187,10 @@ function makeRuneLayer(textureName, color, radius, spin) {
     blendSrcAlpha: THREE.OneFactor,
     blendDstAlpha: THREE.OneMinusSrcAlphaFactor,
   });
+  return finishRuneLayer(mat, radius, spin);
+}
+
+function finishRuneLayer(mat, radius, spin) {
   const mesh = new THREE.Mesh(runeGeo, mat);
   mesh.rotation.x = -Math.PI / 2;
   mesh.scale.setScalar(radius * 2);
@@ -2156,7 +2223,7 @@ function updateRuneCircles(dt) {
     const rc = runeCircles[i];
     rc.life -= dt;
     if (rc.life <= 0) {
-      for (const l of rc.layers) { scene.remove(l.mesh); l.mat.dispose(); }
+      for (const l of rc.layers) { scene.remove(l.mesh); freeMat('rune', l.mat); }
       runeCircles.splice(i, 1);
       continue;
     }
@@ -2215,7 +2282,9 @@ function spawnHeatDistortion(pos, radius = 3, duration = 0.45, strength = 1.0) {
   if (!distortRT || distortions.length >= MAX_DISTORTIONS) return;
   if (!distortGeo) distortGeo = new THREE.PlaneGeometry(1, 1);
 
-  const mat = new THREE.ShaderMaterial({
+  let mat = takeMat('distort');
+  if (mat) { mat.uniforms.uStrength.value = strength; mat.uniforms.uTime.value = 0; }
+  else mat = new THREE.ShaderMaterial({
     uniforms: { uStrength: { value: strength }, uTime: { value: 0 } },
     vertexShader: shockwaveVertexShader,
     fragmentShader: distortFragmentShader,
@@ -2239,7 +2308,7 @@ function updateDistortions(dt) {
     d.life -= dt;
     if (d.life <= 0) {
       scene.remove(d.mesh);
-      d.mat.dispose();
+      freeMat('distort', d.mat);
       distortions.splice(i, 1);
       continue;
     }
@@ -2507,7 +2576,15 @@ function spawnSlashArc(position, facing, opts = {}) {
     height = 1.0,
   } = opts;
 
-  const mat = new THREE.ShaderMaterial({
+  // Fires on every melee swing, and the arc lives 0.22 s — so without a pool
+  // the program died in the gap between swings and re-linked on the next one.
+  let mat = takeMat('slashArc');
+  if (mat) {
+    mat.uniforms.uColor.value.set(color);
+    mat.uniforms.uEdgeColor.value.set(edgeColor);
+    mat.uniforms.uProgress.value = 0;
+    mat.uniforms.uOpacity.value = 1;
+  } else mat = new THREE.ShaderMaterial({
     uniforms: {
       uColor: { value: new THREE.Color(color) },
       uEdgeColor: { value: new THREE.Color(edgeColor) },
@@ -2546,7 +2623,7 @@ function updateSlashArcs(dt) {
     a.mesh.scale.setScalar(a.mesh.scale.x * (1 + dt * 0.45));
     if (a.life <= 0) {
       scene.remove(a.mesh);
-      a.mat.dispose();
+      freeMat('slashArc', a.mat);
       slashArcs.splice(i, 1);
     }
   }
@@ -4919,22 +4996,25 @@ const manager = {
       group.geo.instanceCount = 0;
       group.points.visible = false;
     }
-    for (const d of decals) { scene.remove(d.mesh); d.geo.dispose(); d.mat.dispose(); }
+    // Pooled effects hand their materials back rather than disposing them, for
+    // the same reason the lights below stay resident: a dispose deletes the
+    // program and the next effect has to re-link it.
+    for (const d of decals) { scene.remove(d.mesh); freeMat('decal', d.mat); }
     decals.length = 0;
     // Darken the resident lights; removing them would re-link every material.
     for (const l of vfxLights) { l.life = 0; l.peakIntensity = 0; l.light.intensity = 0; }
-    for (const f of impactFlashes) { scene.remove(f.sprite); f.mat.dispose(); }
+    for (const f of impactFlashes) { scene.remove(f.sprite); freeMat('flash', f.mat); }
     impactFlashes.length = 0;
-    for (const s of shockwaves) { scene.remove(s.mesh); s.geo.dispose(); s.mat.dispose(); }
+    for (const s of shockwaves) { scene.remove(s.mesh); freeMat('shockwave', s.mat); }
     shockwaves.length = 0;
     _pendingShockwaves.length = 0;
-    for (const a of slashArcs) { scene.remove(a.mesh); a.mat.dispose(); }
+    for (const a of slashArcs) { scene.remove(a.mesh); freeMat('slashArc', a.mat); }
     slashArcs.length = 0;
     for (const b of lightningBolts) disposeBolt(b);
     lightningBolts.length = 0;
-    for (const d of distortions) { scene.remove(d.mesh); d.mat.dispose(); }
+    for (const d of distortions) { scene.remove(d.mesh); freeMat('distort', d.mat); }
     distortions.length = 0;
-    for (const rc of runeCircles) for (const l of rc.layers) { scene.remove(l.mesh); l.mat.dispose(); }
+    for (const rc of runeCircles) for (const l of rc.layers) { scene.remove(l.mesh); freeMat('rune', l.mat); }
     runeCircles.length = 0;
     for (const trail of trailInstances.values()) trail.dispose();
     trailInstances.clear();
@@ -4950,17 +5030,25 @@ const manager = {
   dispose() {
     for (const group of Object.values(particleGroups)) group.dispose();
     for (const trail of trailInstances.values()) trail.dispose();
-    for (const d of decals) { scene.remove(d.mesh); d.geo.dispose(); d.mat.dispose(); }
+    for (const d of decals) { scene.remove(d.mesh); d.mat.dispose(); }
+    decals.length = 0;
     // Full teardown: the lights do leave the scene here, so the resident set
     // has to be re-provisioned if the system is ever init()ed again.
     for (const l of vfxLights) { scene.remove(l.light); }
     vfxLights.length = 0;
     _lightsProvisioned = -1;
     for (const f of impactFlashes) { scene.remove(f.sprite); f.mat.dispose(); }
-    for (const s of shockwaves) { scene.remove(s.mesh); s.geo.dispose(); s.mat.dispose(); }
+    impactFlashes.length = 0;
+    for (const s of shockwaves) { scene.remove(s.mesh); s.mat.dispose(); }
+    shockwaves.length = 0;
     for (const a of slashArcs) { scene.remove(a.mesh); a.mat.dispose(); }
+    slashArcs.length = 0;
     for (const b of lightningBolts) disposeBolt(b);
     lightningBolts.length = 0;
+    // This is the real teardown, so the pooled materials and shared geometry go too.
+    disposeMatPools();
+    _shockRingGeo?.dispose(); _shockRingGeo = null;
+    _decalGeo?.dispose(); _decalGeo = null;
     _arcGeometry?.dispose();
     _arcGeometry = null;
   },

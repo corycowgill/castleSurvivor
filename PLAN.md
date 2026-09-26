@@ -672,3 +672,63 @@ the asset-run post-mortem in `NEW-LEVEL-PLAN.md`.
 - [ ] 34.15 Open: relic icons are still emoji (no PNGs; `gen-icons.mjs` needs ComfyUI); pause screen
   not yet the two-panel knight + build layout; Codex preview placeholders; Settings not yet grouped;
   minimap frame arrows; the UX spec's "SPACE"/"B" glyph in the dash ring
+
+## Phase 35 - Frame pacing II: shader churn (2026-09-26, from "sometimes it lags")
+The complaint was intermittent freezes against an otherwise smooth picture. Phase 23 fixed the
+tail once; this is the same class of bug from a different door, found by measurement rather
+than inspection.
+- [x] 35.1 **Tooling first.** `tools/frame-trace.mjs` records every frame with the counters that
+  explain a spike (programs, enemies, wave, geometries, textures, draw calls, shadow size, bloom,
+  lights, heap) and prints each hitch with what changed across it; `tools/mat-churn.mjs` patches
+  `Material.dispose` to tally by material type with a call site; `tools/trace-analyse.mjs` digs
+  through a saved capture. `tools/perf-probe.mjs` (Phase 23) still answers "what does it feel like"
+- [x] 35.2 **The finding.** 33 of 40 hitches over 50 ms coincided with the WebGL program count
+  changing, and the count bounced rather than settling: **1,507 programs linked and 1,493 released
+  in one 7-minute run**, scaling with kills (27 links in wave 1, 291 in wave 9). three.js deletes a
+  program when its last material is disposed, and re-linking blocks the render thread
+- [x] 35.3 **The cause: per-event materials in `vfx.js`.** Impact flashes (1,060 disposes / 3 min),
+  shockwaves and slash arcs (489), and ground decals (334) each built a material on spawn and
+  disposed it on expiry. A slash arc fires on *every melee swing* and lives 0.22 s, so a gap
+  between swings killed the program and the next swing re-linked it — which is exactly why it felt
+  intermittent. Now pooled per effect (`takeMat`/`freeMat`), so the program stays resident
+- [x] 35.4 **Shared geometry.** Every shockwave rebuilt the same 48-segment ring and every decal a
+  fresh plane; both are now one shared geometry with the size on the mesh scale
+- [x] 35.5 **Adaptive quality could not fire without a stall.** `dirLight.castShadow` is part of
+  three.js's program cache key (`numDirLightShadows`), so the level-3 step re-linked every material
+  in the scene, and only ever when the frame rate was already bad. It drops the shadow map to 256
+  instead. It also sampled slow-mo-scaled `dt`, reading as up to 6x the true frame rate and
+  ratcheting quality back up while the machine struggled; it samples `rawDt` now
+- [x] 35.6 **Texture uploads.** Neither sprite canvas texture set `generateMipmaps = false`, so the
+  damage numbers and enemy HP bars rebuilt a mipmap chain on every upload; the damage-number merge
+  path also bypassed the per-frame ceiling
+- [x] 35.7 **Enemy material keepalive.** The first material set cloned per model is kept for the run
+  so its program is never released. Worth keeping, but it was not the dominant source
+- [x] 35.8 **Result**, 7-minute GPU bot runs to wave 12, before vs after:
+
+  | | before | after |
+  |---|---|---|
+  | mean | 17.4 ms (57.3 fps) | 16.7 ms (59.8 fps) |
+  | p99 | 31.2 ms | 18.2 ms |
+  | p99.9 | 257.3 ms | 21.7 ms |
+  | frames over 50 ms | 158 | **5** |
+  | frames over 100 ms | 95 | **4** |
+  | programs linked / released | 1,507 / 1,493 | **16 / 1** |
+
+  Links now happen only in waves 1, 2 and 4 (warm-up) and then stop.
+- [ ] 35.9 Open, from `tools/reports/perf-audit-2026-09-26.md`: enemy spawns build animation actions
+  for every clip in the GLB including ones never played (a wolf ships nine, the game plays three) —
+  the likely wave-start freeze; lightning bolts rebuild ~36 geometries per bolt; particle groups
+  allocate lazily on first use; `renderDistortion` is a second full scene render
+
+## Phase 36 - Studio ident (2026-09-26)
+- [x] 36.1 **Hallucinated Games intro on load.** Vendored `gameCentral/intro/hallucinated-intro.js`
+  (self-contained, no dependencies) to `intro/`. Started from a classic script at the top of
+  `<body>`, not the module — a module is deferred until the document parses and its imports
+  resolve, which let the loading screen show first. The ident draws into its own overlay and
+  removes itself; `init()` awaits it before revealing the title, so it is never cut off and the
+  4.6 s is spent loading rather than waiting. Click or any key skips it
+- [x] 36.2 **Harness-safe.** Skipped for `?debug` (every tool in `tools/` boots with it) and
+  `?nointro`; otherwise the overlay would swallow the first synthetic click. Sound is off because a
+  sting needs a prior user gesture and would be dropped on a cold load
+- [x] 36.3 **Verified** with `tools/intro-shot.mjs`: ident at 0.3-3.6 s over the loading screen,
+  title at 6 s, no JS errors. Frames in `tools/shots/intro-*.png`
