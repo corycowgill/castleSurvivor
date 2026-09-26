@@ -615,3 +615,60 @@ the asset-run post-mortem in `NEW-LEVEL-PLAN.md`.
   the crowd, and cycles the title's hue; close stops the riff and removes the lights.
   Preview entries can now name `clip` and `clipsFrom` (a clip borrowed from another asset)
 - [ ] 33.4 Open: nobody has heard the riff or seen the show at full frame rate
+
+## Phase 34 - UX pass: HUD, type, screens (2026-09-26, from `tools/reports/ux-review-2026-09-26.md`)
+- [x] 34.1 **Tokens.** Colour/type tokens in `:root` (`--parchment` for body and numerals, `--gold-dim`
+  for labels only, HP/XP/danger, rarity, knight tints); the low-contrast browns are gone from text roles
+- [x] 34.2 **Title → Muster.** Two stages on `#start-screen`: the painting with PLAY and four
+  destinations (`.stage-title`, with a "last quest" line from `castleSurvivor_lastQuest`), then the
+  two-column Muster (`.stage-muster`: knights + party | battlefield + Ogre Level) with BEGIN QUEST in
+  the panel footer. The `max-height:1000px` fixed pin that hid the Ogre Level ladder at 1280x800 is
+  deleted. Level Editor / Load Map live under Settings › Advanced. Pad rows are built from what is
+  visible; B on the Muster goes back to the title; returning from a run lands on the Muster
+- [x] 34.3 **Knight panel.** Chip · name · HP bar with Cinzel numerals inside (amber under 50%, red
+  pulsing frame under 25%) · ride chip; level badge + XP bar; power-up pills in the panel. Co-op rows
+  are the same component; every knight gets a nameplate sprite in its ring group while there is a party
+- [x] 34.4 **Top-centre restack.** Boss bar first (520x16, Cinzel name, % inside, 50% tick); the
+  wave-event banner is a tinted pill under it for the whole event with a draining timer bar (the
+  "(19s)" buff pill is gone); announcements are one outlined line at 128px; combo and streak are one
+  12px line in the wave panel; the revive banner uses the event slot
+- [x] 34.5 **Wave panel.** WAVE 8 /20 in Cinzel, a 20-segment track with boss diamonds at 5/10/15/20,
+  a NEXT drain bar, clock · combo, Glory · slain demoted to a dim line (hidden on phones)
+- [x] 34.6 **Weapons and relics.** 48px slots with a 5-pip level strip under each, cooldown as a
+  conic sweep, dashed empty slots, a labelled relic row above (hidden on phones)
+- [x] 34.7 **Damage numbers.** Cinzel with an ink outline, crits a third larger and gold, ±0.45 unit
+  jitter, same-spot hits within 120 ms merge into one number
+- [x] 34.8 **Level-up cards.** Four silhouettes: stat (rank pips, delta bar, "Feeds ★ Excalibur" from
+  `WEAPON_EVOLUTIONS[w].requires`), new weapon (NEW chip, DMG/CD chips, "Evolves into"), weapon level
+  (Lv chip + pips), relic (gem slot row), evolution (merge glyph [weapon] + [requirement] → [evo]).
+  Solid chips replace text tags; REROLL goes gold when all three cards are stats
+- [x] 34.9 **End of run.** One screen, no scroll: grade + gold anchor, quest line with six numbers,
+  damage breakdown with "hurt most by" (from `runStats.damageTakenBy`), build tiles (+ relics), minor
+  stats line, unlock strip; per-knight build rows in co-op; FALLEN tints the frame
+- [x] 34.10 **Phone.** Muster stacks to one column; boss/event banners fit between the scaled panels;
+  wave panel steps left of the pause button; short-height (≤520px) level-up and end screens scroll and
+  compact so REROLL / BANISH / SKIP stay reachable; relics and Glory hidden in play
+- [x] 34.11 **Ten-minute bin.** `staff` added to `PRIMARY_WEAPONS` (Parker's primary cooldown was
+  NaN); Codex lists Arcane Staff — Parker instead of Quickblade; start tip fixed; dash label, menu
+  hints, settings values, coop hint in Cinzel/parchment; Forge screen no longer clips its tabs; the
+  Low Quality crest for Dad was `'Ὦ1'` (rendered "Ω1"), now `'\u{1F6E1}'`
+- [x] 34.12 **Verify.** `npm test` clean; `tools/coop-verify.mjs` 60/60 (its HP-text regex now accepts
+  "40 / 110"); one full Brennan kite run to victory; `tools/ui-shots.mjs [WxH]` captures title, Muster,
+  level-up, HUD, pause, end screen at desktop or phone size; `tools/coop-shot.mjs` captures the
+  three-knight HUD with one knight down. Shots: `tools/shots/ui-*.png`, `ui-coop.png`, `ui-844x390-*.png`
+- [x] 34.13 **Mobile.** Portrait re-flow for every fixed-width container: knight cards size from
+  the viewport (3 x 132 + gaps was 436px in 390px and clipped both outer cards), level-up cards and
+  the end-of-run grid go one column and scroll, pause stats cap their height and the button row
+  wraps (RESUME and MAIN MENU used to hang off both edges). A "turn your phone sideways" hint on the
+  title under `(orientation: portrait) and (pointer: coarse)`, and if they play upright anyway the
+  two HUD panels narrow to fit side by side with the boss bar and event pill below them. Landscape:
+  the event pill wraps its description instead of running under the wave panel. Power-up pills merge
+  by stat (four "Haste +2" pills used to stack down the panel into the boss bar)
+- [x] 34.14 **Touch-controls check** in `tools/ui-shots.mjs`: logs `_isTouch`, body class and the
+  computed display of `#touch-controls` at the HUD capture, and skips when the run is already over.
+  That false positive is what made portrait look like it hid the controls: `touch-gameplay` is
+  removed at game over, so a probe after a death reads as hidden. Controls are live in both
+  orientations (closes the open piece of 18.7)
+- [ ] 34.15 Open: relic icons are still emoji (no PNGs; `gen-icons.mjs` needs ComfyUI); pause screen
+  not yet the two-panel knight + build layout; Codex preview placeholders; Settings not yet grouped;
+  minimap frame arrows; the UX spec's "SPACE"/"B" glyph in the dash ring

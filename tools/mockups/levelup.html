@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Castle Survivor — Level-up card mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@700;900&display=swap" rel="stylesheet">
+<style>
+/* ─── DESIGN TOKENS (lift into index.html :root) ─── */
+:root {
+  --ink-900: #0c0602; --ink-800: #1a0e05; --ink-700: #2a180a; --ink-600: #3d2a14;
+  --line: #5a3a1a;
+  --gold: #c9a253; --gold-bright: #e8c860; --gold-dim: #8a7040;
+  --parchment: #e8d9b0; --parchment-dim: #b8a680;
+  --danger: #d04040; --hp: #4ec95a; --hp-warn: #e0b030; --xp: #4a8fd6;
+  --rare: #4a9eff; --epic: #b66cff; --legendary: #ffb02e; --evolution: #ffdd00; --relic: #5fd3c7; --new: #88ddff;
+  --k1: #e8c860; --k2: #7ec8ff; --k3: #8fe08f;
+  --outline: 0 0 2px #000, 0 1px 2px #000, 0 0 6px rgba(0,0,0,0.8);
+  --f-display: 'Cinzel Decorative', serif; --f-ui: 'Cinzel', Georgia, serif; --f-body: 'MedievalSharp', cursive;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #222; font-family: var(--f-ui); color: var(--parchment); display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 16px; }
+.note { font: 13px/1.5 system-ui, sans-serif; color: #bbb; max-width: 1280px; }
+.note b { color: #fff; }
+.num { font-variant-numeric: tabular-nums; }
+#stage { position: relative; width: 1280px; height: 800px; overflow: hidden; box-shadow: 0 0 0 1px #000; background: url('../shots/rev-kingsfield-4.png') center / cover no-repeat; }
+#stage::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(30,15,5,0.9) 0%, rgba(0,0,0,0.95) 100%); }
+/* Co-op: the picking knight's tint frames the screen (existing --pick-tint). */
+#stage::after { content: ''; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 0 3px var(--k2), inset 0 0 90px -30px var(--k2); }
+.wrap { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; padding-top: 34px; }
+.owner { font: 700 15px var(--f-ui); letter-spacing: 0.2em; color: var(--k2); text-shadow: 0 0 18px var(--k2); }
+h2 { font: 900 44px var(--f-display); letter-spacing: 0.08em; color: var(--gold); text-shadow: 0 0 25px rgba(201,162,83,0.4), 0 3px 6px rgba(0,0,0,0.8); margin-top: 2px; }
+h2 small { font: 700 14px var(--f-ui); letter-spacing: 0.14em; color: var(--gold-dim); margin-left: 12px; vertical-align: middle; }
+.rule { width: 280px; height: 2px; margin: 8px 0 16px; background: linear-gradient(90deg, transparent, var(--line), var(--gold), var(--line), transparent); }
+
+/* ─── CARDS: four silhouettes ─── */
+.cards { display: flex; flex-direction: column; gap: 8px; width: 560px; }
+.card { position: relative; display: grid; grid-template-columns: 56px 1fr; gap: 0 14px; align-items: center; padding: 10px 16px 10px 14px; border: 1px solid var(--line); border-radius: 5px; background: linear-gradient(180deg, rgba(40,22,8,0.96), rgba(20,10,2,0.96)); box-shadow: 0 2px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(201,162,83,0.1); text-align: left; }
+.card.focus { border-color: var(--gold-bright); box-shadow: 0 0 0 1px var(--gold-bright), 0 0 16px rgba(232,200,96,0.4), 0 6px 14px rgba(0,0,0,0.6); transform: translateY(-2px); }
+.icon { width: 56px; height: 56px; border-radius: 6px; border: 1px solid var(--line); object-fit: cover; background: rgba(15,8,2,0.6); }
+.body { min-width: 0; }
+.title { display: flex; align-items: center; gap: 8px; font: 700 18px var(--f-ui); letter-spacing: 0.04em; color: var(--gold); }
+.chip { font: 700 10px var(--f-ui); letter-spacing: 0.14em; padding: 2px 7px 1px; border-radius: 3px; color: var(--ink-900); background: var(--gold); line-height: 1.3; }
+.chip.rare { background: var(--rare); } .chip.epic { background: var(--epic); } .chip.leg { background: var(--legendary); }
+.chip.new { background: var(--new); } .chip.relic { background: var(--relic); } .chip.evo { background: var(--evolution); }
+.chip.lv { background: transparent; color: var(--new); border: 1px solid var(--new); }
+.flavour { font: 15px var(--f-body); color: var(--parchment-dim); margin-top: 3px; }
+.meta { display: flex; align-items: center; gap: 14px; margin-top: 6px; font: 700 12px var(--f-ui); letter-spacing: 0.04em; color: var(--parchment); }
+.meta .k { color: var(--gold-dim); letter-spacing: 0.1em; font-size: 11px; }
+.pips { display: inline-flex; gap: 3px; margin-left: 4px; vertical-align: middle; }
+.pips i { width: 10px; height: 6px; border-radius: 1px; background: var(--ink-600); border: 1px solid rgba(201,162,83,0.25); }
+.pips i.on { background: var(--gold); }
+.pips i.next { background: var(--gold-bright); box-shadow: 0 0 5px var(--gold-bright); }
+.delta { display: inline-flex; align-items: center; gap: 6px; }
+.delta .bar { width: 120px; height: 8px; border-radius: 2px; background: var(--ink-900); border: 1px solid var(--line); overflow: hidden; display: flex; }
+.delta .bar .old { height: 100%; background: var(--gold-dim); }
+.delta .bar .add { height: 100%; background: var(--gold-bright); box-shadow: 0 0 6px var(--gold-bright); }
+.feeds { margin-top: 5px; font: 700 11px var(--f-ui); letter-spacing: 0.08em; color: var(--evolution); }
+.feeds .dim { color: var(--gold-dim); font-weight: 400; letter-spacing: 0.04em; }
+.stats { display: flex; gap: 6px; margin-top: 6px; }
+.stats span { padding: 2px 8px; border: 1px solid var(--line); border-radius: 3px; background: rgba(0,0,0,0.35); font: 700 12px var(--f-ui); color: var(--parchment); }
+.stats span b { color: var(--gold-dim); font-size: 10px; letter-spacing: 0.1em; margin-right: 4px; }
+
+/* New weapon */
+.card.weapon { grid-template-columns: 64px 1fr; border-color: var(--new); box-shadow: 0 0 14px rgba(136,221,255,0.2), inset 0 1px 0 rgba(136,221,255,0.15); }
+.card.weapon .icon { width: 64px; height: 64px; border-color: var(--new); box-shadow: 0 0 10px rgba(136,221,255,0.35); }
+/* Evolution */
+.card.evo { grid-template-columns: 1fr; padding: 12px 16px 12px; border: 2px solid var(--evolution); box-shadow: 0 0 24px rgba(255,221,0,0.35), inset 0 0 0 1px rgba(255,221,0,0.35), inset 0 0 40px rgba(255,221,0,0.06); background: linear-gradient(180deg, rgba(60,42,8,0.97), rgba(24,14,2,0.97)); }
+.merge { display: flex; align-items: center; gap: 10px; }
+.merge .icon { width: 48px; height: 48px; }
+.merge .op { font: 700 20px var(--f-ui); color: var(--evolution); }
+.merge .icon.result { width: 64px; height: 64px; border-color: var(--evolution); box-shadow: 0 0 14px rgba(255,221,0,0.5); }
+.merge .lbl { font: 700 10px var(--f-ui); letter-spacing: 0.12em; color: var(--gold-dim); text-align: center; margin-top: 3px; }
+.merge .col { display: flex; flex-direction: column; align-items: center; }
+.card.evo .title { font-size: 22px; margin-top: 8px; color: var(--gold-bright); }
+/* Relic */
+.card.relic { border-color: var(--relic); box-shadow: 0 0 16px rgba(95,211,199,0.3), inset 0 1px 0 rgba(95,211,199,0.15); }
+.card.relic .icon { border-color: var(--relic); background: radial-gradient(circle at 50% 40%, rgba(95,211,199,0.3), rgba(10,5,2,0.9)); display: flex; align-items: center; justify-content: center; font-size: 30px; }
+.gems { display: inline-flex; gap: 5px; margin-left: 6px; vertical-align: middle; }
+.gems i { width: 12px; height: 12px; transform: rotate(45deg); border: 1px solid var(--relic); background: transparent; }
+.gems i.on { background: var(--relic); box-shadow: 0 0 6px var(--relic); }
+
+/* Actions */
+.actions { display: flex; gap: 10px; margin-top: 18px; }
+.actions button { padding: 10px 24px; font: 700 14px var(--f-ui); letter-spacing: 0.1em; border-radius: 4px; border: 1px solid; background: rgba(20,12,30,0.95); }
+.reroll { color: var(--ink-900); background: linear-gradient(180deg, #f0d47a, var(--gold) 60%, #a67f38) !important; border-color: #f4e2a0 !important; box-shadow: 0 0 16px rgba(232,200,96,0.35); }
+.banish { color: #ffaa88; border-color: #884433; }
+.skip { color: var(--parchment-dim); border-color: #4a3a2a; }
+.hint { margin-top: 10px; font: 400 12px var(--f-ui); letter-spacing: 0.06em; color: var(--parchment-dim); }
+.hint b { color: var(--k2); }
+.watching { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); padding: 4px 14px; border-radius: 4px; border: 1px solid rgba(126,200,255,0.4); background: rgba(12,6,2,0.7); font: 700 12px var(--f-ui); letter-spacing: 0.14em; color: var(--k2); }
+</style>
+</head>
+<body>
+<div class="note"><b>levelup.html</b> — the four card silhouettes at once so the differences read: <b>relic</b> (teal, gem slots), <b>evolution</b> (gold frame, merge glyph), <b>new weapon</b> (blue, stat chips, destination line), <b>stat</b> (compact, rank pips, delta bar, "feeds" line). Shown as Brennan's pick in co-op with the existing <code>--pick-tint</code> frame. Three cards are the game's rule; four are shown here for comparison. REROLL is promoted to gold because the player holds charges. Compare with <code>menu-levelup-relic.png</code> and <code>menu-levelup-late.png</code>.</div>
+<div id="stage">
+  <div class="watching">DAD AND PARKER — KEEP FIGHTING, BRENNAN IS CHOOSING</div>
+  <div class="wrap">
+    <div class="owner">P2 · BRENNAN CHOOSES</div>
+    <h2>LEVEL UP<small>+4 MORE</small></h2>
+    <div class="rule"></div>
+
+    <div class="cards">
+      <!-- RELIC -->
+      <div class="card relic">
+        <div class="icon">🪶</div>
+        <div class="body">
+          <div class="title">Phoenix Feather <span class="chip relic">RELIC</span></div>
+          <div class="flavour">Once per quest, a killing blow leaves thee at 35% Vitality instead</div>
+          <div class="meta"><span class="k">RELIC SLOTS</span><span class="gems"><i class="on"></i><i></i><i></i></span><span class="num">1 of 3</span></div>
+        </div>
+      </div>
+
+      <!-- EVOLUTION -->
+      <div class="card evo focus">
+        <div class="merge">
+          <div class="col"><img class="icon" src="../../images/upgrades/dagger.png" alt=""><span class="lbl">DAGGERS 5</span></div>
+          <span class="op">+</span>
+          <div class="col"><img class="icon" src="../../images/upgrades/crit.png" alt=""><span class="lbl">CRIT</span></div>
+          <span class="op">→</span>
+          <div class="col"><img class="icon result" src="../../images/upgrades/dagger.png" alt="" style="filter: hue-rotate(200deg) saturate(1.4)"><span class="lbl" style="color:var(--evolution)">STORM KUNAI</span></div>
+          <div style="flex:1"></div>
+          <span class="chip evo">EVOLUTION</span>
+        </div>
+        <div class="title">Storm Kunai</div>
+        <div class="flavour">Critical daggers that chain to 2 extra targets</div>
+        <div class="meta"><span class="k">FROM</span> Throwing Daggers Lv 5 <span class="k">REQUIRES</span> Assassin's Eye ✓</div>
+      </div>
+
+      <!-- NEW WEAPON -->
+      <div class="card weapon">
+        <img class="icon" src="../../images/upgrades/wardShields.png" alt="">
+        <div class="body">
+          <div class="title">Warding Shields <span class="chip new">NEW</span></div>
+          <div class="flavour">Blessed shields circle thee and batter what they touch</div>
+          <div class="stats"><span><b>DMG</b>8</span><span><b>CD</b>0.6s</span><span><b>ORBIT</b>3</span></div>
+          <div class="feeds">EVOLVES INTO <span style="color:var(--gold-bright)">BULWARK OF AGES</span> <span class="dim">with Champion's Resolve (Max HP)</span></div>
+        </div>
+      </div>
+
+      <!-- STAT -->
+      <div class="card">
+        <img class="icon" src="../../images/upgrades/damage.png" alt="">
+        <div class="body">
+          <div class="title">Whetstone of the Forge <span class="chip epic">EPIC</span></div>
+          <div class="flavour">Thy blade strikes truer — +10 Damage</div>
+          <div class="meta">
+            <span><span class="k">RANK</span><span class="pips"><i class="on"></i><i class="on"></i><i class="next"></i><i></i><i></i></span></span>
+            <span class="delta"><span class="k">DAMAGE</span><span class="bar"><span class="old" style="width:56%"></span><span class="add" style="width:22%"></span></span><span class="num">22 → 32</span></span>
+          </div>
+          <div class="feeds">FEEDS <span style="color:var(--gold-bright)">EXCALIBUR</span> <span class="dim">Sword Lv 5 + Damage</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions"><button class="reroll">REROLL (3)</button><button class="banish">BANISH (1)</button><button class="skip">SKIP</button></div>
+    <div class="hint"><b>Pad 2</b> &nbsp;D-Pad to choose · A confirm · X reroll · Y banish &nbsp;·&nbsp; every other controller is locked out</div>
+  </div>
+</div>
+</body>
+</html>

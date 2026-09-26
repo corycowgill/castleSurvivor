@@ -9,7 +9,24 @@
 <style>
 /* Title art. The public plate is the default so the loading screen is already
    correct before any script runs; Private Mode off swaps in the family art. */
-:root { --title-bg: url('castleTitlePublic.png'); }
+:root {
+  --title-bg: url('castleTitlePublic.png');
+  /* ─── DESIGN TOKENS (tools/reports/ux-review-2026-09-26.md §3.7) ───
+     Contrast in the comments is against --ink-800. Body copy and numerals use
+     --parchment; the browns below 4.5:1 are kept for borders and non-text only. */
+  --ink-900: #0c0602; --ink-800: #1a0e05; --ink-700: #2a180a; --ink-600: #3d2a14;
+  --line: #5a3a1a;
+  --gold: #c9a253;          /* 7.9:1 */
+  --gold-bright: #e8c860;   /* 11.6:1 */
+  --gold-dim: #8a7040;      /* 4.0:1 — labels ≥13px bold only */
+  --parchment: #e8d9b0;     /* 13.5:1 */
+  --parchment-dim: #b8a680; /* 8.0:1 */
+  --danger: #d04040; --hp: #4ec95a; --hp-warn: #e0b030; --xp: #4a8fd6;
+  --rare: #4a9eff; --epic: #b66cff; --legendary: #ffb02e; --evolution: #ffdd00; --relic: #5fd3c7; --new: #88ddff;
+  --k1: #e8c860; --k2: #7ec8ff; --k3: #8fe08f;
+  --panel: linear-gradient(135deg, rgba(20,10,2,0.86), rgba(42,24,10,0.78));
+  --hud-shadow: 0 0 2px #000, 0 1px 2px #000, 0 0 6px rgba(0,0,0,0.8);
+}
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { overflow: hidden; background: #000; font-family: 'Cinzel', 'Georgia', serif; }
 .touch-active { touch-action: none; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
@@ -111,6 +128,99 @@ canvas { display: block; }
   width: 280px; height: 2px; margin: 0 auto 16px;
   background: linear-gradient(90deg, transparent, #5a3a1a, #c9a253, #5a3a1a, transparent);
 }
+
+/* ─── TITLE STAGE / MUSTER STAGE ───
+   Stage 1 (.stage-title) is the painting, PLAY and four destinations. Stage 2
+   (.stage-muster) is the two-column Muster panel. One class on #start-screen
+   flips between them; the pad rows are built from what is visible. */
+#start-screen.stage-title #muster { display: none; }
+#start-screen.stage-muster #title-stage { display: none; }
+#start-screen.stage-muster h1 { font-size: 34px; margin-top: 12px; letter-spacing: 4px; }
+#start-screen.stage-muster h2, #start-screen.stage-muster .divider { display: none; }
+#title-stage {
+  display: flex; flex-direction: column; align-items: center;
+  margin-top: auto; margin-bottom: 26px; width: 100%;
+}
+#play-btn {
+  padding: 16px 92px; font-family: 'Cinzel', serif; font-size: 30px; font-weight: 700;
+  letter-spacing: 6px; cursor: pointer; border-radius: 6px;
+  background: linear-gradient(180deg, #f0d585 0%, #c9a253 55%, #a67c2e 100%);
+  color: var(--ink-900); border: 2px solid #8b5e20;
+  box-shadow: 0 0 30px rgba(232,200,96,0.35), 0 6px 18px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,240,200,0.7);
+  transition: transform 0.15s, box-shadow 0.2s; margin-bottom: 14px;
+}
+#play-btn:hover, #play-btn.gp-focus { transform: translateY(-2px); box-shadow: 0 0 40px rgba(232,200,96,0.55), 0 8px 22px rgba(0,0,0,0.6); }
+#last-quest {
+  margin-top: 12px; font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 0.08em;
+  color: var(--parchment-dim); text-shadow: var(--hud-shadow); text-transform: uppercase; min-height: 14px;
+}
+#last-quest b { color: var(--gold-bright); }
+#last-quest:empty { display: none; }
+#title-stage .controls-info { margin-top: 10px; }
+/* Portrait phone: the game plays best sideways (the HUD panels, the boss bar and
+   the card row all assume width). Say so once, on the title, without blocking. */
+#rotate-hint {
+  display: none; margin: 0 16px 10px; padding: 8px 14px; border-radius: 6px;
+  border: 1px solid rgba(232,200,96,0.45); background: rgba(12,6,2,0.7);
+  font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 0.08em; text-align: center;
+  color: var(--parchment); text-shadow: var(--hud-shadow);
+}
+#rotate-hint b { color: var(--gold-bright); }
+@media (orientation: portrait) and (pointer: coarse) {
+  #rotate-hint { display: block; }
+  /* If they play upright anyway: two narrow panels that fit 390px side by side,
+     the boss bar and event pill drop below them, one announcement line under that. */
+  #hud { padding: 8px 8px; }
+  .touch-active #hud-left { width: 186px; padding: 6px 8px; transform: none; }
+  .touch-active #hud-right { width: 140px; padding: 6px 8px; transform: none; margin-right: 46px; }
+  .kp-name, #xp-text, .stats-line { display: none; }
+  #ride-timer { font-size: 10px; padding: 0 5px; }
+  #wave-text { font-size: 16px; }
+  #wave-track i { width: 5px; height: 5px; }
+  .wn-bar { width: 60px; }
+  .wn-label { display: none; }
+  /* The two panels stack to ~96px tall here, so the centre column starts below
+     them rather than beside them. */
+  .touch-active #boss-bar, .touch-active #wave-event-banner { width: 92vw; top: 124px; }
+  body.boss-active #wave-event-banner { top: 168px; }
+  #wave-announce { top: 212px; font-size: 14px; max-width: 90vw; white-space: normal; }
+  #revive-banner { top: 168px; width: 92vw; font-size: 14px; }
+  body.boss-active #revive-banner { top: 212px; }
+  /* At most two pills side by side; a third stat is rare and wraps. */
+  #active-buffs { max-width: 100%; }
+  .buff-pill { font-size: 9px; padding: 1px 5px; }
+  /* BEGIN QUEST stays on screen while the Muster scrolls behind it. */
+  #muster-foot {
+    position: sticky; bottom: 0; margin-top: 8px; padding: 10px 6px;
+    background: linear-gradient(180deg, rgba(10,5,2,0.4), rgba(10,5,2,0.95) 40%);
+    border-top: 1px solid rgba(90,58,26,0.7);
+  }
+}
+#muster {
+  width: min(1180px, 96vw); max-height: calc(100vh - 92px);
+  display: grid; grid-template-columns: 1fr 392px; column-gap: 26px; row-gap: 0;
+  padding: 16px 24px 12px; margin: 4px auto 12px;
+  background: linear-gradient(180deg, rgba(14,8,3,0.88), rgba(10,5,2,0.9));
+  border: 1px solid var(--line); border-radius: 10px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(201,162,83,0.12);
+  overflow-y: auto; overscroll-behavior: contain;
+}
+#muster-left { display: flex; flex-direction: column; align-items: center; min-width: 0; }
+#muster-right { display: flex; flex-direction: column; align-items: center; min-width: 0; border-left: 1px solid rgba(90,58,26,0.5); padding-left: 22px; }
+.muster-head {
+  align-self: flex-start; font-family: 'Cinzel', serif; font-size: 13px; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold-dim); margin: 0 0 8px;
+}
+#muster-foot {
+  grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center;
+  margin-top: 10px; padding-top: 12px; border-top: 1px solid rgba(90,58,26,0.5);
+}
+#muster-back { font-size: 12px; }
+#muster #char-select-wrapper { margin-bottom: 10px; }
+#muster #map-select-wrapper, #muster #ogre-level-wrapper { align-items: center; }
+#muster #map-select { flex-wrap: wrap; justify-content: center; gap: 8px; max-width: 360px; }
+#muster #coop-roster { margin: 6px 0 2px; }
+#muster #start-btn { margin-bottom: 0; }
 
 /* ─── CHARACTER SELECT (rebuilt from scratch) ─── */
 #char-select-wrapper {
@@ -279,7 +389,7 @@ canvas { display: block; }
 #load-map-input { display: none; }
 .controls-info {
   margin-bottom: 20px; font-family: 'MedievalSharp', cursive;
-  font-size: 12px; color: #b0a080; text-align: center; line-height: 1.6;
+  font-size: 14px; color: var(--parchment-dim); text-align: center; line-height: 1.6;
   text-shadow: 0 1px 4px rgba(0,0,0,1);
 }
 
@@ -416,65 +526,126 @@ canvas { display: block; }
 }
 #hud-top { display: flex; justify-content: space-between; align-items: flex-start; }
 #hud-left, #hud-right { pointer-events: auto; }
-#hud-left {
-  background: linear-gradient(135deg, rgba(20,10,2,0.85), rgba(40,22,8,0.75));
-  border: 1px solid #5a3a1a; border-radius: 6px; padding: 10px 14px;
+#hud-left, #hud-right {
+  background: var(--panel);
+  border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.6);
 }
-#health-bar-outer {
-  width: 240px; height: 20px; background: #1a0e05;
-  border: 1px solid #5a3a1a; border-radius: 3px; overflow: hidden;
+#hud-left { width: 300px; }
+/* ─── KNIGHT PANEL ───
+   Row 1: chip · name · HP bar with the numerals INSIDE it (Cinzel, outlined, so
+   they survive phone scale) · ride chip. Row 2: level badge · XP bar. */
+.kp-row { display: flex; align-items: center; gap: 8px; }
+.kp-row2 { margin-top: 6px; }
+.kp-chip {
+  width: 26px; height: 26px; border-radius: 50%; flex: 0 0 auto;
+  border: 2px solid var(--tint, var(--k1)); color: var(--tint, var(--k1));
+  background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;
+  font-family: 'Cinzel', serif; font-size: 13px; font-weight: 700; text-shadow: var(--hud-shadow);
+}
+.kp-name {
+  font-family: 'Cinzel', serif; font-size: 13px; font-weight: 700; letter-spacing: 0.06em;
+  color: var(--tint, var(--k1)); text-shadow: var(--hud-shadow); min-width: 0; white-space: nowrap;
+}
+#health-bar-outer, .coop-hp-outer {
+  position: relative; flex: 1 1 auto; height: 18px; background: var(--ink-800);
+  border: 1px solid var(--line); border-radius: 3px; overflow: hidden;
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
 }
-#health-bar-inner {
-  width: 100%; height: 100%;
-  background: linear-gradient(90deg, #8b1a1a, #cc2222, #dd3333);
-  box-shadow: 0 0 6px rgba(200,30,30,0.4);
-  transition: width 0.2s;
+#health-bar-inner, .coop-hp-inner {
+  width: 100%; height: 100%; transition: width 0.2s, background 0.3s;
+  background: linear-gradient(90deg, #2f9a3c, var(--hp));
+  box-shadow: 0 0 6px rgba(78,201,90,0.35);
 }
-#health-text {
-  font-family: 'MedievalSharp', cursive; color: #cc8888;
-  font-size: 12px; text-shadow: 1px 1px 2px #000; margin-top: 3px;
+#health-bar-outer.warn #health-bar-inner, .coop-hp-outer.warn .coop-hp-inner { background: linear-gradient(90deg, #a88020, var(--hp-warn)); box-shadow: 0 0 6px rgba(224,176,48,0.4); }
+#health-bar-outer.low #health-bar-inner, .coop-hp-outer.low .coop-hp-inner { background: linear-gradient(90deg, #8b1a1a, var(--danger)); box-shadow: 0 0 8px rgba(208,64,64,0.6); }
+#health-bar-outer.low, .coop-hp-outer.low { animation: hpPulse 1.2s ease-in-out infinite; }
+@keyframes hpPulse { 0%,100% { border-color: var(--line); } 50% { border-color: var(--danger); } }
+#health-text, .coop-hp-text {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: flex-end;
+  padding-right: 6px; font-family: 'Cinzel', serif; font-size: 12px; font-weight: 700;
+  font-variant-numeric: tabular-nums; color: var(--parchment); text-shadow: var(--hud-shadow);
+  pointer-events: none; letter-spacing: 0.02em;
+}
+.kp-level {
+  width: 22px; height: 22px; border-radius: 50%; flex: 0 0 auto; margin-left: 2px;
+  border: 1px solid var(--gold-dim); background: rgba(0,0,0,0.5);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700; color: var(--gold-bright);
+  font-variant-numeric: tabular-nums; text-shadow: var(--hud-shadow);
 }
 #xp-bar-outer {
-  width: 240px; height: 14px; background: #1a0e05;
-  border: 1px solid #5a3a1a; border-radius: 3px; overflow: hidden; margin-top: 6px;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
-  transition: box-shadow 0.3s;
+  flex: 1 1 auto; height: 7px; background: var(--ink-800);
+  border: 1px solid var(--line); border-radius: 3px; overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.8); transition: box-shadow 0.3s;
 }
-#xp-bar-outer.xp-near-full {
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.8), 0 0 12px rgba(255,221,0,0.5);
-  border-color: #d4a856;
-}
-#xp-bar-inner {
-  width: 0%; height: 100%;
-  background: linear-gradient(90deg, #2a4a8b, #4488cc, #66aaee);
-  box-shadow: 0 0 6px rgba(68,136,204,0.4);
-  transition: width 0.2s;
-}
-#xp-bar-inner.xp-near-full {
-  background: linear-gradient(90deg, #4488cc, #88ccff, #ffdd44);
-  box-shadow: 0 0 10px rgba(255,221,0,0.6);
-}
+#xp-bar-outer.xp-near-full { box-shadow: inset 0 1px 3px rgba(0,0,0,0.8), 0 0 10px rgba(232,200,96,0.5); border-color: var(--gold); }
+#xp-bar-inner { width: 0%; height: 100%; background: linear-gradient(90deg, #2c5f9e, var(--xp)); transition: width 0.2s; }
+#xp-bar-inner.xp-near-full { background: linear-gradient(90deg, var(--xp), #88ccff, var(--gold-bright)); }
 #xp-text {
-  font-family: 'MedievalSharp', cursive; color: #88aacc;
-  font-size: 11px; text-shadow: 1px 1px 2px #000; margin-top: 3px;
+  font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.08em; color: var(--parchment-dim);
+  text-shadow: var(--hud-shadow); white-space: nowrap;
 }
+#xp-text:empty { display: none; }
+#ride-timer {
+  flex: 0 0 auto; padding: 1px 7px 1px 5px; border-radius: 10px;
+  border: 1px solid rgba(232,200,96,0.5); background: rgba(0,0,0,0.5);
+  font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700; color: var(--gold-bright);
+  font-variant-numeric: tabular-nums; white-space: nowrap; text-shadow: var(--hud-shadow);
+}
+#ride-timer::before { content: '🐎 '; font-size: 11px; }
+#ride-timer:empty { display: none; }
+#ride-timer.ending { color: #ff9955; border-color: rgba(255,153,85,0.6); }
 
-#hud-right {
-  background: linear-gradient(135deg, rgba(20,10,2,0.85), rgba(40,22,8,0.75));
-  border: 1px solid #5a3a1a; border-radius: 6px; padding: 10px 14px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.6);
-}
-#stats {
-  font-family: 'Cinzel', serif; color: #c9a253;
-  font-size: 13px; text-shadow: 1px 1px 3px #000;
-  text-align: right; line-height: 1.55; letter-spacing: 0.5px;
-}
+/* ─── WAVE PANEL ─── */
+#hud-right { width: 236px; }
+#stats { font-family: 'Cinzel', serif; color: var(--gold); text-align: right; text-shadow: var(--hud-shadow); }
 #wave-text {
-  font-family: 'Cinzel Decorative', serif; font-size: 20px; font-weight: 700;
-  color: #c9a253; letter-spacing: 1px;
+  font-family: 'Cinzel', serif; font-size: 22px; font-weight: 700; letter-spacing: 0.06em;
+  color: var(--gold); line-height: 1.1; text-transform: uppercase;
 }
+#wave-text small { font-size: 13px; font-weight: 400; color: var(--gold-dim); letter-spacing: 0.04em; margin-left: 4px; }
+#wave-text.final { color: var(--legendary); font-size: 18px; }
+#wave-track { display: flex; justify-content: flex-end; gap: 2px; margin: 5px 0 6px; }
+#wave-track i {
+  display: block; width: 8px; height: 6px; border-radius: 1px;
+  background: var(--ink-600); border: 1px solid rgba(0,0,0,0.5);
+}
+#wave-track i.done { background: var(--gold); border-color: rgba(0,0,0,0.4); }
+#wave-track i.current { background: var(--gold-bright); box-shadow: 0 0 6px var(--gold-bright); animation: trackPulse 1s ease-in-out infinite; }
+#wave-track i.boss { width: 8px; height: 8px; transform: rotate(45deg) scale(0.8); border-radius: 0; background: #5a2020; border-color: var(--danger); margin: -1px 1px; }
+#wave-track i.boss.done { background: var(--danger); }
+#wave-track i.boss.current { background: var(--danger); box-shadow: 0 0 6px var(--danger); }
+@keyframes trackPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.55; } }
+#wave-next { display: flex; align-items: center; gap: 6px; justify-content: flex-end; }
+.wn-label { font-size: 10px; letter-spacing: 0.14em; color: var(--gold-dim); text-transform: uppercase; }
+.wn-bar { width: 118px; height: 4px; background: var(--ink-600); border-radius: 2px; overflow: hidden; }
+#wave-next-fill { height: 100%; width: 100%; background: var(--gold); transition: width 0.25s linear; }
+#wave-next.urgent #wave-next-fill { background: var(--danger); }
+#wave-timer {
+  font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--parchment);
+  min-width: 34px; text-align: right; transition: color 0.3s;
+}
+#wave-next.urgent #wave-timer { color: #ff6a6a; }
+#wave-next.final { display: block; font-size: 11px; color: var(--legendary); letter-spacing: 0.08em; }
+#wave-next.final .wn-bar, #wave-next.final .wn-label { display: none; }
+#ogre-hud { font-size: 10px; letter-spacing: 0.08em; color: #ff9a6a; margin-top: 3px; }
+.stats-line { display: flex; justify-content: flex-end; gap: 10px; align-items: baseline; margin-top: 4px; font-size: 12px; font-variant-numeric: tabular-nums; flex-wrap: wrap; }
+.stats-line.stats-dim { color: var(--gold-dim); font-size: 11px; margin-top: 1px; }
+#time-text { color: var(--parchment); font-weight: 700; }
+/* Combo and streak are ambient now: one 12px line in the wave panel, not a
+   headline in the play area. The writers still drive opacity / transform, so
+   both are neutralised here. */
+#combo-display, #streak-display {
+  position: static !important; transform: none !important; padding: 0; border: 0;
+  background: none; font-size: 12px; letter-spacing: 0.04em; transition: opacity 0.3s, color 0.3s;
+  white-space: nowrap; pointer-events: none;
+}
+#combo-display { color: var(--gold-dim); opacity: 0; }
+#combo-display.milestone { color: var(--gold-bright); }
+#streak-display { color: #ff9955; opacity: 0; }
+#streak-display.active { opacity: 1; }
+#streak-display:empty { display: none; }
 
 /* ─── LEVEL UP ─── */
 #level-up-screen {
@@ -516,31 +687,80 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
   background: linear-gradient(90deg, transparent, #5a3a1a, #c9a253, #5a3a1a, transparent);
 }
 .upgrade-btn {
-  display: flex; align-items: center; width: 420px; padding: 12px 18px; margin: 6px;
+  display: flex; align-items: center; width: 560px; padding: 10px 16px; margin: 5px;
   font-family: 'Cinzel', serif; font-size: 15px; cursor: pointer;
   background: linear-gradient(180deg, rgba(40,22,8,0.95), rgba(20,10,2,0.95));
-  color: #b08a50; border: 1px solid #5a3a1a; border-radius: 4px; text-align: left;
+  color: var(--parchment); border: 1px solid var(--line); border-radius: 5px; text-align: left;
   box-shadow: 0 2px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(201,162,83,0.1);
-  transition: all 0.2s; gap: 14px;
+  transition: transform 0.15s, box-shadow 0.2s, border-color 0.2s; gap: 14px; position: relative;
 }
 .upgrade-btn:hover, .upgrade-btn.gp-selected {
   background: linear-gradient(180deg, rgba(60,32,12,0.95), rgba(35,18,6,0.95));
-  color: #e8d090; border-color: #c9a253;
-  box-shadow: 0 0 15px rgba(201,162,83,0.25), inset 0 1px 0 rgba(201,162,83,0.2);
+  border-color: var(--gold-bright); transform: translateY(-2px);
+  box-shadow: 0 0 0 2px rgba(232,200,96,0.35), 0 0 16px rgba(201,162,83,0.3), inset 0 1px 0 rgba(201,162,83,0.2);
 }
 .upgrade-icon {
   width: 56px; height: 56px; border-radius: 6px; flex-shrink: 0;
-  border: 1px solid #5a3a1a; object-fit: cover;
+  border: 1px solid var(--line); object-fit: cover;
   background: rgba(15,8,2,0.6);
 }
-.upgrade-text { flex: 1; }
+.upgrade-text { flex: 1; min-width: 0; }
 .upgrade-btn .upgrade-title {
   font-family: 'Cinzel', serif; font-weight: 700; font-size: 18px;
-  color: #c9a253; letter-spacing: 1px;
+  color: var(--gold); letter-spacing: 0.04em; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
 }
 .upgrade-btn .upgrade-desc {
-  font-family: 'MedievalSharp', cursive; font-size: 14px; margin-top: 4px; color: #8a7040;
+  font-family: 'MedievalSharp', cursive; font-size: 15px; margin-top: 3px; color: var(--parchment-dim);
 }
+/* Solid chips instead of tinted text tags: they read as a type, not a word */
+.chip {
+  display: inline-block; padding: 1px 7px; border-radius: 3px; font-family: 'Cinzel', serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; line-height: 1.5;
+  color: var(--ink-900); background: var(--gold);
+}
+.chip-relic { background: var(--relic); }
+.chip-new { background: var(--new); }
+.chip-lv { background: var(--gold-bright); }
+.chip-rare { background: var(--rare); }
+.chip-epic { background: var(--epic); color: #fff; }
+.chip-legendary { background: var(--legendary); }
+.chip-evo { background: var(--evolution); }
+/* Detail row: rank pips, delta bar, stat chips, relic gems */
+.upgrade-delta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 6px; font-family: 'Cinzel', serif; font-size: 12px; color: var(--parchment); }
+.upgrade-delta .k { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-dim); font-weight: 700; }
+.pips { display: inline-flex; gap: 2px; }
+.pips i { display: block; width: 10px; height: 6px; border-radius: 1px; background: var(--ink-600); border: 1px solid rgba(0,0,0,0.5); }
+.pips i.on { background: var(--gold); }
+.pips i.next { background: var(--gold-bright); box-shadow: 0 0 5px var(--gold-bright); }
+.delta-bar { position: relative; display: inline-block; width: 120px; height: 6px; background: var(--ink-600); border-radius: 3px; overflow: hidden; }
+.delta-bar i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--gold-dim); }
+.delta-bar i.inc { background: var(--gold-bright); box-shadow: 0 0 6px var(--gold-bright); }
+.delta-num { font-weight: 700; font-variant-numeric: tabular-nums; color: var(--parchment); }
+.stat-chip { display: inline-flex; align-items: baseline; gap: 4px; padding: 1px 7px; border: 1px solid var(--line); border-radius: 3px; background: rgba(0,0,0,0.35); font-weight: 700; font-variant-numeric: tabular-nums; }
+.stat-chip small { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-dim); }
+.feeds { display: block; margin-top: 4px; font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 0.04em; color: var(--evolution); }
+.feeds b { font-weight: 700; }
+.feeds i { font-style: normal; color: var(--parchment-dim); }
+.gems { display: inline-flex; gap: 4px; }
+.gems i { display: block; width: 10px; height: 10px; transform: rotate(45deg); border: 1px solid var(--relic); background: transparent; }
+.gems i.on { background: var(--relic); }
+.gems i.next { box-shadow: 0 0 6px var(--relic); }
+/* Card silhouettes */
+.upgrade-btn.card-weapon { border-color: var(--new); }
+.upgrade-btn.card-weapon .upgrade-icon { border-color: var(--new); box-shadow: 0 0 10px rgba(136,221,255,0.25); }
+.upgrade-btn.card-relic .upgrade-icon { border-color: var(--relic); }
+.upgrade-btn.card-evo { flex-direction: column; align-items: stretch; padding: 12px 18px; border-width: 2px; }
+.upgrade-btn.card-evo::before { content: ''; position: absolute; inset: 4px; border: 1px solid rgba(255,221,0,0.35); border-radius: 3px; pointer-events: none; }
+.upgrade-btn.card-evo .upgrade-title { font-size: 22px; color: var(--evolution); }
+.evo-glyph { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.evo-glyph .eg { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.evo-glyph .eg img { width: 44px; height: 44px; border-radius: 5px; border: 1px solid var(--line); object-fit: cover; background: rgba(0,0,0,0.5); }
+.evo-glyph .eg small { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-dim); }
+.evo-glyph .eg-out img { width: 56px; height: 56px; border-color: var(--evolution); box-shadow: 0 0 12px rgba(255,221,0,0.5); }
+.evo-glyph .eg-out small { color: var(--evolution); }
+.evo-glyph .eg-op { font-family: 'Cinzel', serif; font-size: 20px; color: var(--gold-dim); }
+.evo-glyph .chip { margin-left: auto; align-self: flex-start; }
+#reroll-btn.gold { background: linear-gradient(180deg, #f0d585, #c9a253); color: var(--ink-900); border-color: #8b5e20; box-shadow: 0 0 14px rgba(232,200,96,0.45); }
 
 #level-up-actions { display: flex; gap: 10px; margin-top: 14px; }
 .lu-action {
@@ -573,15 +793,17 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
 .upgrade-btn.rarity-evolution { border-color: #ffdd00; box-shadow: 0 0 20px rgba(255,220,0,0.3), inset 0 1px 0 rgba(255,220,0,0.2); }
 .upgrade-btn.rarity-relic { border-color: #5fd3c7; box-shadow: 0 0 16px rgba(95,211,199,0.3), inset 0 1px 0 rgba(95,211,199,0.15); }
 .relic-icon { display: flex; align-items: center; justify-content: center; font-size: 30px; background: radial-gradient(circle at 50% 40%, rgba(95,211,199,0.25), rgba(10,5,2,0.8)); }
-#relic-hud { position: fixed; bottom: 66px; left: 15px; display: flex; gap: 6px; z-index: 100; pointer-events: none; }
+#relic-hud-wrap { position: fixed; bottom: 82px; left: 15px; display: flex; align-items: center; gap: 6px; z-index: 100; pointer-events: none; }
+#relic-hud-wrap:has(#relic-hud:empty) { display: none; }
+#relic-label { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-dim); text-shadow: var(--hud-shadow); }
+#relic-hud { display: flex; gap: 5px; }
 .relic-pill {
-  width: 30px; height: 30px; border-radius: 8px; font-size: 14px; line-height: 30px; text-align: center;
-  background: rgba(20,12,5,0.8); border: 1px solid rgba(95,211,199,0.45); overflow: hidden;
+  width: 28px; height: 28px; border-radius: 6px; font-size: 14px; line-height: 26px; text-align: center;
+  background: rgba(20,12,5,0.8); border: 1px solid rgba(95,211,199,0.6); overflow: hidden;
 }
 .relic-pill-img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .rarity-tag { font-size: 11px; letter-spacing: 2px; font-weight: 700; margin-left: 6px; }
-.upgrade-rank { float: right; font-size: 11px; color: #6d5637; font-weight: normal; }
-.upgrade-delta { font-family: 'MedievalSharp', cursive; font-size: 12px; color: #7a9a5a; margin-top: 3px; }
+.upgrade-rank { float: right; font-size: 12px; color: var(--parchment-dim); font-weight: normal; }
 
 /* ─── GAME OVER ─── */
 /* ─── PAUSE SCREEN ─── */
@@ -607,8 +829,8 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
   /* Three knights' builds do not fit on one screen; the buttons must stay put. */
   max-height: 62vh; overflow-y: auto; padding-right: 4px;
 }
-#pause-stats span:nth-child(odd) { text-align: right; color: #8a7040; }
-#pause-stats span:nth-child(even) { text-align: left; color: #d4c080; }
+#pause-stats span:nth-child(odd) { text-align: right; color: var(--gold-dim); }
+#pause-stats span:nth-child(even) { text-align: left; color: var(--parchment); font-family: 'Cinzel', serif; font-variant-numeric: tabular-nums; }
 /* Explicit column roles. A full-width section header is still a grid child, so
    it flips the odd/even parity for everything after it -- with three loadout
    blocks the key/value columns swapped sides halfway down. */
@@ -644,9 +866,58 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
   background: linear-gradient(90deg, transparent, #5a1a1a, #8b2020, #5a1a1a, transparent);
 }
 #game-over-stats {
-  font-family: 'MedievalSharp', cursive; color: #b08a50;
-  font-size: 20px; line-height: 2; margin-bottom: 30px; text-align: center;
+  font-family: 'Cinzel', serif; color: var(--parchment);
+  font-size: 14px; line-height: 1.5; margin-bottom: 14px; text-align: center; width: min(1180px, 96vw);
 }
+#game-over-screen h1 { font-size: 56px; margin-bottom: 0; }
+#game-over-screen .divider { margin: 6px auto 8px; }
+.go-grid {
+  display: grid; grid-template-columns: 300px 1fr 1fr; grid-template-rows: auto 1fr; gap: 12px;
+  text-align: left; margin-top: 8px;
+}
+.go-panel {
+  background: linear-gradient(180deg, rgba(30,16,6,0.9), rgba(14,8,3,0.92));
+  border: 1px solid var(--line); border-radius: 8px; padding: 12px 16px; min-width: 0;
+}
+.go-grade { grid-row: 1 / 3; display: flex; flex-direction: column; align-items: center; }
+.go-quest { grid-column: 2 / 4; display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; }
+.go-head { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold-dim); font-weight: 700; margin-bottom: 8px; align-self: flex-start; }
+#grade-display { font-size: 96px; line-height: 1; margin: 6px 0 2px; }
+.go-gold { margin-top: 10px; padding: 10px 18px; border: 1px solid rgba(232,200,96,0.35); border-radius: 6px; background: rgba(232,200,96,0.06); text-align: center; display: flex; flex-direction: column; gap: 2px; width: 100%; }
+.go-gold .k, .go-hurt .k { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold-dim); font-weight: 700; }
+.go-gold b { font-size: 28px; color: var(--gold-bright); font-variant-numeric: tabular-nums; text-shadow: 0 0 14px rgba(232,200,96,0.4); }
+.go-gold small { font-size: 11px; color: var(--parchment-dim); font-family: 'MedievalSharp', cursive; }
+.go-best { margin-top: 12px; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-bright); font-weight: 700; }
+.go-best.dim { color: var(--parchment-dim); font-weight: 400; text-transform: none; letter-spacing: 0; }
+.go-quest-line { font-size: 15px; color: var(--parchment-dim); }
+.go-quest-line b { color: var(--gold-bright); }
+.go-quest-line i { font-style: normal; color: var(--gold); }
+.go-nums { display: flex; gap: 22px; }
+.go-nums span { display: flex; flex-direction: column; align-items: center; }
+.go-nums b { font-size: 22px; color: var(--gold-bright); font-variant-numeric: tabular-nums; }
+.go-nums small { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-dim); }
+.go-hurt { margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(90,58,26,0.5); font-size: 13px; }
+.go-hurt b { color: #ff8a8a; }
+.go-hurt i { font-style: normal; color: var(--parchment-dim); font-size: 12px; }
+.go-tiles { display: flex; gap: 6px; flex-wrap: wrap; }
+.go-tile { width: 46px; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.go-tile img { width: 44px; height: 44px; border-radius: 5px; border: 1px solid var(--gold-dim); object-fit: cover; background: rgba(0,0,0,0.5); }
+.go-tile.evolved img { border-color: var(--evolution); box-shadow: 0 0 8px rgba(255,221,0,0.35); }
+.go-tile small { font-size: 9px; letter-spacing: 0.1em; color: var(--gold-dim); font-weight: 700; }
+.go-tile.evolved small { color: var(--evolution); }
+.go-tile.empty { height: 44px; border: 1px dashed var(--ink-600); border-radius: 5px; opacity: 0.6; }
+.go-relics { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.go-relic { padding: 2px 8px; border: 1px solid var(--relic); border-radius: 4px; font-size: 11px; color: var(--relic); background: rgba(95,211,199,0.06); }
+.go-knight { padding: 6px 0 6px 10px; border-left: 3px solid var(--tint, var(--gold)); margin-bottom: 6px; }
+.go-kname { font-size: 11px; letter-spacing: 0.12em; color: var(--tint, var(--gold)); font-weight: 700; margin-bottom: 4px; }
+.go-kname i { font-style: normal; color: #ff8a8a; text-transform: uppercase; }
+.go-minor { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 12px; padding-top: 8px; border-top: 1px solid rgba(90,58,26,0.5); font-size: 11px; color: var(--gold-dim); letter-spacing: 0.06em; text-transform: uppercase; }
+.go-minor b { color: var(--parchment); font-variant-numeric: tabular-nums; }
+.go-strip { display: flex; gap: 8px 22px; flex-wrap: wrap; justify-content: center; margin-top: 12px; padding: 8px 14px; border: 1px solid rgba(136,221,255,0.35); border-radius: 6px; background: rgba(136,221,255,0.05); font-size: 12px; }
+.go-unlock { color: var(--new); font-weight: 700; letter-spacing: 0.04em; }
+.go-unlock::before { content: 'NEW  '; font-size: 9px; letter-spacing: 0.16em; color: var(--parchment-dim); }
+#game-over-screen.fallen .go-panel { border-color: #5a1a1a; }
+#game-over-screen.fallen .divider { background: linear-gradient(90deg, transparent, #5a1a1a, #8b2020, #5a1a1a, transparent); }
 #restart-btn {
   padding: 14px 55px; font-size: 22px; cursor: pointer;
   font-family: 'Cinzel', serif; font-weight: 700; letter-spacing: 2px;
@@ -661,34 +932,38 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
   box-shadow: 0 0 25px rgba(200,40,40,0.4);
 }
 
-/* ─── BOSS HEALTH BAR ─── */
+/* ─── BOSS HEALTH BAR ───
+   The widest single element on screen and the fight's headline: top of the
+   centre column, 520px, name in Cinzel (not Decorative, which is mush at 15px). */
 #boss-bar {
-  position: fixed; top: 60px; left: 50%; transform: translateX(-50%);
-  width: 360px; display: none; z-index: 150; text-align: center;
+  position: fixed; top: 12px; left: 50%; transform: translateX(-50%);
+  width: 520px; display: none; z-index: 150; text-align: center;
 }
 #boss-name {
-  font-family: 'Cinzel Decorative', serif; font-size: 15px; font-weight: 700;
-  color: #c9a253; letter-spacing: 2px;
-  text-shadow: 0 0 10px rgba(201,162,83,0.4), 0 2px 4px rgba(0,0,0,0.8);
-  margin-bottom: 4px;
+  font-family: 'Cinzel', serif; font-size: 15px; font-weight: 700;
+  color: var(--parchment); letter-spacing: 0.12em; text-transform: uppercase;
+  text-shadow: var(--hud-shadow); margin-bottom: 3px;
 }
 #boss-bar-outer {
-  width: 100%; height: 12px; background: #1a0e05;
-  border: 2px solid #8b2020; border-radius: 3px; overflow: hidden;
-  box-shadow: inset 0 2px 6px rgba(0,0,0,0.8), 0 0 12px rgba(140,20,20,0.4);
+  position: relative; width: 100%; height: 16px; background: var(--ink-800);
+  border: 2px solid var(--gold-dim); border-radius: 3px; overflow: hidden;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.8), 0 0 12px rgba(0,0,0,0.5);
+}
+/* Bosses phase at half: a tick at the bar's centre says where that is. */
+#boss-bar-outer::after {
+  content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px;
+  background: rgba(0,0,0,0.55); pointer-events: none;
 }
 #boss-bar-inner {
   width: 100%; height: 100%;
-  background: linear-gradient(90deg, #6b1010, #cc2222, #dd4444);
-  box-shadow: 0 0 8px rgba(200,30,30,0.5);
+  background: linear-gradient(90deg, #7a1616, var(--danger), #e05a5a);
+  box-shadow: 0 0 8px rgba(208,64,64,0.5);
   transition: width 0.15s;
 }
-
-/* ─── COMBO COUNTER ─── */
-#combo-display {
-  top: 10px; left: calc(50% - 6px); transform: translateX(-100%);
-  font-size: 14px; color: #e0b862; opacity: 0; z-index: 150;
-  transition: opacity 0.3s, transform 0.15s;
+#boss-pct {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: flex-end;
+  padding-right: 6px; font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700;
+  color: var(--parchment); text-shadow: var(--hud-shadow); font-variant-numeric: tabular-nums;
 }
 
 /* ─── DASH COOLDOWN INDICATOR ─── */
@@ -721,8 +996,8 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
   transition: height 0.1s linear;
 }
 #dash-label {
-  font-family: 'MedievalSharp', cursive; font-size: 11px; color: #8a7040;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+  font-family: 'Cinzel', serif; font-size: 12px; font-weight: 700; letter-spacing: 0.12em;
+  color: var(--gold); text-shadow: var(--hud-shadow);
 }
 
 /* ─── TOUCH CONTROLS ─── */
@@ -804,11 +1079,47 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
   -webkit-tap-highlight-color: transparent;
 }
 .touch-active #weapon-hud { bottom: 12px; left: 12px; }
-.touch-active #relic-hud { bottom: 60px; left: 12px; }
+.touch-active #relic-hud-wrap { display: none; }          /* relics live on the pause screen on a phone */
 .touch-active #minimap { width: 110px; height: 110px; bottom: 10px; right: 10px; }
 .touch-active #dash-indicator { display: none !important; }
 .touch-active #hud-left { transform: scale(0.85); transform-origin: top left; }
-.touch-active #hud-right { transform: scale(0.85); transform-origin: top right; }
+/* The pause button sits at the top-right corner; the wave panel steps left of it. */
+.touch-active #hud-right { transform: scale(0.85); transform-origin: top right; margin-right: 44px; }
+.touch-active .stats-dim { display: none; }
+.touch-active .weapon-slot { width: 40px; height: 40px; }
+/* Between the two scaled panels: 100vw minus ~540px of HUD, never under 200px */
+.touch-active #boss-bar, .touch-active #wave-event-banner { width: clamp(200px, 100vw - 540px, 520px); }
+.touch-active #boss-name { font-size: 12px; }
+/* The pill is narrow between the two scaled panels, so the description wraps
+   under the event name instead of running under the wave panel. */
+.touch-active #wave-event-banner { white-space: normal; font-size: 12px; }
+.touch-active #wave-event-desc { display: block; margin-left: 0; font-size: 13px; line-height: 1.3; }
+/* Landscape phone: the card screen is taller than the viewport, so it scrolls
+   from the top and the cards compact; the REROLL / BANISH / SKIP row must stay
+   reachable. */
+@media (max-height: 520px) {
+  #level-up-screen { justify-content: flex-start; overflow-y: auto; padding: 8px 0 16px; }
+  #level-up-screen h2 { font-size: 26px; margin-bottom: 2px; }
+  #level-up-screen .divider { margin: 0 auto 8px; }
+  .upgrade-btn { padding: 6px 12px; margin: 3px; width: min(560px, 92vw); gap: 10px; }
+  .upgrade-icon { width: 40px; height: 40px; }
+  .upgrade-btn .upgrade-title { font-size: 15px; }
+  .upgrade-btn .upgrade-desc { font-size: 13px; margin-top: 1px; }
+  .upgrade-delta { margin-top: 3px; }
+  .upgrade-btn.card-evo { padding: 8px 12px; }
+  .evo-glyph .eg img { width: 32px; height: 32px; }
+  .evo-glyph .eg-out img { width: 40px; height: 40px; }
+  #level-up-actions { margin-top: 6px; }
+  #game-over-screen { justify-content: flex-start; overflow-y: auto; padding: 8px 0 16px; }
+  #game-over-screen h1 { font-size: 34px; }
+  /* The pause stats were taller than the viewport, so RESUME sat on top of them. */
+  #pause-screen { justify-content: flex-start; padding: 8px 0 12px; }
+  #pause-screen h2 { font-size: 26px; margin-bottom: 2px; }
+  #pause-screen .divider { margin: 4px auto 8px; }
+  #pause-stats { font-size: 14px; line-height: 1.5; margin-bottom: 10px; max-height: calc(100vh - 150px); gap: 1px 18px; }
+  #pause-btns { flex-wrap: wrap; justify-content: center; }
+  #resume-btn { padding: 8px 26px; font-size: 16px; }
+}
 
 /* ─── ENEMY OVERHEAD HEALTH BAR ─── */
 .enemy-hp-bar {
@@ -824,62 +1135,60 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
 .enemy-hp-bar.boss .enemy-hp-fill { background: linear-gradient(90deg, #cc1111, #ff3333); }
 
 /* ─── CHARACTER PASSIVE INDICATOR ─── */
-#passive-indicator {
-  font-family: 'MedievalSharp', cursive; font-size: 11px; color: #88aa66;
-  margin-top: 4px; text-shadow: 0 1px 2px rgba(0,0,0,0.8);
-}
+/* The passive line is on the pause screen now; the knight panel is HP, level, kit. */
+#passive-indicator { display: none; }
+body.boss-active #revive-banner { top: 112px; }
 
 /* ─── WAVE TIMER ─── */
 #wave-timer {
   font-family: 'MedievalSharp', cursive; font-size: 12px; color: #8a6a3a;
   margin-top: 2px; transition: color 0.3s, font-size 0.3s;
 }
-#active-buffs {
-  position: fixed; top: 34px; left: 50%; transform: translateX(-50%);
-  display: flex; gap: 6px; z-index: 100; pointer-events: none;
-}
+/* Power-up pills live in the knight panel: they are "what I have", not a threat. */
+#active-buffs { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+#active-buffs:empty { display: none; }
 .buff-pill {
-  display: flex; align-items: center; gap: 4px; padding: 3px 8px;
-  background: rgba(20, 12, 5, 0.8); border: 1px solid rgba(212,168,86,0.3);
-  border-radius: 12px; font-family: 'MedievalSharp', cursive; font-size: 12px;
-  color: #d4a856; white-space: nowrap;
+  display: flex; align-items: center; gap: 4px; padding: 1px 7px;
+  background: rgba(0,0,0,0.45); border: 1px solid rgba(212,168,86,0.35);
+  border-radius: 10px; font-family: 'Cinzel', serif; font-size: 10px; font-weight: 700;
+  letter-spacing: 0.04em; color: var(--parchment); white-space: nowrap; text-shadow: var(--hud-shadow);
 }
 .buff-pill.speed { border-color: rgba(68,170,238,0.5); color: #44aaee; }
 .buff-pill.damage { border-color: rgba(255,68,34,0.5); color: #ff6644; }
 .buff-pill.armor { border-color: rgba(255,221,136,0.5); color: #ffdd88; }
 
-/* ─── WEAPON HUD ─── */
+/* ─── WEAPON HUD ───
+   48px slots, level as a 5-pip strip UNDER the slot (a numeral in the corner
+   did not read), cooldown as a radial sweep over the icon. */
 #weapon-hud {
   position: fixed; bottom: 15px; left: 15px;
-  display: flex; gap: 6px; z-index: 100; pointer-events: none;
+  display: flex; gap: 6px; z-index: 100; pointer-events: none; align-items: flex-start;
 }
+.ws { display: flex; flex-direction: column; align-items: center; gap: 3px; }
 .weapon-slot {
-  width: 44px; height: 44px; border-radius: 6px;
-  border: 2px solid #5a3a1a;
+  width: 48px; height: 48px; border-radius: 6px;
+  border: 2px solid var(--gold-dim);
   background: rgba(15,8,2,0.8);
   position: relative; overflow: hidden;
   display: flex; align-items: center; justify-content: center;
 }
-.weapon-slot.active { border-color: #c9a253; }
-.weapon-slot.evolved { border-color: #ffdd00; box-shadow: 0 0 8px rgba(255,220,0,0.3); }
-.weapon-slot-icon {
-  font-size: 20px; color: #c9a253;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-}
-.weapon-slot-img {
-  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-}
-.weapon-slot-cd { z-index: 1; }
-.weapon-slot-level { z-index: 2; }
-.weapon-slot-level {
-  position: absolute; bottom: 1px; right: 3px;
-  font-family: 'Cinzel', serif; font-size: 10px; font-weight: 700;
-  color: #e8c860; text-shadow: 0 1px 2px rgba(0,0,0,1);
-}
+.weapon-slot.empty { border-style: dashed; opacity: 0.5; }
+.weapon-slot.active { border-color: var(--gold); }
+.weapon-slot.evolved { border-color: var(--evolution); box-shadow: 0 0 8px rgba(255,220,0,0.35); }
+.weapon-slot-icon { font-size: 20px; color: var(--gold); text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+.weapon-slot-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .weapon-slot-cd {
-  position: absolute; bottom: 0; left: 0; right: 0;
-  height: 0%; background: rgba(201,162,83,0.3);
-  transition: height 0.1s linear;
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: conic-gradient(rgba(0,0,0,0.55) var(--cd, 0deg), transparent 0deg);
+}
+.ws-pips { display: flex; gap: 2px; height: 5px; }
+.ws-pips i { display: block; width: 6px; height: 4px; border-radius: 1px; background: var(--ink-600); border: 1px solid rgba(0,0,0,0.5); }
+.ws-pips i.on { background: var(--gold); }
+.ws-pips b { font-size: 9px; line-height: 5px; color: var(--evolution); text-shadow: var(--hud-shadow); }
+.weapon-slot-level {
+  position: absolute; bottom: 1px; right: 3px; z-index: 2;
+  font-family: 'Cinzel', serif; font-size: 10px; font-weight: 700;
+  color: var(--gold-bright); text-shadow: 0 1px 2px rgba(0,0,0,1);
 }
 
 /* ─── EFFECTS ─── */
@@ -909,8 +1218,11 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
   background: rgba(12,6,2,0.55); border: 1px solid rgba(201,162,83,0.28);
   text-shadow: 0 1px 3px rgba(0,0,0,0.9);
 }
+/* One transient line, never a second pill: no box, an outline and a glow. */
 #wave-announce {
-  top: 100px; font-size: 19px; color: #e0b862; max-width: 60vw;
+  top: 128px; font-size: 18px; color: var(--gold-bright); max-width: 60vw;
+  background: none; border: 0; padding: 0;
+  text-shadow: 0 0 2px #000, 0 1px 2px #000, 0 0 8px rgba(0,0,0,0.9), 0 0 14px rgba(232,200,96,0.35);
   opacity: 0; z-index: 200; transition: opacity 0.35s;
 }
 #wave-announce:empty { display: none; }
@@ -931,25 +1243,26 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
 .dmg-dir-right { top: 50%; right: 0; transform: translateY(-50%) rotate(90deg); }
 .dmg-dir svg { width: 100%; height: 100%; }
 
-/* ─── KILL STREAK ─── */
-#streak-display {
-  top: 10px; left: calc(50% + 6px); transform: none;
-  font-size: 14px; color: #ff9955; opacity: 0; z-index: 100;
-  transition: opacity 0.3s, transform 0.15s;
-}
-#streak-display.active { opacity: 1; }
-#ride-timer { top: 64px; font-size: 15px; color: #e8c860; z-index: 100; }
-#ride-timer:empty { display: none; }
-#ride-timer.ending { color: #ff9955; }
-
-/* ─── WAVE EVENT BANNER ─── */
+/* ─── WAVE EVENT BANNER ───
+   A tinted pill directly under the boss bar (or at the top when there is no
+   boss) that stays for the whole event, with a timer bar draining along its
+   bottom edge. Replaces the "(19s)" countdown pill. */
 #wave-event-banner {
-  top: 136px; font-size: 16px; letter-spacing: 2px; opacity: 0; z-index: 200;
-  transition: opacity 0.4s;
+  top: 12px; width: 440px; padding: 6px 14px 8px; text-align: left;
+  font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0; z-index: 200;
+  border-left: 3px solid var(--event, var(--gold)); overflow: hidden; border-radius: 4px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--event, #c9a253) 14%, rgba(12,6,2,0.8)), rgba(12,6,2,0.8));
+  transition: opacity 0.4s, top 0.3s;
 }
+body.boss-active #wave-event-banner { top: 62px; }
+#wave-event-text { color: var(--parchment); }
 #wave-event-desc {
-  display: inline; font-family: 'MedievalSharp', cursive; font-size: 12px; letter-spacing: 0.5px;
-  margin-left: 10px; opacity: 0.85; font-weight: normal;
+  display: inline; font-family: 'MedievalSharp', cursive; font-size: 14px; letter-spacing: 0; text-transform: none;
+  margin-left: 10px; color: var(--parchment-dim); font-weight: normal;
+}
+#wave-event-bar {
+  position: absolute; left: 0; bottom: 0; height: 3px; width: 100%;
+  background: var(--event, var(--gold)); transition: width 0.25s linear;
 }
 
 /* ─── PERFORMANCE GRADE ─── */
@@ -965,8 +1278,8 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
 
 /* ─── FORGE (Meta-Progression) ─── */
 #forge-screen {
-  position: fixed; inset: 0; display: none;
-  flex-direction: column; align-items: center; justify-content: center;
+  position: fixed; inset: 0; display: none; padding-top: 20px;
+  flex-direction: column; align-items: center; justify-content: flex-start;
   background: radial-gradient(ellipse at center, rgba(30,15,5,0.97), rgba(10,5,2,0.99));
   z-index: 500; color: #c9a253; overflow-y: auto;
 }
@@ -1134,8 +1447,8 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
   box-shadow: 0 0 16px rgba(232,200,96,0.55) !important;
 }
 .menu-hint {
-  font-family: 'MedievalSharp', cursive; font-size: 11px; color: #6d5637;
-  margin-top: 10px; letter-spacing: 1px; text-align: center;
+  font-family: 'Cinzel', serif; font-size: 12px; color: var(--parchment-dim); opacity: 0.85;
+  margin-top: 10px; letter-spacing: 0.08em; text-align: center;
 }
 
 /* ─── CO-OP HUD (companion health) ───
@@ -1168,28 +1481,20 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
 }
 .coop-kit-sep { width: 1px; height: 13px; background: rgba(201,162,83,0.3); margin: 0 2px; }
 .coop-hp-row {
-  display: grid; grid-template-columns: auto 1fr auto; gap: 2px 7px; align-items: center;
-  padding: 3px 5px; border-radius: 4px;
-  background: rgba(0,0,0,0.35); border-left: 3px solid var(--tint, #fff);
+  display: grid; grid-template-columns: auto auto 1fr; gap: 2px 8px; align-items: center;
+  padding: 4px 6px 4px 4px; border-radius: 4px;
+  background: rgba(0,0,0,0.3); border-left: 3px solid var(--tint, #fff);
 }
+.coop-hp-row .kp-chip { width: 22px; height: 22px; font-size: 11px; }
 .coop-hp-who {
-  font-family: 'Cinzel', serif; font-size: 12px; font-weight: 700; letter-spacing: 1px;
-  min-width: 74px;
+  font-family: 'Cinzel', serif; font-size: 12px; font-weight: 700; letter-spacing: 0.06em;
+  color: var(--tint, var(--gold)); text-shadow: var(--hud-shadow); white-space: nowrap;
 }
-.coop-hp-outer {
-  height: 14px; background: rgba(0,0,0,0.6);
-  border: 1px solid #3a2510; border-radius: 3px; overflow: hidden;
-}
-.coop-hp-inner { height: 100%; transition: width 0.15s; }
-.coop-hp-text {
-  font-family: 'MedievalSharp', cursive; font-size: 12px; color: #c0a878;
-  min-width: 70px; text-align: right;
-}
+.coop-hp-inner { background: linear-gradient(90deg, #2f9a3c, var(--hp)); }
 /* Down is a state you must be able to read at a glance from across the room. */
-.coop-hp-row.is-down { background: rgba(70,10,10,0.45); border-left-color: #d04040; }
+.coop-hp-row.is-down { background: rgba(70,10,10,0.45); border-left-color: var(--danger); }
 .coop-hp-row.is-down .coop-hp-who { color: #ff9a9a !important; }
-.coop-hp-row.is-down .coop-hp-text { color: #ff8080; }
-.coop-hp-row.is-down .coop-hp-inner { background: #d04040 !important; }
+.coop-hp-row.is-down .coop-hp-inner { background: var(--danger) !important; }
 .coop-hp-row.is-reviving { background: rgba(20,60,20,0.45); border-left-color: #6ad06a; }
 .coop-hp-row.is-reviving .coop-hp-inner { background: #6ad06a !important; }
 
@@ -1198,7 +1503,7 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
    REVIVE_SECONDS. There is no button to press, which is right for kids but
    impossible to guess, so it has to be said on screen. */
 #revive-banner {
-  top: 92px; font-size: 17px; display: none; z-index: 320;
+  top: 62px; font-size: 17px; display: none; z-index: 320;
   background: rgba(60,6,6,0.82); border-color: rgba(255,120,120,0.55);
   color: #ffd9d9; padding: 6px 20px;
 }
@@ -1228,7 +1533,7 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
 .coop-slot.joined .cs-knight { color: #d4a856; }
 .coop-slot .cs-dev { font-family: 'MedievalSharp', cursive; font-size: 10px; color: #5f4a2a; }
 .coop-slot.joined .cs-dev { color: #8a7040; }
-#coop-hint { font-family: 'MedievalSharp', cursive; font-size: 11px; color: #6d5637; margin-top: 5px; line-height: 1.5; }
+#coop-hint { font-family: 'MedievalSharp', cursive; font-size: 12px; color: var(--parchment-dim); margin-top: 5px; line-height: 1.5; }
 #coop-hint b { color: #a8873f; }
 
 .char-card-crest {
@@ -1245,32 +1550,71 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
    and the flex centering defeated the start screen's own scroll. This compacts
    the layout so everything fits, keeps the screen genuinely scrollable as a
    fallback, and pins the button so it can never be lost off-screen again. */
-/* Pinning the button helps ANY short window, desktop included -- at 1080p
-   maximised the viewport is ~955px and the button sat below the fold there
-   too. This part is deliberately broad. */
-@media (max-height: 1000px) {
-  #start-screen { padding-bottom: 88px; }
-  #start-btn {
-    position: fixed; left: 50%; transform: translateX(-50%);
-    bottom: 14px; z-index: 1002; min-width: 220px;
-  }
-}
+/* The fixed BEGIN QUEST pin that used to live here is gone: the button sits in
+   the Muster panel's own footer (#muster-foot), which is always the last row of
+   the panel, so nothing can be covered by it at any window height. */
 
 /* The aggressive shrink is for phones only. Keyed on width, not height:
    max-height alone caught 1920x955 desktops and shrank their cards to 132px. */
 @media (max-width: 900px), (pointer: coarse) and (max-height: 820px) {
   #start-screen {
     justify-content: flex-start;
-    padding-bottom: 92px;              /* room for the pinned button */
+    padding-bottom: 12px;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
   }
+  /* The Muster stacks to one column on a phone and scrolls as a whole; its
+     footer (BEGIN QUEST) is still the last thing in the panel. */
+  #muster { grid-template-columns: 1fr; max-height: none; padding: 10px 10px 8px; row-gap: 6px; overflow: visible; }
+  #muster-right { border-left: 0; padding-left: 0; border-top: 1px solid rgba(90,58,26,0.5); padding-top: 8px; }
+  #muster-foot { flex-wrap: wrap; gap: 8px; justify-content: center; }
+  #muster #start-btn { width: 100%; }
+  #start-screen.stage-muster h1 { font-size: 26px; margin-top: 6px; }
+  #play-btn { padding: 12px 56px; font-size: 22px; }
+  #title-stage .controls-info { display: none; }
   #start-screen h1 { font-size: 38px; margin: 6px 0 0; }
   #start-screen .subtitle { font-size: 13px; margin-bottom: 4px; }
-  .char-card { width: 132px; padding: 6px 6px 8px; }
-  .char-card canvas { width: 108px; height: 108px; }
-  .char-name { font-size: 14px; }
+  /* Three cards must fit the narrowest phone: 3 x 132 + gaps was 436px in a
+     390px viewport and clipped both outer cards. Size from the viewport. */
+  #char-select { gap: 8px; width: 100%; justify-content: center; }
+  .char-card { width: min(132px, calc((100vw - 64px) / 3)); padding: 6px 4px 8px; }
+  .char-card canvas { width: min(108px, calc((100vw - 64px) / 3 - 10px)); height: auto; aspect-ratio: 1; }
+  .char-name { font-size: 13px; }
   .char-title { font-size: 10px; }
+  /* Level-up and end-of-run: fixed 560px cards and a 3-column grid re-flow to
+     the viewport; the action rows wrap instead of running off the edge. */
+  #level-up-screen { justify-content: flex-start; overflow-y: auto; padding: 10px 0 20px; }
+  #level-up-screen h2 { font-size: 30px; margin-bottom: 4px; }
+  .upgrade-btn { width: min(560px, 94vw); padding: 8px 10px; gap: 10px; margin: 4px; }
+  .upgrade-icon { width: 44px; height: 44px; }
+  .upgrade-btn .upgrade-title { font-size: 15px; }
+  .upgrade-btn .upgrade-desc { font-size: 13px; }
+  .evo-glyph { flex-wrap: wrap; gap: 6px; }
+  #level-up-actions { flex-wrap: wrap; justify-content: center; }
+  #game-over-screen { justify-content: flex-start; overflow-y: auto; padding: 10px 0 20px; }
+  #game-over-screen h1 { font-size: 36px; }
+  #game-over-stats { width: 96vw; }
+  .go-grid { grid-template-columns: 1fr; grid-template-rows: none; gap: 8px; }
+  .go-grade { grid-row: auto; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 4px 18px; padding: 8px 12px; }
+  .go-grade .go-head { width: 100%; }
+  #grade-display { font-size: 56px; margin: 0; }
+  .go-gold { width: auto; margin-top: 0; padding: 6px 14px; }
+  .go-gold b { font-size: 22px; }
+  .go-best { width: 100%; text-align: center; margin-top: 4px; }
+  .go-quest { grid-column: auto; }
+  .go-nums { gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .go-nums b { font-size: 18px; }
+  .db-row { grid-template-columns: minmax(0, 1.3fr) 1fr 38px; }
+  .db-name { font-size: 12px; }
+  #go-btns { flex-wrap: wrap; justify-content: center; }
+  #restart-btn { padding: 10px 28px; font-size: 18px; }
+  /* Pause: the three buttons were a single non-wrapping row wider than the
+     phone, so RESUME and MAIN MENU hung off both edges. */
+  #pause-screen { justify-content: flex-start; padding: 12px 8px; }
+  #pause-screen h2 { font-size: 30px; }
+  #pause-stats { font-size: 14px; line-height: 1.55; margin-bottom: 12px; max-height: calc(100vh - 210px); gap: 1px 18px; }
+  #pause-btns { flex-wrap: wrap; justify-content: center; gap: 8px; width: 100%; }
+  #resume-btn { padding: 10px 30px; font-size: 17px; }
   #char-bio-area { font-size: 11px; padding: 6px 10px; margin: 4px 8px; }
   #map-select-wrapper, #ogre-level-wrapper { margin: 4px 0; }
   /* Three battlefields no longer fit on one phone-width row at the desktop size:
@@ -1341,7 +1685,7 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
   align-items: center; margin: 10px 0 20px;
 }
 .setting-label { font-family: 'Cinzel', serif; font-size: 14px; font-weight: 700; color: #d4a856; text-align: right; }
-.setting-value { font-family: 'MedievalSharp', cursive; font-size: 13px; color: #8a7040; }
+.setting-value { font-family: 'Cinzel', serif; font-size: 13px; color: var(--parchment-dim); font-variant-numeric: tabular-nums; }
 #settings-grid-gfx {
   display: grid; grid-template-columns: 180px 260px 60px; gap: 12px 16px;
   align-items: center; margin: 10px 0 20px;
@@ -1362,20 +1706,14 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
 .setting-toggle.on { color: #e8c860; border-color: #c9a253; }
 
 /* ─── RUN-END DAMAGE BREAKDOWN ─── */
-#dmg-breakdown {
-  width: 420px; margin: 10px auto 0; text-align: left;
-  font-family: 'MedievalSharp', cursive; font-size: 13px;
-}
-#dmg-breakdown .db-title {
-  font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 2px; color: #8a6a3a;
-  text-transform: uppercase; margin-bottom: 4px;
-}
-.db-row { display: grid; grid-template-columns: 150px 1fr 70px; gap: 8px; align-items: center; margin: 2px 0; }
-.db-name { color: #d4c080; display: flex; align-items: center; gap: 6px; }
-.db-icon { width: 18px; height: 18px; border-radius: 3px; border: 1px solid #5a3a1a; object-fit: cover; }
-.db-bar { height: 8px; background: rgba(0,0,0,0.5); border: 1px solid #3a2510; border-radius: 3px; overflow: hidden; }
-.db-fill { height: 100%; background: linear-gradient(90deg, #8b5e20, #e8c860); }
-.db-val { text-align: right; color: #8a7040; }
+#dmg-breakdown { width: 100%; margin: 0; text-align: left; font-family: 'Cinzel', serif; font-size: 13px; }
+#dmg-breakdown .db-title { display: none; }
+.db-row { display: grid; grid-template-columns: 150px 1fr 44px; gap: 8px; align-items: center; margin: 3px 0; }
+.db-name { color: var(--parchment); display: flex; align-items: center; gap: 6px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.db-icon { width: 22px; height: 22px; border-radius: 3px; border: 1px solid var(--line); object-fit: cover; flex: 0 0 auto; }
+.db-bar { height: 8px; background: rgba(0,0,0,0.5); border: 1px solid var(--ink-600); border-radius: 3px; overflow: hidden; }
+.db-fill { height: 100%; background: linear-gradient(90deg, #8b5e20, var(--gold-bright)); }
+.db-val { text-align: right; color: var(--parchment-dim); font-variant-numeric: tabular-nums; }
 #pause-btns, #go-btns { display: flex; gap: 10px; align-items: center; }
 </style>
 </head>
@@ -1391,11 +1729,34 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
   <div class="build-badge"></div>
 </div>
 
-<div id="start-screen">
+<div id="start-screen" class="stage-title">
   <div class="build-badge"></div>
   <h1>Castle Survivor</h1>
   <h2>Defend Your Kingdom</h2>
   <div class="divider"></div>
+  <!-- Stage 1: the picture and one button. Everything a first-time player needs
+       to decide lives one press further in, on the Muster panel. -->
+  <div id="title-stage">
+    <div id="rotate-hint">&#x1F4F1; <b>Turn your phone sideways</b> &middot; the battle plays best in landscape</div>
+    <button id="play-btn">PLAY</button>
+    <div class="menu-row" id="title-menu">
+      <button class="menu-btn-secondary" id="forge-btn">THE FORGE</button>
+      <button class="menu-btn-secondary" id="scores-btn">HALL OF FAME</button>
+      <button class="menu-btn-secondary" id="help-btn">CODEX</button>
+      <button class="menu-btn-secondary" id="settings-btn">SETTINGS</button>
+    </div>
+    <div id="last-quest"></div>
+    <div class="controls-info">
+      WASD / Left Stick &mdash; Move &bull; Space / B Button &mdash; Dash &bull; D-Pad navigates menus, A selects, B goes back
+      <div id="start-tip"></div>
+    </div>
+  </div>
+  <!-- Stage 2: the Muster. Two columns (knights and party | battlefield and Ogre
+       Level) and BEGIN QUEST in the panel's own footer, so no fixed pin can ever
+       cover the difficulty ladder again. -->
+  <div id="muster">
+  <div id="muster-left">
+  <div class="muster-head">Knights</div>
   <div id="char-select-wrapper">
     <div id="char-select">
       <div class="char-card selected" data-char="dad">
@@ -1417,6 +1778,14 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
     <div id="char-bio-area">The leader of the kingdom's knights, sworn to protect the realm with his wisdom and leadership.
 ⚔ Shield Wall: +2 Armor, +15 Max HP</div>
   </div>
+  <div id="coop-roster">
+    <div id="coop-title">Party</div>
+    <div id="coop-slots"></div>
+    <div id="coop-hint">Press <b>A</b> on a second controller to join &bull; <b>Y</b> to change knight &bull; <b>B</b> to leave</div>
+  </div>
+  <div id="start-gold"></div>
+  </div>
+  <div id="muster-right">
   <div id="map-select-wrapper">
     <div id="map-select-title">Battlefield</div>
     <div id="map-select">
@@ -1441,27 +1810,11 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
     <div id="ogre-level-name">Normal</div>
     <div id="ogre-level-desc">The standard challenge — for those learning the blade.</div>
   </div>
-  <div id="coop-roster">
-    <div id="coop-title">Companions</div>
-    <div id="coop-slots"></div>
-    <div id="coop-hint">Press <b>A</b> on a second controller to join &bull; <b>Y</b> to change knight &bull; <b>B</b> to leave</div>
   </div>
-  <div id="start-gold"></div>
-  <button id="start-btn">BEGIN QUEST</button>
-  <div class="menu-row">
-    <button class="menu-btn-secondary" id="forge-btn">THE FORGE</button>
-    <button class="menu-btn-secondary" id="scores-btn">HALL OF FAME</button>
-    <button class="menu-btn-secondary" id="settings-btn">SETTINGS</button>
-    <button class="menu-btn-secondary" id="help-btn">HELP</button>
-    <button class="menu-btn-secondary" id="editor-btn">LEVEL EDITOR</button>
-    <button class="menu-btn-secondary" id="load-map-btn">LOAD MAP</button>
-    <input type="file" id="load-map-input" accept=".json">
+  <div id="muster-foot">
+    <button class="menu-btn-secondary" id="muster-back">&lsaquo; BACK</button>
+    <button id="start-btn">BEGIN QUEST</button>
   </div>
-  <div class="controls-info">
-    WASD / Left Stick &mdash; Move &bull; Space / B Button &mdash; Dash<br>
-    Xbox Controller Supported &bull; D-Pad navigates menus, A selects, B goes back<br>
-    Collect Coins for XP, Food for Healing &bull; Slay the Ogre King on Wave 20
-    <div id="start-tip"></div>
   </div>
 </div>
 
@@ -1501,6 +1854,12 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
   <div class="setting-section-title">Lighting</div>
   <div id="settings-grid-gfx"></div>
   <button class="setting-toggle" id="set-gfx-reset" style="width:160px;margin:-10px 0 16px">RESET LIGHTING</button>
+  <div class="setting-section-title">Advanced</div>
+  <div class="menu-row" id="settings-advanced">
+    <button class="menu-btn-secondary" id="editor-btn">LEVEL EDITOR</button>
+    <button class="menu-btn-secondary" id="load-map-btn">LOAD MAP</button>
+    <input type="file" id="load-map-input" accept=".json">
+  </div>
   <button class="menu-btn-secondary" id="settings-close-btn">RETURN</button>
   <div class="menu-hint">D-Pad / Arrows adjust &bull; A / Enter toggle &bull; B / Esc return</div>
 </div>
@@ -1564,25 +1923,35 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
 
 <div id="hud">
   <div id="hud-top">
+    <!-- Knight panel: "am I alive". One grammar for every knight -- the co-op
+         rows below reuse the same chip / name / bar-with-numerals row. -->
     <div id="hud-left">
-      <div id="health-bar-outer"><div id="health-bar-inner"></div></div>
-      <div id="health-text">100 / 100</div>
-      <div id="xp-bar-outer"><div id="xp-bar-inner"></div></div>
-      <div id="xp-text">Level 1 - 0 / 30 XP</div>
+      <div class="kp-row kp-row1">
+        <div id="kp-chip" class="kp-chip">D</div>
+        <div id="kp-name" class="kp-name">DAD</div>
+        <div id="health-bar-outer"><div id="health-bar-inner"></div><div id="health-text">100 / 100</div></div>
+        <div id="ride-timer"></div>
+      </div>
+      <div class="kp-row kp-row2">
+        <div id="kp-level" class="kp-level">1</div>
+        <div id="xp-bar-outer"><div id="xp-bar-inner"></div></div>
+        <div id="xp-text"></div>
+      </div>
+      <div id="active-buffs"></div>
       <div id="passive-indicator"></div>
       <div id="coop-hud"></div>
     </div>
+    <!-- Wave panel: "how far". The 20-segment track shows the boss waves. -->
     <div id="hud-right">
       <div id="stats">
         <div id="wave-text">Wave 1</div>
-        <div id="ogre-hud" style="font-size:11px;color:#b08040;display:none"></div>
-        <div id="score-text">Score: 0</div>
-        <div id="kills-text">Kills: 0</div>
-        <div id="time-text">0:00</div>
-        <div id="wave-timer"></div>
+        <div id="wave-track"></div>
+        <div id="wave-next"><span class="wn-label">Next</span><div class="wn-bar"><div id="wave-next-fill"></div></div><span id="wave-timer">0:00</span></div>
+        <div id="ogre-hud" style="display:none"></div>
+        <div class="stats-line"><span id="time-text">0:00</span><span id="combo-display"></span><span id="streak-display"></span></div>
+        <div class="stats-line stats-dim"><span id="score-text">Glory: 0</span><span id="kills-text">Kills: 0</span></div>
       </div>
     </div>
-    <div id="active-buffs"></div>
   </div>
 </div>
 
@@ -1624,23 +1993,20 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
 
 <div id="boss-bar">
   <div id="boss-name">BOSS</div>
-  <div id="boss-bar-outer"><div id="boss-bar-inner"></div></div>
+  <div id="boss-bar-outer"><div id="boss-bar-inner"></div><div id="boss-pct"></div></div>
 </div>
-<div id="combo-display" class="hud-strip"></div>
 <div id="dash-indicator">
   <div id="dash-icon"><div id="dash-cd-fill"></div>&#x21E8;</div>
   <div id="dash-label">DASH</div>
 </div>
 <div id="weapon-hud"></div>
-<div id="relic-hud"></div>
+<div id="relic-hud-wrap"><span id="relic-label">Relics</span><div id="relic-hud"></div></div>
 <div id="damage-flash"></div>
 <div class="dmg-dir dmg-dir-top" id="dmg-top"><svg viewBox="0 0 80 80"><polygon points="40,0 10,40 70,40" fill="rgba(200,20,0,0.6)"/></svg></div>
 <div class="dmg-dir dmg-dir-bottom" id="dmg-bottom"><svg viewBox="0 0 80 80"><polygon points="40,0 10,40 70,40" fill="rgba(200,20,0,0.6)"/></svg></div>
 <div class="dmg-dir dmg-dir-left" id="dmg-left"><svg viewBox="0 0 80 80"><polygon points="40,0 10,40 70,40" fill="rgba(200,20,0,0.6)"/></svg></div>
 <div class="dmg-dir dmg-dir-right" id="dmg-right"><svg viewBox="0 0 80 80"><polygon points="40,0 10,40 70,40" fill="rgba(200,20,0,0.6)"/></svg></div>
-<div id="streak-display" class="hud-strip"></div>
-<div id="wave-event-banner" class="hud-strip"><span id="wave-event-text"></span><span id="wave-event-desc"></span></div>
-<div id="ride-timer" class="hud-strip"></div>
+<div id="wave-event-banner" class="hud-strip"><span id="wave-event-text"></span><span id="wave-event-desc"></span><i id="wave-event-bar"></i></div>
 <canvas id="minimap"></canvas>
 <div id="touch-controls">
   <div id="touch-stick-zone"><div id="touch-stick-base"></div><div id="touch-stick-knob"></div></div>
@@ -1675,7 +2041,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 // shipped in. `number` is the commit count this change will produce. Do not
 // hand-edit: the stamper matches the two marker lines exactly.
 /* BUILD:START */
-const BUILD = { number: 58, date: '2026-09-25' };
+const BUILD = { number: 59, date: '2026-09-26' };
 /* BUILD:END */
 for (const el of document.querySelectorAll('.build-badge')) el.textContent = `BUILD ${BUILD.number}`;
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -1699,7 +2065,7 @@ const MAGNET_SPEED = 12;
 // filled from level-ups. Limiting slots is what turns picks into a build.
 const MAX_WEAPON_SLOTS = 4;
 const CHARACTER_PRIMARY = { dad: 'sword', brennan: 'spear', parker: 'staff' };
-const PRIMARY_WEAPONS = new Set(['sword', 'spear', 'quickblade']);
+const PRIMARY_WEAPONS = new Set(['sword', 'spear', 'quickblade', 'staff']);
 const WEAPON_NAMES = {
   sword: 'Sword', spear: 'Spear', quickblade: 'Quickblade', staff: 'Arcane Staff',
   dagger: 'Throwing Daggers', holyAura: 'Holy Aura', arrowVolley: 'Arrow Volley', orbitalBomb: 'Arcane Bomb',
@@ -2038,7 +2404,7 @@ function updateSpawnQueue(dt) {
 const _aqFrameTimes = [];
 let _aqTimer = 0;
 let _aqLevel = 0;
-let _bossBarEl = null, _bossBarInnerEl = null; // 0=full, 1=reduced bloom, 2=no bloom+reduced shadows, 3=reduced VFX+anims
+let _bossBarEl = null, _bossBarInnerEl = null, _bossPctEl = null; // 0=full, 1=reduced bloom, 2=no bloom+reduced shadows, 3=reduced VFX+anims
 // Swap-and-pop: O(1) array removal (order doesn't matter for game entities)
 function swapRemove(arr, i) { arr[i] = arr[arr.length - 1]; arr.pop(); }
 function stopAllAnims(enemy) { for (const k in enemy.anims) enemy.anims[k].stop(); }
@@ -2050,11 +2416,39 @@ const _HP_BAR_POOL_MAX = 20;
 function disposeSkeletons(root) {
   root.traverse(c => { if (c.isSkinnedMesh && c.skeleton) c.skeleton.dispose(); });
 }
+// ─── SHADER KEEPALIVE (frame-pacing) ───
+// Every enemy clones its materials on spawn and disposed them on death. A
+// material's dispose releases its WebGLProgram reference, and when the last
+// user of a program goes the program is DELETED -- so the next spawn of that
+// type has to link a new one, synchronously, on the render thread. A 2026-09-26
+// frame trace put 33 of 40 hitches over 50 ms on exactly that path, with the
+// program count bouncing (32->33, 41->42, 39->41) instead of settling.
+//
+// three.js only releases the reference on dispose, so keeping ONE material set
+// per model alive for the whole run pins the program forever. It costs a few
+// kilobytes of Material objects: geometry and textures are shared with the
+// template and are not touched by material.dispose().
+const _warmMats = new Set();
+const _warmModels = new Set();
+function keepShadersWarm(modelKey, materials) {
+  if (!modelKey || _warmModels.has(modelKey)) return;
+  _warmModels.add(modelKey);
+  for (const m of materials) _warmMats.add(m);
+}
+function disposeWarmMats() {
+  for (const m of _warmMats) m.dispose();
+  _warmMats.clear(); _warmModels.clear();
+}
+
 function disposeEnemy(enemy) {
   // A boss torn down mid-charge (return to menu) still owns its lane telegraph
   if (enemy.pattern && enemy.pattern.telegraph) { scene.remove(enemy.pattern.telegraph); enemy.pattern.telegraphMat.dispose(); enemy.pattern = null; }
   if (enemy.mixer) { enemy.mixer.stopAllAction(); enemy.mixer.uncacheRoot(enemy.mesh); }
-  if (enemy._materials) for (let i = 0; i < enemy._materials.length; i++) enemy._materials[i].dispose();
+  // The first set cloned for each model is kept so its shader program is never
+  // released; everything else is disposed as before.
+  if (enemy._materials) for (let i = 0; i < enemy._materials.length; i++) {
+    if (!_warmMats.has(enemy._materials[i])) enemy._materials[i].dispose();
+  }
   disposeSkeletons(enemy.mesh);
   if (enemy.hpBarSprite) {
     enemy.mesh.remove(enemy.hpBarSprite);
@@ -4614,12 +5008,30 @@ async function createPlayer(index = 0) {
     // ring, not disc: a canvas gradient with a bright band near the edge
     const c = document.createElement('canvas'); c.width = c.height = 128; const ctx = c.getContext('2d');
     const grd = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
-    grd.addColorStop(0, tint + '0.0)'); grd.addColorStop(0.6, tint + '0.03)'); grd.addColorStop(0.82, tint + '0.4)'); grd.addColorStop(1, tint + '0)');
+    grd.addColorStop(0, tint + '0.0)'); grd.addColorStop(0.6, tint + '0.03)'); grd.addColorStop(0.82, tint + '0.65)'); grd.addColorStop(1, tint + '0)');
     ctx.fillStyle = grd; ctx.fillRect(0, 0, 128, 128);
     glow.material.map = new THREE.CanvasTexture(c); glow.material.map.colorSpace = THREE.SRGBColorSpace;
     glow.scale.setScalar(3.6); glow.renderOrder = 23;
     p.ring = new THREE.Group(); p.ring.add(shadow); p.ring.add(glow);
     p.ring.position.y = 0.07;
+    // Co-op nameplate: a sprite in the ring group (which already follows the
+    // knight every frame), shown only when there is a party. Three identical
+    // knights on one screen need a name over the ring, not just a tint.
+    {
+      const nc = document.createElement('canvas'); nc.width = 256; nc.height = 64;
+      const nctx = nc.getContext('2d');
+      const label = (CHARACTER_NAMES[p.character] || `P${index + 1}`).toUpperCase();
+      nctx.font = '700 30px Cinzel, Georgia, serif'; nctx.textAlign = 'center'; nctx.textBaseline = 'middle';
+      const tw = Math.min(240, nctx.measureText(label).width + 28);
+      nctx.fillStyle = 'rgba(8,4,1,0.62)';
+      nctx.beginPath(); nctx.roundRect((256 - tw) / 2, 10, tw, 44, 8); nctx.fill();
+      nctx.lineWidth = 5; nctx.strokeStyle = '#000'; nctx.strokeText(label, 128, 33);
+      nctx.fillStyle = _COOP_HUD_TINT[index] || '#e8c860'; nctx.fillText(label, 128, 33);
+      const ntex = new THREE.CanvasTexture(nc); ntex.colorSpace = THREE.SRGBColorSpace;
+      const plate = new THREE.Sprite(new THREE.SpriteMaterial({ map: ntex, transparent: true, depthTest: false, depthWrite: false }));
+      plate.scale.set(3.2, 0.8, 1); plate.position.y = 4.9; plate.renderOrder = 60; plate.visible = false;
+      p.ring.add(plate); p.namePlate = plate;
+    }
     scene.add(p.ring);
   }
   p.ring.visible = true;
@@ -4991,6 +5403,8 @@ function spawnEnemy(type, fixedAngle, opts) {
     mat._origEmissive = mat.emissive ? mat.emissive.getHex() : 0;
     mat._origEmissiveI = mat.emissiveIntensity || 0;
   }
+  // Pin this model's shader program for the rest of the run (see keepShadersWarm)
+  keepShadersWarm(def.model + (isElite ? ':elite' : ''), _materials);
 
   const enemy = {
     mesh,
@@ -5153,6 +5567,7 @@ function spawnBoss(wave) {
     if (mat.metalness != null) mat.metalness = Math.min(mat.metalness, 0.3);
     if (mat.roughness != null) mat.roughness = Math.min(mat.roughness, 0.85);
   }
+  keepShadersWarm('ogreBoss', _materials);
 
   const enemy = {
     mesh, mixer, anims, _materials,
@@ -5251,6 +5666,7 @@ function spawnDragonOgreBoss(wave, isFinal = false) {
 
   const _materials = [];
   mesh.traverse(c => { if (c.isMesh && c.material) _materials.push(c.material); });
+  keepShadersWarm(modelKey, _materials);
 
   const enemy = {
     mesh, mixer, anims, _materials,
@@ -5883,51 +6299,64 @@ _dmgCanvas.width = 128;
 _dmgCanvas.height = 64;
 const _dmgCtx = _dmgCanvas.getContext('2d');
 
-function spawnDamageNumber(position, amount, color = '#c9a253') {
+// Cinzel numerals with an ink outline, crits a third larger, a little horizontal
+// jitter so a burst does not stack into one column, and hits that land on the
+// same spot within 120 ms merge into one number (Vampire Survivors does this).
+function _drawDmgText(ctx, text, color, big) {
+  ctx.clearRect(0, 0, 128, 64);
+  ctx.font = `700 ${big ? 50 : 42}px Cinzel, Georgia, serif`;
+  ctx.textAlign = 'center';
+  ctx.lineJoin = 'round';
+  ctx.strokeStyle = '#000';
+  ctx.lineWidth = big ? 7 : 6;
+  ctx.strokeText(text, 64, 47);
+  ctx.fillStyle = color;
+  ctx.fillText(text, 64, 47);
+}
+function spawnDamageNumber(position, amount, color = '#c9a253', big = false) {
   // Text popups ("+15 HP", "SLOWED") always show; numeric ones honour the setting
-  if (typeof amount !== 'string' && !settings.dmgNumbers) return;
+  const numeric = typeof amount !== 'string';
+  if (numeric && !settings.dmgNumbers) return;
+  if (numeric) {
+    for (let i = damageNumbers.length - 1; i >= 0; i--) {
+      const e = damageNumbers[i];
+      if (!e.numeric || e.lifetime < 0.88 || e.color !== color) continue;
+      const dx = e.sprite.position.x - position.x, dz = e.sprite.position.z - position.z;
+      if (dx * dx + dz * dz > 0.8) continue;
+      e.amount += amount; e.big = e.big || big; e.lifetime = 1.0;
+      _drawDmgText(e.sprite.material.map.image.getContext('2d'), String(Math.round(e.amount)), color, e.big);
+      e.sprite.material.map.needsUpdate = true;
+      e.sprite.scale.set(e.big ? 2.6 : 2, e.big ? 1.3 : 1, 1);
+      return;
+    }
+  }
   if (_dmgNumThisFrame >= _DMG_NUM_PER_FRAME) return;
   _dmgNumThisFrame++;
   let entry = _dmgNumPool.pop();
 
-  const text = typeof amount === 'string' ? amount : String(Math.round(amount));
+  const text = numeric ? String(Math.round(amount)) : amount;
 
   if (entry) {
     const cvs = entry.sprite.material.map.image;
-    const ctx = cvs.getContext('2d');
-    ctx.clearRect(0, 0, 128, 64);
-    ctx.font = 'bold 48px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillStyle = color;
-    ctx.strokeStyle = '#000';
-    ctx.lineWidth = 4;
-    ctx.strokeText(text, 64, 48);
-    ctx.fillText(text, 64, 48);
+    _drawDmgText(cvs.getContext('2d'), text, color, big);
     entry.sprite.material.map.needsUpdate = true;
     entry.sprite.material.opacity = 1;
     entry.sprite.visible = true;
   } else {
-    _dmgCtx.clearRect(0, 0, 128, 64);
-    _dmgCtx.font = 'bold 48px Arial';
-    _dmgCtx.textAlign = 'center';
-    _dmgCtx.fillStyle = color;
-    _dmgCtx.strokeStyle = '#000';
-    _dmgCtx.lineWidth = 4;
-    _dmgCtx.strokeText(text, 64, 48);
-    _dmgCtx.fillText(text, 64, 48);
     const cvs = document.createElement('canvas');
     cvs.width = 128; cvs.height = 64;
-    const ctx2 = cvs.getContext('2d');
-    ctx2.drawImage(_dmgCanvas, 0, 0);
+    _drawDmgText(cvs.getContext('2d'), text, color, big);
     const texture = new THREE.CanvasTexture(cvs);
     const sprite = new THREE.Sprite(
       new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: false })
     );
-    sprite.scale.set(2, 1, 1);
     entry = { sprite, lifetime: 0, velocity: 0 };
   }
+  entry.sprite.scale.set(big ? 2.6 : 2, big ? 1.3 : 1, 1);
+  entry.numeric = numeric; entry.amount = numeric ? amount : 0; entry.color = color; entry.big = big;
 
   entry.sprite.position.copy(position);
+  entry.sprite.position.x += (Math.random() - 0.5) * (numeric ? 0.9 : 0);
   entry.sprite.position.y += 2;
   entry.lifetime = 1.0;
   entry.velocity = 3;
@@ -6099,10 +6528,11 @@ function triggerWaveEvent() {
   const desc = document.getElementById('wave-event-desc');
   text.textContent = event.name;
   desc.textContent = event.desc;
-  banner.style.color = event.color;
-  banner.style.borderColor = event.color;
+  // The banner stays up for the whole event (updateHUD drains its timer bar
+  // and drops it when the event ends); the tint is a CSS variable the pill
+  // uses for its rule, wash and bar.
+  banner.style.setProperty('--event', event.color);
   banner.style.opacity = '1';
-  setTimeout(() => { banner.style.opacity = '0'; }, 3000);
   // Burst in the event's own colour so the banner and the world agree
   if (playerMesh) {
     vfx.waveEventStart(event.id, playerMesh.position, parseInt(event.color.slice(1), 16));
@@ -6521,7 +6951,7 @@ function applyDamage(enemy, amount, opts) {
   const flash = opts.flash != null ? opts.flash : 0.12;
   setHitFlash(enemy, _lastHitCrit ? flash * 1.6 : flash, _lastHitCrit);
   if (enemy.hpBarSprite) updateHPBarSprite(enemy.hpBarSprite, Math.max(0, enemy.hp / enemy.maxHp));
-  spawnDamageNumber(enemy.mesh.position, dmg, _lastHitCrit ? (opts.critColor || '#ff4444') : (opts.color || '#c9a253'));
+  spawnDamageNumber(enemy.mesh.position, dmg, _lastHitCrit ? (opts.critColor || '#ffd24a') : (opts.color || '#e8d9b0'), !!_lastHitCrit);
   if (_lastHitCrit) {
     vfx.criticalHit(enemy.mesh.position);
     if (opts.hitFreeze) triggerHitFreeze(opts.hitFreeze);
@@ -8139,6 +8569,8 @@ function updateWaves(dt) {
     } else {
       const bossRatio = currentBoss.hp / currentBoss.maxHp;
       (_bossBarInnerEl || (_bossBarInnerEl = document.getElementById('boss-bar-inner'))).style.width = `${bossRatio * 100}%`;
+      const pctTxt = Number.isFinite(bossRatio) ? `${Math.max(0, Math.ceil(bossRatio * 100))}%` : '';
+      if (_hudPrev.bossPct !== pctTxt) { _hudPrev.bossPct = pctTxt; (_bossPctEl || (_bossPctEl = document.getElementById('boss-pct'))).textContent = pctTxt; }
       // Enrage itself lives in updateEnemies (two phases at 50% / 25%). This
       // used to apply a second, stacking enrage at 30% — a desperate boss ended
       // up at 2.4x speed. Only the visual pulse remains here.
@@ -8526,7 +8958,24 @@ function upgradeCardText(upg, mul) {
   next = r2(next);
   const sign = amt >= 0 ? '+' : '';
   const desc = upg.desc ? upg.desc(mul) : `${upg.flavor} — ${sign}${fmt(amt)} ${upg.stat}`;
-  return { desc, delta: `${upg.stat}: ${fmt(cur)} → ${fmt(next)}` };
+  return { desc, delta: `${upg.stat}: ${fmt(cur)} → ${fmt(next)}`, stat: upg.stat, cur, next, cap, fmt };
+}
+
+// "Feeds ★ Excalibur": which owned, un-evolved weapon this stat is the
+// evolution requirement for. The reason a late-run stat card can still matter.
+function feedsLine(upgId) {
+  const out = [];
+  for (const [wKey, evo] of Object.entries(WEAPON_EVOLUTIONS)) {
+    const w = playerWeapons[wKey];
+    if (!w || !w.owned || w.evolved || evo.requires !== upgId) continue;
+    out.push(`<span class="feeds">Feeds <b>★ ${evo.evoName}</b> <i>(${WEAPON_NAMES[wKey]} + ${UPGRADES.find(u => u.id === upgId)?.stat || upgId})</i></span>`);
+  }
+  return out.join('');
+}
+function rankPips(have, max, nextOn) {
+  let s = '<span class="pips">';
+  for (let i = 1; i <= max; i++) s += `<i class="${i <= have ? 'on' : (nextOn && i === have + 1) ? 'next' : ''}"></i>`;
+  return s + '</span>';
 }
 
 // Banish removes an upgrade from this run's pool; Skip closes without picking
@@ -9138,8 +9587,19 @@ function populateUpgradeChoices(count, screen, options, isChest) {
   if (evos.length > 0) {
     const evo = evos[Math.floor(Math.random() * evos.length)];
     const evoBtn = document.createElement('button');
-    evoBtn.className = 'upgrade-btn rarity-evolution';
-    evoBtn.innerHTML = `<img class="upgrade-icon" src="images/upgrades/${evo.weaponId}.png" onerror="this.style.display='none'" alt="${evo.evoName}"><div class="upgrade-text"><div class="upgrade-title" style="color:#ffdd00">${evo.evoName} <span class="rarity-tag" style="color:#ff8800">EVOLUTION</span></div><div class="upgrade-desc" style="color:#ccaa44">${evo.evoDesc}</div><div class="upgrade-delta">${WEAPON_NAMES[evo.weaponId]} Lv5 → ★</div></div>`;
+    evoBtn.className = 'upgrade-btn card-evo rarity-evolution';
+    const req = WEAPON_EVOLUTIONS[evo.weaponId]?.requires;
+    const reqName = UPGRADES.find(u => u.id === req)?.title || req || '';
+    // Merge glyph across the top: [weapon] + [requirement] → [evolution]
+    evoBtn.innerHTML = `<div class="evo-glyph">
+        <span class="eg"><img src="images/upgrades/${evo.weaponId}.png" alt="" onerror="this.style.visibility='hidden'"><small>${WEAPON_NAMES[evo.weaponId]} 5</small></span>
+        <span class="eg-op">+</span>
+        <span class="eg"><img src="images/upgrades/${req}.png" alt="" onerror="this.style.visibility='hidden'"><small>${reqName}</small></span>
+        <span class="eg-op">→</span>
+        <span class="eg eg-out"><img src="images/upgrades/${evo.weaponId}.png" alt="" onerror="this.style.visibility='hidden'"><small>${evo.evoName}</small></span>
+        <span class="chip chip-evo">Evolution</span>
+      </div>
+      <div class="upgrade-text"><div class="upgrade-title">${evo.evoName}</div><div class="upgrade-desc">${evo.evoDesc}</div><div class="upgrade-delta"><span class="k">From</span> ${WEAPON_NAMES[evo.weaponId]} Lv 5 <span class="k">Requires</span> ${reqName} ✓</div></div>`;
     evoBtn.onclick = () => {
       if (_banishMode) return; // evolutions cannot be banished
       AudioSystem.play('upgradeSelect', { volume: 0.7 });
@@ -9153,18 +9613,42 @@ function populateUpgradeChoices(count, screen, options, isChest) {
     const rarity = (upg.isWeapon || upg.isRelic) ? RARITIES[0] : rollRarity();
     const text = upgradeCardText(upg, rarity.mul);
     const btn = document.createElement('button');
-    btn.className = `upgrade-btn rarity-${upg.isRelic ? 'relic' : rarity.id}`;
     const curLvl = upg.isWeapon ? (playerWeapons[upg.id]?.level || 0) : 0;
-    const levelTag = upg.isRelic
-      ? ` <span class="rarity-tag" style="color:#5fd3c7">RELIC</span>`
-      : upg.isWeapon
-      ? ` <span class="rarity-tag" style="color:#88ddff">${curLvl > 0 ? `Lv ${curLvl} → ${curLvl + 1}` : 'NEW'}</span>`
-      : (rarity.name ? ` <span class="rarity-tag" style="color:${rarity.color}">${rarity.name}</span>` : '');
-    const rankTag = !upg.isWeapon && !upg.isRelic && isFinite(upg.maxRank) ? `<span class="upgrade-rank">${upgradeRank(upg.id) + 1}/${upg.maxRank}</span>` : '';
+    const kind = upg.isRelic ? 'relic' : upg.isWeapon ? (curLvl > 0 ? 'weapon-lv' : 'weapon') : 'stat';
+    btn.className = `upgrade-btn card-${kind.split('-')[0]} rarity-${upg.isRelic ? 'relic' : rarity.id}`;
+    // Four silhouettes: the chip and the detail row differ by kind so the shape
+    // says what the card is before the text does.
+    const chip = kind === 'relic' ? '<span class="chip chip-relic">Relic</span>'
+      : kind === 'weapon' ? '<span class="chip chip-new">New</span>'
+      : kind === 'weapon-lv' ? `<span class="chip chip-lv">Lv ${curLvl} → ${curLvl + 1}</span>`
+      : (rarity.name ? `<span class="chip chip-${rarity.id}">${rarity.name}</span>` : '');
+    let detail = '';
+    if (kind === 'stat') {
+      const have = upgradeRank(upg.id), max = isFinite(upg.maxRank) ? upg.maxRank : 0;
+      const pips = max ? `<span class="k">Rank</span>${rankPips(have, max, true)}` : '';
+      let bar = '';
+      if (typeof text.cur === 'number' && typeof text.next === 'number') {
+        const top = text.cap != null && isFinite(text.cap) && text.cap > 0 ? text.cap : Math.max(text.next, text.cur) * 1.25 || 1;
+        const a = Math.max(0, Math.min(100, text.cur / top * 100)), b = Math.max(0, Math.min(100, text.next / top * 100));
+        bar = `<span class="k">${text.stat}</span><span class="delta-bar"><i style="width:${a.toFixed(0)}%"></i><i class="inc" style="left:${a.toFixed(0)}%;width:${Math.max(0, b - a).toFixed(0)}%"></i></span><b class="delta-num">${text.fmt(text.cur)} → ${text.fmt(text.next)}</b>`;
+      } else bar = text.delta;
+      detail = `<div class="upgrade-delta">${pips}${bar}</div>${feedsLine(upg.id)}`;
+    } else if (kind === 'weapon' || kind === 'weapon-lv') {
+      const s = WEAPON_STATS[upg.id];
+      const n = Math.min(5, curLvl + 1);
+      const chips = s ? `<span class="stat-chip"><small>Dmg</small>${s.damage[n]}</span><span class="stat-chip"><small>CD</small>${s.cooldown[n]}s</span>${s.range ? `<span class="stat-chip"><small>Range</small>${s.range[n]}</span>` : ''}` : text.delta;
+      const evo = WEAPON_EVOLUTIONS[upg.id];
+      const evoLine = evo ? `<span class="feeds">Evolves into <b>★ ${evo.evoName}</b> <i>with ${UPGRADES.find(u => u.id === evo.requires)?.title || evo.requires}</i></span>` : '';
+      detail = `<div class="upgrade-delta">${kind === 'weapon-lv' ? `<span class="k">Level</span>${rankPips(curLvl, 5, true)}` : ''}${chips}</div>${evoLine}`;
+    } else {
+      let gems = '';
+      for (let i = 1; i <= MAX_RELICS; i++) gems += `<i class="${i <= relicCount() ? 'on' : i === relicCount() + 1 ? 'next' : ''}"></i>`;
+      detail = `<div class="upgrade-delta"><span class="k">Relic slots</span><span class="gems">${gems}</span><b class="delta-num">${relicCount() + 1} of ${MAX_RELICS}</b></div>`;
+    }
     const iconHtml = upg.isRelic
       ? `<img class="upgrade-icon" src="images/relics/${upg.relic.id}.png" alt="" onerror="this.outerHTML='<div class=&quot;upgrade-icon relic-icon&quot;>${upg.relic.icon}</div>'">`
       : `<img class="upgrade-icon" src="images/upgrades/${upg.id}.png" onerror="this.style.display='none'" alt="${upg.title}">`;
-    btn.innerHTML = `${iconHtml}<div class="upgrade-text"><div class="upgrade-title">${upg.title}${levelTag}${rankTag}</div><div class="upgrade-desc">${text.desc}</div><div class="upgrade-delta">${text.delta}</div></div>`;
+    btn.innerHTML = `${iconHtml}<div class="upgrade-text"><div class="upgrade-title">${upg.title}${chip}</div><div class="upgrade-desc">${text.desc}</div>${detail}</div>`;
     btn.onclick = () => {
       if (_banishMode) {
         banishedUpgrades.add(upg.id);
@@ -9187,6 +9671,8 @@ function populateUpgradeChoices(count, screen, options, isChest) {
   const rerollCount = document.getElementById('reroll-count');
   rerollBtn.style.display = rerollCharges > 0 ? 'block' : 'none';
   rerollCount.textContent = rerollCharges;
+  // Three flat stat cards with charges in hand: the reroll is the real choice, so it goes gold
+  rerollBtn.classList.toggle('gold', rerollCharges > 0 && evos.length === 0 && shuffled.length > 0 && shuffled.every(u => !u.isWeapon && !u.isRelic));
   rerollBtn.onclick = () => {
     if (rerollCharges <= 0) return;
     rerollCharges--;
@@ -9233,6 +9719,16 @@ function _cacheHudEls() {
     killsText: document.getElementById('kills-text'),
     timeText: document.getElementById('time-text'),
     waveTimer: document.getElementById('wave-timer'),
+    waveTrack: document.getElementById('wave-track'),
+    waveNext: document.getElementById('wave-next'),
+    waveNextFill: document.getElementById('wave-next-fill'),
+    healthOuter: document.getElementById('health-bar-outer'),
+    kpChip: document.getElementById('kp-chip'),
+    kpName: document.getElementById('kp-name'),
+    kpLevel: document.getElementById('kp-level'),
+    eventBanner: document.getElementById('wave-event-banner'),
+    eventBar: document.getElementById('wave-event-bar'),
+    bossBar: document.getElementById('boss-bar'),
     weaponHud: document.getElementById('weapon-hud'),
     dashIcon: document.getElementById('dash-icon'),
     dashFill: document.getElementById('dash-cd-fill'),
@@ -9256,6 +9752,14 @@ let _coopHudBuiltFor = -1;
 function updateCoopHud() {
   const el = document.getElementById('coop-hud');
   if (!el) return;
+  // Nameplates over every knight while there is a party, none when solo
+  const party = players.length > 1;
+  if (_hudPrev.party !== party) {
+    _hudPrev.party = party;
+    for (const pl of players) if (pl.namePlate) pl.namePlate.visible = party;
+  } else if (party) {
+    for (const pl of players) if (pl.namePlate && !pl.namePlate.visible) pl.namePlate.visible = true;
+  }
   if (players.length < 2) {
     if (_coopHudBuiltFor !== 0) { el.innerHTML = ''; _coopHudBuiltFor = 0; }
     return;
@@ -9270,10 +9774,11 @@ function updateCoopHud() {
       // Name when we know it; the slot number alone otherwise -- never "P2 P2".
       const nm = CHARACTER_NAMES[players[i].character];
       const label = nm ? `P${i + 1} ${nm.toUpperCase()}` : `PLAYER ${i + 1}`;
+      // Same row as player 1: chip · name · bar with the numerals inside · kit
       html += `<div class="coop-hp-row" id="coop-hp-${i}" style="--tint:${tint}">`
-        + `<div class="coop-hp-who" style="color:${tint}">${label}</div>`
-        + `<div class="coop-hp-outer"><div class="coop-hp-inner" id="coop-hp-bar-${i}" style="background:${tint}"></div></div>`
-        + `<div class="coop-hp-text" id="coop-hp-txt-${i}"></div>`
+        + `<div class="kp-chip">${(nm || 'P')[0].toUpperCase()}</div>`
+        + `<div class="coop-hp-who">${label}</div>`
+        + `<div class="coop-hp-outer" id="coop-hp-outer-${i}"><div class="coop-hp-inner" id="coop-hp-bar-${i}"></div><div class="coop-hp-text" id="coop-hp-txt-${i}"></div></div>`
         + `<div class="coop-kit" id="coop-kit-${i}"></div></div>`;
     }
     el.innerHTML = html;
@@ -9299,7 +9804,9 @@ function updateCoopHud() {
     } else {
       const pct = Math.max(0, ps.hp / ps.maxHp);
       bar.style.width = `${(pct * 100).toFixed(1)}%`;
-      txt.textContent = `${Math.max(0, Math.ceil(ps.hp))}/${Math.round(ps.maxHp)}`;
+      txt.textContent = `${Math.max(0, Math.ceil(ps.hp))} / ${Math.round(ps.maxHp)}`;
+      const outer = document.getElementById(`coop-hp-outer-${i}`);
+      if (outer) { outer.classList.toggle('warn', pct <= 0.5 && pct > 0.25); outer.classList.toggle('low', pct <= 0.25); }
     }
     if (row) row.classList.toggle('is-down', !!ps.isDead);
     // The companion's own arsenal and relics, so a card they picked visibly lands
@@ -9344,56 +9851,73 @@ function updateHUD() {
   const p = state.player;
   const hpPct = p.hp / p.maxHp;
   _setStyle(_hudEls.healthBar, 'hpW', 'width', `${(hpPct * 100).toFixed(1)}%`);
-  _setStyle(_hudEls.healthBar, 'hpBg', 'background', hpPct > 0.5
-    ? 'linear-gradient(90deg, #228b22, #33aa33, #44cc44)'
-    : hpPct > 0.25
-    ? 'linear-gradient(90deg, #aa8800, #ccaa22, #ddbb33)'
-    : 'linear-gradient(90deg, #8b1a1a, #cc2222, #dd3333)');
-  _setStyle(_hudEls.healthBar, 'hpGlow', 'boxShadow', hpPct <= 0.25
-    ? `0 0 ${Math.round(6 + Math.sin(Date.now() * 0.008) * 4)}px rgba(200,30,30,0.6)`
-    : hpPct <= 0.5 ? '0 0 6px rgba(200,160,30,0.4)' : '0 0 6px rgba(30,160,30,0.4)');
+  // Fill colour by threshold: green, amber under half, red (pulsing frame) under a quarter
+  const hpState = hpPct <= 0.25 ? 'low' : hpPct <= 0.5 ? 'warn' : '';
+  if (_hudPrev.hpState !== hpState) {
+    _hudPrev.hpState = hpState;
+    _hudEls.healthOuter.classList.toggle('warn', hpState === 'warn');
+    _hudEls.healthOuter.classList.toggle('low', hpState === 'low');
+  }
   _setText(_hudEls.healthText, 'hpT', `${Math.ceil(p.hp)} / ${p.maxHp}`);
+  // Knight chip + name in the knight's own tint (same grammar as the co-op rows)
+  const kn = CHARACTER_NAMES[selectedCharacter] || 'Knight';
+  _setText(_hudEls.kpName, 'kpName', kn.toUpperCase());
+  _setText(_hudEls.kpChip, 'kpChip', kn[0].toUpperCase());
+  _setText(_hudEls.kpLevel, 'kpLevel', String(p.level));
   const xpPct = p.xp / p.xpToNext;
   _setStyle(_hudEls.xpBar, 'xpW', 'width', `${(xpPct * 100).toFixed(1)}%`);
   // XP is a shared party pool, so say so once there is a party -- otherwise the
   // companions have no way to tell that P1's bar is theirs too.
-  _setText(_hudEls.xpText, 'xpT', players.length > 1
-    ? `Party Level ${p.level} - ${p.xp} / ${p.xpToNext} XP (shared)`
-    : `Level ${p.level} - ${p.xp} / ${p.xpToNext} XP`);
+  _setText(_hudEls.xpText, 'xpT', players.length > 1 ? 'SHARED' : '');
   const nearFull = xpPct >= 0.8;
   if (_hudPrev.nearFull !== nearFull) {
     _hudPrev.nearFull = nearFull;
     _hudEls.xpBar.classList.toggle('xp-near-full', nearFull);
     _hudEls.xpBarOuter.classList.toggle('xp-near-full', nearFull);
   }
-  _setText(_hudEls.waveText, 'wave', state.wave >= FINAL_WAVE ? 'FINAL WAVE' : `Wave ${state.wave} / ${FINAL_WAVE}`);
-  _setText(_hudEls.scoreText, 'score', `Glory: ${state.score}`);
-  _setText(_hudEls.killsText, 'kills', `Vanquished: ${state.kills}`);
+  // Wave headline + the 20-segment track (boss waves are diamonds)
+  const final = state.wave >= FINAL_WAVE;
+  const waveHtml = final ? 'FINAL WAVE' : `WAVE ${state.wave}<small>/ ${FINAL_WAVE}</small>`;
+  if (_hudPrev.waveHtml !== waveHtml) {
+    _hudPrev.waveHtml = waveHtml;
+    _hudEls.waveText.innerHTML = waveHtml;
+    _hudEls.waveText.classList.toggle('final', final);
+    let track = '';
+    for (let w = 1; w <= FINAL_WAVE; w++) {
+      const cls = (w % 5 === 0 ? 'boss ' : '') + (w < state.wave ? 'done' : w === state.wave ? 'current' : '');
+      track += `<i class="${cls.trim()}"></i>`;
+    }
+    _hudEls.waveTrack.innerHTML = track;
+  }
+  _setText(_hudEls.scoreText, 'score', `Glory ${state.score}`);
+  _setText(_hudEls.killsText, 'kills', `${state.kills} slain`);
 
   const mins = Math.floor(state.time / 60);
   const secs = Math.floor(state.time % 60);
   _setText(_hudEls.timeText, 'time', `${mins}:${secs.toString().padStart(2, '0')}`);
 
-  // Wave timer with urgency warning
-  if (_hudEls.waveTimer && state.wave >= FINAL_WAVE) {
-    _hudEls.waveTimer.textContent = 'Slay the Ogre King!';
-    _hudEls.waveTimer.style.color = '#ffcc33';
-    _hudEls.waveTimer.style.fontSize = '14px';
-    _hudEls.waveTimer.style.textShadow = '0 0 8px rgba(255,204,51,0.6)';
+  // Next-wave drain bar; the last five seconds go red
+  if (_hudEls.waveTimer && final) {
+    _setText(_hudEls.waveTimer, 'wt', 'Slay the Ogre King!');
+    if (!_hudPrev.wnFinal) { _hudPrev.wnFinal = true; _hudEls.waveNext.classList.add('final'); _hudEls.waveNext.classList.remove('urgent'); }
   } else if (_hudEls.waveTimer) {
     const remaining = Math.max(0, state.waveDuration - state.waveTimer);
     const wMins = Math.floor(remaining / 60);
     const wSecs = Math.floor(remaining % 60);
-    _hudEls.waveTimer.textContent = `Next wave: ${wMins}:${wSecs.toString().padStart(2, '0')}`;
-    if (remaining <= 5 && remaining > 0) {
-      _hudEls.waveTimer.style.color = '#ff4444';
-      _hudEls.waveTimer.style.fontSize = '16px';
-      _hudEls.waveTimer.style.textShadow = '0 0 8px rgba(255,68,68,0.6)';
-    } else {
-      _hudEls.waveTimer.style.color = '';
-      _hudEls.waveTimer.style.fontSize = '';
-      _hudEls.waveTimer.style.textShadow = '';
-    }
+    _setText(_hudEls.waveTimer, 'wt', `${wMins}:${wSecs.toString().padStart(2, '0')}`);
+    _setStyle(_hudEls.waveNextFill, 'wnW', 'width', `${(remaining / (state.waveDuration || 1) * 100).toFixed(0)}%`);
+    const urgent = remaining <= 5 && remaining > 0;
+    if (_hudPrev.wnUrgent !== urgent) { _hudPrev.wnUrgent = urgent; _hudEls.waveNext.classList.toggle('urgent', urgent); }
+    if (_hudPrev.wnFinal) { _hudPrev.wnFinal = false; _hudEls.waveNext.classList.remove('final'); }
+  }
+  // Event banner: visible for the whole event with a draining timer bar; drops
+  // under the boss bar while a boss is up.
+  if (_hudEls.eventBanner) {
+    const on = !!activeWaveEvent;
+    _setStyle(_hudEls.eventBanner, 'evOp', 'opacity', on ? '1' : '0');
+    if (on) _setStyle(_hudEls.eventBar, 'evW', 'width', `${Math.max(0, waveEventTimer / (activeWaveEvent.duration || 1) * 100).toFixed(0)}%`);
+    const bossUp = _hudEls.bossBar && _hudEls.bossBar.style.display === 'block';
+    if (_hudPrev.bossUp !== bossUp) { _hudPrev.bossUp = bossUp; document.body.classList.toggle('boss-active', bossUp); }
   }
 
   // Dash cooldown indicator
@@ -9429,15 +9953,20 @@ function updateHUD() {
       : (WEAPON_STATS[wKey] ? Math.max(0, weaponTimers[wKey] / WEAPON_STATS[wKey].cooldown[lvl] * 100) : 0);
     const evoClass = wData.evolved ? ' evolved' : '';
     const evoTitle = wData.evolved ? ` (${WEAPON_EVOLUTIONS[wKey]?.evoName || 'Evolved'})` : '';
-    hudHtml += `<div class="weapon-slot active${evoClass}" title="${WEAPON_NAMES[wKey]} Lv${wData.level}${evoTitle}">
+    // Cooldown as a radial sweep (quantised to 10° so the HTML string, and the
+    // DOM rewrite it triggers, only changes a few times per cooldown)
+    const cdDeg = Math.round(Math.min(100, Math.max(0, cdPct)) * 3.6 / 10) * 10;
+    let pips = '';
+    if (wData.evolved) pips = '<b>★</b>';
+    else for (let i = 1; i <= 5; i++) pips += `<i class="${i <= lvl ? 'on' : ''}"></i>`;
+    hudHtml += `<div class="ws"><div class="weapon-slot active${evoClass}" title="${WEAPON_NAMES[wKey]} Lv${wData.level}${evoTitle}">
       <img class="weapon-slot-img" src="images/upgrades/${wKey}.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
       <span class="weapon-slot-icon" style="display:none">${WEAPON_ICONS[wKey]}</span>
-      <div class="weapon-slot-cd" style="height:${Math.round(cdPct)}%"></div>
-      <span class="weapon-slot-level">${wData.evolved ? '★' : wData.level}</span>
-    </div>`;
+      <div class="weapon-slot-cd" style="--cd:${cdDeg}deg"></div>
+    </div><div class="ws-pips">${pips}</div></div>`;
   }
   for (; slotsShown < MAX_WEAPON_SLOTS; slotsShown++) {
-    hudHtml += `<div class="weapon-slot" title="Empty weapon slot"><span class="weapon-slot-icon" style="opacity:0.25">+</span></div>`;
+    hudHtml += `<div class="ws"><div class="weapon-slot empty" title="Empty weapon slot"><span class="weapon-slot-icon" style="opacity:0.35">+</span></div><div class="ws-pips"></div></div>`;
   }
   if (hudHtml !== _prevWeaponHtml) {
     _prevWeaponHtml = hudHtml;
@@ -9455,18 +9984,24 @@ function updateHUD() {
   const buffContainer = _hudEls.buffs || (_hudEls.buffs = document.getElementById('active-buffs'));
   if (buffContainer) {
     let buffHtml = '';
-    if (activeWaveEvent) {
-      const secs = Math.ceil(waveEventTimer);
-      buffHtml += `<div class="buff-pill" style="border-color:${activeWaveEvent.color};color:${activeWaveEvent.color}">✦ ${activeWaveEvent.name} (${secs}s)</div>`;
-    }
     const buffNames = { speed: 'Haste', damage: 'Power', armor: 'Shield' };
     const buffIcons = { speed: '⚡', damage: '⚔', armor: '🛡' };
+    // One pill per stat. Picking up four speed power-ups used to stack four
+    // identical pills down the knight panel, which pushed the panel into the
+    // boss bar on a phone; the totals are what the player wants anyway.
+    const merged = new Map();
     for (let bi = 0; bi < _activeBuffs.length; bi++) {
       const b = _activeBuffs[bi];
+      const m = merged.get(b.stat);
+      if (m) { m.amount += b.amount; m.remaining = Math.max(m.remaining, b.remaining); }
+      else merged.set(b.stat, { stat: b.stat, amount: b.amount, remaining: b.remaining });
+    }
+    for (const b of merged.values()) {
       const name = buffNames[b.stat] || b.stat;
       const icon = buffIcons[b.stat] || '✦';
       const secs = Math.ceil(b.remaining);
-      buffHtml += `<div class="buff-pill ${b.stat}">${icon} ${name} +${b.amount} (${secs}s)</div>`;
+      const amt = Math.round(b.amount * 100) / 100;
+      buffHtml += `<div class="buff-pill ${b.stat}">${icon} ${name} ${amt >= 0 ? '+' : ''}${amt} (${secs}s)</div>`;
     }
     if (_hudPrev.buffs !== buffHtml) { _hudPrev.buffs = buffHtml; buffContainer.innerHTML = buffHtml; }
   }
@@ -9762,6 +10297,7 @@ function gameOver(victory = false) {
   const title = document.getElementById('game-over-title');
   title.textContent = victory ? 'VICTORY' : 'FALLEN';
   title.style.color = victory ? '#e8c860' : '';
+  screen.classList.toggle('fallen', !victory);
   title.style.textShadow = victory ? '0 0 30px rgba(232,200,96,0.6), 0 3px 6px rgba(0,0,0,0.9)' : '';
   const mins = Math.floor(state.time / 60);
   const secs = Math.floor(state.time % 60);
@@ -9795,6 +10331,12 @@ function gameOver(victory = false) {
     date: runStamp,
   });
   _lastRunStamp = placement > 0 ? runStamp : 0;
+  try {
+    localStorage.setItem('castleSurvivor_lastQuest', JSON.stringify({
+      who: CHARACTER_NAMES[selectedCharacter] || 'Knight', map: MAPS[loadedMap]?.name || 'Kingsfield',
+      wave: state.wave, grade: grade.letter, gold: 0, victory: !!victory,
+    }));
+  } catch {}
   const placementLine = placement > 0
     ? `<div id="go-placement">Entered the Hall of Fame at <span style="color:#ffdd00">#${placement}</span>${placement === 1 ? ' — a new highest glory!' : ''}</div>`
     : '';
@@ -9815,6 +10357,7 @@ function gameOver(victory = false) {
   const goldEarned = goldByProfile[profileIdFor(players[0])] || calcRunGold(players[0]);
   const meta = loadMeta(players[0]);
   meta.gold += goldEarned;
+  try { const q = JSON.parse(localStorage.getItem('castleSurvivor_lastQuest') || '{}'); q.gold = goldEarned; localStorage.setItem('castleSurvivor_lastQuest', JSON.stringify(q)); } catch {}
   AudioSystem.setMusicMuffle(0);
   // Achievements (run milestones) persist and gate weapon unlocks; mastery accrues kills
   let unlockLine = '';
@@ -9855,32 +10398,62 @@ function gameOver(victory = false) {
   }
   refreshOgreButtons();
 
+  // One screen, no scroll: grade + gold anchor the left, the quest is two lines
+  // of numbers, the breakdown and the build are peers, "hurt most by" teaches,
+  // unlocks are one strip. Co-op adds one build row per knight.
+  const hurt = Object.entries(runStats.damageTakenBy || {}).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
+  const hurtName = k => (SOURCE_NAMES[k] || ENEMY_TYPES[k]?.name || k).replace(/^./, c => c.toUpperCase());
+  const hurtLine = hurt.length
+    ? `<div class="go-hurt"><span class="k">Hurt most by</span> <b>${hurtName(hurt[0][0])}</b> · ${Math.round(hurt[0][1]).toLocaleString()} damage${hurt[1] ? ` <i>then ${hurtName(hurt[1][0])} ${Math.round(hurt[1][1]).toLocaleString()}</i>` : ''}</div>`
+    : '';
+  const buildTiles = pl => {
+    let h = '';
+    for (const [k, v] of Object.entries(pl.weapons)) {
+      if (!v.owned) continue;
+      h += `<span class="go-tile${v.evolved ? ' evolved' : ''}" title="${WEAPON_NAMES[k]}"><img src="images/upgrades/${k}.png" alt="" onerror="this.outerHTML='${WEAPON_ICONS[k] || ''}'"><small>${v.evolved ? '★ EVO' : `LV ${v.level}`}</small></span>`;
+    }
+    for (let i = Object.values(pl.weapons).filter(w => w.owned).length; i < MAX_WEAPON_SLOTS; i++) h += '<span class="go-tile empty"></span>';
+    const rel = pl.state.relics ? RELICS.filter(r => pl.state.relics[r.id]) : [];
+    const relHtml = rel.map(r => `<span class="go-relic">${r.icon} ${r.name}</span>`).join('');
+    return `<div class="go-tiles">${h}</div>${relHtml ? `<div class="go-relics">${relHtml}</div>` : ''}`;
+  };
+  const buildPanels = players.length > 1
+    ? players.map((pl, i) => `<div class="go-knight" style="--tint:${_COOP_HUD_TINT[i] || '#c9a253'}"><div class="go-kname">P${i + 1} · ${(CHARACTER_NAMES[pl.character] || 'Knight').toUpperCase()}${pl.state.isDead ? ' <i>fallen</i>' : ''}</div>${buildTiles(pl)}</div>`).join('')
+    : buildTiles(players[0]);
+  const unlocks = unlockLine.replace(/<div id="go-placement"[^>]*>/g, '<span class="go-unlock">').replace(/<\/div>/g, '</span>');
+  const questWho = players.length > 1 ? players.map(pl => CHARACTER_NAMES[pl.character] || 'Knight').join(' + ') : (CHARACTER_NAMES[selectedCharacter] || 'Knight');
   document.getElementById('game-over-stats').innerHTML = `
-    <div id="grade-display" style="color:${grade.color}">${grade.letter}</div>
     <div id="grade-title">${victory ? 'The realm is saved. ' : ''}${grade.title}${newRecordTag}</div>
-    ${placementLine}${unlockLine}
-    <div style="font-size:24px; color:#d4a856; margin-bottom:8px;">Time Endured: ${mins}:${secs.toString().padStart(2, '0')}</div>
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px 30px; text-align:left; max-width:420px; margin:0 auto;">
-      <span>Waves Weathered</span><span style="text-align:right">${state.wave}${state.wave >= best.wave ? ' ★' : ''}</span>
-      <span>Foes Vanquished</span><span style="text-align:right">${state.kills}${state.kills >= best.kills ? ' ★' : ''}</span>
-      <span>Elites Slain</span><span style="text-align:right">${runStats.elitesKilled}</span>
-      <span>Bosses Felled</span><span style="text-align:right">${runStats.bossesKilled}</span>
-      <span>Highest Combo</span><span style="text-align:right">${runStats.highestCombo}x</span>
-      <span>Kill Streak Best</span><span style="text-align:right">${killStreak.best}</span>
-      <span>Total Damage</span><span style="text-align:right">${Math.floor(runStats.totalDamageDealt).toLocaleString()}</span>
-      <span>Coins Collected</span><span style="text-align:right">${runStats.coinsCollected}</span>
-      <span>Food Eaten</span><span style="text-align:right">${runStats.foodEaten}</span>
-      <span>Dashes Used</span><span style="text-align:right">${runStats.dashesUsed}</span>
-      <span>Renown</span><span style="text-align:right">Level ${state.player.level}</span>
-      <span>Glory</span><span style="text-align:right">${state.score}${state.score >= best.score ? ' ★' : ''}</span>
-      ${selectedOgreLevel > 0 ? `<span>Ogre Level</span><span style="text-align:right">${selectedOgreLevel} — ${OGRE_LEVELS[selectedOgreLevel].name}</span>` : ''}
+    <div class="go-grid${players.length > 1 ? ' coop' : ''}">
+      <div class="go-panel go-grade">
+        <div class="go-head">Grade</div>
+        <div id="grade-display" style="color:${grade.color}">${grade.letter}</div>
+        <div class="go-gold"><span class="k">Gold earned</span><b>+${goldEarned.toLocaleString()}</b>${_milestoneGold > 0 ? `<small>${_milestoneGold} from milestones</small>` : ''}</div>
+        ${state.kills >= best.kills || state.wave >= best.wave || state.score >= best.score ? `<div class="go-best">★ Personal best${state.kills >= best.kills ? ' · kills' : state.wave >= best.wave ? ' · wave' : ' · glory'}</div>` : `<div class="go-best dim">Best: wave ${best.wave} · ${best.kills} kills · ${bestMins}:${bestSecs.toString().padStart(2, '0')}</div>`}
+      </div>
+      <div class="go-panel go-quest">
+        <div class="go-quest-line"><b>${questWho}</b> · ${MAPS[loadedMap]?.name || 'Kingsfield'} · Ogre Level ${selectedOgreLevel}${selectedOgreLevel > 0 ? ` <i>${OGRE_LEVELS[selectedOgreLevel].name}</i>` : ''}</div>
+        <div class="go-nums">
+          <span><b>${state.wave}</b><small>waves</small></span>
+          <span><b>${mins}:${secs.toString().padStart(2, '0')}</b><small>time</small></span>
+          <span><b>${state.kills.toLocaleString()}</b><small>slain</small></span>
+          <span><b>${runStats.elitesKilled}</b><small>elites</small></span>
+          <span><b>${runStats.bossesKilled}</b><small>bosses</small></span>
+          <span><b>${state.player.level}</b><small>level</small></span>
+        </div>
+      </div>
+      <div class="go-panel go-dmg">
+        <div class="go-head">Where the damage came from</div>
+        ${buildDamageBreakdownHtml()}
+        ${hurtLine}
+      </div>
+      <div class="go-panel go-build">
+        <div class="go-head">The build</div>
+        ${buildPanels}
+        <div class="go-minor"><span>Combo <b>${runStats.highestCombo}×</b></span><span>Streak <b>${killStreak.best}</b></span><span>Damage <b>${Math.floor(runStats.totalDamageDealt).toLocaleString()}</b></span><span>Coins <b>${runStats.coinsCollected}</b></span><span>Food <b>${runStats.foodEaten}</b></span><span>Dashes <b>${runStats.dashesUsed}</b></span><span>Glory <b>${state.score.toLocaleString()}</b></span></div>
+      </div>
     </div>
-    <div id="forge-gold-earned">+${goldEarned} Gold Earned${_milestoneGold > 0 ? ` <span style="font-size:14px;color:#c9a253;">(${_milestoneGold} from milestones)</span>` : ''}</div>
-    <div style="margin-top:6px; padding:8px 12px; background:rgba(212,168,86,0.08); border:1px solid rgba(212,168,86,0.2); border-radius:6px; font-size:14px; color:#887755;">
-      <span style="color:#d4a856;">Personal Best:</span> Wave ${best.wave} &bull; ${best.kills} Kills &bull; ${bestMins}:${bestSecs.toString().padStart(2, '0')} &bull; ${best.score} Glory
-    </div>
-    <div style="margin-top:8px; font-size:16px; color:#887755;">Weapons: ${loadout}</div>
-    ${buildDamageBreakdownHtml()}
+    ${unlocks || placementLine ? `<div class="go-strip">${placementLine ? `<span class="go-unlock">${placementLine.replace(/<[^>]+>/g, '')}</span>` : ''}${unlocks}</div>` : ''}
   `;
   screen.style.display = 'flex';
 }
@@ -9894,6 +10467,7 @@ function clearRun() {
   // Clear enemies
   for (const e of enemies) { scene.remove(e.mesh); disposeEnemy(e); }
   enemies.length = 0;
+  disposeWarmMats();   // the kept-alive shader materials belong to the run, not the session
   for (const s of _hpBarPool) { s.material.map?.dispose(); s.material.dispose(); }
   _hpBarPool.length = 0;
   currentBoss = null;
@@ -10082,6 +10656,7 @@ function returnToMenu() {
     document.getElementById(id).style.display = 'none';
   document.body.classList.remove('touch-gameplay');
   document.getElementById('start-screen').style.display = 'flex';
+  setStartStage('muster');
   updateStartGold();
   resumeCharacterPreviews();
 }
@@ -10840,7 +11415,7 @@ function updateHorse(dt) {
     if (h.hudTimer <= 0) {
       h.hudTimer = 0.2;
       const el = document.getElementById('ride-timer');
-      if (el) { const s = Math.max(0, Math.ceil(h.timer)); el.textContent = `Riding  ${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; el.classList.toggle('ending', h.timer < 10); }
+      if (el) { const s = Math.max(0, Math.ceil(h.timer)); el.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`; el.classList.toggle('ending', h.timer < 10); }
     }
     if (h.timer <= 0) dismountHorse(true);
   } else if (h.phase === 'fleeing') {
@@ -11473,6 +12048,7 @@ function readInput(p) {
 const MENU_SCREENS = ['level-up-screen', 'settings-screen', 'pause-screen', 'game-over-screen',
                       'forge-screen', 'scores-screen', 'help-screen', 'start-screen'];
 const MENU_BACK_BUTTON = {
+  'start-screen': 'muster-back',
   'settings-screen': 'settings-close-btn', 'pause-screen': 'resume-btn',
   'forge-screen': 'forge-close-btn', 'scores-screen': 'scores-close-btn', 'help-screen': 'help-close-btn',
 };
@@ -11492,12 +12068,15 @@ function buildMenuRows(id) {
   const root = document.getElementById(id);
   switch (id) {
     case 'start-screen': return [
+      // Title stage rows first, Muster rows after; _visible drops whichever
+      // stage is hidden so the pad only walks what is on screen.
+      _visible('#play-btn', root),
+      _visible('#title-menu button', root),
       _visible('.char-card', root),
-      [...root.querySelectorAll('.map-btn')],
-      [...root.querySelectorAll('.ogre-btn')],
+      _visible('.map-btn', root),
+      _visible('.ogre-btn', root),
       _visible('#coop-slots .coop-slot', root),
-      [root.querySelector('#start-btn')],
-      _visible('.menu-row button', root),
+      _visible('#muster-foot button', root),
     ];
     case 'level-up-screen': {
       const rows = [...root.querySelectorAll('.upgrade-btn')].map(b => [b]);
@@ -11536,10 +12115,15 @@ function refreshMenu(force) {
   if (id !== menuNav.screen || force) {
     menuNav.screen = id;
     menuNav.rows = id ? buildMenuRows(id) : [];
-    // Sensible default focus per screen
-    let row = 0;
-    if (id === 'start-screen') row = 3;   // BEGIN QUEST
-    setMenuFocus(row, 0);
+    // Sensible default focus per screen: PLAY on the title, BEGIN QUEST on the Muster
+    let row = 0, col = 0;
+    if (id === 'start-screen') {
+      const want = document.getElementById('start-screen').classList.contains('stage-muster') ? 'start-btn' : 'play-btn';
+      const rows = menuNav.rows.filter(r => r.length > 0);
+      const ri = rows.findIndex(r => r.some(e => e.id === want));
+      if (ri >= 0) { row = ri; col = rows[ri].findIndex(e => e.id === want); }
+    }
+    setMenuFocus(row, col);
     return;
   }
   if (!id) return;
@@ -11924,7 +12508,8 @@ async function setupCharacterPreviews() {
       if (card && !card.querySelector('.char-card-crest')) {
         const crest = document.createElement('div');
         crest.className = 'char-card-crest';
-        crest.textContent = key === 'parker' ? '\u2727' : key === 'brennan' ? '\u2694' : '\u1F6E1';
+        // \u{1F6E1} is the shield; the old '\u1F6E1' parsed as U+1F6E followed by a literal "1"
+        crest.textContent = key === 'parker' ? '\u2727' : key === 'brennan' ? '\u2694' : '\u{1F6E1}';
         card.insertBefore(crest, card.firstChild);
       }
     }
@@ -12091,7 +12676,7 @@ const START_TIPS = [
   'You carry four weapons. Pick a build, then feed it.',
   'Win a quest to unlock the next Ogre Level.',
   'Evolutions come from chests: level a weapon to 5, own its stat, then open one.',
-  'Your primary weapon changes with your knight: sword, spear or quickblade.',
+  'Your primary weapon changes with your knight: sword, spear or arcane staff.',
   'Kills with a weapon build its mastery across runs.',
 ];
 let _tipIndex = Math.floor(Math.random() * START_TIPS.length);
@@ -12144,6 +12729,28 @@ refreshOgreButtons();
 // ─── START ───
 let _starting = false;
 document.getElementById('start-btn').addEventListener('click', beginQuest);
+// Title ⇄ Muster. The Muster is where every pre-run decision lives; the title
+// is a picture and one button. After a run the menu comes back on the Muster,
+// because the next question is "again?", not "what is this?".
+function setStartStage(stage) {
+  const ss = document.getElementById('start-screen');
+  ss.classList.toggle('stage-title', stage === 'title');
+  ss.classList.toggle('stage-muster', stage === 'muster');
+  if (stage === 'title') renderLastQuest();
+  ss.scrollTop = 0;
+  refreshMenu(true);
+}
+function renderLastQuest() {
+  const el = document.getElementById('last-quest');
+  if (!el) return;
+  try {
+    const q = JSON.parse(localStorage.getItem('castleSurvivor_lastQuest') || 'null');
+    el.innerHTML = q ? `Last quest &middot; <b>${q.who}</b> on ${q.map} &middot; Wave <b>${q.wave}</b> &middot; Grade <b>${q.grade}</b> &middot; <b>+${q.gold}</b> gold` : '';
+  } catch { el.textContent = ''; }
+}
+document.getElementById('play-btn').addEventListener('click', () => { AudioSystem.play('coinPickup', { volume: 0.25, pitch: 1.3 }); setStartStage('muster'); });
+document.getElementById('muster-back').addEventListener('click', () => setStartStage('title'));
+renderLastQuest();
 async function beginQuest() {
   if (state.started || _starting) return;
   _starting = true;
@@ -12289,7 +12896,7 @@ function populateHelpScreen() {
   const weaponDetails = {
     sword: { name: 'Sword — Dad', desc: 'A balanced sweep that strikes everything around you. Higher levels deal more damage, swing faster, reach further and cleave more foes at full power.', stats: 'Damage: 15→55 &bull; Cooldown: 1.2→0.75s &bull; Range: 3.5→5.0 &bull; Cleave: 0→2' },
     spear: { name: 'Spear — Brennan', desc: 'A long thrust in a narrow cone. The nearest foes in the line take full damage and are shoved back; the rest take half. Slow, but it reaches well past the horde\'s front rank.', stats: 'Damage: 22→68 &bull; Cooldown: 1.4→0.95s &bull; Range: 5.0→6.8 &bull; Full-damage targets: 2→4' },
-    quickblade: { name: 'Quickblade — Parker', desc: 'Light and fast. Low damage per hit but a blistering tempo, and Parker\'s dash cuts through anything it passes.', stats: 'Damage: 12→40 &bull; Cooldown: 0.7→0.4s &bull; Range: 3.0→4.2 &bull; Cleave: 1→3' },
+    staff: { name: 'Arcane Staff — Parker', desc: 'A bolt from the wizard\'s staff that seeks the nearest foe. Long reach and hard single hits, and from level 3 the bolt pierces. Nothing to fall back on when a crowd closes in.', stats: 'Damage: 16→58 &bull; Cooldown: 0.95→0.56s &bull; Range: 14→18 &bull; Pierce from Lv 3' },
     dagger: { name: 'Throwing Daggers', desc: 'Enchanted blades that automatically seek the nearest enemy. Higher levels add more daggers and pierce through foes.', stats: 'Damage: 8→30 &bull; Cooldown: 1.2→0.5s &bull; Daggers: 1→3 &bull; Pierce: 0→2 &bull; Range: 13→20' },
     holyAura: { name: 'Holy Aura', desc: 'A divine ring of energy that periodically pulses outward, damaging and knocking back all nearby enemies.', stats: 'Damage: 6→30 &bull; Cooldown: 1.5→0.7s &bull; Radius: 4→6.5 &bull; Knockback: Yes' },
     arrowVolley: { name: 'Arrow Volley', desc: 'Fires a fan of arrows in the direction you face. Higher levels add more arrows and deal more damage.', stats: 'Damage: 12→50 &bull; Cooldown: 3.5→1.5s &bull; Arrows: 3→8 &bull; Spread: Fan pattern' },

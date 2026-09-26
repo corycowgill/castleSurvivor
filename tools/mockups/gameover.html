@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Castle Survivor — End-of-run mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@700;900&display=swap" rel="stylesheet">
+<style>
+/* ─── DESIGN TOKENS (lift into index.html :root) ─── */
+:root {
+  --ink-900: #0c0602; --ink-800: #1a0e05; --ink-700: #2a180a; --ink-600: #3d2a14;
+  --line: #5a3a1a;
+  --gold: #c9a253; --gold-bright: #e8c860; --gold-dim: #8a7040;
+  --parchment: #e8d9b0; --parchment-dim: #b8a680;
+  --danger: #d04040; --hp: #4ec95a; --hp-warn: #e0b030; --xp: #4a8fd6;
+  --rare: #4a9eff; --epic: #b66cff; --legendary: #ffb02e; --evolution: #ffdd00; --relic: #5fd3c7; --new: #88ddff;
+  --k1: #e8c860; --k2: #7ec8ff; --k3: #8fe08f;
+  --grade-a: #7fe08f;
+  --outline: 0 0 2px #000, 0 1px 2px #000, 0 0 6px rgba(0,0,0,0.8);
+  --f-display: 'Cinzel Decorative', serif; --f-ui: 'Cinzel', Georgia, serif; --f-body: 'MedievalSharp', cursive;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #222; font-family: var(--f-ui); color: var(--parchment); display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 16px; }
+.note { font: 13px/1.5 system-ui, sans-serif; color: #bbb; max-width: 1280px; }
+.note b { color: #fff; }
+.num { font-variant-numeric: tabular-nums; }
+#stage { position: relative; width: 1280px; height: 800px; overflow: hidden; box-shadow: 0 0 0 1px #000; background: url('../shots/rev-kingsfield-1.png') center / cover no-repeat; }
+#stage::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(30,15,5,0.93) 0%, rgba(0,0,0,0.97) 100%); }
+.wrap { position: absolute; inset: 0; display: grid; grid-template-columns: 300px 1fr 1fr; grid-template-rows: auto auto 1fr auto auto; gap: 12px 14px; padding: 26px 50px 22px; }
+.verdict { grid-column: 1 / -1; text-align: center; }
+.verdict h1 { font: 900 64px var(--f-display); letter-spacing: 0.08em; color: var(--gold-bright); text-shadow: 0 0 30px rgba(232,200,96,0.6), 0 3px 6px rgba(0,0,0,0.9); line-height: 1; }
+.verdict .sub { font: 16px var(--f-body); color: var(--parchment-dim); margin-top: 4px; }
+.box { padding: 14px 18px; border: 1px solid var(--line); border-radius: 6px; background: linear-gradient(180deg, rgba(40,22,8,0.9), rgba(20,10,2,0.92)); box-shadow: 0 2px 10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(201,162,83,0.1); }
+.h { font: 700 12px var(--f-ui); letter-spacing: 0.16em; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+.h::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(201,162,83,0.35), transparent); }
+
+/* Grade + gold */
+.grade { grid-row: 2 / 4; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.grade .letter { font: 900 96px var(--f-display); line-height: 1; color: var(--grade-a); text-shadow: 0 0 30px currentColor, 0 0 60px currentColor, 0 3px 8px rgba(0,0,0,0.9); margin-top: 6px; }
+.grade .word { font: 16px var(--f-body); color: var(--parchment-dim); margin-top: 6px; }
+.grade .gold { margin-top: 18px; padding: 10px 18px; border: 1px solid var(--gold); border-radius: 6px; background: rgba(232,200,96,0.08); }
+.grade .gold b { display: block; font: 700 30px var(--f-ui); color: var(--gold-bright); text-shadow: 0 0 12px rgba(232,200,96,0.4); }
+.grade .gold span { font: 700 11px var(--f-ui); letter-spacing: 0.14em; color: var(--gold-dim); }
+.grade .gold small { display: block; margin-top: 3px; font: 13px var(--f-body); color: var(--parchment-dim); }
+.grade .pb { margin-top: 14px; font: 700 12px var(--f-ui); letter-spacing: 0.1em; color: var(--legendary); }
+
+/* Quest line */
+.quest { grid-column: 2 / -1; display: flex; align-items: center; justify-content: space-between; }
+.quest .who { font: 700 16px var(--f-ui); letter-spacing: 0.06em; color: var(--k2); }
+.quest .who span { color: var(--parchment-dim); font-weight: 400; }
+.quest .facts { display: flex; gap: 22px; }
+.fact { text-align: center; }
+.fact b { display: block; font: 700 22px var(--f-ui); color: var(--parchment); }
+.fact b.star { color: var(--legendary); }
+.fact span { font: 700 10px var(--f-ui); letter-spacing: 0.14em; color: var(--gold-dim); }
+
+/* Breakdown */
+.breakdown .row { display: grid; grid-template-columns: 24px 150px 1fr 46px; gap: 8px; align-items: center; margin: 5px 0; }
+.breakdown img { width: 24px; height: 24px; border-radius: 3px; border: 1px solid var(--line); object-fit: cover; }
+.breakdown .name { font: 700 13px var(--f-ui); color: var(--parchment); }
+.breakdown .name small { color: var(--evolution); margin-left: 4px; }
+.breakdown .bar { height: 10px; background: rgba(0,0,0,0.5); border: 1px solid var(--line); border-radius: 3px; overflow: hidden; }
+.breakdown .bar i { display: block; height: 100%; background: linear-gradient(90deg, #8b5e20, var(--gold-bright)); }
+.breakdown .pct { text-align: right; font: 700 13px var(--f-ui); color: var(--gold-dim); }
+.breakdown .hurt { margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(90,58,26,0.6); font: 700 12px var(--f-ui); letter-spacing: 0.1em; color: var(--gold-dim); }
+.breakdown .hurt b { color: #ff8a8a; font-size: 14px; letter-spacing: 0.04em; margin-left: 6px; }
+.breakdown .hurt span { color: var(--parchment-dim); font-weight: 400; letter-spacing: 0.02em; }
+
+/* Build */
+.build .slots { display: flex; gap: 8px; }
+.slot { width: 52px; text-align: center; }
+.slot .box { position: relative; width: 52px; height: 52px; border-radius: 6px; border: 2px solid var(--gold-dim); background: rgba(15,8,2,0.85); overflow: hidden; }
+.slot .box img { width: 100%; height: 100%; object-fit: cover; }
+.slot.evo .box { border-color: var(--evolution); box-shadow: 0 0 8px rgba(255,221,0,0.35); }
+.slot.empty .box { border-style: dashed; opacity: 0.4; }
+.slot .lv { font: 700 11px var(--f-ui); color: var(--parchment); margin-top: 3px; }
+.slot.evo .lv { color: var(--evolution); }
+.relics { display: flex; gap: 8px; margin-top: 12px; }
+.relic { display: flex; align-items: center; gap: 6px; padding: 4px 10px 4px 6px; border: 1px solid var(--relic); border-radius: 14px; background: rgba(95,211,199,0.08); font: 700 12px var(--f-ui); color: var(--relic); }
+.relic i { font-style: normal; font-size: 14px; }
+.stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px 12px; margin-top: 14px; padding-top: 10px; border-top: 1px solid rgba(90,58,26,0.6); }
+.stats span { font: 400 12px var(--f-ui); color: var(--gold-dim); }
+.stats span b { color: var(--parchment); font-weight: 700; margin-left: 4px; }
+
+/* Unlocks + actions */
+.unlocks { grid-column: 1 / -1; display: flex; align-items: center; gap: 12px; padding: 8px 14px; border: 1px solid rgba(136,221,255,0.35); border-radius: 5px; background: rgba(136,221,255,0.06); font: 700 12px var(--f-ui); letter-spacing: 0.08em; color: var(--parchment); }
+.unlocks .k { color: var(--new); letter-spacing: 0.16em; }
+.unlocks span:not(.k) { padding: 2px 10px; border-radius: 3px; background: rgba(0,0,0,0.35); }
+.actions { grid-column: 1 / -1; display: flex; justify-content: center; align-items: center; gap: 12px; }
+.actions .primary { padding: 13px 54px; font: 700 20px var(--f-ui); letter-spacing: 0.14em; color: var(--ink-900); background: linear-gradient(180deg, #f0d47a, var(--gold) 60%, #a67f38); border: 2px solid #f4e2a0; border-radius: 4px; box-shadow: 0 0 22px rgba(232,200,96,0.3), 0 4px 14px rgba(0,0,0,0.6); }
+.actions .primary small { font-size: 12px; letter-spacing: 0.08em; opacity: 0.8; margin-left: 10px; }
+.actions button:not(.primary) { padding: 10px 26px; font: 700 13px var(--f-ui); letter-spacing: 0.12em; color: var(--gold); background: rgba(12,6,2,0.8); border: 1px solid var(--line); border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="note"><b>gameover.html</b> — end of run in one screen with no scroll: grade and gold are the anchor, the quest is two lines of numbers, the breakdown and the build are peers, "hurt most by" teaches, unlocks are one strip. Data is Brennan's Kingsfield victory from <code>menu-gameover-brennan.png</code>. FALLEN uses the same grid with the title and rules in <code>--danger</code>. In co-op the two right-hand boxes repeat per knight.</div>
+<div id="stage">
+  <div class="wrap">
+    <div class="verdict"><h1>VICTORY</h1><div class="sub">The realm is saved. The Ogre King is felled.</div></div>
+
+    <div class="box grade">
+      <div class="h" style="align-self:stretch">Grade</div>
+      <div class="letter">A</div>
+      <div class="word">Valiant</div>
+      <div class="gold"><span>GOLD EARNED</span><b class="num">+7,795</b><small>575 from milestones · into Brennan's purse</small></div>
+      <div class="pb">★ PERSONAL BEST · KILLS</div>
+    </div>
+
+    <div class="box quest">
+      <div class="who">BRENNAN <span>· Kingsfield · Ogre Level 0</span></div>
+      <div class="facts">
+        <div class="fact"><b class="num star">20</b><span>WAVES</span></div>
+        <div class="fact"><b class="num">16:49</b><span>TIME</span></div>
+        <div class="fact"><b class="num star">6,424</b><span>SLAIN</span></div>
+        <div class="fact"><b class="num">264</b><span>ELITES</span></div>
+        <div class="fact"><b class="num">3</b><span>BOSSES</span></div>
+        <div class="fact"><b class="num">46</b><span>LEVEL</span></div>
+      </div>
+    </div>
+
+    <div class="box breakdown">
+      <div class="h">Where the damage came from</div>
+      <div class="row"><img src="../../images/upgrades/dagger.png" alt=""><span class="name">Storm Kunai<small>★</small></span><span class="bar"><i style="width:91%"></i></span><span class="pct num">91%</span></div>
+      <div class="row"><img src="../../images/upgrades/spear.png" alt=""><span class="name">Spear</span><span class="bar"><i style="width:8%"></i></span><span class="pct num">8%</span></div>
+      <div class="row"><img src="../../images/upgrades/holyAura.png" alt=""><span class="name">Holy Aura</span><span class="bar"><i style="width:1%"></i></span><span class="pct num">1%</span></div>
+      <div class="row"><img src="../../images/upgrades/wardShields.png" alt=""><span class="name">Warding Shields</span><span class="bar"><i style="width:0.5%"></i></span><span class="pct num">0%</span></div>
+      <div class="hurt">HURT MOST BY <b>Goblin Archer</b> <span>· 1,038 damage · then Dragon Ogre 816</span></div>
+    </div>
+
+    <div class="box build">
+      <div class="h">The build</div>
+      <div class="slots">
+        <div class="slot"><div class="box"><img src="../../images/upgrades/spear.png" alt=""></div><div class="lv">LV 5</div></div>
+        <div class="slot evo"><div class="box"><img src="../../images/upgrades/dagger.png" alt=""></div><div class="lv">★ EVO</div></div>
+        <div class="slot"><div class="box"><img src="../../images/upgrades/holyAura.png" alt=""></div><div class="lv">LV 5</div></div>
+        <div class="slot"><div class="box"><img src="../../images/upgrades/wardShields.png" alt=""></div><div class="lv">LV 3</div></div>
+        <div class="slot empty"><div class="box"></div><div class="lv">&nbsp;</div></div>
+        <div class="slot empty"><div class="box"></div><div class="lv">&nbsp;</div></div>
+      </div>
+      <div class="relics"><span class="relic"><i>🪶</i>Phoenix Feather</span><span class="relic"><i>🎯</i>Hunter's Mark</span><span class="relic"><i>🔥</i>Berserker's Oath</span></div>
+      <div class="stats">
+        <span>COMBO<b class="num">6,197×</b></span><span>STREAK<b class="num">2,702</b></span><span>DAMAGE<b class="num">770,839</b></span>
+        <span>COINS<b class="num">2,089</b></span><span>FOOD<b class="num">370</b></span><span>DASHES<b class="num">24</b></span>
+      </div>
+    </div>
+
+    <div class="unlocks"><span class="k">NEW</span><span>Arcane Bomb unlocked</span><span>Trail of Embers unlocked</span><span>Spear mastery rank 2 · +6%</span><span>Throwing Daggers mastery rank 5 · +15%</span></div>
+
+    <div class="actions"><button class="primary">RISE AGAIN <small>A</small></button><button>HALL OF FAME</button><button>MAIN MENU</button></div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Castle Survivor — HUD mockup (solo, boss + event)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@700;900&display=swap" rel="stylesheet">
+<style>
+/* ─── DESIGN TOKENS (lift into index.html :root) ─── */
+:root {
+  --ink-900: #0c0602; --ink-800: #1a0e05; --ink-700: #2a180a; --ink-600: #3d2a14;
+  --line: #5a3a1a;
+  --gold: #c9a253; --gold-bright: #e8c860; --gold-dim: #8a7040;
+  --parchment: #e8d9b0; --parchment-dim: #b8a680;
+  --danger: #d04040; --hp: #4ec95a; --hp-warn: #e0b030; --xp: #4a8fd6;
+  --rare: #4a9eff; --epic: #b66cff; --legendary: #ffb02e; --evolution: #ffdd00; --relic: #5fd3c7; --new: #88ddff;
+  --k1: #e8c860; --k2: #7ec8ff; --k3: #8fe08f;
+  --ev-gold: #e8c860; --ev-blood: #cc2222; --ev-wind: #44ccff; --ev-rage: #ff6622;
+  --panel: linear-gradient(135deg, rgba(26,14,5,0.86), rgba(42,24,10,0.78));
+  --outline: 0 0 2px #000, 0 1px 2px #000, 0 0 6px rgba(0,0,0,0.8);
+  --f-display: 'Cinzel Decorative', serif; --f-ui: 'Cinzel', Georgia, serif; --f-body: 'MedievalSharp', cursive;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #222; font-family: var(--f-ui); color: var(--parchment); display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 16px; }
+.note { font: 13px/1.5 system-ui, sans-serif; color: #bbb; max-width: 1280px; }
+.note b { color: #fff; }
+#stage { position: relative; width: 1280px; height: 800px; overflow: hidden; background: url('../shots/rev-bloodmarch-3.png') center / cover no-repeat; box-shadow: 0 0 0 1px #000; }
+/* Mask the old HUD in the capture so only the new one reads. */
+#stage::before { content: ''; position: absolute; inset: 0; background:
+  linear-gradient(rgba(20,12,6,0.9), rgba(20,12,6,0.9)) 0 0 / 300px 150px no-repeat,
+  linear-gradient(rgba(20,12,6,0.9), rgba(20,12,6,0.9)) 470px 0 / 340px 50px no-repeat,
+  linear-gradient(rgba(20,12,6,0.85), rgba(20,12,6,0.85)) 1090px 0 / 190px 160px no-repeat,
+  linear-gradient(rgba(20,12,6,0.9), rgba(20,12,6,0.9)) 0 690px / 230px 110px no-repeat,
+  linear-gradient(rgba(20,12,6,0.9), rgba(20,12,6,0.9)) 580px 735px / 120px 65px no-repeat,
+  linear-gradient(rgba(20,12,6,0.9), rgba(20,12,6,0.9)) 1090px 610px / 190px 190px no-repeat; }
+#stage > * { position: absolute; }
+.num { font-family: var(--f-ui); font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* ─── KNIGHT PANEL ─── */
+.knight-panel { top: 12px; left: 16px; width: 300px; padding: 9px 12px 10px; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 2px 10px rgba(0,0,0,0.6); }
+.krow { display: grid; grid-template-columns: 28px 1fr; gap: 6px 8px; align-items: center; }
+.kchip { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--tint); background: radial-gradient(circle at 50% 35%, #4a2e12, #1a0e05); color: var(--tint); font: 700 13px var(--f-ui); display: flex; align-items: center; justify-content: center; }
+.khead { display: flex; align-items: center; gap: 8px; }
+.kname { font: 700 13px var(--f-ui); letter-spacing: 0.12em; color: var(--tint); text-shadow: var(--outline); }
+.hpbar { position: relative; flex: 1; height: 18px; background: var(--ink-900); border: 1px solid var(--line); border-radius: 3px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.8); }
+.hpbar .fill { height: 100%; background: linear-gradient(180deg, #6fe07a, var(--hp) 55%, #3aa646); box-shadow: 0 0 6px rgba(78,201,90,0.4); }
+.hpbar .txt { position: absolute; right: 6px; top: 0; line-height: 16px; font-size: 12px; color: var(--parchment); text-shadow: var(--outline); }
+.hpbar.warn .fill { background: linear-gradient(180deg, #f0c650, var(--hp-warn) 55%, #b88a20); }
+.hpbar.danger { border-color: var(--danger); animation: pulse 1.2s ease-in-out infinite; }
+.hpbar.danger .fill { background: linear-gradient(180deg, #ff6a6a, var(--danger) 55%, #8b1a1a); }
+@keyframes pulse { 50% { box-shadow: inset 0 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(208,64,64,0.7); } }
+.lvl { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--gold-dim); background: var(--ink-900); color: var(--gold-bright); font: 700 11px var(--f-ui); display: flex; align-items: center; justify-content: center; margin-left: 3px; }
+.xpbar { height: 6px; background: var(--ink-900); border: 1px solid var(--line); border-radius: 3px; overflow: hidden; }
+.xpbar .fill { height: 100%; background: linear-gradient(90deg, #2a4a8b, var(--xp)); }
+.kit { grid-column: 2; display: flex; align-items: center; gap: 4px; margin-top: 1px; }
+.tile { position: relative; width: 22px; height: 22px; border-radius: 3px; border: 1px solid var(--line); background: linear-gradient(180deg, rgba(48,28,10,0.95), rgba(22,12,4,0.95)); overflow: hidden; }
+.tile img { width: 100%; height: 100%; object-fit: cover; filter: brightness(1.15) saturate(1.1); }
+.tile b { position: absolute; right: 1px; bottom: -1px; font: 700 9px var(--f-ui); color: var(--parchment); text-shadow: 0 0 3px #000, 0 1px 2px #000; }
+.tile.evo { border-color: var(--evolution); box-shadow: 0 0 6px rgba(255,221,0,0.35); }
+.tile.relic { border-color: var(--relic); color: var(--relic); font-size: 11px; text-align: center; line-height: 20px; background: radial-gradient(circle at 50% 40%, rgba(95,211,199,0.25), rgba(10,5,2,0.9)); }
+.sep { width: 1px; height: 14px; background: rgba(201,162,83,0.35); margin: 0 2px; }
+.ride { display: inline-flex; align-items: center; gap: 4px; margin-left: 6px; padding: 1px 7px 1px 4px; border: 1px solid var(--gold-dim); border-radius: 10px; font: 700 11px var(--f-ui); color: var(--gold-bright); }
+
+/* ─── TOP CENTRE: BOSS, EVENT, ANNOUNCE ─── */
+.boss { top: 12px; left: 50%; transform: translateX(-50%); width: 520px; text-align: center; }
+.boss .name { font: 700 15px var(--f-ui); letter-spacing: 0.12em; color: var(--parchment); text-shadow: var(--outline); margin-bottom: 4px; }
+.boss .bar { position: relative; height: 16px; background: var(--ink-900); border: 2px solid var(--gold-dim); border-radius: 3px; overflow: hidden; box-shadow: inset 0 2px 6px rgba(0,0,0,0.8), 0 2px 8px rgba(0,0,0,0.6); }
+.boss .fill { height: 100%; width: 62%; background: linear-gradient(180deg, #ff6060, var(--danger) 50%, #8b1a1a); box-shadow: 0 0 8px rgba(208,64,64,0.5); }
+.boss .pct { position: absolute; right: 6px; top: 0; line-height: 12px; font-size: 11px; color: var(--parchment); text-shadow: var(--outline); }
+.boss .tick { position: absolute; left: 50%; top: -2px; bottom: -2px; width: 2px; background: rgba(232,200,96,0.7); }
+.event { top: 64px; left: 50%; transform: translateX(-50%); width: 440px; padding: 6px 12px 8px 14px; border: 1px solid rgba(204,34,34,0.6); border-left: 3px solid var(--ev-blood); border-radius: 4px; background: linear-gradient(90deg, rgba(204,34,34,0.18), rgba(12,6,2,0.7) 40%); box-shadow: 0 2px 8px rgba(0,0,0,0.6); overflow: hidden; }
+.event .row { display: flex; align-items: baseline; gap: 10px; }
+.event .name { font: 700 14px var(--f-ui); letter-spacing: 0.12em; color: var(--parchment); text-shadow: var(--outline); }
+.event .desc { font: 14px var(--f-body); color: var(--parchment-dim); text-shadow: var(--outline); }
+.event .timer { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(0,0,0,0.5); }
+.event .timer i { display: block; height: 100%; width: 56%; background: var(--ev-blood); }
+.event .secs { position: absolute; right: 10px; top: 5px; font: 700 11px var(--f-ui); color: var(--parchment-dim); }
+.announce { top: 124px; left: 50%; transform: translateX(-50%); font: 700 18px var(--f-ui); letter-spacing: 0.14em; color: var(--gold); text-shadow: var(--outline), 0 0 14px rgba(0,0,0,0.9); white-space: nowrap; }
+
+/* ─── WAVE PANEL ─── */
+.wave-panel { top: 12px; right: 16px; width: 236px; padding: 8px 12px 9px; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 2px 10px rgba(0,0,0,0.6); text-align: right; }
+.wave-panel .w { display: flex; justify-content: flex-end; align-items: baseline; gap: 6px; }
+.wave-panel .big { font: 700 22px var(--f-ui); letter-spacing: 0.06em; color: var(--gold); text-shadow: var(--outline); }
+.wave-panel .of { font: 400 13px var(--f-ui); color: var(--gold-dim); }
+.track { display: flex; gap: 2px; justify-content: flex-end; margin: 5px 0 6px; }
+.track i { width: 9px; height: 6px; background: var(--ink-600); border-radius: 1px; }
+.track i.done { background: var(--gold); }
+.track i.cur { background: var(--gold-bright); box-shadow: 0 0 5px var(--gold-bright); }
+.track i.boss { width: 8px; height: 8px; margin-top: -1px; transform: rotate(45deg); background: var(--ink-600); border: 1px solid var(--danger); }
+.track i.boss.done { background: var(--danger); }
+.next { display: flex; align-items: center; justify-content: flex-end; gap: 6px; font: 700 11px var(--f-ui); letter-spacing: 0.1em; color: var(--gold-dim); }
+.next .bar { width: 120px; height: 4px; background: var(--ink-900); border: 1px solid var(--line); border-radius: 2px; overflow: hidden; }
+.next .bar i { display: block; height: 100%; width: 78%; background: var(--gold); }
+.next .t { color: var(--parchment); font-size: 12px; letter-spacing: 0; }
+.meta { margin-top: 5px; font: 400 12px var(--f-ui); color: var(--gold-dim); }
+.meta .num { color: var(--parchment); }
+
+/* ─── BOTTOM ─── */
+.weapons { left: 16px; bottom: 14px; display: flex; flex-direction: column; gap: 5px; }
+.relics { display: flex; align-items: center; gap: 5px; }
+.relics .lbl { font: 700 10px var(--f-ui); letter-spacing: 0.14em; color: var(--gold-dim); margin-right: 2px; text-shadow: var(--outline); }
+.relics .tile { width: 28px; height: 28px; line-height: 26px; font-size: 14px; }
+.slots { display: flex; gap: 6px; }
+.slot { width: 48px; }
+.slot .box { position: relative; width: 48px; height: 48px; border-radius: 6px; border: 2px solid var(--gold-dim); background: rgba(15,8,2,0.85); overflow: hidden; }
+.slot .box img { width: 100%; height: 100%; object-fit: cover; }
+.slot .cd { position: absolute; inset: 0; background: conic-gradient(rgba(0,0,0,0.55) var(--cd, 0deg), transparent 0deg); }
+.slot.evo .box { border-color: var(--evolution); box-shadow: 0 0 8px rgba(255,221,0,0.35); }
+.slot.empty .box { border-style: dashed; opacity: 0.5; }
+.slot.empty .box::after { content: '+'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--gold-dim); font: 700 16px var(--f-ui); }
+.pips { display: flex; gap: 3px; justify-content: center; margin-top: 4px; }
+.pips i { width: 6px; height: 4px; background: var(--ink-600); border-radius: 1px; box-shadow: 0 0 2px #000; }
+.pips i.on { background: var(--gold); }
+.pips b { font: 700 11px var(--f-ui); color: var(--evolution); line-height: 4px; text-shadow: var(--outline); }
+.dash { left: 50%; bottom: 14px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.dash .ring { position: relative; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--gold); background: rgba(15,8,2,0.85); display: flex; align-items: center; justify-content: center; font: 700 14px var(--f-ui); color: var(--gold-bright); box-shadow: 0 0 10px rgba(201,162,83,0.35); }
+.dash .lbl { font: 700 11px var(--f-ui); letter-spacing: 0.14em; color: var(--gold); text-shadow: var(--outline); }
+.minimap { right: 16px; bottom: 14px; width: 150px; height: 150px; border: 2px solid var(--line); border-radius: 4px; background: rgba(15,8,2,0.8); box-shadow: 0 2px 10px rgba(0,0,0,0.6), inset 0 0 0 2px rgba(138,112,64,0.35), inset 0 0 15px rgba(0,0,0,0.3); }
+.minimap i { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: var(--danger); }
+.minimap .me { width: 6px; height: 6px; background: var(--k1); box-shadow: 0 0 4px var(--k1); }
+.minimap .arrow { position: absolute; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 8px solid var(--ev-rage); }
+
+/* ─── WORLD LAYER ─── */
+.ring { width: 96px; height: 40px; border-radius: 50%; border: 3px solid rgba(232,200,96,0.9); box-shadow: 0 0 12px rgba(232,200,96,0.6), inset 0 0 12px rgba(232,200,96,0.35); }
+.dmg { font: 700 15px var(--f-ui); font-variant-numeric: tabular-nums; color: var(--parchment); text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 0 6px rgba(0,0,0,0.9); }
+.dmg.crit { font-size: 20px; color: var(--gold-bright); }
+.dmg.taken { color: #ff7070; }
+.threat { width: 0; height: 0; border-top: 22px solid transparent; border-bottom: 22px solid transparent; }
+.threat.l { left: 4px; top: 388px; border-right: 26px solid rgba(220,60,40,0.85); }
+.threat.r { right: 4px; top: 388px; border-left: 26px solid rgba(220,60,40,0.85); }
+</style>
+</head>
+<body>
+<div class="note"><b>hud-solo.html</b> — proposed in-play HUD over <code>rev-bloodmarch-3.png</code>, solo, boss bar and Blood Moon both active, wave-8 announce fading. Old HUD regions in the capture are masked. Compare with <code>rev-bloodmarch-3.png</code> and <code>rev-emberreach-3.png</code>.</div>
+<div id="stage">
+
+  <!-- Knight panel -->
+  <div class="knight-panel" style="--tint: var(--k1)">
+    <div class="krow">
+      <div class="kchip">D</div>
+      <div class="khead">
+        <span class="kname">DAD</span>
+        <div class="hpbar"><div class="fill" style="width:100%"></div><span class="txt num">154 / 154</span></div>
+        <span class="ride" title="Thunderhoof">🐎 <span class="num">0:31</span></span>
+      </div>
+      <div class="lvl num">19</div>
+      <div class="xpbar"><div class="fill" style="width:27%"></div></div>
+      <div class="kit">
+        <span class="tile evo"><img src="../../images/upgrades/stormCall.png" alt=""><b>★</b></span>
+        <span class="tile"><img src="../../images/upgrades/spear.png" alt=""><b>5</b></span>
+        <span class="tile"><img src="../../images/upgrades/holyAura.png" alt=""><b>3</b></span>
+        <span class="tile"><img src="../../images/upgrades/wardShields.png" alt=""><b>2</b></span>
+        <span class="sep"></span>
+        <span class="tile relic">🪶</span><span class="tile relic">🎯</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Boss bar -->
+  <div class="boss">
+    <div class="name">GNARLTUSK THE DEFILER</div>
+    <div class="bar"><div class="fill"></div><span class="tick"></span><span class="pct num">62%</span></div>
+  </div>
+
+  <!-- Event banner (replaces the buff pill AND the old 136px banner) -->
+  <div class="event">
+    <div class="row"><span class="name">☾ BLOOD MOON</span><span class="desc">Foes grow fierce, but yield greater power</span></div>
+    <span class="secs num">14s</span>
+    <div class="timer"><i></i></div>
+  </div>
+
+  <!-- Announce line -->
+  <div class="announce" style="opacity:0.75">WAVE 8 · NO RESPITE</div>
+
+  <!-- Wave panel -->
+  <div class="wave-panel">
+    <div class="w"><span class="big">WAVE 8</span><span class="of">/ 20</span></div>
+    <div class="track">
+      <i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="boss done"></i>
+      <i class="done"></i><i class="done"></i><i class="cur"></i><i></i><i class="boss"></i>
+      <i></i><i></i><i></i><i></i><i class="boss"></i>
+      <i></i><i></i><i></i><i></i><i class="boss"></i>
+    </div>
+    <div class="next">NEXT <span class="bar"><i></i></span><span class="t num">0:47</span></div>
+    <div class="meta"><span class="num">4:50</span> &nbsp;·&nbsp; <span class="num">49</span>× combo &nbsp;·&nbsp; <span class="num">571</span> slain</div>
+  </div>
+
+  <!-- Threat arrows -->
+  <div class="threat l"></div><div class="threat r"></div>
+
+  <!-- World: ring + damage numbers -->
+  <div class="ring" style="left:668px; top:562px"></div>
+  <div class="dmg" style="left:556px; top:52px">30</div>
+  <div class="dmg crit" style="left:598px; top:120px">60</div>
+  <div class="dmg" style="left:640px; top:96px">30</div>
+  <div class="dmg taken" style="left:735px; top:520px">-12</div>
+
+  <!-- Weapons + relics -->
+  <div class="weapons">
+    <div class="relics"><span class="lbl">RELICS</span><span class="tile relic">🪶</span><span class="tile relic">🎯</span><span class="tile relic" style="opacity:0.35">◇</span></div>
+    <div class="slots">
+      <div class="slot evo"><div class="box"><img src="../../images/upgrades/stormCall.png" alt=""><div class="cd" style="--cd:120deg"></div></div><div class="pips"><b>★ WRATH</b></div></div>
+      <div class="slot"><div class="box"><img src="../../images/upgrades/spear.png" alt=""><div class="cd" style="--cd:40deg"></div></div><div class="pips"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div></div>
+      <div class="slot"><div class="box"><img src="../../images/upgrades/holyAura.png" alt=""><div class="cd" style="--cd:250deg"></div></div><div class="pips"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div></div>
+      <div class="slot"><div class="box"><img src="../../images/upgrades/wardShields.png" alt=""></div><div class="pips"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div></div>
+      <div class="slot empty"><div class="box"></div></div>
+      <div class="slot empty"><div class="box"></div></div>
+    </div>
+  </div>
+
+  <!-- Dash -->
+  <div class="dash"><div class="ring">B</div><div class="lbl">DASH</div></div>
+
+  <!-- Minimap -->
+  <div class="minimap">
+    <i style="left:60px;top:40px"></i><i style="left:66px;top:52px"></i><i style="left:80px;top:70px"></i><i style="left:44px;top:88px"></i><i style="left:96px;top:96px"></i><i style="left:70px;top:110px"></i>
+    <i class="me" style="left:72px;top:72px"></i>
+    <span class="arrow" style="left:70px;top:2px"></span>
+  </div>
+</div>
+</body>
+</html>

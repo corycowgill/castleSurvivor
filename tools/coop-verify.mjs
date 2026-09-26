@@ -415,7 +415,7 @@ srv.listen(0, '127.0.0.1', async () => {
   check('all three can dash', r.dashed.every(Boolean), r.dashed.join('/'));
   check('companion kills enemies', r.killsNearP3 > 0, `${r.killsNearP3} kills`);
   check('HUD has a row per companion', r.hudRows === 2, `${r.hudRows} rows`);
-  check('HUD shows companion HP', /\d+\/\d+/.test(r.hudTextBefore.join(' ')), r.hudTextBefore.join(' | '));
+  check('HUD shows companion HP', /\d+ ?\/ ?\d+/.test(r.hudTextBefore.join(' ')), r.hudTextBefore.join(' | '));
   check('shared XP levels everyone', r.levelsMovedTogether, r.levelsAfterXP.join('/'));
   check('each player gets card picks', r.pendingPicks.every(n => n > 0), r.pendingPicks.join('/'));
   check('card screen pauses the game', r.pausedWhilePicking, String(r.pausedWhilePicking));
@@ -442,7 +442,7 @@ srv.listen(0, '127.0.0.1', async () => {
   check('down does NOT end the run', r.downedNotGameOver.gameOverTimer === 0 && r.downedNotGameOver.alive === 2, JSON.stringify(r.downedNotGameOver));
   check('bleed-out counts down', r.bleedTicked < 25 && r.bleedTicked > 0, `${r.bleedTicked}s left`);
   check('teammate revives', r.revived.isDead === false && r.revived.hp > 0, JSON.stringify(r.revived));
-  check('HUD reflects revived HP', /\d+\/\d+/.test(r.hudTextAfterRevive.join(' ')), r.hudTextAfterRevive.join(' | '));
+  check('HUD reflects revived HP', /\d+ ?\/ ?\d+/.test(r.hudTextAfterRevive.join(' ')), r.hudTextAfterRevive.join(' | '));
   check('party wipe ends run', r.wipe.alive === 0 && r.wipe.gameOverTimer > 0, JSON.stringify(r.wipe));
   check('wallets are per knight', r.walletsSeparate.join(',') === '1000,2000,3000', r.walletsSeparate.join('/'));
   check('Forge ranks are per knight', r.ranksSeparate.join(',') === '5,0,2', r.ranksSeparate.join('/'));

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Castle Survivor — Title / Muster mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@700;900&display=swap" rel="stylesheet">
+<style>
+/* ─── DESIGN TOKENS (lift into index.html :root) ─── */
+:root {
+  --ink-900: #0c0602; --ink-800: #1a0e05; --ink-700: #2a180a; --ink-600: #3d2a14;
+  --line: #5a3a1a;
+  --gold: #c9a253; --gold-bright: #e8c860; --gold-dim: #8a7040;
+  --parchment: #e8d9b0; --parchment-dim: #b8a680;
+  --danger: #d04040; --hp: #4ec95a; --hp-warn: #e0b030; --xp: #4a8fd6;
+  --rare: #4a9eff; --epic: #b66cff; --legendary: #ffb02e; --evolution: #ffdd00; --relic: #5fd3c7; --new: #88ddff;
+  --k1: #e8c860; --k2: #7ec8ff; --k3: #8fe08f;
+  --ogre3: #ff7733; --ogre4: #ff4444; --ogre5: #dd44dd;
+  --panel: linear-gradient(180deg, rgba(30,16,5,0.92), rgba(12,6,2,0.95));
+  --outline: 0 0 2px #000, 0 1px 2px #000, 0 0 6px rgba(0,0,0,0.8);
+  --f-display: 'Cinzel Decorative', serif; --f-ui: 'Cinzel', Georgia, serif; --f-body: 'MedievalSharp', cursive;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #222; font-family: var(--f-ui); color: var(--parchment); display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 16px; }
+.note { font: 13px/1.5 system-ui, sans-serif; color: #bbb; max-width: 1280px; }
+.note b { color: #fff; }
+.stage { position: relative; width: 1280px; height: 800px; overflow: hidden; box-shadow: 0 0 0 1px #000; background: url('../../castleBackgroundTitle.png') center / cover no-repeat; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ══ STEP 1: TITLE ══ */
+#title::before { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.05) 30%, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0.85) 100%); }
+#title > * { position: absolute; }
+#title h1 { top: 34px; left: 0; right: 0; text-align: center; font: 900 56px var(--f-display); letter-spacing: 0.1em; color: var(--gold); text-shadow: 0 0 30px rgba(201,162,83,0.4), 0 3px 8px #000, 0 0 60px rgba(0,0,0,0.8); }
+#title h2 { top: 108px; left: 0; right: 0; text-align: center; font: 18px var(--f-body); letter-spacing: 0.2em; color: var(--parchment-dim); text-shadow: var(--outline); }
+.play { left: 50%; bottom: 96px; transform: translateX(-50%); padding: 16px 84px; font: 700 26px var(--f-ui); letter-spacing: 0.14em; color: var(--ink-900); background: linear-gradient(180deg, #f0d47a, var(--gold) 60%, #a67f38); border: 2px solid #f4e2a0; border-radius: 4px; box-shadow: 0 0 30px rgba(232,200,96,0.35), 0 6px 20px rgba(0,0,0,0.7); }
+.secondary { left: 50%; bottom: 46px; transform: translateX(-50%); display: flex; gap: 10px; }
+.secondary button { padding: 9px 22px; font: 700 13px var(--f-ui); letter-spacing: 0.12em; color: var(--gold); background: rgba(12,6,2,0.75); border: 1px solid var(--line); border-radius: 4px; }
+.last { left: 20px; bottom: 14px; font: 400 12px var(--f-ui); letter-spacing: 0.06em; color: var(--parchment-dim); text-shadow: var(--outline); }
+.last b { color: var(--gold-bright); font-weight: 700; }
+.badge { right: 12px; bottom: 10px; font: 11px var(--f-ui); letter-spacing: 0.08em; color: var(--gold); opacity: 0.45; }
+
+/* ══ STEP 2: MUSTER ══ */
+#muster::before { content: ''; position: absolute; inset: 0; background: rgba(6,3,1,0.62); }
+.panel { position: absolute; left: 50px; top: 40px; width: 1180px; height: 720px; display: grid; grid-template-columns: 1fr 380px; grid-template-rows: 1fr 68px; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.8), inset 0 1px 0 rgba(201,162,83,0.15); overflow: hidden; }
+.col { padding: 22px 28px; }
+.col.left { border-right: 1px solid rgba(90,58,26,0.6); }
+.h { font: 700 13px var(--f-ui); letter-spacing: 0.16em; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 12px; }
+.h::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(201,162,83,0.35), transparent); }
+.h .crest { font-size: 14px; color: var(--gold); }
+.cards { display: flex; gap: 18px; }
+.card { position: relative; width: 210px; height: 268px; padding: 12px 10px 12px; border: 2px solid var(--ink-600); border-radius: 10px; background: linear-gradient(180deg, rgba(30,16,5,0.9), rgba(12,6,2,0.95)); text-align: center; }
+.card .portrait { height: 172px; border-radius: 6px; background: radial-gradient(ellipse at 50% 60%, rgba(70,45,16,0.55), rgba(15,8,4,0.7)); display: flex; align-items: flex-end; justify-content: center; font: 400 11px var(--f-ui); letter-spacing: 0.1em; color: var(--gold-dim); padding-bottom: 8px; }
+.card .name { font: 700 17px var(--f-ui); letter-spacing: 0.08em; color: var(--parchment-dim); margin-top: 10px; }
+.card .title { font: 14px var(--f-body); color: var(--gold-dim); margin-top: 2px; }
+.card.sel { border-color: var(--tint); box-shadow: 0 0 22px color-mix(in srgb, var(--tint) 35%, transparent), 0 4px 20px rgba(0,0,0,0.6); }
+.card.sel .name { color: var(--tint); }
+.card .owner { position: absolute; top: 8px; right: 8px; padding: 2px 8px; border-radius: 10px; font: 700 11px var(--f-ui); letter-spacing: 0.08em; color: var(--ink-900); background: var(--tint); box-shadow: 0 1px 4px rgba(0,0,0,0.6); }
+.bio { margin-top: 14px; padding: 10px 14px; border: 1px solid rgba(90,58,26,0.5); border-radius: 6px; background: rgba(0,0,0,0.3); font: 15px/1.45 var(--f-body); color: var(--parchment-dim); }
+.bio b { font: 700 13px var(--f-ui); letter-spacing: 0.06em; color: var(--gold); }
+.party { margin-top: 18px; }
+.slots { display: flex; gap: 10px; }
+.slot { min-width: 176px; padding: 8px 12px; border: 1px solid var(--ink-600); border-radius: 5px; background: rgba(20,10,2,0.6); font: 700 12px var(--f-ui); letter-spacing: 0.08em; color: var(--gold-dim); }
+.slot.joined { border-color: var(--tint); color: var(--tint); background: linear-gradient(180deg, rgba(45,26,8,0.9), rgba(20,10,2,0.9)); }
+.slot small { display: block; margin-top: 3px; font: 400 12px var(--f-ui); letter-spacing: 0.04em; color: var(--parchment-dim); }
+.slot.open { border-style: dashed; text-align: center; }
+.hint { margin-top: 8px; font: 400 12px var(--f-ui); letter-spacing: 0.06em; color: var(--parchment-dim); }
+.hint b { color: var(--gold); }
+.purse { margin-top: 18px; display: flex; gap: 22px; font: 700 13px var(--f-ui); letter-spacing: 0.08em; color: var(--gold-dim); }
+.purse b { color: var(--gold-bright); }
+.maps { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.map { position: relative; padding: 5px; border: 2px solid var(--ink-600); border-radius: 6px; background: rgba(12,6,2,0.9); text-align: center; }
+.map img { display: block; width: 100%; height: 76px; object-fit: cover; border-radius: 3px; filter: saturate(0.7) brightness(0.8); }
+.map span { display: block; margin-top: 5px; font: 700 12px var(--f-ui); letter-spacing: 0.08em; color: var(--gold-dim); }
+.map.sel { border-color: var(--gold-bright); box-shadow: 0 0 12px rgba(232,200,96,0.3); }
+.map.sel img { filter: none; }
+.map.sel span { color: var(--gold-bright); }
+.mapdesc { margin: 8px 0 18px; font: 14px/1.4 var(--f-body); color: var(--parchment-dim); min-height: 38px; }
+.ogre { display: flex; gap: 6px; }
+.ogre .lv { width: 46px; height: 46px; border: 2px solid var(--ink-600); border-radius: 6px; background: linear-gradient(180deg, rgba(30,16,5,0.9), rgba(12,6,2,0.95)); display: flex; flex-direction: column; align-items: center; justify-content: center; font: 700 16px var(--f-ui); color: var(--gold-dim); }
+.ogre .lv i { font-style: normal; font-size: 12px; line-height: 1; margin-bottom: 2px; }
+.ogre .lv.sel { border-color: var(--gold-bright); color: var(--gold-bright); box-shadow: 0 0 12px rgba(232,200,96,0.3); }
+.ogre .lv.l3 { color: var(--ogre3); } .ogre .lv.l4 { color: var(--ogre4); } .ogre .lv.l5 { color: var(--ogre5); }
+.ogre .lv.locked { color: #6a5842; border-color: #33261a; }
+.ogrename { margin-top: 8px; font: 700 14px var(--f-ui); letter-spacing: 0.08em; color: var(--gold-bright); }
+.ogredesc { margin-top: 2px; font: 14px/1.4 var(--f-body); color: var(--parchment-dim); }
+.footer { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; padding: 0 28px; border-top: 1px solid rgba(90,58,26,0.6); background: rgba(0,0,0,0.25); }
+.back { font: 700 13px var(--f-ui); letter-spacing: 0.12em; color: var(--gold-dim); }
+.back b { color: var(--gold); }
+.go { padding: 12px 56px; font: 700 20px var(--f-ui); letter-spacing: 0.14em; color: var(--ink-900); background: linear-gradient(180deg, #f0d47a, var(--gold) 60%, #a67f38); border: 2px solid #f4e2a0; border-radius: 4px; box-shadow: 0 0 22px rgba(232,200,96,0.3), 0 4px 14px rgba(0,0,0,0.6); }
+.go small { font-size: 12px; letter-spacing: 0.08em; opacity: 0.8; margin-left: 10px; }
+</style>
+</head>
+<body>
+<div class="note"><b>title.html</b> — two stages. <b>Step 1</b> is the title as a nine-year-old should first see it: the painting, one button, four destinations. <b>Step 2</b> is the Muster screen that replaces the current single column: knights and party on the left, battlefield and Ogre Level on the right, BEGIN QUEST inside the panel footer so nothing can cover it. Portraits are placeholders where the live canvases go. Compare with <code>title.png</code>.</div>
+
+<div class="stage" id="title">
+  <h1>CASTLE SURVIVOR</h1>
+  <h2>DEFEND YOUR KINGDOM</h2>
+  <button class="play">PLAY</button>
+  <div class="secondary"><button>THE FORGE</button><button>HALL OF FAME</button><button>CODEX</button><button>SETTINGS</button></div>
+  <div class="last">LAST QUEST &nbsp;·&nbsp; <b>Brennan</b> on Kingsfield &nbsp;·&nbsp; Wave <b class="num">20</b> &nbsp;·&nbsp; Grade <b>A</b> &nbsp;·&nbsp; <b class="num">+7,795</b> gold</div>
+  <div class="badge">BUILD 58</div>
+</div>
+
+<div class="stage" id="muster">
+  <div class="panel">
+    <div class="col left">
+      <div class="h"><span class="crest">⚜</span> Knights</div>
+      <div class="cards">
+        <div class="card sel" style="--tint: var(--k1)"><span class="owner">P1</span><div class="portrait">live preview canvas</div><div class="name">DAD</div><div class="title">Knight Commander</div></div>
+        <div class="card sel" style="--tint: var(--k2)"><span class="owner">P2</span><div class="portrait">live preview canvas</div><div class="name">BRENNAN</div><div class="title">The Honor Bound</div></div>
+        <div class="card" style="--tint: var(--k3)"><div class="portrait">live preview canvas</div><div class="name">PARKER</div><div class="title">The Arcane</div></div>
+      </div>
+      <div class="bio">The leader of the kingdom's knights, sworn to protect the realm with his wisdom and leadership.<br><b>⚔ SHIELD WALL</b> &nbsp;+2 Armor · +15 Max HP</div>
+      <div class="party">
+        <div class="h">Party</div>
+        <div class="slots">
+          <div class="slot joined" style="--tint: var(--k1)">P1 · DAD<small>Controller 1</small></div>
+          <div class="slot joined" style="--tint: var(--k2)">P2 · BRENNAN<small>Keyboard</small></div>
+          <div class="slot open">+ JOIN<small>press A on a controller</small></div>
+        </div>
+        <div class="hint"><b>Y</b> change knight &nbsp;·&nbsp; <b>B</b> leave &nbsp;·&nbsp; every knight keeps their own gold and Forge</div>
+      </div>
+      <div class="purse"><span>DAD'S PURSE <b class="num">1,240</b> GOLD</span><span>FORGE RANK <b class="num">3</b></span><span>BRENNAN'S PURSE <b class="num">7,795</b> GOLD</span></div>
+    </div>
+
+    <div class="col right">
+      <div class="h">Battlefield</div>
+      <div class="maps">
+        <div class="map sel"><img src="../../images/maps/kingsfield.webp" alt=""><span>KINGSFIELD</span></div>
+        <div class="map"><img src="../../images/maps/darkwood.webp" alt=""><span>DARKWOOD</span></div>
+        <div class="map"><img src="../../images/maps/emberreach.webp" alt=""><span>EMBERREACH</span></div>
+        <div class="map"><img src="../../images/maps/mirefen.webp" alt=""><span>MIREFEN</span></div>
+        <div class="map"><img src="../../images/maps/bloodmarch.webp" alt=""><span>BLOODMARCH</span></div>
+      </div>
+      <div class="mapdesc">The castle town and its farms. Walls to the north, fields and woods beyond, ogre keeps in every corner.</div>
+      <div class="h">Ogre Level</div>
+      <div class="ogre">
+        <div class="lv sel"><i>💀</i>0</div><div class="lv"><i>💀</i>1</div><div class="lv"><i>💀</i>2</div>
+        <div class="lv l3"><i>💀</i>3</div><div class="lv l4 locked"><i>🔒</i>4</div><div class="lv l5 locked"><i>🔒</i>5</div>
+      </div>
+      <div class="ogrename">NORMAL</div>
+      <div class="ogredesc">The standard challenge — for those learning the blade.</div>
+    </div>
+
+    <div class="footer">
+      <div class="back"><b>‹ B</b> &nbsp;BACK TO TITLE</div>
+      <button class="go">BEGIN QUEST <small>A</small></button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

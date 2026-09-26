@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Castle Survivor — HUD mockup (three-knight co-op)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@700;900&display=swap" rel="stylesheet">
+<style>
+/* ─── DESIGN TOKENS (lift into index.html :root) ─── */
+:root {
+  --ink-900: #0c0602; --ink-800: #1a0e05; --ink-700: #2a180a; --ink-600: #3d2a14;
+  --line: #5a3a1a;
+  --gold: #c9a253; --gold-bright: #e8c860; --gold-dim: #8a7040;
+  --parchment: #e8d9b0; --parchment-dim: #b8a680;
+  --danger: #d04040; --hp: #4ec95a; --hp-warn: #e0b030; --xp: #4a8fd6;
+  --rare: #4a9eff; --epic: #b66cff; --legendary: #ffb02e; --evolution: #ffdd00; --relic: #5fd3c7; --new: #88ddff;
+  --k1: #e8c860; --k2: #7ec8ff; --k3: #8fe08f;
+  --ev-gold: #e8c860; --ev-blood: #cc2222; --ev-wind: #44ccff; --ev-rage: #ff6622;
+  --panel: linear-gradient(135deg, rgba(26,14,5,0.86), rgba(42,24,10,0.78));
+  --outline: 0 0 2px #000, 0 1px 2px #000, 0 0 6px rgba(0,0,0,0.8);
+  --f-display: 'Cinzel Decorative', serif; --f-ui: 'Cinzel', Georgia, serif; --f-body: 'MedievalSharp', cursive;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #222; font-family: var(--f-ui); color: var(--parchment); display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 16px; }
+.note { font: 13px/1.5 system-ui, sans-serif; color: #bbb; max-width: 1280px; }
+.note b { color: #fff; }
+#stage { position: relative; width: 1280px; height: 800px; overflow: hidden; background: url('../shots/rev-kingsfield-2.png') center / cover no-repeat; box-shadow: 0 0 0 1px #000; }
+#stage::before { content: ''; position: absolute; inset: 0; background:
+  linear-gradient(rgba(20,12,6,0.9), rgba(20,12,6,0.9)) 0 0 / 300px 150px no-repeat,
+  linear-gradient(rgba(20,12,6,0.9), rgba(20,12,6,0.9)) 470px 0 / 340px 50px no-repeat,
+  linear-gradient(rgba(20,12,6,0.75), rgba(20,12,6,0.75)) 420px 134px / 440px 36px no-repeat,
+  linear-gradient(rgba(20,12,6,0.85), rgba(20,12,6,0.85)) 1090px 0 / 190px 160px no-repeat,
+  linear-gradient(rgba(20,12,6,0.9), rgba(20,12,6,0.9)) 0 690px / 230px 110px no-repeat,
+  linear-gradient(rgba(20,12,6,0.9), rgba(20,12,6,0.9)) 580px 735px / 120px 65px no-repeat,
+  linear-gradient(rgba(20,12,6,0.9), rgba(20,12,6,0.9)) 1090px 610px / 190px 190px no-repeat; }
+#stage > * { position: absolute; }
+.num { font-family: var(--f-ui); font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* ─── KNIGHT PANEL: one row component, repeated ─── */
+.knight-panel { top: 12px; left: 16px; width: 316px; padding: 8px 12px 9px; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 2px 10px rgba(0,0,0,0.6); display: flex; flex-direction: column; gap: 6px; }
+.krow { display: grid; grid-template-columns: 28px 1fr; gap: 4px 8px; align-items: center; padding: 4px 6px 5px 4px; border-radius: 4px; border-left: 3px solid var(--tint); background: rgba(0,0,0,0.28); }
+.krow.down { background: rgba(70,10,10,0.45); border-left-color: var(--danger); }
+.kchip { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--tint); background: radial-gradient(circle at 50% 35%, #4a2e12, #1a0e05); color: var(--tint); font: 700 13px var(--f-ui); display: flex; align-items: center; justify-content: center; }
+.krow.down .kchip { border-color: var(--danger); color: #ff9a9a; }
+.khead { display: flex; align-items: center; gap: 8px; }
+.kname { font: 700 12px var(--f-ui); letter-spacing: 0.12em; color: var(--tint); text-shadow: var(--outline); min-width: 68px; }
+.kname small { font-weight: 400; color: var(--gold-dim); letter-spacing: 0.04em; margin-right: 4px; }
+.krow.down .kname { color: #ff9a9a; }
+.hpbar { position: relative; flex: 1; height: 18px; background: var(--ink-900); border: 1px solid var(--line); border-radius: 3px; overflow: hidden; box-shadow: inset 0 2px 4px rgba(0,0,0,0.8); }
+.hpbar .fill { height: 100%; background: linear-gradient(180deg, color-mix(in srgb, var(--tint) 70%, white), var(--tint) 55%, color-mix(in srgb, var(--tint) 65%, black)); }
+.hpbar .txt { position: absolute; right: 6px; top: 0; line-height: 16px; font-size: 12px; color: var(--parchment); text-shadow: var(--outline); }
+.hpbar.down .fill { background: linear-gradient(180deg, #ff6a6a, var(--danger) 55%, #8b1a1a); width: 100% !important; }
+.hpbar.down .txt { color: #fff; letter-spacing: 0.1em; }
+.hpbar.reviving .fill { background: linear-gradient(180deg, #7cf28a, var(--hp) 55%, #2d8a3a); }
+.lvl { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--gold-dim); background: var(--ink-900); color: var(--gold-bright); font: 700 11px var(--f-ui); display: flex; align-items: center; justify-content: center; margin-left: 3px; }
+.xpbar { height: 6px; background: var(--ink-900); border: 1px solid var(--line); border-radius: 3px; overflow: hidden; }
+.xpbar .fill { height: 100%; background: linear-gradient(90deg, #2a4a8b, var(--xp)); }
+.kit { grid-column: 2; display: flex; align-items: center; gap: 4px; }
+.tile { position: relative; width: 22px; height: 22px; border-radius: 3px; border: 1px solid var(--line); background: linear-gradient(180deg, rgba(48,28,10,0.95), rgba(22,12,4,0.95)); overflow: hidden; }
+.tile img { width: 100%; height: 100%; object-fit: cover; filter: brightness(1.15) saturate(1.1); }
+.tile b { position: absolute; right: 1px; bottom: -1px; font: 700 9px var(--f-ui); color: var(--parchment); text-shadow: 0 0 3px #000, 0 1px 2px #000; }
+.tile.evo { border-color: var(--evolution); box-shadow: 0 0 6px rgba(255,221,0,0.35); }
+.tile.relic { border-color: var(--relic); color: var(--relic); font-size: 11px; text-align: center; line-height: 20px; background: radial-gradient(circle at 50% 40%, rgba(95,211,199,0.25), rgba(10,5,2,0.9)); }
+.sep { width: 1px; height: 14px; background: rgba(201,162,83,0.35); margin: 0 2px; }
+.ride { display: inline-flex; align-items: center; gap: 4px; padding: 1px 7px 1px 4px; border: 1px solid var(--gold-dim); border-radius: 10px; font: 700 11px var(--f-ui); color: var(--gold-bright); white-space: nowrap; }
+.party-xp { display: flex; align-items: center; gap: 8px; padding: 0 4px; font: 700 10px var(--f-ui); letter-spacing: 0.14em; color: var(--gold-dim); }
+.party-xp .xpbar { flex: 1; }
+
+/* ─── TOP CENTRE ─── */
+.revive { top: 12px; left: 50%; transform: translateX(-50%); width: 460px; padding: 7px 14px 9px 16px; border: 1px solid rgba(255,120,120,0.55); border-left: 3px solid var(--danger); border-radius: 4px; background: linear-gradient(90deg, rgba(208,64,64,0.22), rgba(12,6,2,0.78) 45%); box-shadow: 0 2px 8px rgba(0,0,0,0.6); text-align: left; overflow: hidden; }
+.revive .name { font: 700 15px var(--f-ui); letter-spacing: 0.12em; color: #ffd9d9; text-shadow: var(--outline); }
+.revive .sub { font: 400 12px var(--f-ui); letter-spacing: 0.06em; color: var(--parchment-dim); margin-top: 2px; }
+.revive .timer { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: rgba(0,0,0,0.5); }
+.revive .timer i { display: block; height: 100%; width: 96%; background: var(--danger); }
+.revive .secs { position: absolute; right: 12px; top: 7px; font: 700 15px var(--f-ui); color: #ffd9d9; }
+.announce { top: 82px; left: 50%; transform: translateX(-50%); font: 700 18px var(--f-ui); letter-spacing: 0.14em; color: var(--gold); text-shadow: var(--outline), 0 0 14px rgba(0,0,0,0.9); white-space: nowrap; }
+
+/* ─── WAVE PANEL ─── */
+.wave-panel { top: 12px; right: 16px; width: 236px; padding: 8px 12px 9px; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 2px 10px rgba(0,0,0,0.6); text-align: right; }
+.wave-panel .w { display: flex; justify-content: flex-end; align-items: baseline; gap: 6px; }
+.wave-panel .big { font: 700 22px var(--f-ui); letter-spacing: 0.06em; color: var(--gold); text-shadow: var(--outline); }
+.wave-panel .of { font: 400 13px var(--f-ui); color: var(--gold-dim); }
+.track { display: flex; gap: 2px; justify-content: flex-end; margin: 5px 0 6px; }
+.track i { width: 9px; height: 6px; background: var(--ink-600); border-radius: 1px; }
+.track i.done { background: var(--gold); }
+.track i.cur { background: var(--gold-bright); box-shadow: 0 0 5px var(--gold-bright); }
+.track i.boss { width: 8px; height: 8px; margin-top: -1px; transform: rotate(45deg); background: var(--ink-600); border: 1px solid var(--danger); }
+.track i.boss.done { background: var(--danger); }
+.next { display: flex; align-items: center; justify-content: flex-end; gap: 6px; font: 700 11px var(--f-ui); letter-spacing: 0.1em; color: var(--gold-dim); }
+.next .bar { width: 120px; height: 4px; background: var(--ink-900); border: 1px solid var(--line); border-radius: 2px; overflow: hidden; }
+.next .bar i { display: block; height: 100%; width: 78%; background: var(--gold); }
+.next .t { color: var(--parchment); font-size: 12px; letter-spacing: 0; }
+.meta { margin-top: 5px; font: 400 12px var(--f-ui); color: var(--gold-dim); }
+.meta .num { color: var(--parchment); }
+
+/* ─── BOTTOM ─── */
+.weapons { left: 16px; bottom: 14px; display: flex; flex-direction: column; gap: 5px; }
+.relics { display: flex; align-items: center; gap: 5px; }
+.relics .lbl { font: 700 10px var(--f-ui); letter-spacing: 0.14em; color: var(--gold-dim); margin-right: 2px; text-shadow: var(--outline); }
+.relics .tile { width: 28px; height: 28px; line-height: 26px; font-size: 14px; }
+.slots { display: flex; gap: 6px; }
+.slot { width: 48px; }
+.slot .box { position: relative; width: 48px; height: 48px; border-radius: 6px; border: 2px solid var(--gold-dim); background: rgba(15,8,2,0.85); overflow: hidden; }
+.slot .box img { width: 100%; height: 100%; object-fit: cover; }
+.slot .cd { position: absolute; inset: 0; background: conic-gradient(rgba(0,0,0,0.55) var(--cd, 0deg), transparent 0deg); }
+.slot.empty .box { border-style: dashed; opacity: 0.5; }
+.slot.empty .box::after { content: '+'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--gold-dim); font: 700 16px var(--f-ui); }
+.pips { display: flex; gap: 3px; justify-content: center; margin-top: 4px; }
+.pips i { width: 6px; height: 4px; background: var(--ink-600); border-radius: 1px; box-shadow: 0 0 2px #000; }
+.pips i.on { background: var(--gold); }
+.dash { left: 50%; bottom: 14px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.dash .ring { position: relative; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--gold-dim); background: rgba(15,8,2,0.85); display: flex; align-items: center; justify-content: center; font: 700 14px var(--f-ui); color: var(--gold-dim); }
+.dash .ring::after { content: ''; position: absolute; inset: -2px; border-radius: 50%; background: conic-gradient(var(--gold) 200deg, transparent 0deg); -webkit-mask: radial-gradient(circle, transparent 62%, #000 64%); mask: radial-gradient(circle, transparent 62%, #000 64%); }
+.dash .lbl { font: 700 11px var(--f-ui); letter-spacing: 0.14em; color: var(--gold); text-shadow: var(--outline); }
+.minimap { right: 16px; bottom: 14px; width: 150px; height: 150px; border: 2px solid var(--line); border-radius: 4px; background: rgba(15,8,2,0.8); box-shadow: 0 2px 10px rgba(0,0,0,0.6), inset 0 0 0 2px rgba(138,112,64,0.35), inset 0 0 15px rgba(0,0,0,0.3); }
+.minimap i { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: var(--danger); }
+.minimap .me { width: 6px; height: 6px; box-shadow: 0 0 4px currentColor; }
+
+/* ─── WORLD LAYER: rings + nameplates ─── */
+.knight { display: flex; flex-direction: column; align-items: center; gap: 30px; }
+.plate { font: 700 12px var(--f-ui); letter-spacing: 0.12em; color: var(--tint); padding: 2px 8px; border-radius: 3px; background: rgba(12,6,2,0.55); text-shadow: var(--outline); white-space: nowrap; }
+.plate.down { color: #ff9a9a; background: rgba(70,10,10,0.7); }
+.ring { width: 96px; height: 40px; border-radius: 50%; border: 3px solid var(--tint); opacity: 0.9; box-shadow: 0 0 12px var(--tint), inset 0 0 12px color-mix(in srgb, var(--tint) 40%, transparent); }
+.ring.down { border-style: dashed; border-color: var(--danger); box-shadow: 0 0 12px var(--danger); }
+.revive-arc { width: 140px; height: 58px; border-radius: 50%; border: 2px dashed rgba(78,201,90,0.7); }
+.dmg { font: 700 15px var(--f-ui); font-variant-numeric: tabular-nums; color: var(--parchment); text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 0 6px rgba(0,0,0,0.9); }
+.dmg.crit { font-size: 20px; color: var(--gold-bright); }
+.threat { width: 0; height: 0; border-top: 22px solid transparent; border-bottom: 22px solid transparent; }
+.threat.r { right: 4px; top: 388px; border-left: 26px solid rgba(220,60,40,0.85); }
+</style>
+</head>
+<body>
+<div class="note"><b>hud-coop.html</b> — same HUD, three knights over <code>rev-kingsfield-2.png</code>. Dad (P1) fighting; Brennan (P2) riding Thunderhoof; Parker (P3) down with 24 s to bleed-out and Dad standing in the revive ring. Every knight gets the same row and an in-world nameplate in their tint. Brennan's and Parker's rings are placed on empty ground since the capture is a solo frame. Compare with <code>coop-down.png</code>.</div>
+<div id="stage">
+
+  <!-- Knight panel: three identical rows -->
+  <div class="knight-panel">
+    <div class="krow" style="--tint: var(--k1)">
+      <div class="kchip">D</div>
+      <div class="khead"><span class="kname"><small>P1</small>DAD</span><div class="hpbar"><div class="fill" style="width:100%"></div><span class="txt num">151 / 151</span></div></div>
+      <div class="lvl num">20</div>
+      <div class="kit"><span class="tile"><img src="../../images/upgrades/sword.png" alt=""><b>5</b></span><span class="tile"><img src="../../images/upgrades/dagger.png" alt=""><b>4</b></span><span class="tile"><img src="../../images/upgrades/holyAura.png" alt=""><b>3</b></span><span class="tile"><img src="../../images/upgrades/arrowVolley.png" alt=""><b>2</b></span><span class="sep"></span><span class="tile relic">🪶</span><span class="tile relic">🐎</span></div>
+    </div>
+    <div class="krow" style="--tint: var(--k2)">
+      <div class="kchip">B</div>
+      <div class="khead"><span class="kname"><small>P2</small>BRENNAN</span><div class="hpbar"><div class="fill" style="width:86%"></div><span class="txt num">95 / 110</span></div><span class="ride">🐎 <span class="num">0:31</span></span></div>
+      <div class="lvl num">18</div>
+      <div class="kit"><span class="tile"><img src="../../images/upgrades/spear.png" alt=""><b>5</b></span><span class="tile evo"><img src="../../images/upgrades/dagger.png" alt=""><b>★</b></span><span class="tile"><img src="../../images/upgrades/wardShields.png" alt=""><b>1</b></span><span class="sep"></span><span class="tile relic">🎯</span></div>
+    </div>
+    <div class="krow down" style="--tint: var(--k3)">
+      <div class="kchip">P</div>
+      <div class="khead"><span class="kname"><small>P3</small>PARKER</span><div class="hpbar down"><div class="fill"></div><span class="txt num">DOWN · 24s</span></div></div>
+      <div class="lvl num">17</div>
+      <div class="kit"><span class="tile"><img src="../../images/upgrades/staff.png" alt=""><b>4</b></span><span class="tile"><img src="../../images/upgrades/orbitalBomb.png" alt=""><b>3</b></span><span class="tile"><img src="../../images/upgrades/stormCall.png" alt=""><b>2</b></span></div>
+    </div>
+    <div class="party-xp">PARTY <div class="xpbar"><div class="fill" style="width:44%"></div></div><span class="num" style="color:var(--parchment);letter-spacing:0">LV 20</span></div>
+  </div>
+
+  <!-- Revive banner takes the event slot -->
+  <div class="revive">
+    <div class="name">PARKER IS DOWN</div>
+    <div class="sub">RUN TO THEM AND STAND CLOSE — NO BUTTON NEEDED</div>
+    <span class="secs num">24s</span>
+    <div class="timer"><i></i></div>
+  </div>
+  <div class="announce" style="opacity:0.6">WAVE 8 · NO RESPITE</div>
+
+  <!-- Wave panel -->
+  <div class="wave-panel">
+    <div class="w"><span class="big">WAVE 8</span><span class="of">/ 20</span></div>
+    <div class="track">
+      <i class="done"></i><i class="done"></i><i class="done"></i><i class="done"></i><i class="boss done"></i>
+      <i class="done"></i><i class="done"></i><i class="cur"></i><i></i><i class="boss"></i>
+      <i></i><i></i><i></i><i></i><i class="boss"></i>
+      <i></i><i></i><i></i><i></i><i class="boss"></i>
+    </div>
+    <div class="next">NEXT <span class="bar"><i></i></span><span class="t num">0:46</span></div>
+    <div class="meta"><span class="num">4:49</span> &nbsp;·&nbsp; <span class="num">504</span>× combo &nbsp;·&nbsp; <span class="num">581</span> slain</div>
+  </div>
+
+  <div class="threat r"></div>
+
+  <!-- World: Dad at the capture's knight; Parker down nearby; Brennan riding to the right -->
+  <div class="knight" style="--tint: var(--k1); left:590px; top:318px"><span class="plate">DAD</span><div class="ring"></div></div>
+  <div class="knight" style="--tint: var(--k3); left:600px; top:470px"><span class="plate down">PARKER · 24s</span><div class="ring down"></div></div>
+  <div class="revive-arc" style="left:578px; top:520px"></div>
+  <div class="knight" style="--tint: var(--k2); left:900px; top:380px"><span class="plate">BRENNAN</span><div class="ring"></div></div>
+  <div class="dmg crit" style="left:700px; top:300px">88</div>
+  <div class="dmg" style="left:640px; top:292px">30</div>
+
+  <!-- P1's weapons; companions read theirs off their row -->
+  <div class="weapons">
+    <div class="relics"><span class="lbl">RELICS</span><span class="tile relic">🪶</span><span class="tile relic">🐎</span><span class="tile relic" style="opacity:0.35">◇</span></div>
+    <div class="slots">
+      <div class="slot"><div class="box"><img src="../../images/upgrades/sword.png" alt=""><div class="cd" style="--cd:80deg"></div></div><div class="pips"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div></div>
+      <div class="slot"><div class="box"><img src="../../images/upgrades/dagger.png" alt=""></div><div class="pips"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div></div>
+      <div class="slot"><div class="box"><img src="../../images/upgrades/holyAura.png" alt=""><div class="cd" style="--cd:200deg"></div></div><div class="pips"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div></div>
+      <div class="slot"><div class="box"><img src="../../images/upgrades/arrowVolley.png" alt=""></div><div class="pips"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div></div>
+      <div class="slot empty"><div class="box"></div></div>
+      <div class="slot empty"><div class="box"></div></div>
+    </div>
+  </div>
+
+  <div class="dash"><div class="ring">B</div><div class="lbl">DASH</div></div>
+
+  <div class="minimap">
+    <i style="left:60px;top:40px"></i><i style="left:66px;top:52px"></i><i style="left:80px;top:70px"></i><i style="left:44px;top:88px"></i><i style="left:96px;top:96px"></i>
+    <i class="me" style="left:72px;top:72px;background:var(--k1);color:var(--k1)"></i>
+    <i class="me" style="left:76px;top:84px;background:var(--k3);color:var(--k3)"></i>
+    <i class="me" style="left:104px;top:78px;background:var(--k2);color:var(--k2)"></i>
+  </div>
+</div>
+</body>
+</html>

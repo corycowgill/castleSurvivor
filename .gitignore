@@ -23,3 +23,5 @@ AssetFactory/glb_rejected/
 # Per-pass validation reports and runner stdout (regenerable)
 tools/reports/mirefen-*.json
 tools/reports/*.out
+# Frame-trace captures (regenerable, ~1.4 MB each)
+tools/reports/frame-trace-*.json
