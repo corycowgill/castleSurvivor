@@ -760,6 +760,12 @@ than inspection.
   indistinguishable at the gameplay camera (cart, hay bales, pot, stool, cottage identical); all
   five maps load; `npm test` clean; profile at wave 12 clean. The 138 MB heap drop matters as much
   as the triangles for Phase 20's phone build
+- [x] 37.6 **Enemies too.** They were the dominant remaining cost: a goblin was 106,152 triangles
+  and there can be 80 on screen. Decimated the eleven enemy and boss meshes at `--budget 8000
+  --include-skinned`, 1.63 M → 795 k. The simplifier's 2% error cap bites hardest here: goblin
+  106k → 12k and ogre 91k → 14k, but wolf only 163k → 129k and rat 158k → 133k. The player knights,
+  Lupin and the horse are deliberately untouched — they are seen close up in the character previews.
+  Verified against `enemies-horde-predec.png`: armour, weapons and fur all still read
 - [ ] 37.5 Open: a looser `error` would reach the 4k budget properly (another ~2.8 M triangles) but
   needs its own visual pass; the 20 rigged files (2.8 M triangles, `parkerKnightFinal` alone is
   377,874) want a skin-aware decimation or an LOD; `simplify` should move into the AssetFactory
