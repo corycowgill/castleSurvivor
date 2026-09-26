@@ -2068,7 +2068,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 // shipped in. `number` is the commit count this change will produce. Do not
 // hand-edit: the stamper matches the two marker lines exactly.
 /* BUILD:START */
-const BUILD = { number: 63, date: '2026-09-26' };
+const BUILD = { number: 64, date: '2026-09-26' };
 /* BUILD:END */
 for (const el of document.querySelectorAll('.build-badge')) el.textContent = `BUILD ${BUILD.number}`;
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -13419,7 +13419,76 @@ async function init() {
   // Renderer, lights, passes and vfx all exist by now, so the quality mode can
   // be applied before the first frame is drawn.
   applyQualityMode();
+  warmUpScene();
   gameLoop();
+}
+
+// ─── WARM-UP ───
+// A 2026-09-26 frame trace showed 11 of 13 remaining hitches inside the first
+// 72 seconds of a run: the first goblin, the first wolf, the first boss each
+// cost a synchronous shader link, and the first draw of each model uploads its
+// geometry and textures. After that the run is clean for minutes at a time.
+//
+// So pay it up front, while the loading screen (and the studio ident) is still
+// covering the view. Every enemy model is cloned once with the same material
+// treatment spawnEnemy applies — the clamps and castShadow have to match or the
+// program cache key differs and the warm-up buys nothing — handed to
+// renderer.compile(), then removed. The materials stay alive in _warmMats so
+// their programs are never released (see keepShadersWarm).
+function warmUpScene() {
+  const t0 = performance.now();
+  const keys = ['goblin', 'ogre', 'wolf', 'bat', 'rat', 'goblinArcher', 'goblinBomb',
+    'ogreWizard', 'ogreBoss', 'dragonOgre', 'ogreKing'];
+  const temp = [];
+  for (const key of keys) {
+    if (!assets[key]) continue;
+    let gltf;
+    try { gltf = cloneEnemyModel(key); } catch { continue; }
+    if (!gltf) continue;
+    const mesh = gltf.scene;
+    const mats = [];
+    mesh.traverse(c => {
+      if (!c.isMesh) return;
+      c.castShadow = true;                       // matches spawnEnemy, so the depth program warms too
+      if (c.material) { c.material = c.material.clone(); mats.push(c.material); }
+    });
+    for (const m of mats) {
+      if (m.metalness != null) m.metalness = Math.min(m.metalness, 0.3);
+      if (m.roughness != null) m.roughness = Math.min(m.roughness, 0.85);
+    }
+    keepShadersWarm(key, mats);
+    // Far below the map and never culled, so compile sees it but no frame does.
+    mesh.position.set(0, -500, 0);
+    mesh.traverse(c => { c.frustumCulled = false; });
+    scene.add(mesh);
+    temp.push(mesh);
+  }
+  // The VFX shader materials have their own cache keys and only compile on
+  // first use, which is why a link still landed mid-run after the models were
+  // warmed. Fire one of each somewhere harmless so compile() sees them; they
+  // expire straight into the pools freeMat keeps (vfx.js).
+  const far = { x: 0, y: -500, z: 0 };
+  try {
+    if (playerMesh) vfx.meleeSwing(playerMesh, CHARACTER_PRIMARY[selectedCharacter] || 'sword');
+    vfx.shockwaves.spawnShockwave(far, 0xffaa44, 5, 0.5);
+    vfx.flashes.spawnImpactFlash(far, 0xffffff, 1.5, 0.1);
+    vfx.decals.spawnGroundDecal(far, 0x880000, 1);
+    vfx.heatDistortion(far, 3, 0.45, 1.0);
+    vfx.runeCircle(far, { radius: 4, duration: 0.5 });
+    vfx.lightning(far, { x: 0, y: -498, z: 0 });
+    vfx.bloodImpact(far, { x: 0, y: 1, z: 0 }, 0.4);
+  } catch (e) {
+    console.warn('warm-up vfx skipped:', e.message);
+  }
+  try {
+    renderer.compile(scene, camera);
+  } catch (e) {
+    console.warn('warm-up compile skipped:', e.message);
+  }
+  for (const m of temp) scene.remove(m);
+  if (new URLSearchParams(location.search).has('debug')) {
+    console.log(`warm-up: ${temp.length} models compiled in ${(performance.now() - t0).toFixed(0)}ms`);
+  }
 }
 
 init().then(() => {

@@ -770,3 +770,36 @@ than inspection.
   needs its own visual pass; the 20 rigged files (2.8 M triangles, `parkerKnightFinal` alone is
   377,874) want a skin-aware decimation or an LOD; `simplify` should move into the AssetFactory
   pipeline so new assets never ship raw
+
+## Phase 38 - Warm-up pass (2026-09-26)
+- [x] 38.1 **The finding.** After Phases 35 and 37 the remaining hitches were not spread through the
+  run: 11 of 13 landed in the first 72 seconds, carrying shader-link and upload signatures (programs
+  +5, geometries +9, textures +5). The first goblin, the first wolf and the first boss each cost a
+  synchronous link plus a geometry and texture upload; once a type has appeared it never costs
+  again. That also explains the run-to-run swing between 3 and 13 hitches — it is variance in which
+  types appear early, not a regression
+- [x] 38.2 **`warmUpScene()`**, at the end of `init()` while the loading screen and the studio ident
+  still cover the view. Clones every enemy and boss model once with *exactly* the material treatment
+  `spawnEnemy` applies — the metalness/roughness clamps and `castShadow` have to match or the program
+  cache key differs and the warm-up buys nothing — parks them at y=-500 with `frustumCulled = false`,
+  calls `renderer.compile`, then removes them. Materials stay in `_warmMats` so the programs are
+  never released
+- [x] 38.3 **VFX too.** Models alone left links mid-run: each VFX `ShaderMaterial` has its own cache
+  key and only compiles on first use. The warm-up now also fires one melee swing, shockwave, impact
+  flash, ground decal, heat distortion, rune circle, lightning bolt and blood impact far below the
+  map; they expire straight into the pools from Phase 35
+- [x] 38.4 **Result**, 6-minute GPU runs to wave 12:
+
+  | | no warm-up | models | models + VFX |
+  |---|---|---|---|
+  | frames over 50 ms | 13 | 6 | **5** |
+  | frames over 100 ms | 8 | 5 | **4** |
+  | programs at run start | 29 | 36 | **48** |
+  | p99.9 | 22.6 ms | 21.0 ms | **21.3 ms** |
+
+  Against the session's starting point: **158 frames over 50 ms → 5**, p99.9 257 ms → 21 ms.
+- [ ] 38.5 Open: 11 programs still link during play (48 → 59), so something is still uncovered —
+  likely the shadow-pass variants, which `renderer.compile` does not build, and the effects the
+  warm-up does not fire (boss slam, arcane explosion, death dissolve, building fire, weapon trails).
+  The two largest remaining hitches (~320-400 ms) show no program, geometry, texture or heap change
+  at all and need a different tool — they look like GC or an off-main-thread stall
