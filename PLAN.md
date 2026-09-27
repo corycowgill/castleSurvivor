@@ -882,3 +882,31 @@ than inspection.
   victory at wave 20 with no errors
 - [ ] 41.4 Open: ~614 meshes still outside the instancing fold; the unexplained ~400 ms stalls
   (not GC, see 39.2); bloom and GTAO are full-screen passes that will dominate on a weak GPU
+
+## Phase 42 - GPU budget (2026-09-26)
+- [x] 42.1 **`tools/gpu-budget.mjs`.** Measuring GPU cost needs two things the other tools do not
+  do: the vsync cap off, and the simulation **frozen**. The loop is frame-coupled, so an uncapped
+  run at 300 fps also runs the sim 5x and measures the wrong thing — that is why the first uncapped
+  trace (39.x working notes) was discarded. This plays to a wave, freezes the sim, keeps rendering,
+  runs uncapped, then toggles one pass at a time over an identical frozen scene
+- [x] 42.2 **Result at wave 12, 152 live enemies, 1280x800, RTX 4060** (~395 draw calls, ~9.9 M
+  triangles per frame):
+
+  | configuration | ms/frame | fps | delta |
+  |---|---|---|---|
+  | everything on | 3.90 | 256 | — |
+  | bloom off | 3.79 | 264 | 0.11 ms |
+  | + AO off | 3.79 | 264 | 0.00 ms |
+  | + shadows off | 3.06 | 327 | **0.73 ms** |
+  | + all props hidden | 2.46 | 407 | 0.60 ms |
+
+- [x] 42.3 **The conclusion that matters: there is ~4x GPU headroom.** A frame costs 3.9 ms of GPU
+  against a 16.7 ms budget, and the main thread is 83% idle (39.3). Frame rate on this machine is
+  set by the vsync cap, not by the game. Post-processing is nearly free (bloom 0.11 ms, GTAO 0.00 —
+  it is off unless `settings.ambientOcc`); the directional shadow map is the single biggest pass at
+  19% of the frame, and every static prop together is 15%
+- [ ] 42.4 So further micro-optimisation on this hardware has no effect on fps — it is already
+  capped with 4x to spare. The remaining value is entirely on **weak hardware and the phone build**:
+  check `LOW_QUALITY` actually sheds the right things (shadows first, on the evidence above), and
+  re-run this tool on the mobile path. Also still open: the unexplained ~400 ms stalls (not GC,
+  39.2) and the ~614 meshes outside the instancing fold
