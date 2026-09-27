@@ -528,7 +528,9 @@ async function main() {
         for (let i = 0; i < 6; i++) cs.spawnEnemy('goblin', 0, { at: { x: pm.position.x + 3 + i * 0.5, z: pm.position.z } });
         cs.step(1.0); r.horseTramples = h.tramples > 0;
         cs.keys['KeyD'] = false;
-        r.hudCountdown = /Riding\s+0:\d\d/.test(document.getElementById('ride-timer').textContent);
+        // The chip's label is a CSS ::before now (PLAN 34.3), so the element
+        // holds only the countdown.
+        r.hudCountdown = /^\s*\d+:\d\d\s*$/.test(document.getElementById('ride-timer').textContent);
         for (let i = 0; i < 12; i++) { cs.step(5); unpause(); }
         r.horseBolts = p.riding === false && (h.phase === 'fleeing' || cs.horse === null);
         cs.step(0.5); r.riderDropped = pm.position.y < 0.05;

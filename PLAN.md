@@ -827,3 +827,42 @@ than inspection.
   geometry (53 draw calls instead of ~1,200, and the graph stops being the cost) — that is a real
   change to map building and wants its own session; `renderDistortion` as a second full
   `renderer.render` doubles every traversal above; the unexplained ~400 ms stalls
+
+## Phase 40 - Static prop instancing (2026-09-26)
+- [x] 40.1 **`instanceStaticProps()`**, run at the end of `loadMap`. Collapses every single-mesh
+  static prop into `InstancedMesh` keyed by `(geometry, material, world cell)`. The cell is the
+  point: one InstancedMesh spanning the map is a single bounding sphere, so per-prop frustum culling
+  would be lost and the GPU would draw every instance always. At `INSTANCE_CELL = 48` culling
+  survives at cell granularity while the object count collapses. Breakables, water, transparent
+  materials and multi-mesh hierarchies are left alone — partial consumption is not worth the
+  complexity when nearly every prop is one Trellis mesh
+- [x] 40.2 **Scene graph**, all five maps:
+
+  | map | objects | plain meshes | instanced |
+  |---|---|---|---|
+  | kingsfield | 2,579 → **1,403** | 1,234 → 614 | 19 → 83 |
+  | darkwood | → 1,088 | 461 | 87 |
+  | emberreach | → 1,042 | 448 | 89 |
+  | mirefen | → 822 | 288 | 195 |
+  | bloodmarch | → 984 | 431 | 70 |
+
+  Scene triangles held at 17.66 M vs 17.79 M, which is the check that matters: nothing was
+  duplicated in the fold.
+- [x] 40.3 **CPU**, same 4-minute run three times (baseline → frozen subtrees → instanced):
+
+  | | baseline | +39.5 | +40 |
+  |---|---|---|---|
+  | idle | 80.4% | 81.1% | **83.3%** |
+  | `projectObject` | 1.6% | 2.1% | 1.3% |
+  | `intersectsObject` | 0.8% | 1.0% | under the 0.25% cutoff |
+  | `updateMatrixWorld` | 3.0% | 0.8% | 1.0% |
+  | `renderObject` | 0.9% | 1.1% | 0.6% |
+
+  Main-thread busy time **19.6% → 16.7%, a 15% cut**, and frustum culling left the profile.
+- [x] 40.4 **Verified.** `inst-kingsfield-*.png` identical to `frozen-*` and `postdec-*`; all five
+  maps load; `npm test` clean; `coop-verify` 60/60; creatures all pass; enemy regression clean; nine
+  bot runs across three maps with no errors. Fixed a stale assertion while here: `hudCountdown`
+  still expected "Riding 0:31" but 34.3 moved that label into a CSS `::before`
+- [ ] 40.5 Open: ~614 meshes remain (multi-mesh props, breakables, transparent); `renderDistortion`
+  is still a second full `renderer.render` and doubles every traversal above it; the unexplained
+  ~400 ms stalls are still unattributed and are not GC (39.2)

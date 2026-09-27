@@ -2068,7 +2068,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 // shipped in. `number` is the commit count this change will produce. Do not
 // hand-edit: the stamper matches the two marker lines exactly.
 /* BUILD:START */
-const BUILD = { number: 65, date: '2026-09-27' };
+const BUILD = { number: 66, date: '2026-09-27' };
 /* BUILD:END */
 for (const el of document.querySelectorAll('.build-badge')) el.textContent = `BUILD ${BUILD.number}`;
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -4268,6 +4268,73 @@ const mapMeshes = [];
 // own updateMatrixWorld recurses the whole subtree every frame regardless of
 // the auto-update flags; a frozen prop has nothing to recompute.
 function _frozenMatrixWorld() {}
+
+// ─── STATIC PROP INSTANCING ───
+// A live profile (PLAN 39) found the scene holding 2,579 objects of which 1,202
+// meshes were duplicate placements of just 53 geometries, and three.js walks all
+// of them every frame — twice, because the distortion pass is a second render.
+// projectObject and intersectsObject alone were 2.4% of all main-thread samples.
+//
+// Collapsing each (geometry, material) into an InstancedMesh fixes that, but a
+// single InstancedMesh spanning the whole map is one bounding sphere, so per-prop
+// frustum culling is lost and the GPU draws every instance always. So instances
+// are grouped into world-space cells: culling survives at cell granularity and
+// the object count still collapses.
+//
+// Only single-mesh props are folded in. Breakables, water and anything with a
+// multi-mesh hierarchy stay as they were; partial consumption is not worth the
+// complexity when most props are one Trellis mesh.
+const INSTANCE_CELL = 48;        // world units
+const INSTANCE_MIN = 4;          // below this, an InstancedMesh is not worth an object
+function instanceStaticProps() {
+  const keep = new Set();
+  for (const b of breakables) keep.add(b.mesh);
+
+  const groups = new Map();
+  const consumed = [];
+  const _m = new THREE.Matrix4();
+  for (const root of mapMeshes) {
+    if (root.isInstancedMesh || keep.has(root)) continue;
+    // Exactly one mesh in the subtree, and nothing exotic on it.
+    let mesh = null, count = 0, bad = false;
+    root.traverse(c => {
+      if (!c.isMesh) return;
+      count++; mesh = c;
+      if (Array.isArray(c.material) || c.material?._water || c.material?.transparent) bad = true;
+    });
+    if (bad || count !== 1 || !mesh.geometry || !mesh.material) continue;
+
+    root.updateMatrixWorld(true);
+    const cx = Math.floor(root.position.x / INSTANCE_CELL);
+    const cz = Math.floor(root.position.z / INSTANCE_CELL);
+    const key = `${mesh.geometry.uuid}|${mesh.material.uuid}|${cx},${cz}`;
+    let g = groups.get(key);
+    if (!g) groups.set(key, g = { geo: mesh.geometry, mat: mesh.material, cast: mesh.castShadow, recv: mesh.receiveShadow, mats: [], roots: [] });
+    g.mats.push(_m.copy(mesh.matrixWorld).clone());
+    g.roots.push(root);
+  }
+
+  let made = 0, folded = 0;
+  for (const g of groups.values()) {
+    if (g.mats.length < INSTANCE_MIN) continue;
+    const im = new THREE.InstancedMesh(g.geo, g.mat, g.mats.length);
+    for (let i = 0; i < g.mats.length; i++) im.setMatrixAt(i, g.mats[i]);
+    im.instanceMatrix.needsUpdate = true;
+    im.castShadow = g.cast; im.receiveShadow = g.recv;
+    im.frustumCulled = true;               // per cell, which is the whole point
+    im.matrixAutoUpdate = false;
+    im.updateMatrix();
+    scene.add(im);
+    mapMeshes.push(im);
+    made++;
+    for (const r of g.roots) { scene.remove(r); consumed.push(r); folded++; }
+  }
+  if (consumed.length) {
+    const drop = new Set(consumed);
+    for (let i = mapMeshes.length - 1; i >= 0; i--) if (drop.has(mapMeshes[i])) mapMeshes.splice(i, 1);
+  }
+  console.log(`Instanced ${folded} static props into ${made} InstancedMeshes (cell ${INSTANCE_CELL})`);
+}
 const _flatGroundMat = new THREE.MeshStandardMaterial({ color: 0x3a7a28, roughness: 0.9 });
 const breakables = []; // barrels and supply caches placed by the map
 let ground = null;
@@ -4584,6 +4651,8 @@ async function loadMap(mapId) {
       breakables.push({ mesh, x: obj.x, z: obj.z, type: obj.key === 'barrel' ? 'barrel' : obj.key === 'chest' ? 'cache' : 'crate', obstacle, broken: false });
     }
   }
+
+  instanceStaticProps();
 
   // Light shafts: a few tall additive planes leaning along the key light, where the
   // generator asked for them (Darkwood clearings). Cheap, and they sell the canopy.
