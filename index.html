@@ -2068,7 +2068,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 // shipped in. `number` is the commit count this change will produce. Do not
 // hand-edit: the stamper matches the two marker lines exactly.
 /* BUILD:START */
-const BUILD = { number: 64, date: '2026-09-26' };
+const BUILD = { number: 65, date: '2026-09-27' };
 /* BUILD:END */
 for (const el of document.querySelectorAll('.build-badge')) el.textContent = `BUILD ${BUILD.number}`;
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -4264,6 +4264,10 @@ function applyLook(def) {
 let selectedMap = 'kingsfield';
 let loadedMap = null;
 const mapMeshes = [];
+// Installed on every static map root once its world matrix is final. Object3D's
+// own updateMatrixWorld recurses the whole subtree every frame regardless of
+// the auto-update flags; a frozen prop has nothing to recompute.
+function _frozenMatrixWorld() {}
 const _flatGroundMat = new THREE.MeshStandardMaterial({ color: 0x3a7a28, roughness: 0.9 });
 const breakables = []; // barrels and supply caches placed by the map
 let ground = null;
@@ -4400,7 +4404,13 @@ function updateMapFires(dt) {
 }
 
 function unloadMap() {
-  for (let i = 0; i < mapMeshes.length; i++) scene.remove(mapMeshes[i]);
+  for (let i = 0; i < mapMeshes.length; i++) {
+    // Hand the prototype method back before letting the object go, so nothing
+    // downstream inherits a frozen matrix (see the freeze in loadMap).
+    delete mapMeshes[i].updateMatrixWorld;
+    mapMeshes[i].matrixAutoUpdate = true;
+    scene.remove(mapMeshes[i]);
+  }
   mapMeshes.length = 0;
   obstacles.length = 0;
   _nearbyObstacles.length = 0;
@@ -4651,11 +4661,23 @@ async function loadMap(mapId) {
   // multiplyMatrices / applyMatrix4 doing exactly this for ~1,400 props that had
   // not moved since load. Composing the matrix once and clearing the auto-update
   // flags skips both the compose and the parent multiply from then on.
+  // 2026-09-26: clearing the flags stops the compose and the parent multiply,
+  // but Object3D.updateMatrixWorld still RECURSES into every child every frame
+  // whatever the flags say, and the distortion pass makes that twice. A live
+  // CPU profile put 3.0% of all main-thread samples in updateMatrixWorld and
+  // another 1.0% in multiplyMatrices, over a 2,579-object graph.
+  //
+  // So compute each static root's world matrix once, then replace the method on
+  // that instance with a no-op: the subtree is frozen, so there is nothing to
+  // walk. Anything that ever needs to move a prop again must restore the
+  // prototype method on it first.
   for (let i = 0; i < mapMeshes.length; i++) {
     const m = mapMeshes[i];
     m.updateMatrix();
     m.matrixAutoUpdate = false;
-    m.matrixWorldNeedsUpdate = true;   // one last world update, then it stays put
+    m.matrixWorldNeedsUpdate = true;
+    m.updateMatrixWorld(true);         // the one world update it will ever get
+    m.updateMatrixWorld = _frozenMatrixWorld;
   }
 
   loadedMap = mapId;

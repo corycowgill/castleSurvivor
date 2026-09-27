@@ -803,3 +803,27 @@ than inspection.
   warm-up does not fire (boss slam, arcane explosion, death dissolve, building fire, weapon trails).
   The two largest remaining hitches (~320-400 ms) show no program, geometry, texture or heap change
   at all and need a different tool — they look like GC or an off-main-thread stall
+
+## Phase 39 - Live CPU profile: what is actually spending the frame (2026-09-26)
+- [x] 39.1 **`tools/cpu-profile.mjs`.** `playtest.mjs profile` samples the *stepped* simulation with
+  rendering off, which is the wrong instrument for "what stalls a frame". This drives a real
+  rAF run and attaches V8's sampling CPU profiler and its allocation sampler over CDP
+- [x] 39.2 **GC is not the problem.** The allocation sampler measured **8 MB over four minutes
+  (~0.03 MB/s)**. So the ~320-400 ms hitches that show no program / geometry / texture / heap change
+  are *not* GC pressure. They need a different instrument again (driver or compositor)
+- [x] 39.3 **The main thread is 80% idle** at the 60 Hz cap, so the cap sets the frame rate on this
+  machine, not the game. The busy fifth is scene-graph bookkeeping, not game logic:
+  `updateMatrixWorld` 3.0% of all samples, `projectObject` 1.6%, `multiplyMatrices` 1.0%,
+  `intersectsObject` 0.8% — about a third of non-idle time spent walking objects rather than drawing
+- [x] 39.4 **Why: 2,579 objects, and 1,202 of the 1,234 meshes are duplicate placements of just 53
+  geometries.** three.js walks the whole graph every frame, twice with the distortion pass
+- [x] 39.5 **Frozen subtrees.** 23.3 cleared the auto-update flags, which stops the matrix maths, but
+  `Object3D.updateMatrixWorld` recurses into every child *regardless of the flags* — ~5,000 calls a
+  frame for props that have not moved since load. Each static root now gets its world matrix computed
+  once at map load and then its `updateMatrixWorld` replaced with a no-op on that instance;
+  `unloadMap` hands the prototype method back. Measured: **updateMatrixWorld 3.0% → 0.8%,
+  multiplyMatrices 1.0% → 0.4%** (a 74% cut on that path, ~7 s of 251 s profiled)
+- [ ] 39.6 Open, in value order: convert the 1,202 duplicate placements to `InstancedMesh` per
+  geometry (53 draw calls instead of ~1,200, and the graph stops being the cost) — that is a real
+  change to map building and wants its own session; `renderDistortion` as a second full
+  `renderer.render` doubles every traversal above; the unexplained ~400 ms stalls
