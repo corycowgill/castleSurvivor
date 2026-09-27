@@ -910,3 +910,368 @@ than inspection.
   check `LOW_QUALITY` actually sheds the right things (shadows first, on the evidence above), and
   re-run this tool on the mobile path. Also still open: the unexplained ~400 ms stalls (not GC,
   39.2) and the ~614 meshes outside the instancing fold
+
+## Phase 43 - The horde you can read again (2026-09-26)
+
+Four phases of profiling ended at "there is 4x GPU headroom and the frame rate is set by vsync"
+(42.3), so this one goes back to the game. Starting point: the three open review lists
+(`press-review-2026-09-26.md`, its addendum, `code-review-2026-09-26.md`), whose top items had not
+been touched in five commits.
+
+- [x] 43.1 **`eliteAura` was declared twice in `vfx.js`, and the wrong one won.** The object
+  literal had both the new `(position, radius, dt, height, hue)` written for the recolour purge and
+  the original `(enemy, dt)` 500 lines later. Last key wins, so every call that passed a position
+  hit a function that read `position.mesh`, found `undefined` and returned. The entire `ENEMY_AURA`
+  table - shaman violet, bomb-goblin amber, speed-goblin cyan, ogre green - **did nothing**. Elites
+  looked marked only because a second call site still used the old signature. Deleted the shadow,
+  removed that call site, and made the aura tail `dimHex(hue, 0.18)` instead of a hardcoded dark
+  green so a violet aura stays violet as it fades.
+- [x] 43.2 **Both attack telegraphs were empty loops.** The recolour purge (8a06eca) deleted the
+  bodies of the melee wind-up pulse and the archer draw pulse and left the loops behind: `const
+  pulse = ...` computed, `for (const mat of ...)` iterated, nothing inside. So the 0.55 s archer
+  draw that 18.3 lengthened *specifically to be a dodge window* had no tell at all, and neither did
+  an ogre's swing. Replaced with `vfx.attackTell` (motes converging on the creature, tightening as
+  the blow nears) plus `attackTellPulse` (a flash that quickens from 5 Hz to 14 Hz) and
+  `attackRelease` on the strike. **Not** on every goblin: only archers, ogres, elites and bosses,
+  because 150 simultaneous tells is noise, and a goblin's 4 damage is not worth the player's
+  attention.
+- [x] 43.3 **Enemy arrows were invisible.** `MeshBasicMaterial({ color: 0x3a2214 })` on a
+  0.11 x 1.1 cone at 17 units/s: a near-black splinter on near-black ground. That is most of why
+  "archers are the top damage source in 12 of 15 runs" - not that they hit hard (4 damage, `dmgW`
+  0.5) but that the damage arrived with no visible cause. Now hot orange with a trail
+  (`vfx.enemyArrowTrail`), in the one colour nothing the player owns uses.
+- [x] 43.4 **`colorMul: 0.55` deleted from goblin and archer.** It multiplied every material on the
+  two most common enemies to a bit over half brightness. Three reviews called the horde "dark
+  smudges"; this was why. The mechanism is gone, not just the values.
+- [x] 43.5 **Archers are marked** (`ENEMY_AURA.archer`, pale steel, quiet at `mul` 0.7). The table
+  carried a line saying archers "stay unmarked" - written when the table did nothing at all.
+- [x] 43.6 **Verified** with `tools/lineup.mjs`, new: one of every enemy type plus elites and a boss
+  parked at fixed angles around a frozen knight, archer held mid-draw and ogre mid-swing, shot from
+  the gameplay camera. `playtest action` could not do this - the bot kites, the camera lerps after
+  it, and half the frames come back with the fight off screen. Deterministic, so two commits are
+  directly comparable: `before-kingsfield.png` vs `after-kingsfield.png`, plus
+  `lineup-darkwood.png`. Needed one game-side hook, `spawnEnemy(type, angle, { elite: true })`, to
+  force the 3-20% elite roll.
+
+## Phase 44 - No single blow takes the bar (2026-09-26)
+- [x] 44.1 **A damage ceiling, `HIT_CAP_FRAC` = 50% of max HP** (`HIT_CAP_TELEGRAPHED` = 60%, for
+  boulders, where you were shown the ring and given time to leave it). Enemy damage scales with wave
+  *and* Ogre Level; max HP scales with neither, so the curves cross: a wave-20 Ogre King boulder is
+  120 raw at Ogre 0 and 222 at Ogre 3 against a knight carrying 100-200. Past the crossing the
+  finale is not a fight, it is a coin flip on where you were standing. Two hits from full is now the
+  floor on how fast anyone can die.
+- [x] 44.2 **Storm Kunai chains on crits only.** Its own upgrade text has always said "Critical
+  daggers that chain to 2 extra targets"; the code chained on every hit, and with the evolved volley
+  at five daggers every 0.3 s that one line was 91% of a winning run's damage - every other weapon
+  in the build was decoration. Gated, it pays off the crit stat the evolution already requires.
+
+## Phase 45 - The co-op bug class (2026-09-26, from `code-review-2026-09-26.md`)
+Twelve of the review's 24 findings, chosen as the ones that lose a run or a save rather than a
+frame. Numbers are the review's.
+- [x] 45.1 **C1 RISE AGAIN dropped every companion.** `resetGame` was `clearRun(); startRun()`, and
+  `clearRun` truncates the party to one knight; only `beginQuest` ever rebuilt it. Restarting after
+  a co-op run silently went solo - dead pads, solo party scaling, two people at the couch gone.
+- [x] 45.2 **C2 a pad companion's level-up card could soft-lock the run.** The screen is modal and
+  paused and only its owner's pad could answer it, so a Bluetooth pad going to sleep - or a player
+  putting one down after bleeding out - ended the run in the worst way: not a death, a hang. Cards
+  are no longer queued for a bled-out knight, and an orphaned card falls back to player 1, which the
+  prompt now says out loud.
+- [x] 45.3 **C3 + M2 three copies of the player sheet, collapsed into one.** `state.player`'s
+  literal, `makePlayerState()` and `clearRun`'s reset list each carried a different field set, and
+  none of them carried `bledOut` - so player 1's bleed-out was permanent for the session: next time
+  they went down they could never be revived, while companions (who get a fresh sheet) were fine.
+  All three now come from `makePlayerState()`.
+- [x] 45.4 **C5 archers aimed at one knight's X and player 1's Z.** The comment above it says this
+  was fixed; only the X half was. Every co-op volley flew along a heading that pointed at nobody.
+- [x] 45.5 **C6 wave-event buffs landed on player 1 only** (`addBuff` defaults to `state.player`).
+  Companions got the Blessed Wind banner and none of the wind. Now `partyBuff`, and the Armor of
+  Light shield draws on every knight.
+- [x] 45.6 **C7 companion projectiles used player 1's evolutions.** A companion who evolved their
+  daggers fired plain ones that never chained; player 1 evolving made everyone's level-1 daggers
+  chain and look evolved. `spawnProjectile` reads the owner's book now.
+- [x] 45.7 **C9 nobody could pause while player 1 was down**; **C11 any pad disconnect wiped the
+  whole co-op roster** (the keys are `'pad:2'`, never bare indices, so `gps[key]` was always
+  undefined and everything was deleted, including the keyboard companion).
+- [x] 45.8 **C13 the Ogre-Level unlock line erased the weapon-unlock and mastery lines** (`=` where
+  the two loops above use `+=`) - and the weapon unlock is the only notice in the game that Storm
+  Call or Trail of Embers exists, lost exactly on the run that earned both. **C14** a save with any
+  version other than 2 was treated as v1 and blanked, so a future v3 would wipe every wallet.
+- [x] 45.9 **C4/C10 boot and start-button robustness.** BEGIN QUEST was live while `init` was still
+  loading the map and the player, and a click there ran a second `loadMap`/`createPlayer`
+  concurrently with the first: orphaned props no unload could reach, doubled obstacles. `beginQuest`
+  also had no `try/finally`, so one rejected loader left the button reading PREPARING... forever.
+- [x] 45.10 **C12 the HUD cooldown sweep was NaN** for Warding Shields and Trail of Embers: they
+  have a `cooldown` row in `WEAPON_STATS` but no entry in `weaponTimers`, `undefined / n` is NaN and
+  CSS drops `height:NaN%`, so those slots never showed a sweep.
+- [x] 45.11 **`npm test` could not fail.** It printed its findings and exited 0 whatever they were -
+  only `creatures` had a non-zero exit. `smoke` now asserts each knight fights, kills, survives and
+  that the spawner runs, and `smoke`/`enemies`/`balance` all exit 1 on a JS error. Kept to what 30 s
+  of wave 1 actually proves: the first draft also asserted levelling, which the historical baseline
+  (`b18-smoke.log`) shows has never happened inside that window.
+- [ ] 45.12 Open, still from the code review: C8 two music loops after a quick restart, C15-C19
+  (stale `saveMeta` writes, shape-trusting `loadBestRun`, per-map GPU leaks in `unloadMap`,
+  companion ring and ward-shield material leaks, blank companion kit row), C20-C23 (latent
+  `tgtMesh` self-reference, announce timers crossing runs, Hall of Fame records player 1 only,
+  `SOURCE_NAMES` and `RARE_UPGRADES` missing `staff`), C24 the variable-step loop vs the fixed-step
+  harness. Also **wolves, bats and rats are still near-black on dark ground** - 18.4's moonlit rim
+  and ground discs were deleted by the same recolour purge and only their comment survived (now
+  corrected in the Darkwood map entry). A real fix is a rim term in the material shader, not another
+  tint, and that is a look decision for the user rather than a bug fix.
+
+## Phase 46 - The rest of the code review (2026-09-27)
+The findings 45.12 left open, minus the two that are design calls rather than bugs.
+- [x] 46.1 **C8 two music loops after a quick restart.** `playMusic` only assigned `musicSource`
+  when its 600 ms timer fired, so a second call inside that window found it null, stopped nothing,
+  and the first timer then started a looping source with no handle: unstoppable for the session,
+  playing under everything. `gameOver` plays the game-over theme and RISE AGAIN plays the battle
+  theme, which is well inside 600 ms if you are quick on the button. The pending timer is held and
+  cleared now, and a start that finds a live source stops it first.
+- [x] 46.2 **C16 stored shapes are no longer trusted.** `loadBestRun` merges onto defaults: a stored
+  `"5"` or `[]` parsed fine and then every comparison in `saveBestRun` threw inside its own `try`,
+  which returns `{ best: current }` - so Personal Best silently showed the current run forever and
+  NEW RECORD never fired again, with no error to explain it. `settings.gfx` is shape-checked too,
+  because it is indexed on the first frame and a stored null is a crash before anything is drawn.
+- [x] 46.3 **C17 per-map GPU objects are owned and disposed.** `unloadMap` only did `scene.remove`.
+  Decal and tuft materials, the three contact/canopy/glow materials, the shaft geometry and
+  material, every InstancedMesh's instance attributes and every stream ribbon's geometry are now
+  registered in `mapOwnedGPU` at creation and disposed on unload. The shared ones - `_decalGeo`,
+  `_tuftGeo`, `_streamMats`, the radial textures, everything from `loadTex`, and the GLB geometry
+  and materials behind the prop instancing - are deliberately not in there; disposing those would
+  break the next load. Measured with a four-pass kingsfield/bloodmarch cycle: steady state falls
+  from 53 geometries and 44 shader programs to 51 and 38. Worth having, but **the review's "each
+  change adds a set" is not what the counters show** - both before and after, the totals are flat
+  across passes. This was a constant set of orphans, not unbounded growth.
+- [x] 46.4 **C18 companion rings and ward shields are disposed.** A joined knight's ring is three
+  canvas textures, two materials and a geometry, and `resetPartyToSolo` only removed it from the
+  scene. A ward shield clones the GLB scene *and* clones every material on it, and the ring resizes
+  on every rank-up; `disposeShield` now handles all three pop sites. Geometry is shared with the
+  source asset and is left alone.
+- [x] 46.5 **C19 the HUD memo cache is cleared between runs** (`resetHudCache`). `updateCoopHud`
+  rebuilds the knight rows whenever the party size changes, so after co-op -> solo -> co-op the
+  freshly empty row and the remembered string agreed, the write was skipped, and a companion's kit
+  strip stayed blank for the whole run. **C21** the twelve loose `setTimeout`s fading the shared
+  announce banner are one `hideAnnounceIn`, cleared in `clearRun`: they used to outlive their run
+  and blank the next one's WAVE 1.
+- [x] 46.6 **C20** `const tgtMesh = tgt.mesh || tgtMesh` named the binding being declared - safe only
+  because `nearestPlayer` falls back to players[0]. **C22** the Hall of Fame records the whole
+  `party`, not just player 1; a three-knight victory went in under one name. **C23** `staff` added
+  to `SOURCE_NAMES` (the damage breakdown printed the raw key for Parker's primary) and to
+  `RARE_UPGRADES` (Fortune's Favor weighted every primary except his).
+- [x] 46.7 **C15 `saveMeta` no longer writes the shared half unless asked.** Every call rewrote
+  achievements, mastery, wins and the Ogre ladder from whatever `loadMeta` returned earlier, so the
+  Forge - which saves on each purchase - could roll back a run finishing in another tab. Only the
+  end of a run passes `{ shared: true }` now.
+- [x] 46.8 **Verified:** `npm test` PASS, `coop-verify` 60/60, `leak` clean (every class delta 0
+  across two runs, heap +1 MB).
+- [ ] 46.9 Left deliberately: **C24**, the variable-step loop vs the fixed-step harness. It is a
+  measurement mismatch and a prerequisite for netcode, not a bug today, and an accumulator in
+  `gameLoop` changes the feel of every existing balance number - it wants its own phase with a
+  re-measure, not a footnote in this one.
+
+## Phase 47 - The Ogre ladder had never been played (2026-09-27)
+- [x] 47.1 **`--ogre N` was a suggestion the game quietly ignored.** `__cs.startRun` set the
+  difficulty by *clicking the Ogre Level button*, and that handler refuses any level past
+  `ogreUnlocked` and returns without changing anything. `ogreUnlocked` comes from the v2 save, the
+  harness seeds the long-dead `castleSurvivor_meta` key that nothing reads any more, so the ladder
+  was locked at 1 in every headless run. **Every Ogre-level number this project has recorded since
+  the v2 save migration was measured at Ogre 0**, including `review-2026-09-26-ogre3.log` and the
+  round-two finding built on it: *"Ogre Level is a step function - Ogre 3 won 7/9 vs 6/9 on the
+  same maps, speedMul never catches a kiter, only boss dmgMul bites."* Nine runs of Normal.
+- [x] 47.2 **Fixed at both ends.** The test hook sets `selectedOgreLevel` directly - it is a test
+  hook and may skip the unlock gate - and returns what it actually set; `playRun` throws if the run
+  it got is not the run it asked for. A difficulty measurement that quietly measures the wrong
+  difficulty is worse than no measurement.
+- [x] 47.3 **The real ladder, measured for the first time.** Ogre 5, three knights x three maps:
+  **nine deaths, every one at wave 2 or 3, all inside 70 seconds.** Not "barely harder than Normal"
+  - the exact opposite. The arithmetic says why: at wave 2 an Ogre 5 goblin has 61 HP against a
+  level-1 sword's 15 damage on a 1.2 s swing, so it takes five swings - six seconds - to kill one
+  of twice as many, while seven of their hits kill you. The multipliers are flat across the run but
+  the player's power is not: one level-1 weapon at wave 2 against four rank-5 weapons and
+  evolutions at wave 20. The same multiplier that is a fair fight late is a wall before the build
+  exists.
+- [x] 47.4 **The whole ladder, measured for the first time** (`tools/reports/ladder-real.log`,
+  three knights x two maps per level, plus nine runs at Ogre 5 in `ogre5-real.log`):
+
+  | level | result | where the deaths land |
+  |---|---|---|
+  | Ogre 1 Hardened | 1 win / 5 | waves 7, 10, 18, 19, 20 — a real fight, and a fair one |
+  | Ogre 2 Veteran | 1 win / 5 | **4, 4, 5, 5**, 9 |
+  | Ogre 3 Nightmare | 0 wins / 6 | **2, 3, 4, 4**, 7, 8 |
+  | Ogre 4 Insanity | 1 win / 5 | **2, 3, 3, 3**, 5 |
+  | Ogre 5 Extinction | 0 wins / 9 | **2, 2, 2, 2, 2, 2, 2, 2, 3** — none reached 70 seconds |
+
+  Ogre 1 is the only level above Normal anyone can play. Everything above it dies in the first two
+  minutes, and the shape is identical every time: not a hard fight lost late, a wall hit early. The
+  two runs that did get through (Parker on Darkwood at Ogre 2 and at Ogre 4) finished at level 51
+  and level 56 — so past the opening the run is not merely survivable, it snowballs. The difficulty
+  is entirely front-loaded.
+- [x] 47.5 **Why, in one number.** Work the horde generates per 3-second spawn tick at wave 4,
+  against a rank-2 sword (22 damage, 1.1 s):
+
+  | Ogre | 0 | 1 | 2 | 3 | 4 | 5 |
+  |---|---|---|---|---|---|---|
+  | seconds of killing per 3 s tick | 2.2 | 4.4 | 6.6 | 9.9 | 13.2 | **17.6** |
+
+  At Extinction the player falls six seconds behind every three seconds, compounding, with one
+  level-1 weapon. It is not difficult, it is arithmetically impossible, and no amount of skill
+  changes it because the tools to clear that many hit points do not exist yet at wave 4.
+- [x] 47.6 **The fix: the mutators fade in instead of applying from wave 1** (`ogreRamp`,
+  `ogreMul`). Every read of `ogreMods.*` goes through `ogreMul(key)`, which interpolates from 1.0 at
+  wave 1 to the table's value at `ogreRampWave()`. The multipliers themselves are untouched -- the
+  `OGRE_LEVELS` table is byte-identical to before -- so **nothing about the game from the ramp wave
+  on changes at any level**, and Ogre 0 is a no-op at every wave (all its mutators are 1.0, and the
+  speed ceiling only engages above 1.0). The premise: a difficulty multiplier should track the
+  player's power curve, and that curve starts at one level-1 weapon and ends at four rank-5 weapons
+  with evolutions.
+- [x] 47.7 **The ramp length is per level: `1 + 2 x level`** (Ogre 1 full by wave 3, Ogre 5 by wave
+  11). Two flat lengths were tried first and both were wrong in instructive ways. At 6 waves every
+  level improved -- Ogre 5 went from nine deaths at wave 2-3 to none before wave 4 -- but the deaths
+  then piled up exactly ON wave 6 (Ogre 4: 4, 5, 6, 6, 6, 6), the ramp saying it ends before the
+  player is ready. At 10 waves the top levels got their room, but Ogre 1 -- the one level that was
+  already well tuned, dying at waves 7 through 20 -- went soft at 3 wins of 6. The length has to
+  scale with the level because the thing being faded in does: 1.35x HP is something a wave-3 build
+  absorbs, 3.8x is something nothing before wave 10 can.
+- [ ] 47.8 **Sample size: the per-level ramp is validated at 12 runs per level, not 6.** Comparing
+  the 6-wave and 10-wave sweeps level by level was reading noise -- Ogre 2 came back *worse* at the
+  longer ramp (0 wins vs 1), which is mechanically impossible since a longer ramp is strictly
+  gentler at those waves. Six runs is two per knight, well under the >= 4 per knight this project
+  already knows to require. The claims that survive that bar are the large ones: flat Ogre 5 dying
+  9 for 9 at wave 2-3, and ramped Ogre 5 reaching wave 4-6. Exact ramp lengths are not resolvable at
+  small n, so the choice is made on the mechanism (fade length should scale with overshoot) and
+  checked at the two anchors -- Ogre 1 must stay hard, Ogre 5 must stop being impossible.
+- [ ] 47.9 Still open: Ogre 2-4 are unmeasured at the per-level ramp, and the whole ladder deserves
+  one long overnight sweep at >= 12 runs per level before anyone calls it tuned. The wave-5 boss
+  spike (`press-review-2026-09-26` item 5) is visible in the Ogre 0 logs too and is a separate
+  problem from the ladder.
+## Phase 48 - Omens, knight actives, and a boss worth the name (2026-09-27)
+
+Three of the five things the "what would improve the gameplay" pass put at the top. Regression:
+`node tools/playtest.mjs systems` (64 checks, plus `omen-choice.png` and `omen-hud.png`).
+
+### Omens - the run forks now
+- [x] 48.1 **Every run was the same twenty waves.** `WAVE_SCRIPT` is fixed and only the map and the
+  Ogre Level were chosen before BEGIN QUEST, so five battlefields sat on top of one identical
+  fight. An **omen** is now read on the wave after each boss falls -- **6, 11, 16** -- as two cards,
+  each a curse carried for the rest of the quest and a boon that pays for it. Both are permanent,
+  and there is no third card: declining is not on offer, which is what makes it a decision rather
+  than a buff. Seven omens, three read per quest, so no two quests run the same road:
+  The Blood Moon (+30% enemy life / a fourth relic slot), The Gathering Horde (+45% spawns / +60%
+  XP), Famine (no food drops / +25% damage), The Long Night (+25% wave length / +75% coin), Giants
+  Walk (ogres x3 / a fifth weapon slot), Arrowstorm (archers x2.2 / three rerolls and two
+  banishments), The Quickening (+12% enemy speed / dash -40% and active -25%).
+  The per-tick spawn cap went 14 -> 18 so The Gathering Horde is felt in the late waves rather than
+  swallowed by the clamp; the live enemy cap (`partyMaxEnemies`, 180) is unchanged and still bounds
+  everything. Relic and weapon slot counts are read through `maxRelics()` / `maxWeaponSlots()` now,
+  so two omens can move them.
+- [x] 48.2 **The omen screen is the level-up screen.** Not laziness: the pause, the controller focus
+  model, the keyboard routing, the co-op lockout and the harness bot's click target are all already
+  correct there, and a second modal would have had to reproduce every one of them. Reroll, banish
+  and skip are hidden; `_pickingPlayer` is null, so an omen belongs to the party and every keyboard
+  plus the first pad can answer it, which is the one arrangement that cannot soft-lock a couch. The
+  offer is flagged on the wave turn and raised on the NEXT tick, because a kill in the same frame
+  can open the level-up screen and two modals racing for one element leaves the run paused forever.
+- [x] 48.3 **Omens fade in over three waves** (`omenStrength`, `rebuildOmenMul`). This is Phase 47's
+  lesson applied to a second system, and it was found the same way: with the first omen at wave 4 at
+  full strength, Dad and Brennan both died at **wave 4 inside two and a half minutes** on Bloodmarch
+  (`balance-phase48-d.log`), where the same three runs with omens disabled all won
+  (`balance-phase48-bm-noomens.log`, added `--omens off` to the harness for exactly this A/B). A
+  knight at wave 4 has one weapon at rank 1 and no answer to any of these curses. Both fixes were
+  taken: the offer moved from 4/9/14 to 6/11/16, and the multipliers ramp. The one-off grants -- a
+  relic slot, a weapon slot, rerolls -- still land whole and at once, deliberately, because those
+  are what a player needs at the moment they take on a cost. After the move: deaths at waves 11, 16
+  and 11 instead of 4, and 6 of 9 runs won across three maps.
+
+### Knight actives - the one blow you aim
+- [x] 48.4 **The whole of a player's agency was where to stand and when to dash.** Weapons fire
+  themselves, so a good build played itself and a bad one could not be saved by playing well. One
+  active per knight, shaped around what that knight already is rather than three skins on one nova:
+  **Dad's Shield Wall** (14 s) hurls everything within 7 back, holds it for 1.5 s, and halves
+  incoming damage for 3 s; **Brennan's Skyfall** (13 s) is a 10-unit leap, untouchable in the air,
+  with the landing as the attack; **Parker's Arcane Step** (11 s) blinks 13 units and leaves a rune
+  that bursts half a second later on whatever followed him. All three scale with the Damage stat, so
+  the pick pool feeds them.
+- [x] 48.5 **Wired everywhere a control has to be wired**: Q or E and pad X for player 1, Numpad 1 or
+  `/` for a keyboard companion, each pad's own X in co-op, and a second round button above the dash
+  on a phone (`touch-verify` grew four checks: topmost at its own centre, fully on screen, clear of
+  the dash, clear of the minimap). Edge-triggered, because held down it would fire on the frame the
+  cooldown expired every time, which is not a decision. A dial beside the dash carries the knight's
+  colour, glyph and the ability's name; the character-select card names it; the Codex has a Knight
+  Actives section at the top of the weapons tab rather than buried under Advanced.
+- [x] 48.6 **The kite bot spends them now.** A bot that never presses the button measures a weaker
+  player than any human, and every difficulty number in this project is read as a floor on what a
+  person can do. It presses when something is within 6 units, when a boss is within 9, or below half
+  health: 17-96 uses per run, and `balance` reports uses and damage.
+
+### The boss that was a slog and the boss that was a formality
+- [x] 48.7 **The wave-5 ogre was 2,100 HP against a level-12 build** -- `800 + 260 * wave`, a curve
+  so flat it was 2,100 at wave 5 and 4,700 at wave 15, when the build it meets goes from one
+  level-1 weapon to four rank-5 weapons with evolutions. Three reviews found this boss **still alive
+  at wave 8**, soaking two minutes while the bat ring and the ogre wall arrived on top of him. The
+  curves are now fitted to **57 measured fights** across three knights, three maps and four batches
+  (`balance-phase48-b/-c/-d/-e.log`), from the damage per second each build actually put into a
+  boss: pooled medians 31 at wave 5, 162 at wave 10, 338 at wave 15, 2,331 at wave 20. HP is that
+  median times the intended fight length, and the exponents join the anchors rather than being
+  chosen. `ogreBossHp = 1200 * (wave/5)^2.2` (1,200 at wave 5, 13,454 at wave 15);
+  `dragonBossHp = 7900 * (wave/10)^1.75`, and the King 110,000 where he was 40,000.
+  Measured after, over the two confirmation batches (`-e.log` and `-f.log`, 18 runs, 12 won, four
+  maps): wave-5 boss median **61 s** (was ~120), wave-10 **61 s**, wave-15 **36 s**, and the King
+  **33-139 s, median 50**, where every build that reached him used to kill him in 22-37. Read the
+  three mid-boss numbers with 48.16 in hand.
+- [x] 48.8 **The wave-5 boss's contact damage, `20 + 2.5 * wave`, is now `12 + 3.0 * wave`** --
+  pivoted about wave 15, where it was already right. 27 at wave 5 instead of 32.5, unchanged at 57
+  by wave 15. Parker brings 85 HP to this fight and contact is the one blow with no telegraph at
+  all, so it is the one that should not be a third of a knight's life the first time they meet him.
+  `HIT_CAP_FRAC` (44.1) still backstops everything above it.
+- [x] 48.9 **A boss is meant to be the thing you are fighting.** The trickle ran at full rate
+  underneath him, so a boss who outlived his own wave met the next wave's script on top of the crowd
+  he already had -- the reviewed frame where the wave-5 ogre was up at 4:48 with the wave-7 bat ring
+  and the wave-8 ogre wall. While a boss lives the trickle drops to 55% (`BOSS_TRICKLE_MUL`) and a
+  later wave's scripted formation is skipped. Waves 15 and 20 script a boss AND a formation together
+  on purpose and are untouched.
+- [x] 48.10 **Every boss fight is recorded** (`runStats.bossFights`: wave, HP, seconds, dps) and
+  printed by `playtest balance`. The next tuning pass reads the times it is tuning instead of
+  inferring them from a timeline.
+
+### What was tried and thrown away
+- [x] 48.11 **An adaptive boss budget was built first, measured, and deleted.** The idea: size each
+  boss off how hard the party actually hits, so the King stops being "a 40-second fight or a
+  two-boulder death". Two estimators were built and both failed against real runs.
+  (1) A **single-target throughput meter** -- the most damage any one enemy took in a second, 70th
+  percentile over a 20-second window of fighting seconds. It reads systematically high at mid-game,
+  where it is a maximum over a crowd of forty, and low late, where nothing survives a whole second.
+  (2) The **last boss's observed DPS scaled by the meter's growth**, on the theory that the bias
+  cancels in a ratio. It did not: the predictor came back four times low, sizing a wave-10 boss
+  Parker then killed in 12.9 s.
+  The killing measurement is in `balance-phase48-b.log`: at wave 20 the meter and the real fight are
+  **uncorrelated**. Meter 1108 -> 950 real; meter 1070 -> 3524 real. Same reading, 3.7x apart. An
+  estimator with that much error cannot size a boss, so the whole mechanism came out: no meter, no
+  clamp band, no per-run drift. Fixed numbers also keep two balance runs comparable, which 47.2
+  found matters more than it looks. **Do not rebuild this without a better signal than damage
+  dealt.**
+- [ ] 48.12 Open: **the King is still short for strong builds and long for weak ones** -- 33 s to
+  107 s in the last batch, against the 60-120 s his own code comment claims. The spread is 10x in
+  measured single-target output between builds (405 to 3,873 dps at wave 20), so no single HP number
+  serves both ends; 110,000 puts the median at about 48 s and reaches into the band, where 40,000
+  never did. Closing the rest needs a **mechanic, not a constant** -- time-gated phases like the
+  guard phases the Ogre King already has at `_invulnUntil`, which a DPS check cannot skip.
+- [ ] 48.13 Open: omen pills in the HUD and on the cards are emoji, like the relics (34.15).
+  `gen-icons.mjs` could make seven PNGs. The troll glyph was already swapped for a mountain because
+  it is Emoji 14 and renders as a blank box on plenty of machines.
+- [ ] 48.14 Open: the Ogre ladder multiplies the new boss curves, so at Ogre 5 the King is 297,000.
+  That is untested -- 47.9 already wanted a long sweep of Ogre 2-4, and it now has a second reason.
+- [ ] 48.16 **Caveat on every mid-boss time in this phase: the bot does not fight them.**
+  `botStep` only presses a boss once it has been alive 45 seconds (`pressBoss`, added because
+  charging every boss on sight walked level-12 knights into the wave-5 ogre and its escort). So a
+  measured wave-5 fight of 83 s contains up to 45 s of a knight circling it, and the "dps" column
+  is build output times the fraction of time actually engaged, not build output. The Ogre King is
+  exempt -- `isFinalBoss` presses immediately -- so the wave-20 numbers are the honest ones, and
+  they are what the King's 110,000 was fitted on. The mid-boss curves are fitted on a contaminated
+  signal and are therefore *conservative*: a human who turns and fights will kill them faster than
+  40 s. Before the next tuning pass, either drop `pressBoss`'s delay now that a wave-5 boss is
+  1,200 HP and 27 contact damage rather than 2,100 and 32.5, or record engaged-time separately.
+  Re-measuring the whole ladder on a changed bot is a batch of its own, which is why it was not
+  done here.
+- [ ] 48.15 Open: three of nine runs still die, and the two Bloodmarch wave-4 deaths in
+  `balance-phase48-d.log` were on the map the 2026-09-26 review already called the hardest
+  (13% snag, 171 live enemies at wave 8). The omen move fixed those two, but Bloodmarch's early
+  game was not otherwise touched.

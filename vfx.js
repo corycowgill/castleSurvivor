@@ -1748,6 +1748,17 @@ class WeaponTrail {
   }
 }
 
+// Burn a packed hex colour down by a factor, per channel. Used for particle
+// tails that must stay the same hue as their head: `colorEnd: dimHex(hue, 0.18)`
+// keeps a violet aura violet where a hardcoded tail turns it into another colour
+// entirely halfway through its life.
+function dimHex(hex, f) {
+  const r = ((hex >> 16) & 255) * f | 0;
+  const g = ((hex >> 8) & 255) * f | 0;
+  const b = (hex & 255) * f | 0;
+  return (r << 16) | (g << 8) | b;
+}
+
 // Per-projectile look. `meteor` and `storm` are the evolved Arrow Volley and
 // Throwing Dagger, named for fire and lightning in their upgrade text.
 const PROJECTILE_STYLES = {
@@ -4166,7 +4177,11 @@ const manager = {
         y: position.y + Math.random() * height * 0.55,
         z: position.z + Math.sin(a) * r,
         vx: Math.cos(a) * 0.3, vy: 1.3 + Math.random() * 1.1, vz: Math.sin(a) * 0.3,
-        color: hue, colorEnd: 0x0a5522,
+        // The tail is the aura's own hue burnt down, not a fixed green. While
+        // this method was shadowed (see the note in index.html's ENEMY_AURA) the
+        // only caller was the elite one, so a hardcoded dark green looked right;
+        // a shaman's violet fading to green does not.
+        color: hue, colorEnd: dimHex(hue, 0.18),
         sizeStart: 0.30 + Math.random() * 0.22, sizeEnd: 0.03,
         life: 0.8 + Math.random() * 0.5,
         opacityStart: 0.8, opacityEnd: 0,
@@ -4177,6 +4192,72 @@ const manager = {
     // No ground disc here on purpose. A soft circle big enough to read from the
     // gameplay camera renders as a glowing donut -- i.e. exactly the ground ring
     // this replaced. The sparks alone carry the signal.
+  },
+
+  // "This one is swinging at you, now." Called every frame of a wind-up with `t`
+  // running 0 -> 1 as the blow lands, so it is stateless like eliteAura: motes
+  // fall inward onto the creature and tighten as the strike nears, which pulls
+  // the eye in a crowd without repainting the model. The emissive flash this
+  // replaces was deleted with the rest of the enemy recolours and never given a
+  // successor, so wind-ups had no tell at all beyond the animation.
+  //
+  // Deliberately NOT called for every goblin: at 150 enemies the screen would be
+  // a spark storm and the signal would mean nothing. Only the blows that can
+  // actually take a chunk of the bar get one (see updateEnemies).
+  attackTell(position, t, dt, hue = 0xff4422, reach = 1.5) {
+    // Sized to be read at the gameplay camera, not in a close-up: the first pass
+    // at this was a polite sprinkle of sparks that vanished at playing distance.
+    const want = 70 * Math.max(0.5, quality.particleMul) * dt;
+    let n = Math.floor(want);
+    if (Math.random() < want - n) n++;
+    const r = reach * (1.9 - 1.35 * t);
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * 6.283;
+      const cx = Math.cos(a), cz = Math.sin(a);
+      getGroup('streakV', THREE.AdditiveBlending).emit({
+        x: position.x + cx * r, y: position.y + 0.4 + Math.random() * 1.6, z: position.z + cz * r,
+        vx: -cx * r * 4.0, vy: 0.5, vz: -cz * r * 4.0,
+        color: hue, colorEnd: 0xffffff,
+        sizeStart: 0.26 + 0.24 * t, sizeEnd: 0.03,
+        aspect: 0.32, stretch: 0.10,
+        life: 0.16 + Math.random() * 0.1,
+        opacityStart: 1, opacityEnd: 0,
+        drag: 0.4,
+      });
+    }
+  },
+
+  // A pulse on the creature itself. This is what actually carries at distance --
+  // the converging motes say "something", the pulse says "here". Timed by the
+  // caller off the wind-up clock (see `_tellPulse` in updateEnemies) so this stays
+  // stateless like every other emitter here.
+  attackTellPulse(position, t, hue = 0xff4422) {
+    spawnImpactFlash({ x: position.x, y: position.y + 1.0, z: position.z },
+                     hue, 0.8 + 0.7 * t, 0.13);
+  },
+
+  // The moment the wind-up pays off: one punch of light on the creature, so the
+  // hit reads as caused by *that* enemy even when the damage number lands on you.
+  attackRelease(position, hue = 0xff4422) {
+    spawnImpactFlash({ x: position.x, y: position.y + 1.0, z: position.z }, hue, 1.1, 0.09);
+  },
+
+  // Enemy arrows were a 0.11 x 1.1 cone in flat #3a2214 at 17 units/s: on dark
+  // ground, functionally invisible, which is most of why archers were the top
+  // damage source in a run nobody could explain. Player projectiles have had a
+  // trail since the start; this gives the incoming ones the same courtesy, in a
+  // hostile colour so the two never read as the same thing.
+  enemyArrowTrail(pos, dx, dz) {
+    getGroup('streakV', THREE.AdditiveBlending).emit({
+      x: pos.x, y: pos.y, z: pos.z,
+      color: 0xff9a4a, colorEnd: 0x6a1f00,
+      sizeStart: 0.30, sizeEnd: 0.05,
+      aspect: 0.3, stretch: 0.20,
+      vx: dx, vy: 0, vz: dz,
+      life: 0.18,
+      opacityStart: 0.7, opacityEnd: 0,
+      drag: 4,
+    });
   },
 
   // ─── ENVIRONMENT ───
@@ -4673,35 +4754,10 @@ const manager = {
     }
   },
 
-  // ─── ELITE ENEMY AURA (call per-frame for living elites) ───
-  eliteAura(enemy, dt) {
-    if (!enemy.mesh || enemy.isDying) return;
-    enemy._eliteVfxTimer = (enemy._eliteVfxTimer || 0) + dt;
-    // Emit subtle rising embers every ~0.15s
-    if (enemy._eliteVfxTimer < 0.15) return;
-    enemy._eliteVfxTimer = 0;
-    const pos = enemy.mesh.position;
-    const group = getGroup('softCircle', THREE.AdditiveBlending);
-    const angle = Math.random() * Math.PI * 2;
-    const r = 0.5 + Math.random() * 0.5;
-    group.emit({
-      x: pos.x + Math.cos(angle) * r,
-      y: pos.y + 0.1,
-      z: pos.z + Math.sin(angle) * r,
-      vy: 1.5 + Math.random() * 2,
-      vx: (Math.random() - 0.5) * 0.3,
-      vz: (Math.random() - 0.5) * 0.3,
-      color: enemy.type === 'ogre' ? 0xff6622 : 0xddaa33,
-      colorEnd: enemy.type === 'ogre' ? 0x441100 : 0x553300,
-      sizeStart: 0.12 + Math.random() * 0.08,
-      sizeEnd: 0.02,
-      life: 0.5 + Math.random() * 0.4,
-      opacityStart: 0.6,
-      opacityEnd: 0,
-      drag: 0.5,
-    });
-  },
-
+  // ─── ELITE ENEMY SPAWN ───
+  // The per-frame elite aura used to live here as a second `eliteAura(enemy, dt)`
+  // that shadowed the real one above; it is gone, and every threat marker now
+  // goes through that one entry point.
   eliteSpawnBurst(position) {
     preset_sparks(position, 0xddaa33, 12, 8);
     spawnShockwave(position, 0xddaa33, 3, 0.4);

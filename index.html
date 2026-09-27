@@ -806,6 +806,39 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
   background: rgba(20,12,5,0.8); border: 1px solid rgba(95,211,199,0.6); overflow: hidden;
 }
 .relic-pill-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* ─── OMEN CARDS ─── */
+/* Two cards, each with a cost line and a gain line, so the shape of the card
+   says "this is a trade" before any of the words are read. */
+.upgrade-btn.card-omen {
+  border-color: var(--omen, #b06cd8);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--omen, #b06cd8) 30%, transparent), inset 0 1px 0 rgba(255,255,255,0.08);
+  background: linear-gradient(180deg, rgba(24,10,28,0.95), rgba(12,6,14,0.96));
+}
+.omen-glyph {
+  width: 56px; min-width: 56px; height: 56px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center; font-size: 30px;
+  color: var(--omen, #b06cd8);
+  background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--omen, #b06cd8) 28%, transparent), rgba(10,5,2,0.85));
+  border: 1px solid color-mix(in srgb, var(--omen, #b06cd8) 55%, transparent);
+}
+.chip-omen { background: rgba(176,108,216,0.18); border: 1px solid rgba(176,108,216,0.6); color: #d9a8f0; }
+.omen-line { display: flex; gap: 8px; align-items: baseline; font-size: 13px; line-height: 1.45; margin-top: 3px; }
+.omen-line .k {
+  font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+  min-width: 78px; opacity: 0.75;
+}
+.omen-curse { color: #d98a8a; }
+.omen-boon { color: #9fd9a0; }
+/* ─── OMEN HUD ─── */
+#omen-hud-wrap { position: fixed; bottom: 118px; left: 15px; display: flex; align-items: center; gap: 6px; z-index: 100; pointer-events: none; }
+#omen-hud-wrap:has(#omen-hud:empty) { display: none; }
+#omen-label { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-dim); text-shadow: var(--hud-shadow); }
+#omen-hud { display: flex; gap: 5px; }
+.omen-pill {
+  width: 28px; height: 28px; border-radius: 6px; font-size: 15px; line-height: 26px; text-align: center;
+  background: rgba(20,12,5,0.8); border: 1px solid currentColor;
+}
+.touch-active #omen-hud-wrap { display: none; }   /* same as the relics: the pause screen carries them on a phone */
 .rarity-tag { font-size: 11px; letter-spacing: 2px; font-weight: 700; margin-left: 6px; }
 .upgrade-rank { float: right; font-size: 12px; color: var(--parchment-dim); font-weight: normal; }
 
@@ -1003,6 +1036,33 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
   font-family: 'Cinzel', serif; font-size: 12px; font-weight: 700; letter-spacing: 0.12em;
   color: var(--gold); text-shadow: var(--hud-shadow);
 }
+/* The knight's active, beside the dash. Same dial, its own colour, set per
+   knight from KNIGHT_ABILITIES so the meter reads as theirs and not as a
+   second dash. The label carries the ability's name once the run starts. */
+#ability-icon {
+  width: 40px; height: 40px; border-radius: 50%; margin-left: 10px;
+  border: 2px solid var(--ability-dim, #4a3060); background: rgba(15,8,2,0.85);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+  font-size: 19px; line-height: 1; color: var(--ability, #c48cff);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+  transition: border-color 0.3s;
+}
+#ability-icon.ready { border-color: var(--ability, #c48cff); }
+#ability-icon.ready::after {
+  content: ''; position: absolute; inset: -2px;
+  border-radius: 50%; border: 2px solid var(--ability, #c48cff);
+  animation: dashPulse 1.5s ease-in-out infinite;
+}
+#ability-cd-fill {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: var(--ability-fill, rgba(196,140,255,0.32));
+  transition: height 0.1s linear;
+}
+#ability-label {
+  font-family: 'Cinzel', serif; font-size: 12px; font-weight: 700; letter-spacing: 0.12em;
+  color: var(--ability, #c48cff); text-shadow: var(--hud-shadow);
+}
 
 /* ─── TOUCH CONTROLS ─── */
 #touch-controls { display: none; }
@@ -1064,6 +1124,31 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
   opacity: 0; pointer-events: none;
 }
 #touch-dash-btn.on-cd::after { opacity: 1; }
+/* The knight's active, above the dash and in the knight's own colour so the
+   two are never confused mid-fight. Same size, same sweep, same pressed state. */
+#touch-ability-btn {
+  position: fixed; right: 104px; bottom: 196px; width: 72px; height: 72px;
+  border-radius: 50%; z-index: 200; touch-action: none;
+  background: radial-gradient(circle, rgba(34,18,44,0.85), rgba(14,7,18,0.9));
+  border: 2px solid rgba(196,140,255,0.5);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; line-height: 1; color: #c48cff; text-shadow: 0 1px 3px rgba(0,0,0,0.85);
+  -webkit-tap-highlight-color: transparent;
+}
+#touch-ability-btn.pressed {
+  background: radial-gradient(circle, rgba(96,52,140,0.95), rgba(44,20,66,0.95));
+  border-color: rgba(226,190,255,0.95); color: #f0deff;
+  transform: scale(0.93);
+}
+#touch-ability-btn.on-cd { border-color: rgba(90,60,120,0.6); color: rgba(196,140,255,0.4); }
+#touch-ability-btn::after {
+  content: ''; position: absolute; inset: -2px; border-radius: 50%;
+  background: conic-gradient(rgba(196,140,255,0.6) var(--cd, 0deg), transparent 0deg);
+  -webkit-mask: radial-gradient(circle, transparent 60%, #000 62%);
+  mask: radial-gradient(circle, transparent 60%, #000 62%);
+  opacity: 0; pointer-events: none;
+}
+#touch-ability-btn.on-cd::after { opacity: 1; }
 /* Live input readout for ?touchdebug. iOS Safari has no devtools, so when a
    control misbehaves on a real phone the only way to see why is to put the
    state on the screen. */
@@ -1774,7 +1859,7 @@ body.boss-active #wave-event-banner { top: 62px; }
     </div>
     <div id="last-quest"></div>
     <div class="controls-info">
-      WASD / Left Stick &mdash; Move &bull; Space / B Button &mdash; Dash &bull; D-Pad navigates menus, A selects, B goes back
+      WASD / Left Stick &mdash; Move &bull; Space / B &mdash; Dash &bull; Q / X &mdash; Knight's Active &bull; D-Pad navigates menus, A selects, B goes back
       <div id="start-tip"></div>
     </div>
   </div>
@@ -1992,7 +2077,7 @@ body.boss-active #wave-event-banner { top: 62px; }
     <button id="banish-btn" class="lu-action" style="display:none">BANISH (<span id="banish-count">0</span>)</button>
     <button id="skip-btn" class="lu-action">SKIP</button>
   </div>
-  <div class="menu-hint">1 / 2 / 3 or D-Pad + A to choose &bull; R / X reroll &bull; B / Y banish &bull; Esc skip</div>
+  <div class="menu-hint" id="level-up-hint">1 / 2 / 3 or D-Pad + A to choose &bull; R / X reroll &bull; B / Y banish &bull; Esc skip</div>
   <div id="pick-hint"></div>
 </div>
 
@@ -2025,9 +2110,12 @@ body.boss-active #wave-event-banner { top: 62px; }
 <div id="dash-indicator">
   <div id="dash-icon"><div id="dash-cd-fill"></div>&#x21E8;</div>
   <div id="dash-label">DASH</div>
+  <div id="ability-icon"><div id="ability-cd-fill"></div><span id="ability-glyph">&#x25CF;</span></div>
+  <div id="ability-label">ABILITY</div>
 </div>
 <div id="weapon-hud"></div>
 <div id="relic-hud-wrap"><span id="relic-label">Relics</span><div id="relic-hud"></div></div>
+<div id="omen-hud-wrap"><span id="omen-label">Omens</span><div id="omen-hud"></div></div>
 <div id="damage-flash"></div>
 <div class="dmg-dir dmg-dir-top" id="dmg-top"><svg viewBox="0 0 80 80"><polygon points="40,0 10,40 70,40" fill="rgba(200,20,0,0.6)"/></svg></div>
 <div class="dmg-dir dmg-dir-bottom" id="dmg-bottom"><svg viewBox="0 0 80 80"><polygon points="40,0 10,40 70,40" fill="rgba(200,20,0,0.6)"/></svg></div>
@@ -2038,6 +2126,7 @@ body.boss-active #wave-event-banner { top: 62px; }
 <div id="touch-controls">
   <div id="touch-stick-zone"><div id="touch-stick-base"></div><div id="touch-stick-knob"></div></div>
   <div id="touch-dash-btn">DASH</div>
+  <div id="touch-ability-btn">&#x25CF;</div>
   <div id="touch-pause-btn">&#x2759;&#x2759;</div>
 </div>
 <div id="wave-announce" class="hud-strip"></div>
@@ -2068,7 +2157,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 // shipped in. `number` is the commit count this change will produce. Do not
 // hand-edit: the stamper matches the two marker lines exactly.
 /* BUILD:START */
-const BUILD = { number: 68, date: '2026-09-27' };
+const BUILD = { number: 69, date: '2026-09-27' };
 /* BUILD:END */
 for (const el of document.querySelectorAll('.build-badge')) el.textContent = `BUILD ${BUILD.number}`;
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -2081,6 +2170,12 @@ let WORLD_SIZE = 120;
 const TILE_SIZE = 4;
 const PLAYER_SPEED = 8;
 const PLAYER_MAX_HP = 100;
+// The most any one hit may take, as a fraction of the victim's max HP, so two
+// hits from full is always the floor on how fast a knight can die. Telegraphed
+// area attacks are allowed more, because you were shown the circle and given
+// time to leave it (see `capFrac` in damagePlayer).
+const HIT_CAP_FRAC = 0.5;
+const HIT_CAP_TELEGRAPHED = 0.6;
 const ATTACK_RANGE = 3.5;
 const ATTACK_COOLDOWN = 0.8;
 const PICKUP_RANGE = 2.0;
@@ -2119,7 +2214,7 @@ let playerWeapons = {
 };
 const weaponTimers = { dagger: 0, holyAura: 0, arrowVolley: 0, orbitalBomb: 0, stormCall: 0 };
 function ownedWeaponCount() { let n = 0; for (const k in playerWeapons) if (playerWeapons[k].owned) n++; return n; }
-function weaponSlotsFull() { return ownedWeaponCount() >= MAX_WEAPON_SLOTS; }
+function weaponSlotsFull() { return ownedWeaponCount() >= maxWeaponSlots(); }
 
 // Auto-targeting reach. The camera (offset 0,10,8 at zoom 2) shows roughly 24
 // units ahead of the knight and 11 behind, while enemies spawn 48-50 out. The
@@ -2251,6 +2346,54 @@ const OGRE_LEVELS = [
   { level: 5, name: 'Extinction', desc: 'No mercy. No food. Only death awaits the unprepared.',
     hpMul: 3.8, dmgMul: 2.4, speedMul: 1.4, foodMul: 0.0, spawnMul: 2.0, eliteMul: 3.0, bossHpMul: 2.7 },
 ];
+// The ladder's speed dial had no teeth. A goblin is 4.5 + 0.12/wave, so at wave
+// 10 it moves at 5.7 against a knight who moves at 8 and has a dash: x1.22 at
+// Nightmare put it at 6.9, still hopelessly behind, and x1.40 at Extinction only
+// reached 8.0 - a dead heat, ten waves in, with the dash as the tiebreak. Every
+// Ogre Level was therefore the same fight at different HP totals, which is why
+// the bot won Extinction outright.
+//
+// The multipliers above are raised, but a flat multiply is the wrong instrument:
+// rats already run at 8.5 + 0.3/wave, so x1.4 made a wave-20 rat move at 20
+// units a second, which reads as a teleport and is unfair rather than hard. So
+// the Ogre boost is applied as *room toward a ceiling* instead: everything is
+// pushed toward being just able to catch you, and nothing is pushed past it.
+// Enemies already over the line get no boost at all, which leaves every Ogre 0
+// number exactly where it was.
+const OGRE_SPEED_CEIL = PLAYER_SPEED * 1.25;   // 10.0 against the knight's 8
+
+// The Ogre Level multipliers are flat across a run. The player's power is not:
+// at wave 2 a knight has one level-1 weapon, and by wave 20 four at rank 5 with
+// evolutions and a full stat sheet. So the same hpMul that makes wave 15 a real
+// fight is a wall before the build exists -- measured, the first time the ladder
+// was ever actually played (see 47.1): at Ogre 5, nine of nine bot runs died at
+// wave 2 or 3, none lasting 70 seconds. A wave-2 goblin there has 61 HP against
+// a level-1 sword's 15 damage on a 1.2 s swing, so it takes five swings to kill
+// one of twice as many, and seven of their hits kill you.
+//
+// So the mutators fade in across the waves where the build is being assembled and
+// reach their authored value once it exists. Nothing about the late game changes:
+// from OGRE_RAMP_WAVE on, every number is exactly the table's. Ogre 0 is a no-op
+// at every wave.
+// How many waves the fade takes, per level: `1 + 2 x level`, so Ogre 1 is at full
+// strength by wave 3 and Ogre 5 by wave 11. The length has to scale with the
+// level because the thing being faded in scales with it -- Ogre 1 asks for 1.35x
+// HP, which a wave-3 build can absorb, and Ogre 5 asks for 3.8x, which nothing
+// before wave 10 can. A single flat ramp cannot serve both: at 6 waves the top
+// levels still hit a wall (every Ogre 4 death landed exactly on wave 6), and at
+// 10 waves Ogre 1 -- the one level that was already well tuned, dying at waves 7
+// through 20 -- went soft, winning 3 of 6 instead of 1 of 6.
+function ogreRampWave() { return 1 + selectedOgreLevel * 2; }
+function ogreRamp() {
+  const span = ogreRampWave() - 1;
+  return span <= 0 ? 1 : Math.min(1, Math.max(0, (state.wave - 1) / span));
+}
+// A mutator at its ramped strength. Works for reductions (foodMul < 1) as well as
+// increases, and is exactly 1 for any mutator the level does not touch.
+function ogreMul(key) {
+  const v = ogreMods[key];
+  return v === 1 ? 1 : 1 + (v - 1) * ogreRamp();
+}
 let selectedOgreLevel = 0;
 let ogreMods = { ...OGRE_LEVELS[0] };
 
@@ -2271,29 +2414,13 @@ const state = {
   waveDuration: 35,
   spawnTimer: 0,
   spawnInterval: 3.0,
-  player: {
-    hp: PLAYER_MAX_HP,
-    maxHp: PLAYER_MAX_HP,
-    level: 1,
-    xp: 0,
-    xpToNext: 23, // xpForLevel(1); function is defined later in the file
-    speed: PLAYER_SPEED,
-    damage: 15,
-    attackRange: ATTACK_RANGE,
-    attackCooldown: ATTACK_COOLDOWN,
-    attackTimer: 0,
-    armor: 0,
-    regen: 0,
-    regenTimer: 0,
-    critChance: 0.05,
-    critMultiplier: 2.0,
-    isAttacking: false,
-    isDead: false,
-    iframes: 0,
-    dashTimer: 0,
-    dashCooldown: 0,
-    isDashing: false,
-  },
+  // One sheet, one definition. This was a hand-written literal, `makePlayerState`
+  // was a second copy with a different field set, and `clearRun` had a third with
+  // twenty fields the other two lacked -- which is how `bledOut` came to be reset
+  // for companions and never for player 1, leaving them unrevivable for the rest
+  // of the session after one bleed-out. `makePlayerState` is a hoisted function
+  // declaration, so calling it here before its definition is fine.
+  player: makePlayerState(),
 };
 
 let selectedCharacter = 'dad'; // 'dad', 'brennan', 'parker'
@@ -2336,8 +2463,46 @@ function getDashCooldown(p) {
   let cd = 2.5 - (pl.state._dashCDBonus || 0);
   const qb = pl.weapons.quickblade;
   if (qb && qb.owned && qb.evolved) cd *= WEAPON_STATS.quickblade.evo.dashCdMul;
-  return Math.max(0.6, cd);
+  return Math.max(0.6, cd * omenMul('dashCd'));
 }
+
+// ─── KNIGHT ABILITIES ───
+// Until now the whole of a player's agency was where to stand and when to dash:
+// the weapons fire themselves, so a good build plays itself and a bad one cannot
+// be saved by playing well. One active per knight, on a cooldown long enough
+// that spending it is a decision, gives a run something to be saved by.
+//
+// Each is shaped around what that knight already is rather than being three
+// skins on one nova: Dad holds ground, Brennan closes distance, Parker leaves.
+const KNIGHT_ABILITIES = {
+  dad: {
+    id: 'bulwark', name: 'Shield Wall', icon: '\u{1F6E1}', glyph: '●', cooldown: 14, color: 0xffd98a,
+    desc: 'Drive the shield into the earth: foes within seven paces are hurled back and held fast, and blows glance off thee for three seconds',
+  },
+  brennan: {
+    id: 'skyfall', name: 'Skyfall', icon: '\u{1F3F9}', glyph: '↑', cooldown: 13, color: 0xaad4ff,
+    desc: 'Leap ten paces spear-first. Nothing can touch thee in the air, and the landing shatters the ground where it falls',
+  },
+  parker: {
+    id: 'arcanestep', name: 'Arcane Step', icon: '✦', glyph: '✦', cooldown: 11, color: 0xc48cff,
+    desc: 'Step through the weave thirteen paces on, leaving a rune where thou stood that bursts a moment later',
+  },
+};
+function knightAbility(p) {
+  const pl = p || players[0];
+  return KNIGHT_ABILITIES[pl.character] || KNIGHT_ABILITIES.dad;
+}
+function getAbilityCooldown(p) {
+  const pl = p || players[0];
+  const a = knightAbility(pl);
+  // Windwalker already buys dash uptime; it buys a little of this too, so the
+  // relic stays the movement relic rather than becoming dash-only.
+  const mul = hasRelic('windwalker', pl) ? 0.85 : 1;
+  return Math.max(4, a.cooldown * mul * omenMul('abilityCd'));
+}
+// One scale for all three, so pouring picks into Damage makes the active grow
+// with the rest of the build instead of falling behind it by wave 15.
+function abilityPower(ps) { return 1 + Math.max(0, ps.damage - 15) / 30; }
 
 const keys = {};
 const enemies = [];
@@ -2369,6 +2534,127 @@ const WAVE_EVENTS = [
   { id: 'stampede', name: 'Stampede', desc: 'A wolf pack charges from the wilds!', color: '#7799aa', duration: 0, effect: { stampede: true } },
   { id: 'magneticField', name: 'Magnetic Field', desc: 'Treasures fly to thy hands!', color: '#44ddaa', duration: 20, effect: { magnetBoost: 8 } },
 ];
+// ─── OMENS ───
+// Every run played the same twenty waves. The map and the Ogre Level were the
+// only two things a player chose before BEGIN QUEST, and nothing between the
+// first wave and the King ever differed except which cards the RNG dealt. Five
+// battlefields did not fix that, because the fight inside them was identical.
+//
+// An omen is read on the wave after each boss falls: two cards, each a curse
+// the rest of the run carries and a boon that pays for it. Both are permanent,
+// so the choice is a fork in the run rather than a buff, and there is no third
+// card -- declining is not on offer, which is what makes it a decision.
+//
+// The waves are 6, 11 and 16 and were 4, 9 and 14 first. Measured on
+// Bloodmarch (`balance-phase48-d.log` against `-bm-noomens.log`): with the
+// first omen at wave 4, Dad and Brennan died at wave 4 inside two and a half
+// minutes; without omens the same three runs all won. A knight at wave 4 has
+// one weapon at rank 1 and no answer to any of these curses. Reading it just
+// after a boss also puts the cost right where the reward is.
+//
+// `mul` entries multiply into the world through `omenMul`; `apply` grants the
+// one-off party rewards. Weight keys are `w_<enemy type>`.
+const OMEN_WAVES = [6, 11, 16];
+const OMENS = [
+  { id: 'bloodmoon', name: 'The Blood Moon', glyph: '\u{1F311}', color: '#cc3355',
+    curse: 'Every foe carries a third more life',
+    boon: 'Thou mayest bear a fourth relic',
+    mul: { hpMul: 1.3 },
+    apply() { omens.relicSlots++; } },
+  { id: 'horde', name: 'The Gathering Horde', glyph: '\u{1F463}', color: '#c98a3a',
+    curse: 'Half again as many foes come with every tide',
+    boon: 'Each death yields three-fifths more experience',
+    mul: { spawnMul: 1.45, xpMul: 1.6 } },
+  { id: 'famine', name: 'Famine', glyph: '\u{1F35E}', color: '#8a7a4a',
+    curse: 'No bread falls from the slain',
+    boon: 'Thy every blow lands a quarter harder',
+    mul: { foodMul: 0, playerDmg: 1.25 } },
+  { id: 'longnight', name: 'The Long Night', glyph: '\u{1F319}', color: '#5a6fb0',
+    curse: 'Each tide runs a quarter longer before the next',
+    boon: 'Coin is worth three-quarters again',
+    mul: { waveLen: 1.25, coinMul: 1.75 } },
+  // A mountain, not the troll emoji: that one is Emoji 14 and is still missing
+  // on plenty of machines, where it renders as a blank box.
+  { id: 'giants', name: 'Giants Walk', glyph: '⛰', color: '#6aa84f',
+    curse: 'Ogres come three times as often',
+    boon: 'Thou mayest carry a fifth weapon',
+    mul: { w_ogre: 3.0 },
+    apply() { omens.weaponSlots++; } },
+  { id: 'arrowstorm', name: 'Arrowstorm', glyph: '\u{1F3F9}', color: '#b0603a',
+    curse: 'Twice as many archers hold the line',
+    boon: 'Three rerolls and two banishments, now',
+    mul: { w_archer: 2.2 },
+    apply() {
+      for (const pl of players) {
+        addRerolls(pl, 3);
+        // Player 1's charges live in the global, a companion's on their object
+        // -- the same split `addRerolls` exists to hide.
+        if (pl.index === 0) banishCharges += 2;
+        else pl.banishCharges = (pl.banishCharges || 0) + 2;
+      }
+    } },
+  { id: 'quickening', name: 'The Quickening', glyph: '⚡', color: '#49b3c9',
+    curse: 'The horde moves a tenth faster',
+    boon: 'Dash and thy knight\'s active return far sooner',
+    mul: { enemySpeed: 1.12, dashCd: 0.6, abilityCd: 0.75 } },
+];
+// `mul` is what the world reads; the two slot counts are separate because they
+// are additive, not multiplicative.
+const omens = { taken: [], takenAt: {}, mul: {}, relicSlots: 0, weaponSlots: 0 };
+function omenMul(key) { const v = omens.mul[key]; return v == null ? 1 : v; }
+function hasOmen(id) { return omens.taken.indexOf(id) >= 0; }
+
+// An omen fades in over three waves instead of landing at full strength on the
+// wave it is read. This is the lesson of Phase 47 applied to a second system:
+// a flat multiplier that is a fair trade at wave 12 is a wall at wave 4,
+// because the player's power curve starts at one level-1 weapon. The first
+// omen is offered on wave 4, and the first measured batch without this ramp
+// (`balance-phase48-c.log`) killed Dad at wave 5 within a minute of reading
+// The Gathering Horde. The boon fades in with the curse, so the trade stays a
+// trade at every wave; only the one-off grants -- a relic slot, a weapon slot,
+// rerolls -- land whole and at once, which is deliberate, because those are
+// what a player needs at the moment they are taking on a cost.
+const OMEN_RAMP_WAVES = 3;
+function omenStrength(id) {
+  const from = omens.takenAt[id];
+  if (from == null) return 0;
+  return Math.min(1, Math.max(0, (state.wave - from + 1) / OMEN_RAMP_WAVES));
+}
+// Rebuilt when the wave turns over and when an omen is read, rather than
+// computed per call: `omenMul` is read inside `applyDamage`, which is the
+// hottest function in the game.
+function rebuildOmenMul() {
+  for (const k in omens.mul) delete omens.mul[k];
+  for (const id of omens.taken) {
+    const o = OMENS.find(x => x.id === id);
+    if (!o || !o.mul) continue;
+    const t = omenStrength(id);
+    // Compounded rather than assigned: two omens that both touch the spawn
+    // rate should stack, and Famine's `foodMul: 0` has to survive whatever is
+    // read after it.
+    for (const k in o.mul) {
+      const v = 1 + (o.mul[k] - 1) * t;
+      omens.mul[k] = (omens.mul[k] == null ? 1 : omens.mul[k]) * v;
+    }
+  }
+}
+function resetOmens() {
+  omens.taken.length = 0;
+  for (const k in omens.takenAt) delete omens.takenAt[k];
+  for (const k in omens.mul) delete omens.mul[k];
+  omens.relicSlots = 0;
+  omens.weaponSlots = 0;
+}
+function takeOmen(o) {
+  omens.taken.push(o.id);
+  omens.takenAt[o.id] = state.wave;
+  rebuildOmenMul();
+  if (o.apply) o.apply();
+}
+// Slot counts are read through these three so an omen can move them.
+function maxRelics() { return MAX_RELICS + omens.relicSlots; }
+function maxWeaponSlots() { return MAX_WEAPON_SLOTS + omens.weaponSlots; }
+
 let activeWaveEvent = null;
 let waveEventTimer = 0;
 // Counts down to a wave event announced a couple of seconds after a wave starts
@@ -2415,6 +2701,8 @@ let _animThrottleFrame = 0;
 // Enemy cap — prevents lag death spirals in late waves. Adaptive quality
 // throttles far animations so this can sit higher than it used to (120).
 const MAX_ENEMIES = 180;
+// How much of the ordinary trickle still arrives while a boss is on the field.
+const BOSS_TRICKLE_MUL = 0.55;
 // Staggered spawn queue — replaces setTimeout for pack/swarm spawns
 const _spawnQueue = [];
 function queueSpawn(type, delay, angle, opts) { _spawnQueue.push({ type, timer: delay, angle, opts: opts || null }); }
@@ -2514,6 +2802,29 @@ function getDamageFlashEl() { return _damageFlashEl || (_damageFlashEl = documen
 let _damageFlashCSSTimer = 0;
 let _waveAnnounceEl = null;
 function getWaveAnnounce() { return _waveAnnounceEl || (_waveAnnounceEl = document.getElementById('wave-announce')); }
+// One timer for the shared announce banner. There were twelve loose setTimeouts
+// writing opacity on this one element, every one of them outliving the run that
+// scheduled it: restart within a few seconds of a boss name or a swarm call and
+// the next run's WAVE 1 blinked out early, hidden by a timer belonging to a game
+// that had already ended.
+let _announceTimer = 0;
+function hideAnnounceIn(ms) {
+  clearTimeout(_announceTimer);
+  _announceTimer = setTimeout(() => {
+    _announceTimer = 0;
+    const a = getWaveAnnounce();
+    a.style.opacity = '0';
+    a.style.color = '';
+  }, ms);
+}
+function clearAnnounce() {
+  clearTimeout(_announceTimer);
+  _announceTimer = 0;
+  const a = getWaveAnnounce();
+  a.style.opacity = '0';
+  a.style.color = '';
+  a.innerHTML = '';
+}
 let _streakDisplayEl = null;
 function getStreakDisplay() { return _streakDisplayEl || (_streakDisplayEl = document.getElementById('streak-display')); }
 let _comboDisplayEl = null;
@@ -2656,10 +2967,14 @@ const runStats = {
   foodEaten: 0,
   coinsCollected: 0,
   dashesUsed: 0,
+  abilitiesUsed: 0,
   milestone50: 0, // tracks last announced 50-kill milestone
   damageBySource: {}, // weapon id → damage dealt, for the run-end breakdown
   killsBySource: {},
   damageTakenBy: {},  // attacker kind → damage taken (balance diagnostics)
+  // One row per boss killed: { wave, hp, secs }. The whole point of Phase 48
+  // is how long a boss lasts, so the harness should not have to infer it.
+  bossFights: [],
 };
 function resetRunStats() {
   for (const k of Object.keys(runStats)) runStats[k] = typeof runStats[k] === 'object' ? {} : 0;
@@ -2949,6 +3264,11 @@ function triggerPlayerDeath(p) {
   ps.iframes = 0;
   ps.reviveProgress = 0;
   ps.bleedOut = BLEED_OUT_SECONDS;
+  // `updatePlayer` returns before `updateLeap` for a downed knight, so a
+  // Skyfall interrupted by the killing blow would leave him hanging three units
+  // off the ground with `leapTimer` stuck above zero -- and `abilityReady`
+  // false for the rest of the run once he was revived.
+  endLeap(pl);
   if (pl.mesh) pl.mesh.visible = true;
   AudioSystem.play('playerDeath', { volume: 0.7 });
   playPlayerAnimFor(pl, 'Death_C', false);
@@ -3503,13 +3823,24 @@ const AudioSystem = (() => {
     window.addEventListener(ev, resumeIfSuspended, { capture: true });
   }
 
+  // Handle for a music start still inside its 600 ms crossfade gap.
+  let _musicPending = 0;
   function playMusic(name, { fadeIn = 1.5 } = {}) {
     // Resume BEFORE the buffer check. It used to come after, so a music slot
     // that had not loaded skipped the resume and left everything muted.
     resumeIfSuspended();
     if (!ctx || !buffers[name]) return;
     stopMusic(0.5);
-    setTimeout(() => {
+    // The handle is only assigned when this timer fires, so a second playMusic
+    // inside 600 ms found `musicSource === null`, stopped nothing, and the first
+    // timer then started a looping source nobody held a reference to: unstoppable
+    // for the rest of the session, playing under everything. gameOver plays the
+    // game-over theme and RISE AGAIN plays the battle theme, which is well inside
+    // 600 ms if you are quick on the button.
+    clearTimeout(_musicPending);
+    _musicPending = setTimeout(() => {
+      _musicPending = 0;
+      if (musicSource) stopMusicNow();
       const source = ctx.createBufferSource();
       source.buffer = buffers[name];
       source.loop = true;
@@ -3523,7 +3854,17 @@ const AudioSystem = (() => {
     }, 600);
   }
 
+  function stopMusicNow() {
+    if (!musicSource) return;
+    try { musicSource.source.stop(); } catch (e) {}
+    musicSource = null;
+  }
+
   function stopMusic(fadeOut = 1) {
+    // Kill any start still in flight, or it will fire after this and leave a
+    // loop running with no handle.
+    clearTimeout(_musicPending);
+    _musicPending = 0;
     if (!musicSource || !ctx) return;
     const { source, gain } = musicSource;
     gain.gain.linearRampToValueAtTime(0, ctx.currentTime + fadeOut);
@@ -3649,8 +3990,11 @@ const SETTING_TOGGLES = [['dmgNumbers', 'set-dmgnums'], ['hitFreeze', 'set-hitfr
 function loadSettings() {
   try {
     const d = JSON.parse(localStorage.getItem(SETTINGS_KEY));
-    if (d && typeof d === 'object') Object.assign(settings, d);
+    if (d && typeof d === 'object' && !Array.isArray(d)) Object.assign(settings, d);
   } catch {}
+  // `gfx` is indexed on the first frame (effectiveGfx), so a stored null or a
+  // stored string there is a crash before anything is drawn, not a bad setting.
+  if (!settings.gfx || typeof settings.gfx !== 'object' || Array.isArray(settings.gfx)) settings.gfx = {};
   // A stored `privateMode: false` predates the code and unlocks nothing: only a
   // saved unlock, which the code is the sole way to write, may lift it.
   if (!settings.privateUnlocked) settings.privateMode = true;
@@ -3873,10 +4217,15 @@ const MAPS = {
       ao: 1.0,
     },
     weights: { wolf: 1.6, bat: 1.4, rat: 0.5, archer: 1.1, goblin: 0.8, ogre: 0.9 },
-    // Moonlit rim on every regular spawn (added on top of the type tint) and a
-    // faint ground disc under enemies that have no priority ring, so wolves,
-    // bats and rats still read against the dark ground away from the lanterns
-    // (i 0.18 renders these dark models as flat pale silhouettes; 0.07 keeps the shading)
+    // There was a paragraph here describing a moonlit rim on every spawn and a
+    // faint ground disc under un-ringed enemies, both added in 18.4 so that
+    // wolves, bats and rats would read against dark ground away from the
+    // lanterns. Neither exists: the recolour purge took the rim with the tints
+    // and the disc with the identity rings, and only the comment survived.
+    // Those three models are still near-black silhouettes here -- see
+    // tools/shots/lineup-darkwood.png. Leaving it that way deliberately rather
+    // than re-adding what was cut on purpose; a real fix is a rim term in the
+    // material shader, not another tint.
   },
   emberreach: {
     name: 'Emberreach', desc: 'The ogre homeland. Rivers of lava run off the burning cone, and the warcamp between them is theirs.',
@@ -4235,8 +4584,21 @@ function makeTuftMaterial(tex) {
 const TUFT_SPRITES = ['tuft1', 'tuft2', 'tuft3', 'reeds'];
 const _tuftGeo = makeTuftGeometry();
 const _decalGeo = new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2);
+// GPU objects that belong to the CURRENT map and are rebuilt by the next
+// `loadMap`. `unloadMap` only ever did `scene.remove`, so switching maps on the
+// title screen -- Kingsfield to Bloodmarch and back -- left a whole set behind
+// every time: decal and tuft materials, the three contact/canopy/glow materials,
+// the shaft geometry and material, every InstancedMesh's instance attributes and
+// every stream ribbon's geometry. It matters most on iOS, where Phase 20 went to
+// some trouble for GPU memory.
+//
+// Deliberately NOT in here: `_decalGeo`, `_tuftGeo`, `_streamMats`, the radial
+// textures and everything from `loadTex`. Those are built once and shared by
+// every map, and disposing them would break the next load.
+const mapOwnedGPU = [];
+function ownedByMap(obj) { mapOwnedGPU.push(obj); return obj; }
 function addInstanced(list, geo, mat, y, order) {
-  const im = new THREE.InstancedMesh(geo, mat, list.length);
+  const im = ownedByMap(new THREE.InstancedMesh(geo, ownedByMap(mat), list.length));
   const m = new THREE.Matrix4(), q = new THREE.Quaternion(), s = new THREE.Vector3(), p = new THREE.Vector3(), e = new THREE.Euler();
   for (let i = 0; i < list.length; i++) {
     const d = list[i];
@@ -4317,7 +4679,10 @@ function instanceStaticProps() {
   let made = 0, folded = 0;
   for (const g of groups.values()) {
     if (g.mats.length < INSTANCE_MIN) continue;
-    const im = new THREE.InstancedMesh(g.geo, g.mat, g.mats.length);
+    // Registered so `unloadMap` frees the instance attributes. Only the
+    // InstancedMesh itself: `g.geo` and `g.mat` come from the shared GLB clones
+    // and belong to the asset cache, not to this map.
+    const im = ownedByMap(new THREE.InstancedMesh(g.geo, g.mat, g.mats.length));
     for (let i = 0; i < g.mats.length; i++) im.setMatrixAt(i, g.mats[i]);
     im.instanceMatrix.needsUpdate = true;
     im.castShadow = g.cast; im.receiveShadow = g.recv;
@@ -4479,6 +4844,10 @@ function unloadMap() {
     scene.remove(mapMeshes[i]);
   }
   mapMeshes.length = 0;
+  for (let i = 0; i < mapOwnedGPU.length; i++) {
+    try { mapOwnedGPU[i].dispose(); } catch (e) {}
+  }
+  mapOwnedGPU.length = 0;
   obstacles.length = 0;
   _nearbyObstacles.length = 0;
   breakables.length = 0;
@@ -4525,6 +4894,9 @@ async function loadMap(mapId) {
   // Resize ground plane to match world size; splat-textured when the map has a
   // terrain definition, flat colour otherwise (editor previews, fallback maps)
   ground.geometry.dispose();
+  // The ground plane itself outlives the map; only its geometry is rebuilt when
+  // WORLD_SIZE changes, so the old one has to go or it is a leak per map change.
+  if (ground.geometry) ground.geometry.dispose();
   ground.geometry = new THREE.PlaneGeometry(WORLD_SIZE * 2, WORLD_SIZE * 2);
   if (ground.material !== _flatGroundMat) ground.material.dispose();
   ground.material = (def.terrain && mapData.splat !== false) ? makeGroundMaterial(def.terrain) : _flatGroundMat;
@@ -4536,7 +4908,7 @@ async function loadMap(mapId) {
     for (const d of mapData.decals) (byKey[d.key] ||= []).push(d);
     let order = 1;
     for (const [key, list] of Object.entries(byKey)) {
-      const mat = new THREE.MeshLambertMaterial({ map: loadTex(`images/decals/${key}.webp`, true), transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+      const mat = ownedByMap(new THREE.MeshLambertMaterial({ map: loadTex(`images/decals/${key}.webp`, true), transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }));
       mat.map.wrapS = mat.map.wrapT = THREE.ClampToEdgeWrapping;
       addInstanced(list, _decalGeo, mat, 0.03, order++);
     }
@@ -4665,8 +5037,8 @@ async function loadMap(mapId) {
       g.globalCompositeOperation = 'destination-out'; g.fillStyle = h; g.fillRect(0, 0, 64, 256);
       _shaftTex = new THREE.CanvasTexture(c); _shaftTex.colorSpace = THREE.SRGBColorSpace;
     }
-    const mat = new THREE.MeshBasicMaterial({ map: _shaftTex, color: look.shafts.color, transparent: true, opacity: look.shafts.opacity, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, fog: false });
-    const geo = new THREE.PlaneGeometry(1, 1).translate(0, 0.5, 0);
+    const mat = ownedByMap(new THREE.MeshBasicMaterial({ map: _shaftTex, color: look.shafts.color, transparent: true, opacity: look.shafts.opacity, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, fog: false }));
+    const geo = ownedByMap(new THREE.PlaneGeometry(1, 1).translate(0, 0.5, 0));
     for (const s of mapData.shafts) {
       const mesh = new THREE.Mesh(geo, mat);
       mesh.position.set(s.x, 0.2, s.z);
@@ -4692,7 +5064,9 @@ async function loadMap(mapId) {
     }
     if (flowTex || flow === 'water') for (const s of mapData.streams) {
       const mesh = buildStreamRibbon(s.pts, s.w || 4.4, flowTex, flow, look);
-      if (mesh) { scene.add(mesh); mapMeshes.push(mesh); }
+      // The geometry is built per ribbon per load; the material is cached per
+      // flow in `_streamMats` and must NOT be disposed with the map.
+      if (mesh) { scene.add(mesh); mapMeshes.push(mesh); ownedByMap(mesh.geometry); }
     }
   }
   // Barriers: collision-only discs with no mesh. Emberreach uses them to make the
@@ -4787,20 +5161,20 @@ function updateBreakables() {
       AudioSystem.play('enemyDeath', { volume: 0.4, pitch: 0.9 });
       triggerShake(0.1, 0.08);
       scatterPickups('coin', _pickupPos, 2 + (luckyRoll(0.5) ? 1 : 0), 2.5);
-      if (luckyRoll(0.3 * ogreMods.foodMul)) spawnPickup('food', _pickupPos);
+      if (luckyRoll(0.3 * ogreMul('foodMul'))) spawnPickup('food', _pickupPos);
     } else if (b.type === 'crate') {
       // Small clutter: a splinter burst and a coin about half the time
       spawnDeathParticles(_pickupPos, 0xa07a4a, 6);
       AudioSystem.play('enemyDeath', { volume: 0.3, pitch: 1.1 });
       if (luckyRoll(0.5)) spawnPickup('coin', _pickupPos);
-      if (luckyRoll(0.08 * ogreMods.foodMul)) spawnPickup('food', _pickupPos);
+      if (luckyRoll(0.08 * ogreMul('foodMul'))) spawnPickup('food', _pickupPos);
     } else {
       vfx.collectEffect(_pickupPos, 'chest');
       AudioSystem.play('coinPickup', { volume: 0.7, pitch: 0.8 });
       spawnDamageNumber(_pickupPos, 'SUPPLY CACHE', '#e8c860');
       state.score += 50;
       scatterPickups('coin', _pickupPos, 6, 3.5);
-      scatterPickups('food', _pickupPos, Math.max(1, Math.round(1 * ogreMods.foodMul)), 2);
+      scatterPickups('food', _pickupPos, Math.max(1, Math.round(1 * ogreMul('foodMul'))), 2);
     }
   }
 }
@@ -4837,6 +5211,11 @@ const players = [];
 // Ring colours per player slot, so three knights stay tellable apart.
 const PLAYER_RING_COLORS = ['rgba(255,235,190,', 'rgba(150,215,255,', 'rgba(180,255,180,'];
 
+// THE player sheet: every field a knight carries for one run, in one place. Used
+// for `state.player`, for every companion `makePlayer` builds, and by `clearRun`
+// to reset player 1 -- so a field added here reaches all three by construction.
+// `xpToNext` is spelled 23 rather than xpForLevel(1) only because `state` is
+// built during module evaluation, before that function's consts exist.
 function makePlayerState() {
   return {
     hp: PLAYER_MAX_HP, maxHp: PLAYER_MAX_HP,
@@ -4847,6 +5226,18 @@ function makePlayerState() {
     critChance: 0.05, critMultiplier: 2.0,
     isAttacking: false, isDead: false, iframes: 0,
     dashTimer: 0, dashCooldown: 0, isDashing: false,
+    // Downed / bled-out state. Missing from the old clearRun reset entirely.
+    bledOut: false, bleedOut: 0, reviveProgress: 0,
+    _atkResetTimer: 0, _gameOverTimer: 0, _dashCDBonus: 0, _dashId: 0, _primaryCD: 1,
+    // Knight active: cooldown, the in-flight leap, and Shield Wall's guard window
+    abilityCooldown: 0, abilityCooldownMax: 1, abilityUses: 0,
+    leapTimer: 0, leapTotal: 0, leapDirX: 0, leapDirZ: 0, leapGroundY: 0, leapDist: 0,
+    guardUntil: -1,
+    thorns: 0, lifesteal: 0, luck: 0,
+    _projDmgMul: 1, _aoeMul: 1, _burnMul: 1,
+    dashStrike: false, primaryWeapon: 'sword',
+    relics: null, _phoenixUsed: false, _runesUntil: -1, _runesReady: 0,
+    _crowdCount: 0, _moving: false,
   };
 }
 function makeWeaponTable() {
@@ -5243,9 +5634,20 @@ function resetPartyToSolo() {
         for (const m of mats) { for (const k of ['map', 'normalMap', 'roughnessMap', 'metalnessMap', 'emissiveMap', 'aoMap']) m[k]?.dispose(); m.dispose(); }
       });
     }
-    if (p.ring) scene.remove(p.ring);
+    if (p.ring) {
+      scene.remove(p.ring);
+      // The ring is three canvas textures, two materials and a geometry built
+      // per joined knight (see createPlayer). Removing it from the scene left
+      // all of that on the GPU, once per co-op run for the life of the tab.
+      p.ring.traverse(c => {
+        if (c.geometry) c.geometry.dispose();
+        const mats = Array.isArray(c.material) ? c.material : (c.material ? [c.material] : []);
+        for (const m of mats) { m.map?.dispose(); m.dispose(); }
+      });
+      p.ring = null;
+    }
     // A departing knight takes their ring of shields with them.
-    while (p.shields && p.shields.length) scene.remove(p.shields.pop());
+    while (p.shields && p.shields.length) disposeShield(p.shields.pop());
     players.length = i;
   }
 }
@@ -5317,8 +5719,8 @@ function playPlayerAnim(name, loop = true) {
 // preset in WEAPON_ATTACH. Adding an enemy is a row here plus, if it needs one,
 // a behaviour branch in updateEnemies.
 const ENEMY_TYPES = {
-  goblin:     { id: 'goblin',     model: 'goblin',     scale: 2.8, hp: 14, speed: 4.5, speedW: 0.12, dmg: 4,  dmgW: 1.0,  xp: 2, score: 20, range: 1.8, cd: 1.2, radius: 0.5, weapon: 'dagger', canElite: true, colorMul: 0.55 },
-  archer:     { id: 'archer',     model: 'goblinArcher', scale: 2.6, hp: 16, speed: 4.0, speedW: 0.08, dmg: 4,  dmgW: 0.5,  xp: 3, score: 25, range: 11,  cd: 3.0, radius: 0.5, weapon: null,     canElite: false, colorMul: 0.55 },
+  goblin:     { id: 'goblin',     model: 'goblin',     scale: 2.8, hp: 14, speed: 4.5, speedW: 0.12, dmg: 4,  dmgW: 1.0,  xp: 2, score: 20, range: 1.8, cd: 1.2, radius: 0.5, weapon: 'dagger', canElite: true },
+  archer:     { id: 'archer',     model: 'goblinArcher', scale: 2.6, hp: 16, speed: 4.0, speedW: 0.08, dmg: 4,  dmgW: 0.5,  xp: 3, score: 25, range: 11,  cd: 3.0, radius: 0.5, weapon: null,     canElite: false },
   rat:        { id: 'rat',        model: 'rat',        scale: 1.5, hp: 6,  speed: 8.5, speedW: 0.3,  dmg: 2,  dmgW: 0.3,  xp: 1, score: 8,  range: 1.2, cd: 0.8, radius: 0.3, weapon: null,     canElite: false },
   wolf:       { id: 'wolf',       model: 'wolf',       scale: 2.2, hp: 12, speed: 8.0, speedW: 0.25, dmg: 4,  dmgW: 0.5,  xp: 1, score: 15, range: 1.5, cd: 0.7, radius: 0.5, weapon: null,     canElite: false },
   bat:        { id: 'bat',        model: 'bat',        scale: 1.8, hp: 8,  speed: 6.5, speedW: 0.2,  dmg: 3,  dmgW: 0.4,  xp: 1, score: 12, range: 1.5, cd: 0.8, radius: 0.5, weapon: null,     canElite: false },
@@ -5327,32 +5729,48 @@ const ENEMY_TYPES = {
   // Hangs back like an archer; every `cd` seconds heals every foe within 6 units. A priority target.
   shaman:     { id: 'shaman',     model: 'ogreWizard', scale: 3.5, hp: 22, speed: 3.8, speedW: 0.08, dmg: 3,  dmgW: 0.6,  xp: 5, score: 45, range: 12,  cd: 4.0, radius: 0.5, weapon: null,     canElite: false },
 };
-// Ground rings under priority targets: readable in a crowd at any distance,
-// which a tint on a 3D silhouette is not. Shared geometry, one material per colour.
-const _markerGeo = new THREE.RingGeometry(0.75, 1.05, 28);
-const _markerMats = {};
 // Which enemies get a threat aura, and in what colour. This replaces the old
 // ground rings and emissive recolouring: the model keeps its own materials and
 // the danger is signalled by particles instead.
 //   elite      bright green  -- the "overpowered" tell the player must learn
+//   speedGob   cyan          -- faster than it looks
 //   ogre       dim green     -- a lesser bruiser, same language, quieter
 //   shaman     violet        -- heals the pack, worth breaking off for
 //   goblinBomb amber         -- about to detonate, a survival warning
-// Ordinary goblins, rats, wolves, bats and archers stay unmarked.
+//   archer     pale steel    -- shoots from outside the brawl (see below)
+// Ordinary goblins, rats, wolves and bats stay unmarked.
+//
+// This whole table did nothing for four days. `vfx.js` declared `eliteAura`
+// twice and the older `(enemy, dt)` overload won the object literal, so every
+// call here hit a function that read `position.mesh`, found undefined and
+// returned. Elites still glowed because a separate call site used the old
+// signature; shamans, bomb goblins, speed goblins, ogres and archers did not.
+// Archers are in the table now because the press review found them the top
+// damage source in 12 of 15 runs with nothing marking them at all.
 const ENEMY_AURA = {
   elite:      { hue: 0x2bff6b, mul: 1.45 },
   speedGoblin:{ hue: 0x00c8ff, mul: 1.0 },
   ogre:       { hue: 0x2bcc66, mul: 0.75 },
   shaman:     { hue: 0x9933ff, mul: 1.1 },
   goblinBomb: { hue: 0xff6a00, mul: 1.2 },
+  // Quieter than the rest on purpose: an archer is a standing threat, not an
+  // emergency, and the loud tell is the draw (see arrowReleaseTimer).
+  archer:     { hue: 0xbcd4e8, mul: 0.7 },
 };
 function enemyAuraHue(enemy, def, isElite, isSpeedGoblin) {
   const a = isElite ? ENEMY_AURA.elite
     : isSpeedGoblin ? ENEMY_AURA.speedGoblin
     : ENEMY_AURA[def.id];
-  if (!a) return;
-  enemy._auraHue = a.hue;
-  enemy._auraMul = a.mul;
+  if (a) {
+    enemy._auraHue = a.hue;
+    enemy._auraMul = a.mul;
+  }
+  // And which wind-ups get a spark tell (see the windupTimer branch): the ones
+  // that take a real bite out of the bar. An ogre hits for 2x its weight class
+  // and an elite for another 1.5x on top; a plain goblin's 4 damage is not worth
+  // interrupting the player's attention for, and 150 of them would bury the
+  // signal for everything else.
+  if (isElite || def.id === 'ogre') enemy._tellHue = isElite ? 0xffd23a : 0xff5522;
 }
 
 const WEAPON_ATTACH = {
@@ -5446,8 +5864,12 @@ function spawnEnemy(type, fixedAngle, opts) {
 
   // Elite chance: 3% base, +1% per wave, max 20% (scaled by Ogre Level). Elites
   // are the chest (evolution) source, so their rate sets the evolution pace.
-  const eliteChance = Math.min((0.03 + state.wave * 0.01) * ogreMods.eliteMul, 0.20);
-  const isElite = def.canElite && state.wave >= 2 && Math.random() < eliteChance;
+  const eliteChance = Math.min((0.03 + state.wave * 0.01) * ogreMul('eliteMul'), 0.20);
+  // `opts.elite` forces the roll, for tools that need a known line-up rather than
+  // a 3-20% chance of one (tools/lineup.mjs). Play never passes it.
+  const isElite = opts && opts.elite != null
+    ? (!!opts.elite && def.canElite)
+    : (def.canElite && state.wave >= 2 && Math.random() < eliteChance);
 
   // Speed goblin: non-elite goblins have 15% chance from wave 4+
   const isSpeedGoblin = enemyType === 'goblin' && !isElite && state.wave >= 4 && Math.random() < 0.15;
@@ -5456,7 +5878,7 @@ function spawnEnemy(type, fixedAngle, opts) {
   // (14 HP vs sword 15) and the +15%/wave multiplier plus the late ramp make
   // them tanky later
   let hp = def.hp * waveMultiplier;
-  let speed = def.speed + state.wave * def.speedW;
+  let speed = def.speed + state.wave * def.speedW;   // Ogre boost applied below
   let damage = def.dmg + state.wave * def.dmgW;
   let xpVal = def.xp, scoreVal = def.score;
   if (isSpeedGoblin) {
@@ -5471,9 +5893,13 @@ function spawnEnemy(type, fixedAngle, opts) {
   scoreVal = Math.round(scoreVal * xpWaveBonus);
 
   // Apply Ogre Level mutators
-  hp *= ogreMods.hpMul * partyHpMul();
-  damage *= ogreMods.dmgMul;
-  speed *= ogreMods.speedMul;
+  hp *= ogreMul('hpMul') * partyHpMul() * omenMul('hpMul');
+  damage *= ogreMul('dmgMul');
+  // Speed is the one mutator that is added toward a ceiling rather than
+  // multiplied outright — see OGRE_SPEED_CEIL. At Ogre 0 this is a no-op.
+  if (ogreMul('speedMul') > 1) {
+    speed += Math.min(speed * (ogreMul('speedMul') - 1), Math.max(0, OGRE_SPEED_CEIL - speed));
+  }
   // Past wave 10 the curve bends upward so the back half of a run keeps pace
   // with a levelled build (wave 20: +50% HP, +40% damage on top of the linear ramp)
   const late = Math.max(0, state.wave - 10);
@@ -5494,11 +5920,11 @@ function spawnEnemy(type, fixedAngle, opts) {
     if (mat.roughness != null) mat.roughness = Math.min(mat.roughness, 0.85);
   }
 
-  if (def.colorMul != null) {
-    for (const mat of _materials) {
-      mat.color.multiplyScalar(def.colorMul);
-    }
-  }
+  // No `colorMul` any more. Goblins and archers carried 0.55, which multiplied
+  // every material on the two most common enemies in the game down to a bit over
+  // half brightness: in a Darkwood crowd the horde read as dark smudges rather
+  // than creatures, which is what three press reviews in a row complained about.
+  // Threat is signalled with the auras and tells instead, never with brightness.
 
   // Elite multipliers
   if (isElite) {
@@ -5648,6 +6074,53 @@ function _flushHPBars() {
   }
 }
 
+// --- HOW LONG A BOSS SHOULD LAST ---
+// The 2026-09-26 review put the problem plainest: the Ogre King is "a
+// 40-second fight or a two-boulder death", because his HP is a fixed number
+// and the build that meets it is not. Every boss has the same problem in
+// miniature, and the wave-5 ogre had it worst -- 2,100 HP against a level-12
+// build meant the review found him still alive at wave 8, soaking two minutes
+// while the bat ring and the ogre wall arrived on top of him.
+//
+// These curves are fitted to 57 measured boss fights, three knights across
+// three maps over four batches (`tools/reports/balance-phase48-b/-c/-d/-e.log`), which
+// recorded the damage per second each build actually put into a boss. Pooled
+// medians: 31 at wave 5, 162 at wave 10, 338 at wave 15, 2,331 at wave 20. HP
+// is that median times the intended fight length, and the exponents are
+// whatever joins the anchors rather than numbers anyone chose.
+//
+// The curve is DELIBERATELY not adaptive. An adaptive version was built and
+// measured first and the measurement killed it -- see PLAN 48.4. Fixed numbers
+// also keep two balance runs comparable, which the Ogre-ladder work (47.2)
+// found matters more than it looks.
+const BOSS_TARGET_SECONDS = { ogre: 40, dragonOgre: 50, final: 75 };   // reference, for the fits below
+// wave 5 -> 1,200 (median 31 dps x 40 s); wave 15 -> 13,450 (median 338 x 40 s)
+function ogreBossHp(wave) { return 1200 * Math.pow(wave / 5, 2.2); }
+// wave 10 -> 7,900 (158 dps x 50 s). The King: 1,790 dps x 75 s = 134,000,
+// pulled back to 110,000 because the median is the best-case reading -- the
+// slowest build measured did 826 and would be standing there for 160 seconds.
+// He was 40,000, which every build that reached him killed in 22-37 s.
+function dragonBossHp(wave, isFinal) {
+  return isFinal ? 110000 * Math.pow(wave / 20, 1.75) : 7900 * Math.pow(wave / 10, 1.75);
+}
+
+// Recorded when a boss dies, so the next tuning pass reads times instead of
+// inferring them. `runStats.bossFights` is printed by `playtest balance`.
+function noteBossKilled(enemy) {
+  // `!= null`, not truthiness: a boss spawned at state.time 0 is a legitimate
+  // zero and was silently dropped.
+  if (!enemy.isBoss || enemy._spawnedAt == null) return;
+  const secs = +(state.time - enemy._spawnedAt).toFixed(1);
+  // `resetRunStats` rebuilds every object field as `{}`, arrays included, so
+  // this has to check the shape rather than the truthiness.
+  if (!Array.isArray(runStats.bossFights)) runStats.bossFights = [];
+  runStats.bossFights.push({
+    wave: state.wave, hp: enemy.maxHp, secs, king: !!enemy.isFinalBoss,
+    dps: Math.round(enemy.maxHp / Math.max(1, secs)),
+  });
+}
+
+
 const BOSS_NAMES = [
   'Gnarltusk the Defiler', 'Rotfang the Ruinous', 'Skulgor the Undying',
   'Morghul the Dread', 'Brakkenmar the Vile', 'Gorethane the Cursed',
@@ -5678,7 +6151,7 @@ function spawnBoss(wave) {
   scene.add(mesh);
   alignToGround(mesh);
 
-  const bossHp = Math.round((800 + wave * 260) * ogreMods.bossHpMul * partyBossHpMul());
+  const bossHp = Math.round(ogreBossHp(wave) * ogreMul('bossHpMul') * partyBossHpMul());
   const bossName = BOSS_NAMES[Math.floor(Math.random() * BOSS_NAMES.length)];
 
   const _materials = [];
@@ -5694,9 +6167,15 @@ function spawnBoss(wave) {
   const enemy = {
     mesh, mixer, anims, _materials,
     type: 'boss',
+    _tellHue: 0xff3311,        // his melee wind-up gets the same tell as an ogre's, in boss red
     hp: bossHp, maxHp: bossHp,
-    speed: 3.2 * ogreMods.speedMul,
-    damage: (20 + wave * 2.5) * ogreMods.dmgMul,
+    speed: 3.2 * ogreMul('speedMul'),
+    // Pivoted about wave 15, where it was already right: 27 at wave 5 instead of
+    // 32.5, unchanged at 57 by wave 15. Parker brings 85 HP to the wave-5 boss
+    // and his contact damage is the one blow with no telegraph at all, so it is
+    // the one that should not be a third of a knight's life the first time they
+    // meet him. HIT_CAP_FRAC (44.1) still backstops everything above this.
+    damage: (12 + wave * 3.0) * ogreMul('dmgMul'),
     attackRange: 3.5,
     attackCooldown: 1.8,
     attackTimer: 0,
@@ -5709,9 +6188,10 @@ function spawnBoss(wave) {
     knockback: { dx: 0, dz: 0, timer: 0 },
     isBoss: true,
     bossName,
+    _spawnedAt: state.time,   // for runStats.bossFights
     enragePhase: 0,
-    baseSpeed: 3.2 * ogreMods.speedMul,
-    baseDamage: (20 + wave * 2.5) * ogreMods.dmgMul,
+    baseSpeed: 3.2 * ogreMul('speedMul'),
+    baseDamage: (12 + wave * 3.0) * ogreMul('dmgMul'),
     baseAttackCooldown: 1.8,
     patternTimer: 3.5,
     pattern: null,
@@ -5737,7 +6217,7 @@ function spawnBoss(wave) {
   const announce = getWaveAnnounce();
   announce.textContent = bossName;
   announce.style.opacity = '1';
-  setTimeout(() => { announce.style.opacity = '0'; }, 2500);
+  hideAnnounceIn(2500);
 }
 
 const DRAGON_OGRE_NAMES = [
@@ -5782,9 +6262,9 @@ function spawnDragonOgreBoss(wave, isFinal = false) {
   // 5x a dragon ogre: a full build took him down in 13–25s at 3x. He advances
   // at full speed and the fury ramp (updateEnemies) escalates him each minute,
   // so a weak build gets pushed instead of stalemating.
-  const bossHp = Math.round((1600 + wave * 320) * (isFinal ? 5.0 : 1) * ogreMods.bossHpMul * partyBossHpMul());
+  const bossHp = Math.round(dragonBossHp(wave, isFinal) * ogreMul('bossHpMul') * partyBossHpMul());
   const bossName = isFinal ? 'THE OGRE KING' : DRAGON_OGRE_NAMES[Math.floor(Math.random() * DRAGON_OGRE_NAMES.length)];
-  const dmgMul = (isFinal ? 1.2 : 1) * ogreMods.dmgMul;
+  const dmgMul = (isFinal ? 1.2 : 1) * ogreMul('dmgMul');
 
   const _materials = [];
   mesh.traverse(c => { if (c.isMesh && c.material) _materials.push(c.material); });
@@ -5793,8 +6273,9 @@ function spawnDragonOgreBoss(wave, isFinal = false) {
   const enemy = {
     mesh, mixer, anims, _materials,
     type: 'dragonOgre',
+    _tellHue: 0xff3311,
     hp: bossHp, maxHp: bossHp,
-    speed: 3.5 * ogreMods.speedMul,
+    speed: 3.5 * ogreMul('speedMul'),
     damage: (25 + wave * 3) * dmgMul,
     attackRange: 25,
     attackCooldown: isFinal ? 2.4 : 3.0,
@@ -5810,11 +6291,12 @@ function spawnDragonOgreBoss(wave, isFinal = false) {
     isDragonOgre: true,
     isFinalBoss: isFinal,
     bossName,
+    _spawnedAt: state.time,   // for runStats.bossFights
     boulderDamage: (30 + wave * 3.5) * dmgMul,
     boulderAoeRadius: isFinal ? 6.0 : 5.0,
     meleeRange: 3.5,
     enragePhase: 0,
-    baseSpeed: 3.5 * ogreMods.speedMul,
+    baseSpeed: 3.5 * ogreMul('speedMul'),
     baseDamage: (25 + wave * 3) * dmgMul,
     baseAttackCooldown: isFinal ? 2.4 : 3.0,
     // Attack pattern state (see updateBossPatterns)
@@ -5844,13 +6326,18 @@ function spawnDragonOgreBoss(wave, isFinal = false) {
   announce.textContent = isFinal ? 'THE OGRE KING HAS COME' : bossName;
   announce.style.color = isFinal ? '#ffcc33' : '#ff6600';
   announce.style.opacity = '1';
-  setTimeout(() => { announce.style.opacity = '0'; announce.style.color = ''; }, 3500);
+  hideAnnounceIn(3500);
 }
 
 // ─── ENEMY PROJECTILES (archer arrows) ───
 const enemyProjectiles = [];
 const _enemyProjPool = [];
-const _enemyArrowMat = new THREE.MeshBasicMaterial({ color: 0x3a2214 });
+// Hot iron, not dark wood. At 0x3a2214 an arrow was a near-black splinter
+// against near-black ground, travelling 17 units a second: the damage arrived
+// with no visible cause, and the review's "archers are the top damage source"
+// was really "I never saw the arrow". The shaft now glows and trails (see
+// updateEnemyProjectiles), in orange -- the colour nothing the player owns uses.
+const _enemyArrowMat = new THREE.MeshBasicMaterial({ color: 0xff8a3c });
 function fireEnemyArrow(enemy) {
   // Aim at the knight this archer is tracking. Aiming at playerMesh meant every
   // arrow in a three-player run flew at player 1, whoever the archer chased.
@@ -5860,7 +6347,10 @@ function fireEnemyArrow(enemy) {
   let mesh = _enemyProjPool.pop();
   if (!mesh) mesh = new THREE.Mesh(_sharedArrowGeo, _enemyArrowMat);
   const dx0 = aimMesh.position.x - enemy.mesh.position.x;
-  const dz0 = playerMesh.position.z - enemy.mesh.position.z;
+  // ...and on Z too. Only the X half of that fix landed, so every arrow in a
+  // co-op run flew along a heading assembled from the tracked knight's X and
+  // player 1's Z: a direction that pointed at nobody whenever the two were apart.
+  const dz0 = aimMesh.position.z - enemy.mesh.position.z;
   const d = Math.sqrt(dx0 * dx0 + dz0 * dz0) || 1;
   mesh.position.set(enemy.mesh.position.x, 1.2, enemy.mesh.position.z);
   mesh.rotation.set(Math.PI / 2, Math.atan2(dx0 / d, dz0 / d), 0);
@@ -5882,6 +6372,9 @@ function updateEnemyProjectiles(dt) {
     p.mesh.position.x += p.dx * p.speed * dt;
     p.mesh.position.z += p.dz * p.speed * dt;
     p.life -= dt;
+    // Trail every other frame, the same throttle the player's projectiles use.
+    p._trailFrame = (p._trailFrame || 0) + 1;
+    if (_renderEnabled && (p._trailFrame & 1)) vfx.enemyArrowTrail(p.mesh.position, p.dx, p.dz);
     const struck = playerAt(p.mesh.position, 0.9);
     if (struck) {
       damagePlayer(p.damage, p.mesh.position, { color: '#cc8844', shake: 0.25, flash: 0.45, by: 'archer arrow', target: struck });
@@ -6139,7 +6632,8 @@ function updateBossBoulders(dt) {
       // AoE damage to every knight in the crater.
       // Long i-frames: a volley must not land three boulders on one player
       damagePlayersInRadius(b.targetPos, b.aoeRadius, b.damage,
-        { iframes: 0.6, color: '#ff4400', volume: 0.6, pitch: 0.7, flash: 0.8, shake: 0.5, by: 'boulder' });
+        { iframes: 0.6, color: '#ff4400', volume: 0.6, pitch: 0.7, flash: 0.8, shake: 0.5, by: 'boulder',
+          capFrac: HIT_CAP_TELEGRAPHED });
 
       // AoE damage to nearby enemies (friendly fire!)
       const innerAoeRadiusSq = (b.aoeRadius * 0.6) * (b.aoeRadius * 0.6);
@@ -6621,7 +7115,7 @@ function applyStreakReward(milestone) {
   announce.style.color = milestone.color;
   announce.style.opacity = '1';
   triggerShake(0.4, 0.25);
-  setTimeout(() => { announce.style.opacity = '0'; announce.style.color = ''; }, 2000);
+  hideAnnounceIn(2000);
   // The streak is the party's, so the reward is too. These all landed on player
   // 1 alone, which made a milestone worth a third as much in a trio.
   if (milestone.reward === 'speed') {
@@ -6662,16 +7156,20 @@ function triggerWaveEvent() {
   banner.style.setProperty('--event', event.color);
   banner.style.opacity = '1';
   // Burst in the event's own colour so the banner and the world agree
-  if (playerMesh) {
-    vfx.waveEventStart(event.id, playerMesh.position, parseInt(event.color.slice(1), 16));
+  for (const pl of alivePlayers()) {
+    vfx.waveEventStart(event.id, pl.mesh.position, parseInt(event.color.slice(1), 16));
     // "A divine shield protects thee" — an actual shield, in gold rather than the
     // blue used by the generic defence power-up.
-    if (event.id === 'armorOfLight') vfx.defenseBoost(playerMesh, 0xffd98a);
+    if (event.id === 'armorOfLight') vfx.defenseBoost(pl.mesh, 0xffd98a);
   }
-  if (event.effect.speedBoost) addBuff('speed', event.effect.speedBoost, event.duration);
-  if (event.effect.armorBoost) addBuff('armor', event.effect.armorBoost, event.duration);
-  if (event.effect.dmgBoost) addBuff('damage', event.effect.dmgBoost, event.duration);
-  if (event.effect.cdReduction) addBuff('attackCooldown', -event.effect.cdReduction, event.duration);
+  // partyBuff, not addBuff: a bare addBuff defaults to `state.player`, so Blessed
+  // Wind, Armor of Light, Berserker Rage and Arcane Blessing all landed on player
+  // 1 alone. Streak and combo rewards were converted in 27.5; these were missed,
+  // and the companions got the banner announcing a buff they never received.
+  if (event.effect.speedBoost) partyBuff('speed', event.effect.speedBoost, event.duration);
+  if (event.effect.armorBoost) partyBuff('armor', event.effect.armorBoost, event.duration);
+  if (event.effect.dmgBoost) partyBuff('damage', event.effect.dmgBoost, event.duration);
+  if (event.effect.cdReduction) partyBuff('attackCooldown', -event.effect.cdReduction, event.duration);
   if (event.effect.magnetBoost) {
     const boost = event.effect.magnetBoost;
     MAGNET_RANGE += boost;
@@ -6719,9 +7217,156 @@ function updateWaveEvent(dt) {
     }
   }
 }
-function getEventCoinMul() { return activeWaveEvent?.effect?.coinMul || 1; }
-function getEventXPMul() { return activeWaveEvent?.effect?.xpMul || 1; }
-function getEventEnemySpeedMul() { return activeWaveEvent?.effect?.enemySpeedMul || 1; }
+function getEventCoinMul() { return (activeWaveEvent?.effect?.coinMul || 1) * omenMul('coinMul'); }
+function getEventXPMul() { return (activeWaveEvent?.effect?.xpMul || 1) * omenMul('xpMul'); }
+function getEventEnemySpeedMul() { return (activeWaveEvent?.effect?.enemySpeedMul || 1) * omenMul('enemySpeed'); }
+
+// ─── KNIGHT ABILITIES: AIM, TRIGGER, FLIGHT ───
+// Aim is the stick if it is pushed, the facing otherwise. Standing still and
+// pressing the button should still do the obvious thing.
+function abilityAim(p, inp) {
+  const len = Math.hypot(inp.dx, inp.dz);
+  if (len > 0.0001) return { x: inp.dx / len, z: inp.dz / len };
+  const r = p.mesh.rotation.y;
+  return { x: Math.sin(r), z: Math.cos(r) };
+}
+
+function abilityReady(p) {
+  const ps = p.state;
+  return !ps.isDead && !ps.bledOut && ps.abilityCooldown <= 0 && ps.leapTimer <= 0 && !p.riding;
+}
+
+// A ring of force centred on `pos`. Shared by Shield Wall, Skyfall's landing
+// and Arcane Step's rune so all three read the same way and are tuned in one
+// place: nearest takes full, the edge takes a third.
+function abilityBlast(p, pos, opts) {
+  const { radius, damage, source, color, knockback = 0, kbTimer = 0.25, stun = 0 } = opts;
+  const r2 = radius * radius;
+  const near = queryEnemies(pos.x, pos.z, radius + 2);
+  let hits = 0;
+  for (let i = 0; i < near.length; i++) {
+    const e = near[i];
+    if (e.isDying) continue;
+    const d2 = distSqXZ(e.mesh.position, pos);
+    if (d2 >= r2) continue;
+    const falloff = 1 - (Math.sqrt(d2) / radius) * 0.67;
+    applyDamage(e, Math.max(1, Math.round(damage * falloff)), {
+      source, by: p, color, canCrit: true, hitReaction: true,
+      knockback: knockback * falloff, kbTimer, kbFrom: pos,
+    });
+    // Bosses are never held: they resist knockback for the same reason, which
+    // is that a heavy enemy has to be able to reach you.
+    if (stun > 0 && !e.isBoss && !e.isDying) e.stunTimer = Math.max(e.stunTimer || 0, stun);
+    hits++;
+  }
+  return hits;
+}
+
+function triggerKnightAbility(p, inp) {
+  const ps = p.state, pmesh = p.mesh;
+  const a = knightAbility(p);
+  const cd = getAbilityCooldown(p);
+  ps.abilityCooldown = cd;
+  ps.abilityCooldownMax = cd;
+  ps.abilityUses = (ps.abilityUses || 0) + 1;
+  runStats.abilitiesUsed = (runStats.abilitiesUsed || 0) + 1;
+  const pow = abilityPower(ps);
+  const lvl = ps.level;
+
+  if (a.id === 'bulwark') {
+    // Dad holds ground: everything in reach is thrown off and pinned, and for
+    // three seconds he can stand in what is left of it.
+    abilityBlast(p, pmesh.position, {
+      radius: 7, damage: (28 + lvl * 4) * pow, source: 'ability',
+      color: '#ffd98a', knockback: 7, kbTimer: 0.35, stun: 1.5,
+    });
+    ps.guardUntil = state.time + 3;
+    vfx.defenseBoost(pmesh, 0xffd98a);
+    vfx.after(3, () => vfx.removeBoost(pmesh, 'defense'));
+    vfx.groundSlam(pmesh.position, 7);
+    vfx.runeCircle(pmesh.position, { color: 0xffd98a, radius: 7, duration: 3.0, sweep: 0.12, peakOpacity: 0.85 });
+    vfx.shockwaves.spawnShockwave(pmesh.position, 0xffd98a, 7, 0.45);
+    triggerShake(0.55, 0.3);
+    AudioSystem.play('shieldBlock', { volume: 0.9, pitch: 0.75 });
+  } else if (a.id === 'skyfall') {
+    // Brennan closes: untouchable in the air, and the landing is the attack.
+    const aim = abilityAim(p, inp);
+    ps.leapTimer = ps.leapTotal = 0.42;
+    ps.leapDirX = aim.x; ps.leapDirZ = aim.z;
+    ps.leapDist = 10;
+    ps.leapGroundY = pmesh.position.y;
+    ps.iframes = Math.max(ps.iframes, 0.5);
+    pmesh.rotation.y = Math.atan2(aim.x, aim.z);
+    vfx.dashEffect(pmesh, aim.x, aim.z);
+    AudioSystem.play('swordSwing', { volume: 0.5, pitch: 0.8 });
+  } else {
+    // Parker leaves, and makes leaving cost the crowd he left.
+    const aim = abilityAim(p, inp);
+    const from = pmesh.position.clone();
+    const dist = 13;
+    pmesh.position.x = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, from.x + aim.x * dist));
+    pmesh.position.z = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, from.z + aim.z * dist));
+    pmesh.rotation.y = Math.atan2(aim.x, aim.z);
+    ps.iframes = Math.max(ps.iframes, 0.35);
+    _obstacleTimer = 1;   // the cache is keyed on where he was, not where he is
+    vfx.vortex(from, 0xc48cff, { radius: 2.4, height: 4.5, count: 40, duration: 0.55 });
+    vfx.runeCircle(from, { color: 0xc48cff, radius: 5, duration: 0.6, sweep: 0.3, peakOpacity: 1.1 });
+    vfx.vortex(pmesh.position, 0xc48cff, { radius: 1.6, height: 3.5, count: 26, duration: 0.45, inward: false });
+    AudioSystem.play('arcaneCast', { volume: 0.7, pitch: 1.15 });
+    // The rune bursts a moment after he is gone, so it catches what followed him.
+    const runeDmg = (40 + lvl * 5) * pow;
+    vfx.after(0.55, () => {
+      if (state.gameOver) return;
+      abilityBlast(p, from, {
+        radius: 5, damage: runeDmg, source: 'ability',
+        color: '#c48cff', knockback: 2.5, kbTimer: 0.2,
+      });
+      vfx.arcaneExplosion(from, 5);
+      triggerShake(0.3, 0.2);
+    });
+  }
+}
+
+// Put a knight back on the ground and clear the flight, wherever he is. Called
+// on the landing, on a knock-down, and on mounting the horse -- anything that
+// takes over his position while `updateLeap` believes it owns it.
+// Zero, not `<= 0`, is the sentinel for "on the ground": the landing frame
+// arrives with the timer slightly negative, and a `<= 0` guard here would skip
+// the one call that has to reset it.
+function endLeap(p) {
+  const ps = p.state;
+  if (ps.leapTimer === 0) return;
+  ps.leapTimer = 0;
+  if (p.mesh) p.mesh.position.y = ps.leapGroundY;
+}
+
+// Skyfall's flight. Same shape as the dash: position is driven directly, world
+// bounds are respected and obstacles are not, and the arc restores the exact
+// ground height it left from rather than guessing at one.
+function updateLeap(p, dt) {
+  const ps = p.state, pmesh = p.mesh;
+  if (ps.leapTimer <= 0) return false;
+  ps.leapTimer -= dt;
+  const t = 1 - Math.max(0, ps.leapTimer) / ps.leapTotal;
+  const step = (ps.leapDist / ps.leapTotal) * dt;
+  pmesh.position.x = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, pmesh.position.x + ps.leapDirX * step));
+  pmesh.position.z = Math.max(-WORLD_SIZE, Math.min(WORLD_SIZE, pmesh.position.z + ps.leapDirZ * step));
+  pmesh.position.y = ps.leapGroundY + Math.sin(Math.min(1, t) * Math.PI) * 3.2;
+  if (ps.leapTimer > 0) return true;
+  // Landing
+  endLeap(p);
+  _obstacleTimer = 1;
+  abilityBlast(p, pmesh.position, {
+    radius: 6.5, damage: (45 + ps.level * 6) * abilityPower(ps), source: 'ability',
+    color: '#aad4ff', knockback: 4.5, kbTimer: 0.3,
+  });
+  vfx.groundSlam(pmesh.position, 6.5);
+  vfx.shockwaves.spawnShockwave(pmesh.position, 0xaad4ff, 6.5, 0.4);
+  vfx.groundCrack(pmesh.position, 1.4);
+  triggerShake(0.5, 0.28);
+  AudioSystem.play('bossSlam', { volume: 0.6, pitch: 1.3 });
+  return false;
+}
 
 // ─── GAME LOGIC ───
 function updatePlayer(p, dt) {
@@ -6747,10 +7392,22 @@ function updatePlayer(p, dt) {
 
   // Tick down dash cooldown
   if (ps.dashCooldown > 0) ps.dashCooldown -= dt;
+  if (ps.abilityCooldown > 0) ps.abilityCooldown -= dt;
 
   // Movement, from whichever device drives this player
   const inp = readInput(p);
   let dx = inp.dx, dz = inp.dz;
+
+  // Knight active. Edge-triggered: held down it would fire on the frame the
+  // cooldown expired, every time, which is not a decision.
+  if (inp.ability && !ps._abilityHeld && abilityReady(p)) triggerKnightAbility(p, inp);
+  ps._abilityHeld = inp.ability;
+
+  // Skyfall drives the knight's position itself while he is in the air, so
+  // walking, dashing and turning are off for those four tenths of a second.
+  // The auto-attack, regen and the pickup sweep below all keep running: a
+  // spear comes down with him, and leaping over a gem should still collect it.
+  const leaping = updateLeap(p, dt);
 
   const moving = dx !== 0 || dz !== 0;
   ps._moving = moving;
@@ -6765,7 +7422,7 @@ function updatePlayer(p, dt) {
   // Dash input (spacebar or gamepad B/right trigger or touch)
   const dashInput = inp.dash;
   const dashCD = getDashCooldown(p);
-  if (dashInput && moving && ps.dashCooldown <= 0 && !ps.isDashing) {
+  if (dashInput && moving && !leaping && ps.dashCooldown <= 0 && !ps.isDashing) {
     ps.isDashing = true;
     ps.dashCooldown = dashCD;
     ps.dashCooldownMax = dashCD;   // so the touch button can draw the sweep
@@ -6796,7 +7453,7 @@ function updatePlayer(p, dt) {
     }
   }
 
-  if (moving) {
+  if (moving && !leaping) {
     const len = Math.sqrt(dx * dx + dz * dz);
     dx /= len;
     dz /= len;
@@ -6839,6 +7496,8 @@ function updatePlayer(p, dt) {
     if (!ps.isAttacking) {
       playPlayerAnimFor(p, 'Run_Anime');
     }
+  } else if (leaping) {
+    playPlayerAnimFor(p, 'Run_Anime');
   } else if (!ps.isAttacking) {
     playPlayerAnimFor(p, 'Idle_A');
   }
@@ -7004,7 +7663,7 @@ function updatePlayer(p, dt) {
 // Damage sources, for the per-weapon breakdown on the run-end screen
 const SOURCE_NAMES = {
   lupin: 'Lupin',
-  sword: 'Sword', spear: 'Spear', quickblade: 'Quickblade',
+  sword: 'Sword', spear: 'Spear', quickblade: 'Quickblade', staff: 'Arcane Staff',
   dagger: 'Throwing Daggers', holyAura: 'Holy Aura', arrowVolley: 'Arrow Volley',
   orbitalBomb: 'Arcane Bomb', thorns: 'Mantle of Thorns', shockwave: 'Shockwave',
   wardShields: 'Warding Shields', stormCall: 'Storm Call', emberTrail: 'Trail of Embers',
@@ -7039,6 +7698,13 @@ const LOOT_TABLE = {
 };
 const ELITE_CHEST_CHANCE = 0.6;
 const CHEST_MIN_GAP = 75; // seconds between elite chests (evolution pacing)
+// A stretch-the-gap-with-Ogre-Level version of this was written and reverted on
+// 2026-09-27: the reasoning (more elites at high Ogre means chests land the
+// instant the gap expires, so the dial hands out evolutions faster the higher you
+// set it) is still sound, but it was aimed at a level the measurements said was
+// too easy -- and those measurements were Ogre 0 in disguise (47.1). The real
+// problem at high Ogre is the opposite, so making evolutions rarer there is the
+// wrong direction. Revisit once the ladder is winnable.
 let _lastChestTime = -999;
 
 // Set by applyDamage so callers can react to a crit without an allocation
@@ -7059,6 +7725,8 @@ function applyDamage(enemy, amount, opts) {
   const by = opts.by || players[0];
   const bs = by.state;
   let dmg = amount * (1 + MASTERY_BONUS_PER_RANK * (_masteryRanks[source] || 0));
+  // Famine's boon. Enemy-on-enemy damage is not the party's, so it is exempt.
+  if (source !== 'friendlyFire') dmg *= omenMul('playerDmg');
   _lastHitCrit = false;
   if (opts.canCrit && Math.random() < bs.critChance) {
     _lastHitCrit = true;
@@ -7148,6 +7816,7 @@ function killEnemy(enemy, source, by) {
   runStats.killsBySource[source] = (runStats.killsBySource[source] || 0) + 1;
   if (enemy.isBoss) {
     runStats.bossesKilled++;
+    noteBossKilled(enemy);
     // A boss is a party kill, so every knight banks the reroll -- each of them
     // has their own card to spend it on.
     for (const pl of players) addRerolls(pl, 1);
@@ -7199,7 +7868,7 @@ function dropLoot(enemy) {
   if (enemy.isBoss) {
     // A shower of loot; the dragon ogre drops more
     scatterPickups('coin', pos, enemy.isDragonOgre ? 12 : 8, 5);
-    scatterPickups('food', pos, Math.max(1, Math.round((enemy.isDragonOgre ? 3 : 2) * ogreMods.foodMul)), 4);
+    scatterPickups('food', pos, Math.round((enemy.isDragonOgre ? 3 : 2) * ogreMul('foodMul') * omenMul('foodMul')), 4);
     return;
   }
   if (enemy.isElite) {
@@ -7207,7 +7876,7 @@ function dropLoot(enemy) {
     // are paced by time as well as chance: with elites every few seconds mid-run,
     // chance alone still handed out all four evolutions by wave 9.
     scatterPickups('coin', pos, 2, 2);
-    if (luckyRoll(0.5 * ogreMods.foodMul)) spawnPickup('food', pos);
+    if (luckyRoll(0.5 * ogreMul('foodMul') * omenMul('foodMul'))) spawnPickup('food', pos);
     if (state.time - _lastChestTime >= CHEST_MIN_GAP && luckyRoll(ELITE_CHEST_CHANCE)) {
       _lastChestTime = state.time;
       spawnWorldPowerup('chest', pos.x, pos.z);
@@ -7216,7 +7885,7 @@ function dropLoot(enemy) {
   }
   const table = LOOT_TABLE[enemy.type] || LOOT_TABLE.goblin;
   if (luckyRoll(table.coin)) spawnPickup('coin', pos);
-  if (table.food > 0 && luckyRoll(table.food * ogreMods.foodMul)) spawnPickup('food', pos);
+  if (table.food > 0 && luckyRoll(table.food * ogreMul('foodMul') * omenMul('foodMul'))) spawnPickup('food', pos);
 }
 
 // Damage the player. Returns true if damage was taken (false during i-frames
@@ -7237,6 +7906,10 @@ function damagePlayer(rawAmount, fromPos, opts) {
   if (tps.iframes > 0 || tps.isDashing) return false;
   const o = opts || {};
   let mult = armorMultiplier(tps);
+  // Shield Wall's guard window. It stacks multiplicatively with armour and with
+  // Warding Runes on purpose: three seconds of standing in the worst of it is
+  // the whole point of the ability, and Dad is the knight who was built to.
+  if (state.time < tps.guardUntil) mult *= 0.5;
   const rel = tps.relics;
   // Warding Runes: half damage for 1.5s after a hit, once every 8s
   if (rel && rel.runes) {
@@ -7248,7 +7921,17 @@ function damagePlayer(rawAmount, fromPos, opts) {
       vfx.after(1.5, () => vfx.removeBoost(tpMesh, 'defense'));
     }
   }
-  const dmg = Math.max(1, Math.round(rawAmount * mult));
+  // No single blow may take more than its share of a full bar. Enemy damage
+  // scales with wave and Ogre Level; max HP does not scale with either, so the
+  // curves cross: a wave-20 Ogre King's boulder is 120 raw at Ogre 0 and 222 at
+  // Ogre 3, against a knight who is carrying 100-200. Past that crossing the
+  // fight stops being a fight and becomes a coin flip on whether you happened to
+  // be standing in a ring, which is what "the boulders two-shot Brennan" was.
+  // Capped, the hit is still terrifying -- half the bar -- and still survivable,
+  // and the Ogre Level dial goes back to meaning "more of them, tougher, faster"
+  // rather than "now it one-shots you".
+  const cap = Math.max(1, Math.round(tps.maxHp * (o.capFrac || HIT_CAP_FRAC)));
+  const dmg = Math.min(cap, Math.max(1, Math.round(rawAmount * mult)));
   tps.hp -= dmg;
   const by = o.by || 'unknown';
   runStats.damageTakenBy[by] = (runStats.damageTakenBy[by] || 0) + dmg;
@@ -7384,7 +8067,11 @@ function updateEnemies(dt) {
     // Co-op: every enemy chases whichever knight is closest to it, re-evaluated
     // each frame so aggro shifts as the party moves apart.
     const tgt = nearestPlayer(enemy.mesh.position.x, enemy.mesh.position.z);
-    const tgtMesh = tgt.mesh || tgtMesh;
+    // `tgt.mesh || tgtMesh` -- the right-hand side named the binding being
+    // declared. It only ever worked because `nearestPlayer` falls back to
+    // players[0] and P1's mesh is never null after createPlayer; the day either
+    // changes, this throws every frame for every enemy.
+    const tgtMesh = tgt.mesh || null;
     enemy.target = tgt;
     const eDist = tgtMesh ? distSqXZ(tgtMesh.position, enemy.mesh.position) : 0;
     // Animation is ~a third of simulation cost, so it is rate-limited by
@@ -7403,10 +8090,11 @@ function updateEnemies(dt) {
       }
     }
 
-    // Elite particle aura (throttled inside vfx)
-    if (enemy.isElite && !enemy.isDying && eDist < fullRange) {
-      vfx.eliteAura(enemy, dt);
-    }
+    // Elites are marked through the `_auraHue` path below like every other
+    // priority target -- there used to be a second `vfx.eliteAura(enemy, dt)`
+    // call here against a second, older overload of the same name, which is how
+    // the shadowing in vfx.js survived so long: elites looked marked, and
+    // everything else in ENEMY_AURA was silently unmarked.
 
     // The Ogre King's guard: at 66% and 33% health he becomes immune for eight
     // seconds and calls a formation. A full build deletes 40k HP in twenty
@@ -7427,7 +8115,7 @@ function updateEnemies(dt) {
         const announce = getWaveAnnounce();
         announce.textContent = phase === 1 ? 'THE KING CALLS HIS GUARD' : 'THE KING SUMMONS THE COVEN';
         announce.style.color = '#ffcc33'; announce.style.opacity = '1';
-        setTimeout(() => { announce.style.opacity = '0'; announce.style.color = ''; }, 3000);
+        hideAnnounceIn(3000);
       }
       if (enemy._invulnUntil && state.time >= enemy._invulnUntil) {
         enemy._invulnUntil = 0;
@@ -7446,7 +8134,7 @@ function updateEnemies(dt) {
         const announce = getWaveAnnounce();
         announce.textContent = stacks >= 4 ? 'THE KING\'S FURY KNOWS NO BOUNDS' : 'THE KING GROWS FURIOUS';
         announce.style.color = '#ff3300'; announce.style.opacity = '1';
-        setTimeout(() => { announce.style.opacity = '0'; announce.style.color = ''; }, 2500);
+        hideAnnounceIn(2500);
       }
     }
 
@@ -7465,7 +8153,7 @@ function updateEnemies(dt) {
         const announce = getWaveAnnounce();
         announce.textContent = `${enemy.bossName} IS DESPERATE!`;
         announce.style.color = '#ff2200'; announce.style.opacity = '1';
-        setTimeout(() => { announce.style.opacity = '0'; announce.style.color = ''; }, 2000);
+        hideAnnounceIn(2000);
       } else if (hpPct <= 0.5 && enemy.enragePhase < 1) {
         enemy.enragePhase = 1;
         enemy.speed = enemy.baseSpeed * 1.3;
@@ -7477,7 +8165,7 @@ function updateEnemies(dt) {
         const announce = getWaveAnnounce();
         announce.textContent = `${enemy.bossName} IS ENRAGED!`;
         announce.style.color = '#ff6600'; announce.style.opacity = '1';
-        setTimeout(() => { announce.style.opacity = '0'; announce.style.color = ''; }, 2000);
+        hideAnnounceIn(2000);
       }
     }
 
@@ -7638,13 +8326,27 @@ function updateEnemies(dt) {
     // is still in reach; the enemy stands still meanwhile. That is the dodge
     // window. (Damage used to land on the same frame the swing animation began.)
     if (enemy.windupTimer > 0) {
+      const windupLen = enemy._windupLen || 0.28;
       enemy.windupTimer -= dt;
-      const pulse = Math.sin(enemy.windupTimer * 45) > 0;
-      const wMats = enemy._materials;
-      for (let m = 0; m < wMats.length; m++) {
-        const mat = wMats[m];
+      // The tell. This used to be a gold emissive pulse on every material; the
+      // recolour purge deleted the body of the loop and left the loop itself
+      // behind, so from that commit until now a wind-up had no tell but the
+      // animation. Only the blows worth dodging get one back: an ogre, an elite
+      // or a boss can take a third of the bar, a goblin nibble cannot, and a
+      // spark storm on 150 goblins would mean nothing.
+      if (enemy._tellHue && _renderEnabled && eDist < 2600) {
+        const t = 1 - Math.max(0, enemy.windupTimer) / windupLen;
+        vfx.attackTell(enemy.mesh.position, t, dt, enemy._tellHue, (enemy.radius || 0.8) * 2.2);
+        // Heartbeat on the creature, quickening as the blow nears: 5 Hz at the
+        // start of the wind-up, 14 Hz at the end.
+        enemy._tellPulse = (enemy._tellPulse || 0) - dt;
+        if (enemy._tellPulse <= 0) {
+          enemy._tellPulse = 1 / (5 + 9 * t);
+          vfx.attackTellPulse(enemy.mesh.position, t, enemy._tellHue);
+        }
       }
       if (enemy.windupTimer <= 0) {
+        if (enemy._tellHue) vfx.attackRelease(enemy.mesh.position, enemy._tellHue);
         restoreEmissive(enemy);
         // Lenient reach: a normal hit's knockback does not cancel a swing already
         // in motion; a crit's larger shove does. Stepping away still works.
@@ -7722,14 +8424,26 @@ function updateEnemies(dt) {
       }
       if (enemy.arrowReleaseTimer > 0) {
         enemy.arrowReleaseTimer -= dt;
-        // Draw flash: a bright gold pulse for the whole draw (the melee wind-up
-        // pattern), so the shot reads before the arrow exists
-        const pulse = Math.sin(enemy.arrowReleaseTimer * 45) > 0;
-        const aMats = enemy._materials;
-        for (let m = 0; m < aMats.length; m++) {
-          const mat = aMats[m];
+        // The draw tell. Gold motes gather on the bow and tighten over the 0.55 s
+        // draw, so the shot reads before the arrow exists -- this is the dodge
+        // window, and it is the whole reason the draw was lengthened in 18.3.
+        // It was a gold emissive pulse until the recolour purge emptied the loop
+        // body and left the loop, which is how the top damage source in the game
+        // ended up with no warning of any kind.
+        if (_renderEnabled && eDist < 2600) {
+          const t = 1 - Math.max(0, enemy.arrowReleaseTimer) / 0.55;
+          vfx.attackTell(enemy.mesh.position, t, dt, 0xffcf5a, 1.6);
+          enemy._tellPulse = (enemy._tellPulse || 0) - dt;
+          if (enemy._tellPulse <= 0) {
+            enemy._tellPulse = 1 / (5 + 9 * t);
+            vfx.attackTellPulse(enemy.mesh.position, t, 0xffcf5a);
+          }
         }
-        if (enemy.arrowReleaseTimer <= 0) { restoreEmissive(enemy); fireEnemyArrow(enemy); }
+        if (enemy.arrowReleaseTimer <= 0) {
+          vfx.attackRelease(enemy.mesh.position, 0xffcf5a);
+          restoreEmissive(enemy);
+          fireEnemyArrow(enemy);
+        }
       }
       continue;
     }
@@ -7872,6 +8586,8 @@ function updateEnemies(dt) {
           : (enemy.type === 'ogre' || enemy.type === 'boss') ? 'Chop_Tree' : 'Sword_Regular_B';
         playEnemyAnim(enemy, atkAnim, false);
         enemy.windupTimer = enemy.isRat ? 0.12 : enemy.isWolf ? 0.18 : (enemy.type === 'ogre' || enemy.isBoss) ? 0.45 : 0.28;
+        // Remembered so the tell knows how far through the wind-up it is.
+        enemy._windupLen = enemy.windupTimer;
         enemy._atkAnimResetTimer = enemy.windupTimer + 0.4;
       }
     }
@@ -8196,11 +8912,25 @@ function syncWardShields(pl, count) {
     scene.add(m);
     ring.push(m);
   }
-  while (ring.length > count) scene.remove(ring.pop());
+  while (ring.length > count) disposeShield(ring.pop());
   return ring;
 }
+// A shield is a clone of the GLB scene with every material cloned on top (for the
+// gold emissive), so the materials are its own and have to go with it; the
+// geometry is shared with the source asset and must not be touched. The ring
+// resizes constantly as Warding Shields levels and evolves, so this ran on every
+// rank-up and every run for the life of the tab.
+function disposeShield(m) {
+  if (!m) return;
+  scene.remove(m);
+  m.traverse(c => {
+    if (!c.isMesh || !c.material) return;
+    const mats = Array.isArray(c.material) ? c.material : [c.material];
+    for (const mt of mats) mt.dispose();
+  });
+}
 function clearWardShields() {
-  for (const pl of players) { const r = pl.shields; while (r && r.length) scene.remove(r.pop()); }
+  for (const pl of players) { const r = pl.shields; while (r && r.length) disposeShield(r.pop()); }
 }
 
 // ─── ORBITAL BOMB ───
@@ -8360,9 +9090,15 @@ function spawnProjectile(type, origin, direction, damage, speed, maxRange, pierc
   const geo = type === 'arrow' ? _sharedArrowGeo : _sharedDaggerGeo;
   // Evolved shots are "Meteor Shower" and "Storm Kunai", so they burn and crackle
   // instead of just flying faster.
+  // The owner's book, not the globals: `playerWeapons` is player 1's, so a
+  // companion who evolved their daggers fired plain ones that never chained,
+  // while player 1 evolving made every companion's level-1 daggers chain and
+  // look evolved. `trailType` drives the Storm Kunai chain, so this was damage,
+  // not just paint.
+  const book = (owner || players[0]).weapons || playerWeapons;
   const evolved = type === 'arrow'
-    ? playerWeapons.arrowVolley.evolved
-    : playerWeapons.dagger.evolved;
+    ? book.arrowVolley.evolved
+    : book.dagger.evolved;
   const trailType = evolved ? (type === 'arrow' ? 'meteor' : 'storm') : type;
   const color = trailType === 'meteor' ? 0xff8833
     : trailType === 'storm' ? 0xcceeff
@@ -8422,8 +9158,15 @@ function updateProjectiles(dt) {
         });
         vfx.projectileHit(enemy.mesh.position, p.type);
         vfx.bloodImpact(enemy.mesh.position, _tv2.subVectors(enemy.mesh.position, p.mesh.position).normalize(), _lastHitCrit ? 0.8 : 0.4);
-        // Storm Kunai arcs onward to nearby foes
-        if (p.trailType === 'storm') chainLightning(enemy, Math.round(finalDmg * 0.6), 2, 'dagger', 0, p.owner);
+        // Storm Kunai arcs onward to nearby foes -- on a CRIT, which is what the
+        // evolution's own text has always promised ("Critical daggers that chain
+        // to 2 extra targets"). It chained on every hit instead, and since the
+        // evolved volley is five daggers every 0.3 s that one line was 91% of a
+        // winning run's total damage: every other weapon in the build was
+        // decoration. Gated, it pays off the crit stat the evolution requires.
+        if (p.trailType === 'storm' && _lastHitCrit) {
+          chainLightning(enemy, Math.round(finalDmg * 0.6), 2, 'dagger', 0, p.owner);
+        }
         p.pierced++;
         if (p.pierced > p.pierce) { hitSomething = true; break; }
       }
@@ -8459,7 +9202,7 @@ async function triggerSwarm() {
   AudioSystem.play('waveStart', { volume: 0.8 });
   companionReact('wave');
   triggerShake(0.5, 0.3);
-  setTimeout(() => { announce.style.opacity = '0'; announce.style.color = ''; }, 2500);
+  hideAnnounceIn(2500);
 
   _swarmIndicatorAngle = swarmDir.angle;
   _swarmIndicatorTimer = 5.0;
@@ -8512,6 +9255,9 @@ function waveWeights(w) {
   // Each map skews the mix (Darkwood: wolves and bats)
   const mapW = (MAPS[loadedMap] && MAPS[loadedMap].weights) || {};
   for (const k in base) if (mapW[k] != null) base[k] *= mapW[k];
+  // Omens skew it again, on top of the map. Giants Walk and Arrowstorm are the
+  // two that do, and both are only felt where their enemy already appears.
+  for (const k in base) base[k] *= omenMul('w_' + k);
   return base;
 }
 function rollEnemyType(w) {
@@ -8582,7 +9328,7 @@ function updatePendingFormations(dt) {
     announce.textContent = f.name;
     announce.style.color = f.color;
     announce.style.opacity = '1';
-    setTimeout(() => { announce.style.opacity = '0'; announce.style.color = ''; }, 2200);
+    hideAnnounceIn(2200);
     AudioSystem.play('waveStart', { volume: 0.5, pitch: 0.8 });
     if (angle != null) { _swarmIndicatorAngle = angle; _swarmIndicatorTimer = 4.0; }
   }
@@ -8601,7 +9347,7 @@ function checkKillMilestones() {
     announce.style.color = '#44ff88';
     announce.style.opacity = '1';
     triggerShake(0.3, 0.2);
-    setTimeout(() => { announce.style.opacity = '0'; announce.style.color = ''; }, 2500);
+    hideAnnounceIn(2500);
   }
 }
 
@@ -8609,6 +9355,7 @@ function updateWaves(dt) {
   state.waveTimer += dt;
 
   if (_victoryTimer > 0) return;
+  maybeOfferOmen();
 
   // Continuous trickle, composition from the wave's weight table
   state.spawnTimer -= dt;
@@ -8618,7 +9365,14 @@ function updateWaves(dt) {
     // Bot playtests showed 50 enemies on screen after one minute against a
     // level-1 kill rate of ~0.6/s. The trickle starts at one per spawn and packs
     // arrive from wave 2 (rats) and 3 (wolves).
-    const enemiesPerSpawn = Math.min(Math.round((1 + Math.floor(state.wave / 3)) * ogreMods.spawnMul * partySpawnMul()), 14);
+    // A boss is meant to be the thing you are fighting. The trickle used to run
+    // at full rate underneath him, so a boss who outlived his own wave met the
+    // next wave's script on top of the crowd he already had -- the reviewed run
+    // where the wave-5 ogre was still up at 4:48 with the wave-7 bat ring and
+    // the wave-8 ogre wall in the same frame. Thinning the trickle while he
+    // lives is the pressure valve; it costs nothing when bosses die on time.
+    const bossValve = currentBoss && !currentBoss.isDying ? BOSS_TRICKLE_MUL : 1;
+    const enemiesPerSpawn = Math.min(Math.round((1 + Math.floor(state.wave / 3)) * ogreMul('spawnMul') * partySpawnMul() * omenMul('spawnMul') * bossValve), 18);
     for (let i = 0; i < enemiesPerSpawn && enemies.length < partyMaxEnemies(); i++) {
       spawnEnemy(rollEnemyType(state.wave));
     }
@@ -8639,11 +9393,13 @@ function updateWaves(dt) {
   updatePendingFormations(dt);
 
   // Next wave (the final wave never ends: it ends when the Ogre King does)
-  if (state.wave < FINAL_WAVE && state.waveTimer >= state.waveDuration) {
+  if (state.wave < FINAL_WAVE && state.waveTimer >= state.waveDuration * omenMul('waveLen')) {
     state.wave++;
     state.waveTimer = 0;
     state.spawnInterval = Math.max(0.5, state.spawnInterval - 0.12);
     state.waveDuration = Math.min(60, state.waveDuration + 2);
+    // The wave before each boss. Flagged here, offered on the next tick.
+    if (OMEN_WAVES.indexOf(state.wave) >= 0) _omenDue = true;
 
     const script = WAVE_SCRIPT[state.wave] || {};
     if (script.boss === 'final') {
@@ -8677,15 +9433,19 @@ function updateWaves(dt) {
       announce.textContent = pool[Math.floor(Math.random() * pool.length)];
       if (state.wave >= 8) announce.style.color = '#cc4444';
       announce.style.opacity = '1';
-      setTimeout(() => { announce.style.opacity = '0'; announce.style.color = ''; }, 2500);
+      hideAnnounceIn(2500);
       if (state.wave >= 4 && Math.random() < 0.30) {
         // Frame-timed: a setTimeout here would fire an event into the next run
         // (or onto the menu) if the player died during the delay.
         _pendingWaveEventTimer = 2.5;
       }
     }
-    if (script.formation) spawnFormation(script.formation, 3.5);
-    if (script.formation2) spawnFormation(script.formation2, 12);
+    // Wave 15 and wave 20 script a boss AND a formation together on purpose;
+    // what is skipped here is a formation belonging to a later wave arriving
+    // while an earlier boss is still standing.
+    const bossStillUp = currentBoss && !currentBoss.isDying && !script.boss;
+    if (script.formation && !bossStillUp) spawnFormation(script.formation, 3.5);
+    if (script.formation2 && !bossStillUp) spawnFormation(script.formation2, 12);
   }
 
   // Update boss health bar + enrage
@@ -8755,7 +9515,7 @@ function registerKill(by) {
       announce.style.color = m.color;
       announce.style.opacity = '1';
       triggerShake(0.5, 0.3);
-      setTimeout(() => { announce.style.opacity = '0'; announce.style.color = ''; }, 2500);
+      hideAnnounceIn(2500);
     }
   }
 
@@ -8803,6 +9563,9 @@ let _upgradeScreenOpen = false;
 function pendingPickCount() { let n = 0; for (const p of players) n += (p.picks ? p.picks.length : 0); return n; }
 function queuePick(p, kind = 'level') {
   if (!p) return;
+  // A knight who has bled out is not going to pick anything. Queuing for them
+  // opened a modal card screen only their (possibly put-down) pad could answer.
+  if (p.state && p.state.bledOut) return;
   if (!p.picks) p.picks = [];
   p.picks.push(kind);
 }
@@ -8959,7 +9722,7 @@ function relicUpgrade(r) {
       if (r.id === 'hooves') state.player.speed *= 1.12;
       if (r.id === 'windwalker') state.player._dashCDBonus = (state.player._dashCDBonus || 0) + 1.0;
     },
-    condition: () => isRelicUnlocked(r) && !(state.player.relics && state.player.relics[r.id]) && relicCount() < MAX_RELICS,
+    condition: () => isRelicUnlocked(r) && !(state.player.relics && state.player.relics[r.id]) && relicCount() < maxRelics(),
   };
 }
 
@@ -9193,7 +9956,11 @@ function loadSave() {
     if (!raw) return _blankSave();
     const data = JSON.parse(raw);
     if (!data || typeof data !== 'object') return _blankSave();
-    const save = data.version === 2 && data.profiles ? data : _migrate(data);
+    // `>= 2`: a strict `=== 2` treated anything else as v1, and _migrate returns
+    // a blank save -- so a future v3, or one hand-edited version bump, wiped every
+    // wallet in the family on the next write. A real migration switch goes here
+    // when v3 exists; until then, a newer save is read as-is rather than erased.
+    const save = data.version >= 2 && data.profiles ? data : _migrate(data);
     // Tolerate a hand-edited or partial save rather than throwing mid-run.
     save.shared = Object.assign({ achievements: [], mastery: {}, wins: 0, ogreUnlocked: 1 }, save.shared);
     save.profiles = save.profiles || {};
@@ -9226,14 +9993,22 @@ function loadMeta(who) {
   };
 }
 
-function saveMeta(meta, who) {
+// `opts.shared` writes the family-wide half (achievements, mastery, wins, the
+// Ogre ladder) as well as the knight's own wallet and Forge ranks. Only the end
+// of a run passes it. Every other caller -- the Forge, which writes on each
+// purchase -- rewrote the shared half from whatever `loadMeta` happened to
+// return earlier, so with the Forge open in one tab and a run finishing in
+// another, the purchase quietly rolled back that run's unlocks.
+function saveMeta(meta, who, opts) {
   const id = profileIdFor(who || meta._profile);
   const save = loadSave();
   save.profiles[id] = { gold: meta.gold || 0, ranks: meta.ranks || {} };
-  save.shared.achievements = meta.achievements || save.shared.achievements;
-  save.shared.mastery = meta.mastery || save.shared.mastery;
-  save.shared.wins = meta.wins != null ? meta.wins : save.shared.wins;
-  save.shared.ogreUnlocked = meta.ogreUnlocked != null ? meta.ogreUnlocked : save.shared.ogreUnlocked;
+  if (opts && opts.shared) {
+    save.shared.achievements = meta.achievements || save.shared.achievements;
+    save.shared.mastery = meta.mastery || save.shared.mastery;
+    save.shared.wins = meta.wins != null ? meta.wins : save.shared.wins;
+    save.shared.ogreUnlocked = meta.ogreUnlocked != null ? meta.ogreUnlocked : save.shared.ogreUnlocked;
+  }
   saveSave(save);
 }
 
@@ -9518,7 +10293,7 @@ function evolveWeapon(weaponId) {
       triggerShake(0.5, 0.35);
     });
   }
-  setTimeout(() => { announce.style.opacity = '0'; announce.style.color = ''; }, 3000);
+  hideAnnounceIn(3000);
 }
 
 function levelUpShockwave(who) {
@@ -9549,6 +10324,91 @@ function levelUpShockwave(who) {
   for (const pickup of pickups) pickup._vacuumed = true;
 }
 
+// ─── THE OMEN SCREEN ───
+// Deliberately the level-up screen rather than a new one: the pause, the
+// controller focus model, the keyboard routing, the co-op lockout and the
+// bot's click target are all already correct there, and a second modal would
+// have to reproduce every one of them.
+let _omenPending = null;   // the two cards on screen, or null
+let _omenDue = false;      // a wave asked for an omen; offered on the next tick
+
+// Offered on the tick AFTER the wave turns over, never inside it. A kill in the
+// same frame can open the level-up screen, and two modals racing for one
+// element ends with one of them orphaned and the run paused forever.
+function maybeOfferOmen() {
+  if (!_omenDue || _upgradeScreenOpen || state.gameOver || _victoryTimer > 0) return;
+  _omenDue = false;
+  offerOmen();
+}
+function offerOmen() {
+  const pool = OMENS.filter(o => !hasOmen(o.id));
+  if (pool.length < 2) return false;
+  const a = pool.splice(Math.floor(Math.random() * pool.length), 1)[0];
+  const b = pool[Math.floor(Math.random() * pool.length)];
+  _omenPending = [a, b];
+  showOmenChoice();
+  return true;
+}
+
+function showOmenChoice() {
+  state.paused = true;
+  _upgradeScreenOpen = true;
+  // An omen is the party's, not one knight's: there is no pick context to swap
+  // to and no owner to lock the other controllers out of. With `_pickingPlayer`
+  // null every keyboard and the first pad can answer, which is the one thing
+  // that cannot soft-lock a couch.
+  _pickingPlayer = null;
+  document.body.classList.remove('coop-pick');
+  const screen = document.getElementById('level-up-screen');
+  const options = document.getElementById('upgrade-options');
+  const heading = screen.querySelector('h2');
+  heading.innerHTML = 'AN OMEN';
+  heading.style.color = '#b06cd8';
+  document.getElementById('pick-owner').textContent = '';
+  document.getElementById('pick-hint').textContent = players.length > 1
+    ? 'The whole party bears this one' : '';
+  document.getElementById('level-up-hint').innerHTML =
+    '1 / 2 or D-Pad + A to choose &bull; there is no third card';
+  for (const id of ['reroll-btn', 'banish-btn', 'skip-btn']) {
+    document.getElementById(id).style.display = 'none';
+  }
+  options.innerHTML = '';
+  for (const o of _omenPending) {
+    const btn = document.createElement('button');
+    btn.className = 'upgrade-btn card-omen';
+    btn.style.setProperty('--omen', o.color);
+    btn.innerHTML = `<div class="omen-glyph">${o.glyph}</div>
+      <div class="upgrade-text">
+        <div class="upgrade-title">${o.name}<span class="chip chip-omen">Omen</span></div>
+        <div class="omen-line omen-curse"><span class="k">Thou bearest</span>${o.curse}</div>
+        <div class="omen-line omen-boon"><span class="k">Thou gainest</span>${o.boon}</div>
+      </div>`;
+    btn.onclick = () => {
+      AudioSystem.play('upgradeSelect', { volume: 0.6, pitch: 0.75 });
+      takeOmen(o);
+      _omenPending = null;
+      announceOmen(o);
+      closeUpgradeScreen();
+    };
+    options.appendChild(btn);
+  }
+  screen.style.display = 'flex';
+  refreshMenu(true);
+}
+
+function announceOmen(o) {
+  const announce = getWaveAnnounce();
+  announce.textContent = `${o.glyph}  ${o.name.toUpperCase()}`;
+  announce.style.color = o.color;
+  announce.style.opacity = '1';
+  hideAnnounceIn(3000);
+  triggerShake(0.4, 0.3);
+  if (playerMesh) {
+    vfx.runeCircle(playerMesh.position, { color: parseInt(o.color.slice(1), 16), radius: 6, duration: 2.0, sweep: 0.2 });
+    vfx.vortex(playerMesh.position, parseInt(o.color.slice(1), 16), { radius: 3.0, height: 6.0, count: 55, duration: 1.0 });
+  }
+}
+
 function showLevelUp(isChest) {
   if (!isChest) {
     AudioSystem.play('levelUp', { volume: 0.7 });
@@ -9571,6 +10431,10 @@ function showLevelUp(isChest) {
   const queued = still > 0 ? ` <span style="font-size:20px;color:#8a7040">(+${still} more)</span>` : '';
   heading.innerHTML = (isChest ? 'TREASURE!' : 'LEVEL UP') + queued;
   heading.style.color = isChest ? '#e8c860' : '#c9a253';
+  // The omen screen borrows this element and rewrites its hint line; put the
+  // card hint back before anyone sees "there is no third card" over three cards.
+  document.getElementById('level-up-hint').innerHTML =
+    '1 / 2 / 3 or D-Pad + A to choose &bull; R / X reroll &bull; B / Y banish &bull; Esc skip';
   // Whose pick this is, in that knight's ring colour, plus the one device that
   // can answer it. Everybody else's controller is inert until they choose.
   const ownerEl = document.getElementById('pick-owner');
@@ -9596,6 +10460,9 @@ function showLevelUp(isChest) {
 function describePickDevice(p) {
   if (!p) return 'Pick a card';
   if (p.index === 0) return 'Keys 1 / 2 / 3, or D-Pad + A on your pad';
+  // Their pad is gone or they have bled out: say who is answering now, instead
+  // of asking the table to press a button on a controller nobody is holding.
+  if (p === _pickingPlayer && _pickOrphaned()) return 'Pad asleep — player 1: keys 1 / 2 / 3';
   if (p.device && p.device.type === 'kb') return 'Arrow keys to choose, Right Shift to confirm';
   if (p.padIndex != null) return `Pad ${p.padIndex + 1}: D-Pad to choose, A to confirm`;
   return 'Keys 1 / 2 / 3, or D-Pad + A on your pad';
@@ -9618,8 +10485,21 @@ const _DEAD_PAD = {
 function pickPadState() {
   const p = _pickingPlayer;
   if (!p || players.length < 2 || p.index === 0) return gamepadState;
-  if (p.padIndex != null) return gamepadStates[p.padIndex] || _DEAD_PAD;
-  return _DEAD_PAD;
+  // If the owner's pad is gone -- asleep, disconnected, or simply put down after
+  // its player bled out -- hand the card back to player 1 rather than to a dead
+  // slot. The screen is modal and paused, so with nothing able to answer it the
+  // run was over in the worst way: not a death, a soft-lock. Bluetooth pads and
+  // children make this routine.
+  if (p.padIndex != null) return gamepadStates[p.padIndex] || (_pickOrphaned() ? gamepadState : _DEAD_PAD);
+  return _pickOrphaned() ? gamepadState : _DEAD_PAD;
+}
+// Has the card's owner stopped being able to answer it?
+function _pickOrphaned() {
+  const p = _pickingPlayer;
+  if (!p) return false;
+  if (p.state && p.state.bledOut) return true;
+  if (p.padIndex != null) return !gamepadStates[p.padIndex];
+  return !p.device;
 }
 // May this keyboard code act on the open card screen?
 function pickKeyAllowed(code) {
@@ -9629,14 +10509,18 @@ function pickKeyAllowed(code) {
   if (p.device && p.device.type === 'kb') {
     return code.indexOf('Arrow') === 0 || code === 'ShiftRight' || code === 'Numpad0' || code === 'Escape';
   }
-  return false;   // a pad companion's card cannot be answered from the keyboard
+  // A pad companion's card is theirs to answer -- unless nothing can answer it
+  // any more, in which case player 1's keyboard takes over (see _pickOrphaned).
+  return _pickOrphaned();
 }
 
 // The run-defining picks. Fortune's Favor promises "rarer upgrades", so luck
 // raises the odds that these appear in a roll. Weights start at 1 for everything,
 // so with no luck the roll stays uniform exactly as before — luck only ever adds.
 const RARE_UPGRADES = new Set([
-  'dagger', 'holyAura', 'arrowVolley', 'orbitalBomb', 'sword', 'spear', 'quickblade',
+  // `staff` was missing, so Fortune's Favor weighted every knight's primary card
+  // except Parker's -- the one knight whose whole build leans on it.
+  'dagger', 'holyAura', 'arrowVolley', 'orbitalBomb', 'sword', 'spear', 'quickblade', 'staff',
   'lifesteal', 'thorns', 'luck', 'critDmg',
 ]);
 
@@ -9770,8 +10654,8 @@ function populateUpgradeChoices(count, screen, options, isChest) {
       detail = `<div class="upgrade-delta">${kind === 'weapon-lv' ? `<span class="k">Level</span>${rankPips(curLvl, 5, true)}` : ''}${chips}</div>${evoLine}`;
     } else {
       let gems = '';
-      for (let i = 1; i <= MAX_RELICS; i++) gems += `<i class="${i <= relicCount() ? 'on' : i === relicCount() + 1 ? 'next' : ''}"></i>`;
-      detail = `<div class="upgrade-delta"><span class="k">Relic slots</span><span class="gems">${gems}</span><b class="delta-num">${relicCount() + 1} of ${MAX_RELICS}</b></div>`;
+      for (let i = 1; i <= maxRelics(); i++) gems += `<i class="${i <= relicCount() ? 'on' : i === relicCount() + 1 ? 'next' : ''}"></i>`;
+      detail = `<div class="upgrade-delta"><span class="k">Relic slots</span><span class="gems">${gems}</span><b class="delta-num">${relicCount() + 1} of ${maxRelics()}</b></div>`;
     }
     const iconHtml = upg.isRelic
       ? `<img class="upgrade-icon" src="images/relics/${upg.relic.id}.png" alt="" onerror="this.outerHTML='<div class=&quot;upgrade-icon relic-icon&quot;>${upg.relic.icon}</div>'">`
@@ -9861,12 +10745,31 @@ function _cacheHudEls() {
     dashIcon: document.getElementById('dash-icon'),
     dashFill: document.getElementById('dash-cd-fill'),
     touchDash: document.getElementById('touch-dash-btn'),
+    abilityIcon: document.getElementById('ability-icon'),
+    abilityFill: document.getElementById('ability-cd-fill'),
+    abilityGlyph: document.getElementById('ability-glyph'),
+    abilityLabel: document.getElementById('ability-label'),
+    touchAbility: document.getElementById('touch-ability-btn'),
   };
   _hudCached = true;
 }
 
 let _prevWeaponHtml = '';
 let _prevRelicHtml = '';
+// Every one of the memo caches below has to be emptied between runs. They exist
+// so the HUD writes a DOM node only when its text changed, but `updateCoopHud`
+// rebuilds the knight rows from scratch whenever the party size changes -- so
+// after co-op run, solo run, co-op run with the same knights, the freshly empty
+// row and the remembered string agree, the write is skipped, and a companion's
+// kit strip stays blank for the whole run.
+function resetHudCache() {
+  for (const k in _hudPrev) delete _hudPrev[k];
+  _prevWeaponHtml = '';
+  _prevRelicHtml = '';
+  _hudCdNodes = [];
+  _hudCdPrev.length = 0;
+  _hudCdDegs.length = 0;
+}
 // Weapon-slot cooldown sweeps are written as a CSS custom property on cached
 // nodes rather than rebuilt into the HUD's HTML (see updateHUD).
 let _hudCdNodes = [];
@@ -10074,6 +10977,40 @@ function updateHUD() {
     }
   }
 
+  // Knight active: the same dial as the dash, in that knight's colour. The
+  // glyph, colour and name are written once per run rather than per tick.
+  if (_hudEls.abilityIcon) {
+    const a = knightAbility(players[0]);
+    if (_hudPrev.abilityId !== a.id) {
+      _hudPrev.abilityId = a.id;
+      const hex = '#' + a.color.toString(16).padStart(6, '0');
+      _hudEls.abilityIcon.style.setProperty('--ability', hex);
+      _hudEls.abilityIcon.style.setProperty('--ability-fill', hex + '55');
+      _hudEls.abilityIcon.style.setProperty('--ability-dim', hex + '66');
+      _hudEls.abilityGlyph.textContent = a.glyph;
+      _hudEls.abilityLabel.textContent = a.name.toUpperCase();
+      _hudEls.abilityLabel.style.color = hex;
+      if (_hudEls.touchAbility) {
+        _hudEls.touchAbility.textContent = a.glyph;
+        _hudEls.touchAbility.style.borderColor = hex + '80';
+        _hudEls.touchAbility.style.color = hex;
+      }
+    }
+    const abCD = p.abilityCooldownMax || getAbilityCooldown();
+    if (p.abilityCooldown <= 0) {
+      _hudEls.abilityIcon.classList.add('ready');
+      _hudEls.abilityFill.style.height = '0%';
+    } else {
+      _hudEls.abilityIcon.classList.remove('ready');
+      _hudEls.abilityFill.style.height = `${(1 - p.abilityCooldown / abCD) * 100}%`;
+    }
+    if (_isTouch && _hudEls.touchAbility) {
+      const onCd = p.abilityCooldown > 0;
+      _hudEls.touchAbility.classList.toggle('on-cd', onCd);
+      if (onCd) _hudEls.touchAbility.style.setProperty('--cd', `${(1 - p.abilityCooldown / abCD) * 360}deg`);
+    }
+  }
+
   // Update weapon HUD.
   // The slot markup is rebuilt only when ownership or level changes. The
   // cooldown sweep is NOT part of the diffed string: it moves several buckets
@@ -10091,7 +11028,13 @@ function updateHUD() {
     const lvl = Math.min(5, wData.level);
     const cdPct = PRIMARY_WEAPONS.has(wKey)
       ? Math.max(0, state.player.attackTimer / (state.player._primaryCD || 1) * 100)
-      : (WEAPON_STATS[wKey] ? Math.max(0, weaponTimers[wKey] / WEAPON_STATS[wKey].cooldown[lvl] * 100) : 0);
+      // Warding Shields and Trail of Embers are continuous: they have a cooldown
+      // row in WEAPON_STATS but no entry in `weaponTimers`, so this divided
+      // undefined and produced `height:NaN%`, which CSS drops -- their slots had
+      // no cooldown sweep at all. Nothing to count down means ready, i.e. 0.
+      : (WEAPON_STATS[wKey] && weaponTimers[wKey] != null
+          ? Math.max(0, weaponTimers[wKey] / WEAPON_STATS[wKey].cooldown[lvl] * 100)
+          : 0);
     const evoClass = wData.evolved ? ' evolved' : '';
     const evoTitle = wData.evolved ? ` (${WEAPON_EVOLUTIONS[wKey]?.evoName || 'Evolved'})` : '';
     // Quantised to 10° so the per-tick style write is also a no-op most ticks.
@@ -10106,7 +11049,7 @@ function updateHUD() {
       <div class="weapon-slot-cd"></div>
     </div><div class="ws-pips">${pips}</div></div>`;
   }
-  for (; slotsShown < MAX_WEAPON_SLOTS; slotsShown++) {
+  for (; slotsShown < maxWeaponSlots(); slotsShown++) {
     hudHtml += `<div class="ws"><div class="weapon-slot empty" title="Empty weapon slot"><span class="weapon-slot-icon" style="opacity:0.35">+</span></div><div class="ws-pips"></div></div>`;
   }
   if (hudHtml !== _prevWeaponHtml) {
@@ -10130,6 +11073,17 @@ function updateHUD() {
     relicHtml += `<div class="relic-pill" title="${r.name}: ${r.desc}" style="${used ? 'opacity:0.35' : ''}"><img class="relic-pill-img" src="images/relics/${r.id}.png" alt="" onerror="this.outerHTML='${r.icon}'"></div>`;
   }
   if (relicHtml !== _prevRelicHtml) { _prevRelicHtml = relicHtml; document.getElementById('relic-hud').innerHTML = relicHtml; }
+
+  // Omens. Party-wide, so this reads the run's list rather than a knight's.
+  if (_hudPrev.omenCount !== omens.taken.length) {
+    _hudPrev.omenCount = omens.taken.length;
+    let omenHtml = '';
+    for (const id of omens.taken) {
+      const o = OMENS.find(x => x.id === id);
+      if (o) omenHtml += `<div class="omen-pill" style="color:${o.color}" title="${o.name} — ${o.curse}, but ${o.boon.charAt(0).toLowerCase() + o.boon.slice(1)}">${o.glyph}</div>`;
+    }
+    document.getElementById('omen-hud').innerHTML = omenHtml;
+  }
 
   // Active buffs + wave event display
   const buffContainer = _hudEls.buffs || (_hudEls.buffs = document.getElementById('active-buffs'));
@@ -10294,10 +11248,17 @@ function calcPerformanceGrade() {
 
 // Personal best tracking
 function loadBestRun() {
+  // Whatever comes out of storage is merged onto the defaults rather than
+  // trusted as-is. A stored `"5"` or `[]` parses fine and then every comparison
+  // in saveBestRun throws inside its own try -- which returns
+  // `{ best: current }`, so Personal Best silently shows the current run forever
+  // and NEW RECORD never fires again, with no error to explain it.
+  const blank = { wave: 0, kills: 0, time: 0, score: 0, grade: 'F' };
   try {
-    const data = localStorage.getItem('castleSurvivor_best');
-    return data ? JSON.parse(data) : { wave: 0, kills: 0, time: 0, score: 0, grade: 'F' };
-  } catch { return { wave: 0, kills: 0, time: 0, score: 0, grade: 'F' }; }
+    const data = JSON.parse(localStorage.getItem('castleSurvivor_best'));
+    if (!data || typeof data !== 'object' || Array.isArray(data)) return blank;
+    return Object.assign(blank, data);
+  } catch { return blank; }
 }
 // Grades ordered best-first. Comparing the letters directly does not work:
 // 'S' sorts after every other letter, so a plain `<` would quietly replace a
@@ -10377,6 +11338,11 @@ function renderHighScores(highlightStamp) {
   // A hall of fame written before Private Mode went on still carries the hidden
   // knights' names, so the column is masked rather than the rows dropped.
   const hero = n => (settings.privateMode && n && n.toLowerCase() !== 'dad') ? 'Knight' : (n || '-');
+  // A co-op row names the whole party. Rows recorded before `party` existed, and
+  // solo runs, still show the one name.
+  const heroes = r => (r.party && r.party.length > 1)
+    ? r.party.map(hero).join(' + ')
+    : hero(r.character);
   const rows = scores.map((r, i) => {
     const grade = GRADES_BY_LETTER[r.grade] || { color: '#887755' };
     const when = r.date ? new Date(r.date).toLocaleDateString() : '';
@@ -10386,7 +11352,7 @@ function renderHighScores(highlightStamp) {
     return `<tr${fresh}>
       <td class="rank">${i + 1}</td>
       <td class="grade" style="color:${grade.color}">${r.grade || '-'}</td>
-      <td>${hero(r.character)}</td>
+      <td>${heroes(r)}</td>
       <td>${where}</td>
       <td>${(r.score ?? 0).toLocaleString()}</td>
       <td>${r.wave ?? 0}</td>
@@ -10476,6 +11442,10 @@ function gameOver(victory = false) {
     grade: grade.letter,
     level: state.player.level,
     character: CHARACTER_ASSETS[selectedCharacter]?.name || selectedCharacter,
+    // ...and everyone who actually fought it. A three-knight victory used to go
+    // into the hall under player 1's name alone, as though they had done it
+    // solo. Older rows have no `party` and fall back to `character`.
+    party: players.map(pl => CHARACTER_NAMES[pl.character] || 'Knight'),
     ogreLevel: selectedOgreLevel,
     map: MAPS[loadedMap]?.name || 'Kingsfield',
     victory: !!victory,
@@ -10534,10 +11504,13 @@ function gameOver(victory = false) {
     const next = Math.min(OGRE_LEVELS.length - 1, selectedOgreLevel + 1);
     if (next > (meta.ogreUnlocked || 1)) {
       meta.ogreUnlocked = next;
-      unlockLine = `<div id="go-placement" style="color:#ff7733">Ogre Level ${next} — ${OGRE_LEVELS[next].name} — unlocked!</div>`;
+      // `+=`. A plain `=` erased the weapon-unlock and mastery lines built above,
+      // and the weapon unlock is the only notice in the game that Storm Call or
+      // Trail of Embers exists -- lost exactly on the run that earned both.
+      unlockLine += `<div id="go-placement" style="color:#ff7733">Ogre Level ${next} — ${OGRE_LEVELS[next].name} — unlocked!</div>`;
     }
   }
-  saveMeta(meta, players[0]);
+  saveMeta(meta, players[0], { shared: true });   // the run's unlocks, mastery and wins
   // Companions: wallet only. The shared half was just written above and must not
   // be written again from a stale copy.
   for (const pl of players.slice(1)) {
@@ -10563,7 +11536,7 @@ function gameOver(victory = false) {
       if (!v.owned) continue;
       h += `<span class="go-tile${v.evolved ? ' evolved' : ''}" title="${WEAPON_NAMES[k]}"><img src="images/upgrades/${k}.png" alt="" onerror="this.outerHTML='${WEAPON_ICONS[k] || ''}'"><small>${v.evolved ? '★ EVO' : `LV ${v.level}`}</small></span>`;
     }
-    for (let i = Object.values(pl.weapons).filter(w => w.owned).length; i < MAX_WEAPON_SLOTS; i++) h += '<span class="go-tile empty"></span>';
+    for (let i = Object.values(pl.weapons).filter(w => w.owned).length; i < maxWeaponSlots(); i++) h += '<span class="go-tile empty"></span>';
     const rel = pl.state.relics ? RELICS.filter(r => pl.state.relics[r.id]) : [];
     const relHtml = rel.map(r => `<span class="go-relic">${r.icon} ${r.name}</span>`).join('');
     return `<div class="go-tiles">${h}</div>${relHtml ? `<div class="go-relics">${relHtml}</div>` : ''}`;
@@ -10668,15 +11641,11 @@ function clearRun() {
     waveTimer: 0, waveDuration: 35, spawnTimer: 0, spawnInterval: 3.0,
     paused: false, gameOver: false,
   });
-  Object.assign(state.player, {
-    hp: PLAYER_MAX_HP, maxHp: PLAYER_MAX_HP, level: 1, xp: 0, xpToNext: xpForLevel(1),
-    speed: PLAYER_SPEED, damage: 15, attackRange: ATTACK_RANGE,
-    attackCooldown: ATTACK_COOLDOWN, attackTimer: 0, armor: 0, regen: 0,
-    regenTimer: 0, critChance: 0.05, critMultiplier: 2.0, isAttacking: false, _atkResetTimer: 0, _gameOverTimer: 0, isDead: false,
-    iframes: 0, dashTimer: 0, dashCooldown: 0, isDashing: false, _dashCDBonus: 0, thorns: 0, lifesteal: 0, luck: 0, _projDmgMul: 1, _aoeMul: 1, _burnMul: 1,
-    dashStrike: false, primaryWeapon: 'sword', _dashId: 0, _primaryCD: 1,
-    relics: null, _phoenixUsed: false, _runesUntil: -1, _runesReady: 0, _crowdCount: 0, _moving: false,
-  });
+  // Player 1 gets a fresh sheet the same way a companion does, from the one
+  // definition, rather than from a hand-maintained field list that drifted.
+  Object.assign(state.player, makePlayerState());
+  resetHudCache();
+  clearAnnounce();
   // Reset weapons: only the character's primary is owned
   for (const k of Object.keys(playerWeapons)) playerWeapons[k] = { owned: false, level: 0 };
   const primary = CHARACTER_PRIMARY[selectedCharacter] || 'sword';
@@ -10689,6 +11658,9 @@ function clearRun() {
     pl.emberLastX = null; pl.emberLastZ = null; pl._lastLifesteal = -1;
   }
   _lastComboMilestone = 0;
+  resetOmens();
+  _omenPending = null;
+  _omenDue = false;
   rerollCharges = 0;
   banishCharges = 1;
   banishedUpgrades.clear();
@@ -10790,10 +11762,23 @@ function startRun() {
   clock.start();
 }
 
-function resetGame() {
-  clearRun();
-  startRun();
+// RISE AGAIN. `clearRun` truncates the party back to one knight (its
+// `resetPartyToSolo`), and only `beginQuest` ever rebuilt it -- so restarting
+// after a co-op run silently dropped every companion: their pads went dead, the
+// party scaling and the shared XP curve snapped back to solo, and the two other
+// people at the couch were simply gone from the next run.
+async function resetGame() {
+  if (_restarting) return;
+  _restarting = true;
+  try {
+    clearRun();
+    await spawnCoopCompanions();
+    startRun();
+  } finally {
+    _restarting = false;
+  }
 }
+let _restarting = false;
 
 // Back to the title screen: character select, Forge and Ogre Level are all
 // reachable again without a page reload.
@@ -11435,6 +12420,10 @@ function disposeHorse() {
 function mountHorse(p) {
   const h = horse;
   if (!h || h.rider || !p.mesh) return;
+  // `_groundY` is read one line down and the ride then drives the knight's
+  // height from it, so a knight caught mid-Skyfall would record the top of his
+  // arc as the ground and ride three units above the saddle.
+  endLeap(p);
   h.rider = p; h.phase = 'ridden'; h.timer = HORSE.rideSeconds; h.mountT = 0;
   p.riding = true;
   p._groundY = p.mesh.position.y;
@@ -12099,10 +13088,15 @@ window.addEventListener('gamepadconnected', () => { _coopPadCount = -1; renderCo
 window.addEventListener('gamepaddisconnected', () => {
   _coopPadCount = -1;
   // Drop any companion whose pad just vanished, or its slot is stuck forever.
+  // The keys here are 'pad:2' and 'kb', never bare indices, so the old
+  // `!gps[padIndex]` was undefined for every key and this deleted the entire
+  // roster -- including the keyboard companion, who has no pad to lose -- any
+  // time one controller went to sleep.
   let dirty = false;
   const gps = navigator.getGamepads();
-  for (const padIndex of [...coopPending.keys()]) {
-    if (!gps[padIndex]) { coopPending.delete(padIndex); dirty = true; }
+  for (const key of [...coopPending.keys()]) {
+    if (!key.startsWith('pad:')) continue;
+    if (!gps[+key.slice(4)]) { coopPending.delete(key); dirty = true; }
   }
   renderCoopRoster();
   if (dirty) AudioSystem.play('playerHit', { volume: 0.2, pitch: 1.3 });
@@ -12172,7 +13166,7 @@ function keyboardCompanionActive() {
 }
 
 function readInput(p) {
-  let dx = 0, dz = 0, dash = false;
+  let dx = 0, dz = 0, dash = false, ability = false;
   if (p.index === 0) {
     // WASD always. The arrows belong to player 1 too, unless a keyboard
     // companion has claimed them for itself.
@@ -12184,21 +13178,27 @@ function readInput(p) {
     if (gamepadState.lx !== 0 || gamepadState.ly !== 0) { dx += gamepadState.lx; dz += gamepadState.ly; }
     if (touchState.stickX !== 0 || touchState.stickY !== 0) { dx += touchState.stickX; dz += touchState.stickY; }
     dash = !!(keys['Space'] || gamepadState.b || touchState.dash);
+    // X on the pad is free during a run -- it only means Reroll on the card
+    // screen, which is modal and paused, so the two can never both be live.
+    ability = !!(keys['KeyQ'] || keys['KeyE'] || gamepadState.x || touchState.ability);
   } else if (p.device && p.device.type === 'kb') {
-    // Keyboard companion: arrows to move, right shift or numpad 0 to dash.
+    // Keyboard companion: arrows to move, right shift or numpad 0 to dash,
+    // numpad 1 or the slash key for the active.
     if (keys['ArrowUp']) dz -= 1;
     if (keys['ArrowDown']) dz += 1;
     if (keys['ArrowLeft']) dx -= 1;
     if (keys['ArrowRight']) dx += 1;
     dash = !!(keys['ShiftRight'] || keys['Numpad0']);
+    ability = !!(keys['Numpad1'] || keys['Slash']);
   } else {
     const pad = p.padIndex != null ? gamepadStates[p.padIndex] : null;
     if (pad) {
       if (pad.lx !== 0 || pad.ly !== 0) { dx += pad.lx; dz += pad.ly; }
       dash = !!pad.b;
+      ability = !!pad.x;
     }
   }
-  return { dx, dz, dash };
+  return { dx, dz, dash, ability };
 }
 
 // ─── MENU NAVIGATION (controller + keyboard) ───
@@ -12350,7 +13350,10 @@ function handleMenuInput() {
 
 // ─── PAUSE SYSTEM ───
 function togglePause() {
-  if (!state.started || state.gameOver || state.player.isDead) return;
+  // Any knight still standing may pause. Testing player 1 alone meant that with
+  // P1 down and companions still fighting, Start and Escape did nothing for
+  // anybody at the couch.
+  if (!state.started || state.gameOver || alivePlayers().length === 0) return;
   // Don't toggle if the level-up or settings screen is open
   if (document.getElementById('level-up-screen').style.display === 'flex') return;
   if (document.getElementById('settings-screen').style.display === 'flex') return;
@@ -12493,7 +13496,7 @@ window.addEventListener('resize', () => {
 });
 
 // ─── TOUCH CONTROLS ───
-const touchState = { active: false, stickX: 0, stickY: 0, dash: false, stickId: -1, dashId: -1 };
+const touchState = { active: false, stickX: 0, stickY: 0, dash: false, ability: false, stickId: -1, dashId: -1, abilityId: -1 };
 const _isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 if (_isTouch) document.body.classList.add('touch-active');
 
@@ -12503,6 +13506,7 @@ if (_isTouch) document.body.classList.add('touch-active');
   const base = document.getElementById('touch-stick-base');
   const knob = document.getElementById('touch-stick-knob');
   const dashBtn = document.getElementById('touch-dash-btn');
+  const abilityBtn = document.getElementById('touch-ability-btn');
   const pauseBtn = document.getElementById('touch-pause-btn');
   const STICK_RADIUS = 50;
 
@@ -12554,6 +13558,17 @@ if (_isTouch) document.body.classList.add('touch-active');
     touchState.dashId = -1;
     dashBtn.classList.remove('pressed');
   }
+  function abilityStart(id) {
+    touchState.ability = true;
+    touchState.abilityId = id;
+    abilityBtn.classList.add('pressed');
+  }
+  function abilityEnd(id) {
+    if (id !== touchState.abilityId) return;
+    touchState.ability = false;
+    touchState.abilityId = -1;
+    abilityBtn.classList.remove('pressed');
+  }
 
   if (USE_TOUCH_EVENTS) {
     // identifier can be 0, so compare against undefined rather than truthiness.
@@ -12593,6 +13608,18 @@ if (_isTouch) document.body.classList.add('touch-active');
     window.addEventListener('touchend', endD);
     window.addEventListener('touchcancel', endD);
 
+    abilityBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      const t = e.changedTouches[0];
+      if (t) abilityStart(t.identifier);
+    }, { passive: false });
+    const endA = (e) => {
+      const t = find(e.changedTouches, touchState.abilityId);
+      if (t) abilityEnd(t.identifier);
+    };
+    window.addEventListener('touchend', endA);
+    window.addEventListener('touchcancel', endA);
+
     pauseBtn.addEventListener('touchstart', (e) => { e.preventDefault(); togglePause(); }, { passive: false });
   } else {
     zone.addEventListener('pointerdown', (e) => {
@@ -12611,6 +13638,10 @@ if (_isTouch) document.body.classList.add('touch-active');
     dashBtn.addEventListener('pointerdown', (e) => { e.preventDefault(); dashStart(e.pointerId); });
     dashBtn.addEventListener('pointerup', (e) => dashEnd(e.pointerId));
     dashBtn.addEventListener('pointercancel', (e) => dashEnd(e.pointerId));
+
+    abilityBtn.addEventListener('pointerdown', (e) => { e.preventDefault(); abilityStart(e.pointerId); });
+    abilityBtn.addEventListener('pointerup', (e) => abilityEnd(e.pointerId));
+    abilityBtn.addEventListener('pointercancel', (e) => abilityEnd(e.pointerId));
 
     pauseBtn.addEventListener('pointerdown', (e) => { e.preventDefault(); togglePause(); });
   }
@@ -12797,7 +13828,12 @@ function setPlayerOneCharacter(char) {
   document.querySelectorAll('.char-card').forEach(c => c.classList.toggle('selected', c.dataset.char === char));
   const passive = CHARACTER_PASSIVES[char];
   const passiveText = passive ? `\n⚔ ${passive.name}: ${passive.desc}` : '';
-  document.getElementById('char-bio-area').textContent = (CHARACTER_BIOS[char] || '') + passiveText;
+  // The active is the one thing about a knight the player has to press a button
+  // for, so it is named on the card they choose them from rather than left to
+  // be discovered by mashing.
+  const act = KNIGHT_ABILITIES[char];
+  const activeText = act ? `\n${act.glyph} ${act.name} (Q / pad X, every ${act.cooldown}s): ${act.desc}` : '';
+  document.getElementById('char-bio-area').textContent = (CHARACTER_BIOS[char] || '') + passiveText + activeText;
   // Gold is per knight now, so the title-screen purse follows the selection.
   updateStartGold();
 }
@@ -12827,7 +13863,7 @@ document.querySelectorAll('.map-btn').forEach(btn => {
 
 // Rotating tips on the title screen
 const START_TIPS = [
-  'Enemies flash red and stand still before they strike. Step back.',
+  'Ogres, elites and bosses glow as they wind up, archers as they draw. Step back.',
   'Elites drop treasure chests. Hunt the big ones.',
   'Archers\' arrows fly straight: a sidestep dodges them.',
   'Banish removes an upgrade from the whole run. Reroll only redraws.',
@@ -12837,6 +13873,9 @@ const START_TIPS = [
   'Evolutions come from chests: level a weapon to 5, own its stat, then open one.',
   'Your primary weapon changes with your knight: sword, spear or arcane staff.',
   'Kills with a weapon build its mastery across runs.',
+  'Q (or X on a pad) works your knight\'s own active. It is the one blow you aim.',
+  'Dad plants his shield, Brennan leaps, Parker steps through the weave. All three scale with Damage.',
+  'An omen is read after each boss falls. Both cards cost you something.',
 ];
 let _tipIndex = Math.floor(Math.random() * START_TIPS.length);
 function rotateTip() {
@@ -12913,33 +13952,40 @@ renderLastQuest();
 async function beginQuest() {
   if (state.started || _starting) return;
   _starting = true;
-  AudioSystem.init(); // Web Audio requires user gesture
-  applySettings();
-  // Apply selected Ogre Level
-  ogreMods = { ...OGRE_LEVELS[selectedOgreLevel] };
-  pauseCharacterPreviews();
-  if (loadedMap !== selectedMap) {
-    document.getElementById('start-btn').textContent = 'PREPARING...';
-    await loadMap(selectedMap);
+  // try/finally: one rejected loader.load -- a 404 on a map GLB, a network blip --
+  // used to leave _starting true forever, so the button read PREPARING... and the
+  // game could not be started again without a reload.
+  try {
+    AudioSystem.init(); // Web Audio requires user gesture
+    applySettings();
+    // Apply selected Ogre Level
+    ogreMods = { ...OGRE_LEVELS[selectedOgreLevel] };
+    pauseCharacterPreviews();
+    if (loadedMap !== selectedMap) {
+      document.getElementById('start-btn').textContent = 'PREPARING...';
+      await loadMap(selectedMap);
+      document.getElementById('start-btn').textContent = 'BEGIN QUEST';
+    }
+    clearRun();
+    // Recreate player with selected character
+    await createPlayer();
+    // Bring in whoever claimed a companion slot on the title screen.
+    await spawnCoopCompanions();
+    // Show Ogre Level in HUD if > 0
+    const ogreHud = document.getElementById('ogre-hud');
+    if (selectedOgreLevel > 0) {
+      const colors = ['', '#e8c860', '#ddaa44', '#ff7733', '#ff4444', '#dd44dd'];
+      ogreHud.style.color = colors[selectedOgreLevel];
+      ogreHud.textContent = `Ogre ${selectedOgreLevel}: ${OGRE_LEVELS[selectedOgreLevel].name}`;
+      ogreHud.style.display = 'block';
+    } else {
+      ogreHud.style.display = 'none';
+    }
+    startRun();
+  } finally {
+    _starting = false;
     document.getElementById('start-btn').textContent = 'BEGIN QUEST';
   }
-  clearRun();
-  // Recreate player with selected character
-  await createPlayer();
-  // Bring in whoever claimed a companion slot on the title screen.
-  await spawnCoopCompanions();
-  // Show Ogre Level in HUD if > 0
-  const ogreHud = document.getElementById('ogre-hud');
-  if (selectedOgreLevel > 0) {
-    const colors = ['', '#e8c860', '#ddaa44', '#ff7733', '#ff4444', '#dd44dd'];
-    ogreHud.style.color = colors[selectedOgreLevel];
-    ogreHud.textContent = `Ogre ${selectedOgreLevel}: ${OGRE_LEVELS[selectedOgreLevel].name}`;
-    ogreHud.style.display = 'block';
-  } else {
-    ogreHud.style.display = 'none';
-  }
-  startRun();
-  _starting = false;
 }
 
 document.getElementById('restart-btn').addEventListener('click', resetGame);
@@ -13049,8 +14095,27 @@ function populateHelpScreen() {
   const weaponUpgrades = UPGRADES.filter(u => u.isWeapon && !(settings.privateMode && PRIVATE_PRIMARIES.has(u.id)));
   let weaponHtml = '<div class="help-section-title">Primary Weapons (one per knight)</div>';
   weaponHtml += `<div class="help-item"><div class="help-item-info">
-    <div class="help-item-desc">Each knight fights with his own primary weapon. It auto-attacks the nearest foe and can be honed at level-up. You may carry <span style="color:#e8c860">${MAX_WEAPON_SLOTS} weapons</span> in total, so choose your arsenal.</div>
+    <div class="help-item-desc">Each knight fights with his own primary weapon. It auto-attacks the nearest foe and can be honed at level-up. You may carry <span style="color:#e8c860">${maxWeaponSlots()} weapons</span> in total, so choose your arsenal.</div>
   </div></div>`;
+  // The one thing in the game that is not automatic. It belongs at the top of
+  // the weapons tab, not buried under Advanced with the relics.
+  weaponHtml += '<div class="help-section-title">Knight Actives</div>';
+  weaponHtml += `<div class="help-item"><div class="help-item-info">
+    <div class="help-item-desc">Weapons swing themselves. This does not. Every knight has one active, on its own cooldown, worked with <span style="color:#e8c860">Q</span> or <span style="color:#e8c860">E</span> on the keyboard, <span style="color:#e8c860">X</span> on a pad, or the round button above the dash on a phone. A second knight on the keyboard uses <span style="color:#e8c860">Numpad 1</span> or <span style="color:#e8c860">/</span>. Aim it with the stick; standing still, it goes where you face.</div>
+  </div></div>`;
+  for (const ch of ['dad', 'brennan', 'parker']) {
+    if (settings.privateMode && ch !== 'dad') continue;
+    const act = KNIGHT_ABILITIES[ch];
+    const hex = '#' + act.color.toString(16).padStart(6, '0');
+    weaponHtml += `<div class="help-item">
+      <div class="help-item-icon" style="display:flex;align-items:center;justify-content:center;font-size:26px;color:${hex}">${act.glyph}</div>
+      <div class="help-item-info">
+        <div class="help-item-name">${act.name} &mdash; ${CHARACTER_NAMES[ch]}</div>
+        <div class="help-item-desc">${act.desc}</div>
+        <div class="help-item-stats">Cooldown: ${act.cooldown}s &bull; Scales with Damage</div>
+      </div>
+    </div>`;
+  }
   weaponHtml += '<div class="help-section-title">Weapons</div>';
   const weaponDetails = {
     sword: { name: 'Sword — Dad', desc: 'A balanced sweep that strikes everything around you. Higher levels deal more damage, swing faster, reach further and cleave more foes at full power.', stats: 'Damage: 15→55 &bull; Cooldown: 1.2→0.75s &bull; Range: 3.5→5.0 &bull; Cleave: 0→2' },
@@ -13165,12 +14230,24 @@ function populateHelpScreen() {
   }
 
   advHtml += '<div class="help-section-title">Relics</div>';
-  advHtml += `<div class="help-item"><div class="help-item-info"><div class="help-item-desc">Relics are offered at level-up alongside stats. You may carry <span style="color:#5fd3c7">${MAX_RELICS}</span>. Each changes how you fight rather than how big your numbers are:</div></div></div>`;
+  advHtml += `<div class="help-item"><div class="help-item-info"><div class="help-item-desc">Relics are offered at level-up alongside stats. You may carry <span style="color:#5fd3c7">${maxRelics()}</span>. Each changes how you fight rather than how big your numbers are:</div></div></div>`;
   for (const r of RELICS) {
     const locked = !isRelicUnlocked(r);
     advHtml += `<div class="help-item" data-modal-name="${r.name.replace(/"/g,'&quot;')}" data-modal-desc="${r.desc.replace(/"/g,'&quot;')}${locked ? ' — Unlock: ' + r.hint : ''}" data-modal-color="#5fd3c7" data-modal-icon="images/relics/${r.id}.png"${locked ? ' style="opacity:0.55"' : ''}><img class="help-item-icon" src="images/relics/${r.id}.png" alt="" onerror="this.outerHTML='<div class=&quot;upgrade-icon relic-icon&quot; style=&quot;width:64px;height:64px;font-size:28px&quot;>${r.icon}</div>'"><div class="help-item-info">
       <div class="help-item-name" style="color:#5fd3c7">${locked ? '🔒 ' : ''}${r.name}</div>
       <div class="help-item-desc">${r.desc}${locked ? ` <span style="color:#c9a253">— Unlock: ${r.hint}</span>` : ''}</div>
+    </div></div>`;
+  }
+
+  advHtml += '<div class="help-section-title">Omens</div>';
+  advHtml += `<div class="help-item"><div class="help-item-info"><div class="help-item-desc">On the wave after each boss falls &mdash; <span style="color:#e8c860">${OMEN_WAVES.join(', ')}</span> &mdash; two omens are laid before the party. Each takes three waves to come into its full strength. Each carries a curse for the rest of the quest and a boon that pays for it, and there is no third card. Three omens are read in a full quest, so no two quests run the same road.</div></div></div>`;
+  for (const o of OMENS) {
+    const oDesc = `${o.curse} — but ${o.boon.charAt(0).toLowerCase() + o.boon.slice(1)}`;
+    advHtml += `<div class="help-item" data-modal-name="${o.name.replace(/"/g,'&quot;')}" data-modal-desc="${oDesc.replace(/"/g,'&quot;')}" data-modal-color="${o.color}">
+      <div class="help-item-icon" style="display:flex;align-items:center;justify-content:center;font-size:30px;color:${o.color}">${o.glyph}</div>
+      <div class="help-item-info">
+      <div class="help-item-name" style="color:${o.color}">${o.name}</div>
+      <div class="help-item-desc"><span style="color:#d98a8a">${o.curse}</span><br><span style="color:#9fd9a0">${o.boon}</span></div>
     </div></div>`;
   }
 
@@ -13494,6 +14571,14 @@ async function init() {
   // a warm cache this usually resolves immediately.
   await (window.__studioIntro || Promise.resolve());
 
+  // The title screen appears here, but the map and the player are loaded in the
+  // awaits below it -- so BEGIN QUEST was live and clickable for those seconds,
+  // and a click ran a second loadMap/createPlayer concurrently with this one.
+  // `unloadMap` then emptied mapMeshes and obstacles underneath the first load,
+  // whose props kept being pushed after every await: orphaned geometry no later
+  // unload could reach, and doubled collision. Borrowing `_starting` makes
+  // beginQuest's own guard cover the gap.
+  _starting = true;
   document.getElementById('loading-screen').style.display = 'none';
   document.getElementById('start-screen').style.display = 'flex';
   updateStartGold();
@@ -13503,6 +14588,7 @@ async function init() {
 
   await loadMap(selectedMap);
   await createPlayer();
+  _starting = false;
 
   camera.position.set(0, 10, 8);
   camera.lookAt(0, 0, 0);
@@ -13618,6 +14704,24 @@ init().then(() => {
       charPreviews, CHARACTER_GEAR, attachCharacterGear,
       updateHudNow: updateHUD, togglePause,
       get lastHitCrit() { return _lastHitCrit; },
+      // The boss curves and the recorded fight times, so a tuning pass can
+      // check what it is tuning rather than infer it.
+      ogreBossHp, dragonBossHp, BOSS_TARGET_SECONDS,
+      get currentBoss() { return currentBoss; },
+      // Knight actives, so a bot can spend them and a regression can assert
+      // that each one actually hits something.
+      KNIGHT_ABILITIES, knightAbility, getAbilityCooldown, abilityReady,
+      useAbility(p) {
+        const pl = p || players[0];
+        if (!abilityReady(pl)) return false;
+        triggerKnightAbility(pl, readInput(pl));
+        return true;
+      },
+      // Omens: the pool, what this run has taken, and a way to force the choice.
+      OMENS, OMEN_WAVES, omens, omenMul, hasOmen, offerOmen, takeOmen, resetOmens,
+      rebuildOmenMul, omenStrength, OMEN_RAMP_WAVES,
+      maxRelics, maxWeaponSlots, MAX_RELICS, MAX_WEAPON_SLOTS,
+      get omenScreenOpen() { return _omenPending != null; },
       get pickingPlayer() { return _pickingPlayer; },
       get playerWeapons() { return playerWeapons; },
       get upgradeScreenOpen() { return _upgradeScreenOpen; },
@@ -13741,9 +14845,23 @@ init().then(() => {
         if (state.started) returnToMenu();
         if (opts.character) document.querySelector(`.char-card[data-char="${opts.character}"]`)?.click();
         if (opts.map) document.querySelector(`.map-btn[data-map="${opts.map}"]`)?.click();
-        if (opts.ogre != null) document.querySelector(`.ogre-btn[data-level="${opts.ogre}"]`)?.click();
+        // The Ogre Level is set directly, NOT by clicking its button. The button
+        // refuses any level past `ogreUnlocked` and returns without changing
+        // anything, so every harness run that asked for Ogre 2-5 on a fresh
+        // profile silently played at whatever was selected before -- Normal. Every
+        // Ogre-level balance number this project has recorded since the v2 save
+        // migration was measured at Ogre 0, including the "Ogre 3 is barely harder
+        // than Ogre 0" finding that the difficulty ladder was then judged on.
+        // `startRun` is a test hook and is allowed to skip the unlock gate; it
+        // reports what it actually set so the caller can assert on it.
+        if (opts.ogre != null) {
+          selectedOgreLevel = Math.max(0, Math.min(OGRE_LEVELS.length - 1, opts.ogre | 0));
+          refreshOgreButtons();
+        }
         await beginQuest();
+        return { character: selectedCharacter, map: loadedMap, ogre: selectedOgreLevel };
       },
+      get ogreLevel() { return selectedOgreLevel; },
       returnToMenu,
       nearestEnemyDist() {
         let best = Infinity;

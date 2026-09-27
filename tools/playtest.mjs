@@ -6,9 +6,10 @@
  *   node tools/playtest.mjs smoke              load, start each knight, run 30s, screenshot, report JS errors
  *   node tools/playtest.mjs balance [opts]     play full runs with a bot and print a timeline per run
  *       --chars dad,brennan,parker   --maps kingsfield,darkwood   --ogre 0   --bot kite|still
- *       --minutes 20                 --headed (show the browser)
+ *       --minutes 20                 --headed (show the browser)   --omens off (A/B the omen system)
  *   node tools/playtest.mjs shot <name>        screenshot the title screen
  *   node tools/playtest.mjs creatures         regression: Lupin heels and bites, Thunderhoof arrives, carries, tramples and bolts; Codex Allies tab shot
+ *   node tools/playtest.mjs systems           regression: knight actives, omens, adaptive boss HP
  *
  * Screenshots land in tools/shots/. Needs Chrome or Edge installed (no download).
  */
@@ -127,7 +128,7 @@ async function pickUpgrade(page) {
 function botStep(kind) {
   return `(() => {
     const cs = window.__cs; const k = cs.keys;
-    for (const c of ['KeyW','KeyA','KeyS','KeyD','Space']) k[c] = false;
+    for (const c of ['KeyW','KeyA','KeyS','KeyD','Space','KeyQ']) k[c] = false;
     if ('${kind}' === 'still') return;
     const p = cs.playerPos; if (!p) return;
     const away = cs.threatVector(10);
@@ -172,11 +173,43 @@ function botStep(kind) {
     if (vz < -0.38) k.KeyW = true; if (vz > 0.38) k.KeyS = true;
     if (vx < -0.38) k.KeyA = true; if (vx > 0.38) k.KeyD = true;
     if ((near < 1.8 || hpFrac < 0.3) && cs.state.player.dashCooldown <= 0) k.Space = true;
+    // Spend the knight's active. A bot that never presses it measures a weaker
+    // player than any human, and every difficulty number here is read as if it
+    // were a floor on what a person can do. Q is cleared at the top of each
+    // step, so the key edge that fires it happens once per press.
+    if (cs.state.player.abilityCooldown <= 0 && (near < 6 || (boss && bossD < 9) || hpFrac < 0.5)) k.KeyQ = true;
   })()`;
 }
 
+// Per-run extras every exit path reports. A run that hits the time limit
+// without killing the King is exactly the run whose boss times you want.
+async function runExtras(page) {
+  return page.evaluate(() => {
+    const cs = window.__cs;
+    const bf = Array.isArray(cs.runStats.bossFights) ? cs.runStats.bossFights : [];
+    return {
+      bosses: bf.map(b => `w${b.wave}${b.king ? ' KING' : ''} ${b.hp}hp in ${b.secs}s (${b.dps} dps)`).join(' | '),
+      omens: cs.omens.taken.join(' '),
+      abilities: cs.runStats.abilitiesUsed || 0,
+      abilityDamage: Math.round(cs.runStats.damageBySource.ability || 0),
+    };
+  });
+}
+
 async function playRun(page, { character, map, ogre, bot, minutes }) {
-  await page.evaluate(async (c, m, o) => { await window.__cs.startRun({ character: c, map: m, ogre: o }); }, character, map, ogre);
+  // Assert the run is the run that was asked for. `--ogre 3` used to be a
+  // suggestion: startRun clicked the Ogre button, the button refuses any level
+  // past `ogreUnlocked` (which is 1 on a fresh profile), and the sweep then
+  // reported "Ogre 3" for nine runs of Normal. Difficulty numbers that quietly
+  // measure the wrong difficulty are worse than no numbers.
+  const got = await page.evaluate(async (c, m, o) => await window.__cs.startRun({ character: c, map: m, ogre: o }), character, map, ogre);
+  if (got && got.ogre !== ogre) throw new Error(`asked for Ogre ${ogre}, got Ogre ${got.ogre}`);
+  // `--omens off` empties the offer waves for this run, so a batch with omens
+  // and a batch without are otherwise the same run and can be compared.
+  if (flag('no-omens') || opt('omens', 'on') === 'off') {
+    await page.evaluate(() => { window.__cs.OMEN_WAVES.length = 0; window.__cs.resetOmens(); });
+  }
+  if (got && map && got.map !== map) throw new Error(`asked for map ${map}, got ${got.map}`);
   await page.evaluate(() => { window.__cs.setLoopUpdates(false); window.__cs.setRendering(false); });
   const timeline = [];
   const picks = [];
@@ -205,7 +238,7 @@ async function playRun(page, { character, map, ogre, bot, minutes }) {
       const weapons = await page.evaluate(() => Object.entries(window.__cs.playerWeapons).filter(([, w]) => w.owned).map(([k, w]) => `${k}${w.evolved ? '★' : ' L' + w.level}`).join(' ')
         + (window.__cs.state.player.relics ? '  relics: ' + Object.keys(window.__cs.state.player.relics).join(' ') : ''));
       const taken = await page.evaluate(() => Object.entries(window.__cs.runStats.damageTakenBy).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k} ${Math.round(v)}`).join(', '));
-      return { result: final.victory ? 'VICTORY' : 'DIED', ...final, timeline, weapons, picks: picks.length, taken, trace, diedAt: [Math.round(st.x), Math.round(st.z)] };
+      return { result: final.victory ? 'VICTORY' : 'DIED', ...final, timeline, weapons, picks: picks.length, taken, trace, diedAt: [Math.round(st.x), Math.round(st.z)], ...(await runExtras(page)) };
     }
     // Position trace every 10 s (stuck detection: the bot pinned against obstacles reads as a static x,z)
     if (t - lastTrace >= 10) { lastTrace = t; trace.push([Math.round(t), Math.round(st.x), Math.round(st.z)]); }
@@ -213,7 +246,7 @@ async function playRun(page, { character, map, ogre, bot, minutes }) {
     if (t >= limit) {
       const weapons = await page.evaluate(() => Object.entries(window.__cs.playerWeapons).filter(([, w]) => w.owned).map(([k, w]) => `${k}${w.evolved ? '★' : ' L' + w.level}`).join(' ')
         + (window.__cs.state.player.relics ? '  relics: ' + Object.keys(window.__cs.state.player.relics).join(' ') : ''));
-      return { result: 'SURVIVED', wave: st.wave, t, kills: st.kills, lvl: st.lvl, timeline, weapons, picks: picks.length, trace };
+      return { result: 'SURVIVED', wave: st.wave, t, kills: st.kills, lvl: st.lvl, timeline, weapons, picks: picks.length, trace, ...(await runExtras(page)) };
     }
   }
 }
@@ -364,7 +397,11 @@ async function main() {
       taken: Object.entries(window.__cs.runStats.damageTakenBy).map(([k, v]) => `${k} ${Math.round(v)}`).join(', ') }));
     console.log('after 45s:', JSON.stringify(summary));
     console.log(g.errors.length ? `JS ERRORS (${g.errors.length}):\n  ` + [...new Set(g.errors)].slice(0, 15).join('\n  ') : 'no JS errors');
-    await g.close(); return;
+    await g.close();
+    // Same reason as smoke: a regression that throws on every enemy type must not
+    // be able to exit 0.
+    if (g.errors.length) process.exit(1);
+    return;
   }
   if (mode === 'leak') {
     // Count live three.js objects by class after GC: baseline, after run 1, after run 2.
@@ -551,6 +588,237 @@ async function main() {
     if (failed || g.errors.length) process.exit(1);
     return;
   }
+  if (mode === 'systems') {
+    // Regression for the three systems added on 2026-09-27: knight actives,
+    // omens, and the boss pacing that sizes a boss off measured throughput.
+    // Every check is a named boolean; any false fails the run.
+    const g = await openGame(headed);
+    const all = {};
+    const detail = {};
+
+    // -- Knight actives, one knight at a time --
+    for (const ch of ['dad', 'brennan', 'parker']) {
+      const r = await g.page.evaluate(async (character) => {
+        const cs = window.__cs;
+        await cs.startRun({ character, map: 'kingsfield', ogre: 0 });
+        cs.setLoopUpdates(false); cs.setRendering(false);
+        cs.setInvulnerable(true); cs.players[0].state.xpToNext = 1e9;
+        const p = cs.players[0], ps = p.state, pm = cs.playerMesh;
+        const out = {}, d = {};
+        cs.teleport(0, -8); cs.step(0.2);
+        const a = cs.knightAbility(p);
+        d.ability = a.id;
+        const want = { dad: 'bulwark', brennan: 'skyfall', parker: 'arcanestep' }[character];
+        out[character + '_hasAbility'] = !!a && a.id === want;
+        out[character + '_readyAtStart'] = cs.abilityReady(p) === true;
+        // Fodder in two rings, at 3 and at 11 units. Ogres, not goblins: a
+        // wave-1 goblin dies to any of the three abilities, and a dead enemy is
+        // never stunned -- correct behaviour and a useless test. The outer ring
+        // is for Skyfall and Arcane Step, which both END somewhere else; with
+        // one ring at 3 units the test was asserting on where Brennan was, not
+        // where he landed, and failed whenever he happened to aim outward.
+        for (let i = 0; i < 10; i++) {
+          const a = (i / 10) * Math.PI * 2;
+          for (const r of [3, 11]) {
+            cs.spawnEnemy('ogre', 0, { at: { x: pm.position.x + Math.cos(a) * r, z: pm.position.z + Math.sin(a) * r } });
+          }
+        }
+        cs.step(0.1);
+        const dmg0 = cs.runStats.damageBySource.ability || 0;
+        const x0 = pm.position.x, z0 = pm.position.z;
+        out[character + '_fires'] = cs.useAbility(p) === true;
+        out[character + '_onCooldown'] = ps.abilityCooldown > 0;
+        if (a.id === 'skyfall') {
+          out.brennan_leaps = ps.leapTimer > 0;
+          cs.step(0.6);   // past the 0.42 s flight
+          d.leapDist = +Math.hypot(pm.position.x - x0, pm.position.z - z0).toFixed(1);
+          out.brennan_travels = d.leapDist > 6 && d.leapDist <= 10.5;
+          out.brennan_landsOnGround = Math.abs(pm.position.y - ps.leapGroundY) < 0.01;
+        } else if (a.id === 'arcanestep') {
+          d.blinkDist = +Math.hypot(pm.position.x - x0, pm.position.z - z0).toFixed(1);
+          out.parker_blinksAtOnce = d.blinkDist > 11 && d.blinkDist <= 13.5;
+          out.parker_runeWaits = (cs.runStats.damageBySource.ability || 0) === dmg0;
+          cs.step(0.8);   // the rune bursts at 0.55 s
+        } else {
+          out.dad_guards = ps.guardUntil > cs.state.time;
+          // Held, not merely shoved: the whole point of the wall.
+          out.dad_stuns = cs.enemies.some(e => !e.isDying && (e.stunTimer || 0) > 0.5);
+          cs.step(0.2);
+        }
+        d[character + 'Damage'] = Math.round((cs.runStats.damageBySource.ability || 0) - dmg0);
+        out[character + '_damages'] = (cs.runStats.damageBySource.ability || 0) > dmg0;
+        out[character + '_countsUse'] = cs.runStats.abilitiesUsed >= 1;
+        // A second press before the cooldown is up must do nothing at all.
+        const before = cs.runStats.abilitiesUsed;
+        cs.useAbility(p);
+        out[character + '_respectsCooldown'] = cs.runStats.abilitiesUsed === before;
+        // ...and it must come back.
+        cs.step(cs.getAbilityCooldown(p) + 0.5);
+        out[character + '_recharges'] = cs.abilityReady(p) === true;
+        return { out, d };
+      }, ch);
+      Object.assign(all, r.out);
+      detail[ch] = r.d;
+    }
+
+    // -- Omens --
+    const om = await g.page.evaluate(async () => {
+      const cs = window.__cs;
+      await cs.startRun({ character: 'dad', map: 'kingsfield', ogre: 0 });
+      cs.setLoopUpdates(false); cs.setRendering(false);
+      cs.setInvulnerable(true); cs.players[0].state.xpToNext = 1e9;
+      const out = {}, d = {};
+      out.startsWithNone = cs.omens.taken.length === 0;
+      out.threeOmenWaves = cs.OMEN_WAVES.length === 3;
+      const seen = [];
+      // Turn the wave over onto each omen wave and answer the card.
+      for (const w of cs.OMEN_WAVES) {
+        cs.state.wave = w - 1;
+        cs.state.waveTimer = 1e9;
+        cs.step(1 / 60);                       // wave turns over, omen flagged
+        cs.step(1 / 60);                       // flagged omen is offered
+        if (!cs.omenScreenOpen) { out['offeredAtWave' + w] = false; continue; }
+        out['offeredAtWave' + w] = true;
+        const cards = [...document.querySelectorAll('.upgrade-btn')];
+        out['twoCardsAtWave' + w] = cards.length === 2;
+        // No way out: reroll, banish and skip are all off the omen screen.
+        out['noEscapeAtWave' + w] = ['reroll-btn', 'banish-btn', 'skip-btn']
+          .every(id => document.getElementById(id).style.display === 'none');
+        cards[0].click();
+        seen.push(cs.omens.taken[cs.omens.taken.length - 1]);
+      }
+      d.taken = seen.slice();
+      out.tookThree = cs.omens.taken.length === 3;
+      out.neverRepeats = new Set(cs.omens.taken).size === cs.omens.taken.length;
+      out.unpausesAfterPick = cs.state.paused === false;
+      cs.updateHudNow();
+      out.hudShowsThem = document.querySelectorAll('#omen-hud .omen-pill').length === 3;
+      // Forced omens, so every lever is checked whatever the cards dealt.
+      // `full()` walks the wave on three waves so the ramp is complete.
+      const full = () => { cs.state.wave += 3; cs.omens.taken.length && cs.rebuildOmenMul(); };
+      cs.resetOmens();
+      const r0 = cs.maxRelics(), w0 = cs.maxWeaponSlots();
+      const wTake = cs.state.wave;
+      cs.takeOmen(cs.OMENS.find(o => o.id === 'bloodmoon'));
+      // A third of the way in on the wave it is read: this is the whole point
+      // of the ramp, and without it wave 4 kills the knight who read it.
+      d.rampAtTake = +cs.omenMul('hpMul').toFixed(4);
+      out.curseStartsWeak = cs.omenMul('hpMul') > 1 && cs.omenMul('hpMul') < 1.15;
+      // The slot arrives whole and at once, unlike the curse that bought it.
+      out.bloodMoonAddsRelicSlot = cs.maxRelics() === r0 + 1;
+      full();
+      out.curseReachesFullStrength = Math.abs(cs.omenMul('hpMul') - 1.3) < 1e-9;
+      out.rampStopsAtFull = (cs.state.wave = wTake + 9, cs.rebuildOmenMul(), Math.abs(cs.omenMul('hpMul') - 1.3) < 1e-9);
+      cs.takeOmen(cs.OMENS.find(o => o.id === 'giants'));
+      out.giantsAddWeaponSlot = cs.maxWeaponSlots() === w0 + 1;
+      full();
+      out.giantsRaiseOgreWeight = Math.abs(cs.omenMul('w_ogre') - 3) < 1e-9;
+      out.untouchedKeysStayOne = cs.omenMul('coinMul') === 1;
+      // Curses have to compound rather than overwrite.
+      cs.takeOmen(cs.OMENS.find(o => o.id === 'horde'));
+      full();
+      out.cursesCompound = Math.abs(cs.omenMul('spawnMul') - 1.45) < 1e-9;
+      // Famine must be able to switch food off entirely, and stay off.
+      cs.resetOmens();
+      cs.takeOmen(cs.OMENS.find(o => o.id === 'famine'));
+      cs.takeOmen(cs.OMENS.find(o => o.id === 'bloodmoon'));
+      full();
+      out.famineStopsFood = cs.omenMul('foodMul') === 0;
+      cs.resetOmens();
+      out.resetClearsThem = cs.omens.taken.length === 0 && cs.maxRelics() === r0 && cs.omenMul('hpMul') === 1;
+      d.pool = cs.OMENS.length;
+      return { out, d };
+    });
+    Object.assign(all, om.out);
+    detail.omens = om.d;
+
+    // -- Boss pacing --
+    const bp = await g.page.evaluate(async () => {
+      const cs = window.__cs;
+      await cs.startRun({ character: 'dad', map: 'kingsfield', ogre: 0 });
+      cs.setLoopUpdates(false); cs.setRendering(false);
+      cs.setInvulnerable(true); cs.players[0].state.xpToNext = 1e9;
+      const out = {}, d = {};
+      // The curves are deterministic, so they can be asserted exactly.
+      d.curve = { w5: Math.round(cs.ogreBossHp(5)), w15: Math.round(cs.ogreBossHp(15)),
+                  w10: Math.round(cs.dragonBossHp(10, false)), king: Math.round(cs.dragonBossHp(20, true)) };
+      // The old wave-5 ogre was 2,100 and the review found him alive at wave 8.
+      out.wave5CurveFixed = d.curve.w5 > 900 && d.curve.w5 < 1700;
+      // The old wave-15 ogre was 4,700, a twelve-second speed bump.
+      out.wave15CurveRises = d.curve.w15 > 9000;
+      out.curveIsMonotonic = d.curve.w5 < d.curve.w10 && d.curve.w10 < d.curve.w15 && d.curve.w15 < d.curve.king;
+      // The King was 40,000 and died in 22-37 s against a 60-120 s intent.
+      out.kingIsAFinale = d.curve.king > 90000;
+      cs.state.wave = 5;
+      cs.spawnBoss(5);
+      const boss = cs.currentBoss;
+      out.bossSpawned = !!boss;
+      if (boss) {
+        d.wave5BossHp = boss.maxHp;
+        d.wave5Contact = Math.round(boss.damage);
+        out.wave5BossOnCurve = boss.maxHp === d.curve.w5;
+        out.wave5ContactSoftened = boss.damage < 32.5;
+        // The fight has to be recorded, or the next tuning pass is blind again.
+        const t0 = cs.state.time;
+        cs.step(2);
+        cs.applyDamage(boss, 999999, { source: 'test' });
+        const bf = cs.runStats.bossFights;
+        out.bossFightRecorded = Array.isArray(bf) && bf.length === 1 && bf[0].hp === d.curve.w5 && bf[0].secs >= 2;
+        d.recorded = Array.isArray(bf) ? bf[0] : null;
+      }
+      return { out, d };
+    });
+    Object.assign(all, bp.out);
+    detail.boss = bp.d;
+
+    // -- Two screenshots, because none of this has been looked at --
+    await g.page.evaluate(async () => {
+      const cs = window.__cs;
+      await cs.startRun({ character: 'brennan', map: 'kingsfield', ogre: 0 });
+      cs.state.wave = 6;
+      cs.offerOmen();
+    });
+    await new Promise(r => setTimeout(r, 900));
+    console.log('omen card:', await shot(g.page, 'omen-choice'));
+    await g.page.evaluate(() => {
+      const cs = window.__cs;
+      document.querySelector('.upgrade-btn').click();
+      // A crowd, three omens on the HUD and an active mid-cooldown, so the
+      // bottom strip can be read at gameplay distance.
+      for (const id of ['giants', 'famine']) cs.takeOmen(cs.OMENS.find(o => o.id === id));
+      const pm = cs.playerMesh;
+      for (let i = 0; i < 26; i++) {
+        const a = (i / 26) * Math.PI * 2, r = 5 + (i % 4) * 2.5;
+        cs.spawnEnemy(i % 5 === 0 ? 'ogre' : i % 3 === 0 ? 'archer' : 'goblin', 0,
+          { at: { x: pm.position.x + Math.cos(a) * r, z: pm.position.z + Math.sin(a) * r } });
+      }
+      cs.players[0].state.relics = { berserker: true, hunter: true };
+      // The camera is driven by the render loop, not by `step`, so a capture
+      // taken after stepping looks at wherever the camera was left -- which is
+      // how the first version of this shot came back as an empty courtyard.
+      cs.setLoopUpdates(true);
+      cs.setRendering(true);
+    });
+    await new Promise(r => setTimeout(r, 1200));
+    await g.page.evaluate(() => {
+      const cs = window.__cs;
+      cs.useAbility(cs.players[0]);
+      // i-frames flicker the knight's mesh, so an invulnerable knight is
+      // invisible in half of all captures. Nothing here can kill him anyway.
+      cs.setInvulnerable(false);
+      cs.updateHudNow();
+    });
+    await new Promise(r => setTimeout(r, 700));
+    console.log('hud with omens + active:', await shot(g.page, 'omen-hud'));
+
+    let failed = 0;
+    for (const [k, v] of Object.entries(all)) { console.log((v ? 'PASS' : 'FAIL') + '  ' + k); if (!v) failed++; }
+    console.log('detail:', JSON.stringify(detail));
+    console.log(g.errors.length ? 'JS ERRORS (' + g.errors.length + '):\n  ' + [...new Set(g.errors)].slice(0, 15).join('\n  ') : 'no JS errors');
+    await g.close();
+    if (failed || g.errors.length) process.exit(1);
+    return;
+  }
   if (mode === 'probe') {
     // Start a run and evaluate a JS expression against the debug hook: --map, --js "cs => ..." (function body with `cs`)
     const pmap = opt('map', 'kingsfield');
@@ -633,6 +901,7 @@ async function main() {
     await g.close(); return;
   }
   if (mode === 'smoke') {
+    const fails = [];
     const g = await openGame(headed);
     console.log('title:', await shot(g.page, 'title'));
     for (const ch of ['dad', 'brennan', 'parker']) {
@@ -648,10 +917,23 @@ async function main() {
       await new Promise(r => setTimeout(r, 400));
       const s = await g.page.evaluate(() => { const s = window.__cs.state; return { wave: s.wave, kills: s.kills, hp: Math.round(s.player.hp), lvl: s.player.level, enemies: window.__cs.enemies.length }; });
       console.log(`${ch}: 30s → wave ${s.wave}, level ${s.lvl}, kills ${s.kills}, hp ${s.hp}, enemies ${s.enemies}, picks ${picks}, shot ${await shot(g.page, 'run-' + ch)}`);
+      // The assertions. `npm test` used to print its findings and exit 0 whatever
+      // they were, so a build that threw on every frame or killed nothing still
+      // "passed" -- `creatures` was the only mode that could fail. Kept to what
+      // 30 s of wave 1 actually proves: the knight fights, kills, survives and the
+      // spawner runs. Levelling is NOT one of them -- level 2 costs 23 XP at 2 XP
+      // a goblin, and the historical baseline is level 1 with no cards offered.
+      if (s.kills < 2) fails.push(`${ch}: only ${s.kills} kills in 30s`);
+      if (s.hp <= 0) fails.push(`${ch}: died inside the 30s smoke window`);
+      if (s.enemies === 0) fails.push(`${ch}: no live enemies after 30s — spawner stalled`);
       await g.page.evaluate(() => window.__cs.returnToMenu());
     }
     console.log(g.errors.length ? `JS ERRORS (${g.errors.length}):\n  ` + [...new Set(g.errors)].slice(0, 15).join('\n  ') : 'no JS errors');
-    await g.close(); return;
+    for (const f of fails) console.error('FAIL:', f);
+    await g.close();
+    if (fails.length || g.errors.length) process.exit(1);
+    console.log('smoke PASS');
+    return;
   }
   if (mode === 'balance') {
     const chars = opt('chars', 'dad,brennan,parker').split(',');
@@ -673,6 +955,9 @@ async function main() {
       console.log(`\n=== ${ch} / ${map} / Ogre ${ogre} / bot=${bot}: ${r.result} at wave ${r.wave}, ${fmtTime(r.t)}, level ${r.lvl}, ${r.kills} kills (${((Date.now() - t0) / 1000).toFixed(0)}s wall)`);
       console.log(`    weapons: ${r.weapons}`);
       if (r.taken) console.log(`    damage taken by: ${r.taken}`);
+      if (r.omens) console.log(`    omens: ${r.omens}`);
+      if (r.bosses) console.log(`    boss fights: ${r.bosses}`);
+      if (r.abilities != null) console.log(`    actives: ${r.abilities} used, ${r.abilityDamage} damage`);
       console.log('    time   wave  hp        lvl  kills  enemies   at');
       for (const row of r.timeline) console.log(`    ${fmtTime(row.t).padStart(5)}  ${String(row.wave).padStart(4)}  ${String(row.hp + '/' + row.maxHp).padEnd(9)} ${String(row.lvl).padStart(3)}  ${String(row.kills).padStart(5)}  ${String(row.enemies).padStart(6)}   ${row.x},${row.z}`);
       if (r.trace && r.trace.length > 2) {
@@ -687,7 +972,11 @@ async function main() {
     console.log('\nSUMMARY');
     for (const r of results) console.log(`  ${r.ch.padEnd(8)} ${r.map.padEnd(10)} ${r.result.padEnd(9)} wave ${String(r.wave).padStart(2)}  ${fmtTime(r.t)}  lvl ${r.lvl}  kills ${r.kills}`);
     console.log(g.errors.length ? `JS ERRORS (${g.errors.length}):\n  ` + [...new Set(g.errors)].slice(0, 15).join('\n  ') : 'no JS errors');
-    await g.close(); return;
+    await g.close();
+    // Who won is a judgement call and never fails the command; an exception
+    // thrown during the sweep is not.
+    if (g.errors.length) process.exit(1);
+    return;
   }
   console.error('unknown mode', mode);
   process.exit(1);

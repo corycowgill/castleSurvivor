@@ -68,16 +68,22 @@ const main = async () => {
   // Geometry: where the controls actually are, and what sits on top of them.
   const geo = await page.evaluate(() => {
     const r = el => { const b = document.getElementById(el)?.getBoundingClientRect(); return b && { x: b.x, y: b.y, w: b.width, h: b.height, cx: b.x + b.width / 2, cy: b.y + b.height / 2 }; };
-    const dash = r('touch-dash-btn'), mini = r('minimap');
+    const dash = r('touch-dash-btn'), mini = r('minimap'), ability = r('touch-ability-btn');
     const topAt = (x, y) => { const e = document.elementFromPoint(x, y); return e ? (e.id || e.className || e.tagName) : null; };
-    const overlap = dash && mini
-      ? Math.max(0, Math.min(dash.x + dash.w, mini.x + mini.w) - Math.max(dash.x, mini.x)) *
-        Math.max(0, Math.min(dash.y + dash.h, mini.y + mini.h) - Math.max(dash.y, mini.y))
+    const box = (a, b) => (a && b)
+      ? Math.max(0, Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x)) *
+        Math.max(0, Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y))
       : 0;
     return {
-      dash, mini, overlapPx: overlap,
+      dash, mini, ability,
+      overlapPx: box(dash, mini),
+      abilityMiniPx: box(ability, mini),
+      abilityDashPx: box(ability, dash),
       topOnDashCentre: dash && topAt(dash.cx, dash.cy),
       topOnDashEdge: dash && topAt(dash.cx, dash.y + 4),
+      topOnAbilityCentre: ability && topAt(ability.cx, ability.cy),
+      onScreen: ability && ability.x >= 0 && ability.y >= 0
+        && ability.x + ability.w <= innerWidth && ability.y + ability.h <= innerHeight,
       controlsVisible: getComputedStyle(document.getElementById('touch-controls')).display,
     };
   });
@@ -88,10 +94,19 @@ const main = async () => {
   console.log('  topmost element at dash centre:', geo.topOnDashCentre);
   console.log('  topmost element at dash top edge:', geo.topOnDashEdge);
   console.log('  dash/minimap overlap:', geo.overlapPx.toFixed(0), 'px^2');
+  console.log('  ability button:', JSON.stringify(geo.ability));
+  console.log('  ability/dash overlap:', geo.abilityDashPx.toFixed(0), 'px^2; ability/minimap:', geo.abilityMiniPx.toFixed(0), 'px^2');
 
   console.log('\n=== checks ===');
   check('dash button is the topmost element at its own centre', geo.topOnDashCentre === 'touch-dash-btn', `got ${geo.topOnDashCentre}`);
   check('dash button does not overlap the minimap', geo.overlapPx === 0, `${geo.overlapPx.toFixed(0)} px^2 overlap`);
+  // The knight's active is a second round button on a phone. It has to be
+  // tappable, on screen, and clear of both the dash and the minimap -- the two
+  // mistakes the dash button itself already made once.
+  check('ability button is the topmost element at its own centre', geo.topOnAbilityCentre === 'touch-ability-btn', `got ${geo.topOnAbilityCentre}`);
+  check('ability button is fully on screen', !!geo.onScreen, JSON.stringify(geo.ability));
+  check('ability button does not overlap the dash button', geo.abilityDashPx === 0, `${geo.abilityDashPx.toFixed(0)} px^2 overlap`);
+  check('ability button does not overlap the minimap', geo.abilityMiniPx === 0, `${geo.abilityMiniPx.toFixed(0)} px^2 overlap`);
 
   // Dispatch a real two-finger sequence.
   const touch = async (type, target, touches) => page.evaluate((type, target, touches) => {
