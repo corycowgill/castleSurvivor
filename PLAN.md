@@ -194,7 +194,8 @@ Target: 8/10 on the same reviewer's rubric. Each item names the pain point, the 
 - [x] 18.4 **Darkwood "crosses from moody to unreadable away from lanterns"; all three knights died before wave 12** — Owner: look agent. Two halves: readability and difficulty. Readability: raise Darkwood `ambientIntensity` to 1.3 and `hemiGround` toward 0x40503a, add a cool rim light on enemies (emissive tint `i` +0.15 for all Darkwood spawns via `MAPS.darkwood.enemyTint`), and give every enemy a faint ground disc on Darkwood (reuse the priority-ring geometry at 0.35 opacity, dark-blue). Difficulty: wolves ×2.0 → ×1.6 and bats ×1.7 → ×1.4 in `MAPS.darkwood.weights`, and the Darkwood spawn distance 45 → 48. Verify: `tour --gpu` at the ford, farmstead and woods at zoom 2.0 with 40 enemies spawned (`--post`), reviewed by the critic-look agent; `balance` target ≥ 1 win in 6 Ogre 0 runs and no death before wave 9. Done when both pass
   - 2026-09-21 results. Look: `ambientIntensity` 1.1 → 1.3, `hemiGround` 0x35452e → 0x40503a; `MAPS.darkwood.enemyTint` 0x9fc0ff at **i 0.07**, not the planned +0.15/0.18: at 0.18 every goblin, rat and wolf renders as a flat pale-blue silhouette with no shading (`tools/shots/dw-after-rim018-darkwood-{1,2}.png`), 0.07 gives a moonlit rim that keeps the model readable. Rim is added on top of the type tint (elites and speed goblins keep their own; bosses do not pass through `spawnEnemy`). `MAPS.darkwood.enemyDisc` 0x2a4a90 at 0.35 opacity, scale 0.7 of the priority ring, for spawns that have **no** priority ring (archers/shamans/bombers/elites keep their ring alone, nothing is stacked). `markerRing` takes an opacity, material cache keyed colour:opacity. Captures with the same `--post` (40 enemies placed 8–22 units out): `dw-before-darkwood-{1..4}.png` vs `dw-after-darkwood-{1..4}.png` (ford 40,-12; farmstead -60,18; village 0,34; woods -30,-50). Read: before, wolves/bats/rats off the road are black blobs identical to their shadows and only the archer rings locate anything; after, every enemy has a blue disc that reads through grass and shadow at zoom 2.0, and the rim separates bodies from the ground in the woods and at the ford. The discs are the readability win; the rim alone would not have been enough. Density in these shots is 3–4× a real wave, so the disc field looks busier than play.
   - Difficulty: weights wolf 2.0 → 1.6, bat 1.7 → 1.4, and after iteration 1 **archer 1.3 → 1.1**; `enemySpawnDistance` 45 → 48 (`tools/generate-darkwood.mjs`, map regenerated, only that field changed). `balance --gpu --chars dad,dad,brennan,brennan,parker,parker --maps darkwood --ogre 0 --bot kite --minutes 24`: iteration 1 (`tools/reports/b18-darkwood-after-iter1.log`) 2 wins / 6, deaths: Dad wave 5 (archer arrows 67 + wave-5 boss charge), Dad wave 20 Ogre King, Brennan wave 20 Ogre King; iteration 2 (`b18-darkwood-after.log`) **5 wins / 6**, one death: Parker wave 5 (archer arrows 51 + boss charge 40). Win target met; the "no death before wave 9" target is missed by one run per batch, both the same shape: wave-5 boss charge landing while archers chip. That is the 18.2/18.3 archer and early-boss problem, not the Darkwood mix (Kingsfield logs show the same wave 5–7 deaths). `npm test` clean (note: the SwiftShader smoke load took 96–180 s today against the harness's 180 s protocol timeout, on base code too; `smoke --gpu` loads in 9 s and is also clean).
-- [ ] 18.5 (agent launched and stopped before any edit on 2026-09-21 — start fresh) **"Thin discovery arc; most content visible within ten runs"** — Owner: content agent. Cheapest depth per hour, in order: (1) three more relics with conditional effects (Glass Cannon +25% dmg/−20% HP, Arcane Focus crits shorten cooldowns, Blood Pact lifesteal-on-kill/−regen), each gated behind a feat; (2) two weapon evolutions that need a *relic* rather than a stat (Storm Call + Hooves → Ride the Lightning; Ember Trail + Berserker → Pyre); (3) per-knight feats ("Win Darkwood as Parker") that unlock a fourth relic slot for that knight; (4) map-specific unlock: winning Darkwood unlocks a third Ogre King variant. Verify: Codex shows every new item locked with a hint; `balance` runs pick them; no JS errors. Done when 20 runs no longer exhaust the pool (count distinct offers across the 20-run log)
+- [~] 18.5 (pick-pool depth landed as Phase 49's weapon sigils on 2026-09-27; the relic and
+  evolution items below are still open) **"Thin discovery arc; most content visible within ten runs"** — Owner: content agent. Cheapest depth per hour, in order: (1) three more relics with conditional effects (Glass Cannon +25% dmg/−20% HP, Arcane Focus crits shorten cooldowns, Blood Pact lifesteal-on-kill/−regen), each gated behind a feat; (2) two weapon evolutions that need a *relic* rather than a stat (Storm Call + Hooves → Ride the Lightning; Ember Trail + Berserker → Pyre); (3) per-knight feats ("Win Darkwood as Parker") that unlock a fourth relic slot for that knight; (4) map-specific unlock: winning Darkwood unlocks a third Ogre King variant. Verify: Codex shows every new item locked with a hint; `balance` runs pick them; no JS errors. Done when 20 runs no longer exhaust the pool (count distinct offers across the 20-run log)
 - [ ] 18.6 **"Generated art inconsistency: some props look melted at close zoom"** — Owner: art agent (needs ComfyUI; run after 18.1 and never alongside the harness). Re-generate the six props the review would have seen up close (village_fence_straight_01, village_fence_corner_01, prop_tree_stump_02, prop_logs_02, prop_wood_crate_small_01, nature_rock_cluster_02) through the pipeline with sharper prompts (`chunky low-poly, hard edges, no fine detail`) and 2 seeds each; keep the best by `validate-glb` drawn fraction *and* a manual look at the sheet; ground textures: re-tile `grass` at 3.6 (from 4.6) to hide the repeat. Done when the six are swapped and `tour` close-ups show no melt
 - [x] 18.7 **"No mobile or touch support"** - done 2026-09-22/23, and it grew past the planned scope into a full mobile pass (Phase 20). Touch: a virtual stick drawn wherever the thumb lands (the whole screen is the zone; it was first pinned bottom-left and read as broken) plus dash and pause buttons above it in z-order. Start/move/end are shared handlers bound to **Touch Events when `ontouchstart` exists, Pointer Events otherwise** - never both: the original Pointer-Event build worked under Chrome emulation and was dead on a real iPhone, because `setPointerCapture` alongside `preventDefault` drops the capture in WebKit and `pointermove` stops firing. `changedTouches` matches on the stored identifier rather than truthiness, since the first touch on a fresh page is usually id 0. Title screen compacted so BEGIN QUEST cannot fall below the fold, keyed on `(max-width: 900px)` or a coarse pointer under 820px tall so desktop is unaffected
   - Verified with dispatched touch events at iPhone resolution: drags from all four corners and centre return dx 1 and move the knight; a two-thumb stick+dash hold dashes. **The planned harness `--mobile` flag was never added** - `tools/playtest.mjs` has no touch mode, so mobile checks are still ad-hoc. That is the open piece of 18.7
@@ -1275,3 +1276,78 @@ Three of the five things the "what would improve the gameplay" pass put at the t
   `balance-phase48-d.log` were on the map the 2026-09-26 review already called the hardest
   (13% snag, 171 live enemies at wave 8). The omen move fixed those two, but Bloodmarch's early
   game was not otherwise touched.
+## Phase 49 - Weapon sigils: the pick pool finally grows (2026-09-27)
+
+The last of the five items from the "what would improve the gameplay" pass, and the one three press
+reviews named first: **"Zero new build content across three reviews; the level-up screen at wave 15
+is three flat stat cards."** PLAN 18.5 has been open since 2026-09-21. Regression: the `sigils`
+section of `node tools/playtest.mjs systems` (19 new checks, 83 total).
+
+- [x] 49.1 **Twenty sigils, two per weapon.** A sigil is a one-off card that changes how a weapon
+  you *already carry* behaves, and that second half is the design: a sigil is only ever offered for
+  a weapon you own and have taken to rank 3, so the pool gets deeper and at the same time **narrows
+  toward the build you are actually playing**. Nothing was added to the pile of flat stat lines.
+
+  | weapon | sigils |
+  |---|---|
+  | Sword | Reaver's Arc (+2 cleave at full force) · Headsman's Edge (finishes below 10%) |
+  | Spear | Impaler's Line (the whole cone takes full damage, not half) · Harrying Point (chill 35%) |
+  | Arcane Staff | Splitting Bolt (forks to one more) · Arcane Brand (mark: +25% from **every** source) |
+  | Throwing Daggers | Whetted Blades (+2 pierce) · Quickened Hand (a kill refunds cooldown) |
+  | Holy Aura | Widening Grace (+2 radius) · Searing Light (each pulse leaves burning ground) |
+  | Arrow Volley | Fletcher's Eye (arrows bend toward their mark) · Barbed Shafts (+1 pierce, knockback) |
+  | Arcane Bomb | Cluster Charge (+1 bomb) · Rime Charge (chill 40%) |
+  | Warding Shields | The Fourth Ward (+1 shield) · Iron Rebuke (knockback + stun) |
+  | Storm Call | Forked Sky (+2 chains) · Thunderclap (every bolt stuns) |
+  | Trail of Embers | Deeper Scorch (wider, longer) · Cinder Brand (mark: +20%) |
+
+- [x] 49.2 **Two hooks, not twenty.** `mods` are numbers the weapon's own fire code adds in through
+  `sigMod(player, weapon, key)` - cleave, count, pierce, radius, life, knockback, refund, and the
+  three flags `fullCone`, `homing`, `scorch`. `onHit` is a **single shared branch in `applyDamage`**,
+  keyed by the damage source, so burn, chill, mark, stun, fork and execute each cost one code path
+  for every weapon rather than one per weapon. Both are pre-derived into `player.sigilMods` and
+  `player.onHit` when a sigil is taken, so nothing walks the table per shot.
+- [x] 49.3 **The two marks are the build pieces.** Arcane Brand and Cinder Brand raise the damage a
+  foe takes from *every* source, applied before the damage is rounded in `applyDamage`. That is what
+  makes a sigil on one weapon a reason to pick a second weapon, which is the thing a pool of flat
+  stat lines can never do.
+- [x] 49.4 **Bug found while wiring it: Parker's staff bolt was filed as Throwing Daggers.**
+  `spawnProjectile` credited by projectile *type*, and the staff bolt is spawned AS a dagger (same
+  mesh, same flight). So every bolt Parker has ever fired was counted under the daggers in the
+  run-end breakdown, in weapon mastery (which ranks by source, so his staff kills were levelling a
+  weapon he does not carry), and in anything keyed on the weapon that fired - which is how it was
+  found, because the staff sigils did nothing. `spawnProjectile` takes a `sourceId` now.
+  `systems` asserts a Parker run reports `staff` damage and no `dagger` damage when he holds no
+  daggers.
+- [x] 49.5 **`chainLightning` cleared its hit set only for `sourceId === 'dagger'`.** That was the
+  same thing as "every caller but Storm Call" when the daggers were the only other caller; a sigil
+  fork on a third weapon would have inherited whatever the last chain had already struck and
+  fizzled. Now stated as what it means. `noSigil` also threads through every arc so a Splitting Bolt
+  cannot fork off its own fork.
+- [x] 49.6 **Rank 3, measured.** Rank 2 was the first gate and it was too generous: nine runs came
+  back **8 victories, one time-out and no deaths at all** (`balance-phase49-a.log`), against 6 of 9
+  in each of the two batches before sigils existed. At rank 3 a sigil arrives around wave 8-12
+  instead of 4-6, and nine runs came back **5 wins, 4 deaths** (`balance-phase49-b.log`) - inside
+  the +-2-in-6 batch variance PLAN 22.1 measured, so the difficulty is where it was and the depth is
+  new. The gate is the only number that changed between those two batches.
+- [x] 49.7 **The damage breakdown is healthier, which is the point.** The 2026-09-26 review's
+  headline balance problem was a hand run ending "Throwing Daggers 91%, Spear 8%, Holy Aura 1%".
+  Across the nine runs of `balance-phase49-a.log` the top source is arrowVolley, sword, dagger,
+  emberTrail, staff or orbitalBomb depending on the run, and second place is routinely 30-60% of
+  first. Runs took 2-7 sigils each, median 4, spread across all ten weapons.
+- [x] 49.8 **Presentation.** A fifth card silhouette: the weapon's own art with the sigil's glyph
+  struck on its corner, a SIGIL chip, and an "etched on <weapon> <rank pips>" line in place of the
+  rank counter a one-off card has no use for (`tools/shots/sigil-card.png`). Each sigil adds a small
+  mark above its weapon's HUD slot - it is the one thing a slot carries that neither the icon nor
+  the level pips showed. The Codex has a Weapon Sigils section listing all twenty with the weapon
+  each belongs to.
+- [ ] 49.9 Open: sigil glyphs are text, like the relics (34.15) and the omens (48.13).
+  `gen-icons.mjs` could make twenty PNGs, and the card already composites weapon art plus glyph, so
+  an icon would drop straight in.
+- [ ] 49.10 Open: **the sigils are unmeasured above Ogre 0.** They multiply into the same ladder
+  47 and 48 left partly unmeasured, and 20 pieces of one-off power land differently at Ogre 4 than
+  at Normal. The long sweep 47.9 asks for now has a third reason.
+- [ ] 49.11 Open: no sigil is a *trade*. Every one is a straight gain, which is why the gate had to
+  do the balancing. An omen-shaped sigil - "the sweep reaches two further, and costs a third of its
+  speed" - would let a strong effect exist without a rank gate holding it back, and is the obvious
+  next shape to try.

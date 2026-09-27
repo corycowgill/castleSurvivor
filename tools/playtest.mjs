@@ -192,6 +192,10 @@ async function runExtras(page) {
       omens: cs.omens.taken.join(' '),
       abilities: cs.runStats.abilitiesUsed || 0,
       abilityDamage: Math.round(cs.runStats.damageBySource.ability || 0),
+      sigils: Object.keys(cs.players[0].sigils || {}).join(' '),
+      damageBySource: Object.entries(cs.runStats.damageBySource)
+        .sort((a, b) => b[1] - a[1]).slice(0, 6)
+        .map(([k, v]) => k + ' ' + Math.round(v)).join(', '),
     };
   });
 }
@@ -732,6 +736,110 @@ async function main() {
     Object.assign(all, om.out);
     detail.omens = om.d;
 
+    // -- Weapon sigils --
+    const sg = await g.page.evaluate(async () => {
+      const cs = window.__cs;
+      await cs.startRun({ character: 'dad', map: 'kingsfield', ogre: 0 });
+      cs.setLoopUpdates(false); cs.setRendering(false);
+      cs.setInvulnerable(true); cs.players[0].state.xpToNext = 1e9;
+      const p = cs.players[0], pm = cs.playerMesh;
+      const out = {}, d = {};
+      d.count = cs.WEAPON_SIGILS.length;
+      out.twoPerWeapon = ['sword', 'spear', 'staff', 'dagger', 'holyAura', 'arrowVolley',
+        'orbitalBomb', 'wardShields', 'stormCall', 'emberTrail']
+        .every(w => cs.sigilsFor(w).length === 2);
+      out.everyIdIsUnique = new Set(cs.WEAPON_SIGILS.map(x => x.id)).size === cs.WEAPON_SIGILS.length;
+      out.everySigilDoesSomething = cs.WEAPON_SIGILS.every(x =>
+        (x.mods && Object.keys(x.mods).length) || (x.onHit && Object.keys(x.onHit).length));
+      out.startsWithNone = Object.keys(p.sigils).length === 0;
+
+      // Gating: offered only for a weapon owned at SIGIL_MIN_LEVEL or above.
+      // Read from the constant, not a hardcoded rank, so raising the gate is a
+      // one-line change rather than a one-line change and a broken test.
+      const pool = () => cs.UPGRADES.filter(u => u.isSigil && u.condition());
+      cs.playerWeapons.sword.level = cs.SIGIL_MIN_LEVEL - 1;
+      out.noneOfferedBelowTheGate = pool().every(u => u.sigil.weapon !== 'sword');
+      cs.playerWeapons.sword.level = cs.SIGIL_MIN_LEVEL;
+      out.offeredAtTheGate = pool().some(u => u.sigil.weapon === 'sword');
+      out.notOfferedForWeaponsNotHeld = pool().every(u => cs.playerWeapons[u.sigil.weapon].owned);
+      // Taking one removes it from the pool for good.
+      const before = pool().length;
+      const card = pool().find(u => u.sigil.weapon === 'sword');
+      card.apply(1);
+      out.takingOneRemovesIt = pool().length === before - 1 && !pool().some(u => u.id === card.id);
+      out.taken = Object.keys(p.sigils).length === 1;
+
+      // Numeric mods reach the fire sites through sigMod.
+      cs.playerWeapons.dagger.owned = true;
+      cs.playerWeapons.dagger.level = cs.SIGIL_MIN_LEVEL;
+      cs.grantSigil('dagger_whetted', p);
+      out.numericModReads = cs.sigMod(p, 'dagger', 'pierce') === 2;
+      out.unrelatedWeaponUnaffected = cs.sigMod(p, 'arrowVolley', 'pierce') === 0;
+
+      // On-hit mods land in the cache applyDamage reads, keyed by damage source.
+      cs.grantSigil('storm_clap', p);
+      out.onHitCacheBuilt = !!(p.onHit.stormCall && p.onHit.stormCall.stun === 0.45);
+
+      // ...and actually fire. A stun applied through applyDamage is the whole
+      // shared path: if this works, burn/chill/mark/exec/chain work too.
+      for (let i = 0; i < 6; i++) {
+        cs.spawnEnemy('ogre', 0, { at: { x: pm.position.x + 2 + i, z: pm.position.z } });
+      }
+      cs.step(0.1);
+      const victim = cs.enemies.find(e => !e.isDying);
+      cs.applyDamage(victim, 5, { source: 'stormCall', by: p });
+      out.onHitStunsOnRealHit = (victim.stunTimer || 0) >= 0.45;
+
+      // A chill has to reach the enemy's stride, not just a field nobody reads.
+      cs.grantSigil('spear_harry', p);
+      const chillee = cs.enemies.find(e => !e.isDying && e !== victim);
+      cs.applyDamage(chillee, 5, { source: 'spear', by: p });
+      out.chillSetsTheField = chillee._chillUntil > cs.state.time && chillee._chillMul < 1;
+
+      // A mark multiplies damage from EVERY source, which is what makes it a
+      // build piece rather than a number on the weapon that applied it.
+      cs.grantSigil('staff_brand', p);
+      const marked = cs.enemies.find(e => !e.isDying && e !== victim && e !== chillee);
+      cs.applyDamage(marked, 1, { source: 'staff', by: p });
+      const hpBefore = marked.hp;
+      cs.applyDamage(marked, 100, { source: 'sword', by: p });
+      d.markedHit = hpBefore - marked.hp;
+      out.markRaisesOtherSources = d.markedHit >= 120;
+
+      // Execute finishes a wounded foe and must never touch a boss.
+      cs.grantSigil('sword_headsman', p);
+      const doomed = cs.enemies.find(e => !e.isDying);
+      doomed.hp = Math.max(2, Math.round(doomed.maxHp * 0.05));
+      cs.applyDamage(doomed, 1, { source: 'sword', by: p });
+      out.executeFinishes = doomed.hp <= 0 || doomed.isDying;
+      cs.spawnBoss(5);
+      const boss = cs.currentBoss;
+      boss.hp = Math.round(boss.maxHp * 0.05);
+      cs.applyDamage(boss, 1, { source: 'sword', by: p });
+      out.executeSparesBosses = boss.hp > 0 && !boss.isDying;
+
+      // Parker's bolt credits the staff, not the daggers. It is spawned AS a
+      // dagger and was filed under Throwing Daggers everywhere.
+      await cs.startRun({ character: 'parker', map: 'kingsfield', ogre: 0 });
+      cs.setLoopUpdates(false); cs.setRendering(false);
+      cs.setInvulnerable(true); cs.players[0].state.xpToNext = 1e9;
+      const pk = cs.players[0];
+      for (let i = 0; i < 8; i++) {
+        cs.spawnEnemy('ogre', 0, { at: { x: cs.playerMesh.position.x + 4 + i, z: cs.playerMesh.position.z } });
+      }
+      cs.step(3);
+      const bySource = cs.runStats.damageBySource;
+      d.parkerSources = Object.keys(bySource).join(',');
+      out.staffCreditsItself = (bySource.staff || 0) > 0;
+      out.staffIsNotFiledAsDaggers = !pk.weapons.dagger.owned ? !(bySource.dagger > 0) : true;
+
+      // Sigils are per knight, like the rest of the upgrade book.
+      out.freshRunClearsThem = Object.keys(pk.sigils).length === 0;
+      return { out, d };
+    });
+    Object.assign(all, sg.out);
+    detail.sigils = sg.d;
+
     // -- Boss pacing --
     const bp = await g.page.evaluate(async () => {
       const cs = window.__cs;
@@ -770,6 +878,33 @@ async function main() {
     });
     Object.assign(all, bp.out);
     detail.boss = bp.d;
+
+    // A level-up screen with a sigil on it, since the card is a new shape.
+    await g.page.evaluate(async () => {
+      const cs = window.__cs;
+      await cs.startRun({ character: 'dad', map: 'kingsfield', ogre: 0 });
+      cs.setInvulnerable(true);
+      // Two weapons at rank 2 so sigils are live, then keep drawing until the
+      // roll puts one on the screen: the point of the shot is the card.
+      const gate = cs.SIGIL_MIN_LEVEL;
+      cs.playerWeapons.sword.level = gate;
+      cs.playerWeapons.dagger.owned = true; cs.playerWeapons.dagger.level = gate;
+      cs.playerWeapons.holyAura.owned = true; cs.playerWeapons.holyAura.level = gate;
+      cs.queuePick(cs.players[0]); cs.presentNextLevelUp();
+      for (let i = 0; i < 40; i++) {
+        if (document.querySelector('.upgrade-btn.card-sigil')) break;
+        document.getElementById('reroll-btn').style.display = 'block';
+        window.__cs.state.player.luck = 0;
+        document.querySelector('#upgrade-options').innerHTML = '';
+        cs.presentNextLevelUp === null ? 0 : 0;
+        document.getElementById('level-up-screen').style.display = 'none';
+        cs.queuePick(cs.players[0]);
+        cs.presentNextLevelUp();
+      }
+    });
+    await new Promise(r => setTimeout(r, 700));
+    console.log('sigil card:', await shot(g.page, 'sigil-card'));
+    await g.page.evaluate(() => { const b = document.querySelector('.upgrade-btn'); if (b) b.click(); });
 
     // -- Two screenshots, because none of this has been looked at --
     await g.page.evaluate(async () => {
@@ -956,6 +1091,8 @@ async function main() {
       console.log(`    weapons: ${r.weapons}`);
       if (r.taken) console.log(`    damage taken by: ${r.taken}`);
       if (r.omens) console.log(`    omens: ${r.omens}`);
+      if (r.sigils) console.log(`    sigils: ${r.sigils}`);
+      if (r.damageBySource) console.log(`    damage by: ${r.damageBySource}`);
       if (r.bosses) console.log(`    boss fights: ${r.bosses}`);
       if (r.abilities != null) console.log(`    actives: ${r.abilities} used, ${r.abilityDamage} damage`);
       console.log('    time   wave  hp        lvl  kills  enemies   at');

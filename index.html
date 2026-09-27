@@ -806,6 +806,35 @@ body.coop-pick #level-up-screen .menu-hint { display: none; }
   background: rgba(20,12,5,0.8); border: 1px solid rgba(95,211,199,0.6); overflow: hidden;
 }
 .relic-pill-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* --- WEAPON SIGILS --- */
+/* A fifth card silhouette. Warm gold rather than the relic's teal, because a
+   sigil belongs to a weapon and relics belong to the knight. */
+.upgrade-btn.rarity-sigil { border-color: #c98a3a; box-shadow: 0 0 16px rgba(201,138,58,0.28), inset 0 1px 0 rgba(201,138,58,0.15); }
+.chip-sigil { background: rgba(201,138,58,0.18); border: 1px solid rgba(201,138,58,0.65); color: #edc083; }
+/* The weapon's own art with the sigil's glyph struck over its corner, so the
+   card reads as "this weapon, changed" before any of the words are. */
+.sigil-icon { position: relative; display: block; overflow: visible; }
+.sigil-icon img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit; }
+.sigil-icon span {
+  position: absolute; right: -5px; bottom: -5px;
+  width: 25px; height: 25px; line-height: 23px; text-align: center;
+  font-size: 13px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(60,36,10,0.98), rgba(18,10,3,0.98));
+  border: 1px solid rgba(201,138,58,0.85); color: #edc083;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.9);
+}
+.help-item-icon.sigil-icon { width: 64px; height: 64px; }
+/* On the HUD slot: small marks over the weapon's own tile. They hang off the
+   .ws wrapper rather than the slot, because the slot clips its own overflow. */
+.ws-sigils {
+  position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 2px; pointer-events: none; z-index: 2;
+}
+.ws-sigils i {
+  font-style: normal; font-size: 9px; line-height: 13px; width: 13px; height: 13px; text-align: center;
+  border-radius: 50%; background: rgba(18,10,3,0.95); border: 1px solid rgba(201,138,58,0.8);
+  color: #edc083;
+}
 /* ─── OMEN CARDS ─── */
 /* Two cards, each with a cost line and a gain line, so the shape of the card
    says "this is a trade" before any of the words are read. */
@@ -1253,7 +1282,7 @@ body.boss-active #revive-banner { top: 112px; }
   position: fixed; bottom: 15px; left: 15px;
   display: flex; gap: 6px; z-index: 100; pointer-events: none; align-items: flex-start;
 }
-.ws { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.ws { display: flex; flex-direction: column; align-items: center; gap: 3px; position: relative; }
 .weapon-slot {
   width: 48px; height: 48px; border-radius: 6px;
   border: 2px solid var(--gold-dim);
@@ -2157,7 +2186,7 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 // shipped in. `number` is the commit count this change will produce. Do not
 // hand-edit: the stamper matches the two marker lines exactly.
 /* BUILD:START */
-const BUILD = { number: 69, date: '2026-09-27' };
+const BUILD = { number: 70, date: '2026-09-27' };
 /* BUILD:END */
 for (const el of document.querySelectorAll('.build-badge')) el.textContent = `BUILD ${BUILD.number}`;
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
@@ -5261,6 +5290,8 @@ function makePlayer(index) {
     // companion's card picks landed on player 1's sheet: the level-up screen
     // reads and writes the globals, which are player 1's.
     ranks: {}, banished: new Set(), synergies: new Set(),
+    // Weapon sigils, and the two caches derived from them (see rebuildSigils).
+    sigils: {}, sigilMods: {}, onHit: {},
     picks: [],
     rerollCharges: 0,
     banishCharges: 1,
@@ -7220,6 +7251,15 @@ function updateWaveEvent(dt) {
 function getEventCoinMul() { return (activeWaveEvent?.effect?.coinMul || 1) * omenMul('coinMul'); }
 function getEventXPMul() { return (activeWaveEvent?.effect?.xpMul || 1) * omenMul('xpMul'); }
 function getEventEnemySpeedMul() { return (activeWaveEvent?.effect?.enemySpeedMul || 1) * omenMul('enemySpeed'); }
+// Everything that scales an enemy's stride, in one place: the wave event, the
+// omen, and a chill from Harrying Point or a Rime Charge. Two call sites read
+// it (the archer/shaman band and the general chase), and both had the event
+// multiplier inline before, which is exactly how a third factor gets added to
+// one of them and forgotten in the other.
+function enemySpeedMul(enemy) {
+  const ev = getEventEnemySpeedMul();
+  return enemy._chillUntil > state.time ? ev * enemy._chillMul : ev;
+}
 
 // ─── KNIGHT ABILITIES: AIM, TRIGGER, FLIGHT ───
 // Aim is the stick if it is pushed, the facing otherwise. Standing still and
@@ -7559,7 +7599,7 @@ function updatePlayer(p, dt) {
         const origin = _tv2.copy(pmesh.position); origin.y += 1.6;
         // A little overtravel past acquisition so a bolt still catches a target
         // that stepped aside, but not enough to cross the map.
-        spawnProjectile('dagger', origin, _tv1, pDmg, pStats.speed, pRange + 4, boltPierce, p);
+        spawnProjectile('dagger', origin, _tv1, pDmg, pStats.speed, pRange + 4, boltPierce, p, primary);
         ps.attackTimer = pCD;
         return;
       }
@@ -7571,7 +7611,8 @@ function updatePlayer(p, dt) {
       vfx.meleeSwing(pmesh, pEvo ? evo.style : pStats.style);
 
       const atkRangeSq = (pRange + 0.5) * (pRange + 0.5);
-      const cleaveLimit = (pStats.cleave ? pStats.cleave[pLvl] : 99) + (pEvo && evo.cleave ? evo.cleave : 0);
+      const cleaveLimit = (pStats.cleave ? pStats.cleave[pLvl] : 99) + (pEvo && evo.cleave ? evo.cleave : 0)
+        + sigMod(p, primary, 'cleave');
       const cone = pStats.shape === 'cone';
       const cosHalf = cone ? Math.cos(pEvo && evo.halfAngle != null ? evo.halfAngle : pStats.halfAngle) : -1;
       const fx = Math.sin(pmesh.rotation.y), fz = Math.cos(pmesh.rotation.y);
@@ -7594,7 +7635,8 @@ function updatePlayer(p, dt) {
         _meleeHits.push({ enemy, dSq });
       }
       _meleeHits.sort((a, b) => a.dSq - b.dSq);
-      const fullTargets = 1 + cleaveLimit;
+      // Impaler's Line: the spear stops halving the back of its own thrust.
+      const fullTargets = sigMod(p, primary, 'fullCone') > 0 ? 999 : 1 + cleaveLimit;
       const spillTargets = cone ? 99 : 3; // the cone itself limits the spear
       let hitCount = 0;
       for (let h = 0; h < _meleeHits.length; h++) {
@@ -7740,6 +7782,10 @@ function applyDamage(enemy, amount, opts) {
     if (rel.wolfsbane) dmg *= 1 + Math.min(0.6, Math.floor(bs._crowdCount / 10) * 0.15);
     if (rel.hooves && bs._moving) dmg *= 1.1;
   }
+  // Arcane Brand / Cinder Brand: a marked foe takes more from EVERY source,
+  // which is what makes those two sigils a build piece rather than a number on
+  // the weapon that applied them.
+  if (enemy._markUntil > state.time) dmg *= 1 + enemy._markAmt;
   dmg = Math.max(1, Math.round(dmg));
   enemy.hp -= dmg;
   runStats.totalDamageDealt += dmg;
@@ -7776,6 +7822,25 @@ function applyDamage(enemy, amount, opts) {
     enemy.knockback.dx = _kbDir.x * kb;
     enemy.knockback.dz = _kbDir.z * kb;
     enemy.knockback.timer = opts.kbTimer || 0.15;
+  }
+  // ─── SIGIL ON-HIT ───
+  // One path for every weapon: the sigil table is keyed by damage source, and
+  // every weapon credits itself, so a burn, a chill, a mark, a stun, a fork or
+  // an execute costs one lookup rather than a branch per weapon.
+  // `noSigil` stops a fork from forking: chainLightning lands through
+  // applyDamage with the same source it started from.
+  const sig = !opts.noSigil && by.onHit && by.onHit[source];
+  if (sig && !enemy.isDying) {
+    if (sig.exec > 0 && enemy.hp > 0 && enemy.hp < enemy.maxHp * sig.exec && !enemy.isBoss) {
+      enemy.hp = 0;
+      spawnDamageNumber(enemy.mesh.position, 'FINISHED', '#ffd24a');
+    }
+    if (sig.mark > 0) { enemy._markUntil = state.time + (sig.markFor || 2); enemy._markAmt = sig.mark; }
+    if (sig.chill > 0) { enemy._chillUntil = state.time + (sig.chillFor || 2); enemy._chillMul = 1 - sig.chill; }
+    // Bosses are never held, for the same reason they shrug off knockback: a
+    // heavy enemy has to be able to reach you.
+    if (sig.stun > 0 && !enemy.isBoss) enemy.stunTimer = Math.max(enemy.stunTimer || 0, sig.stun);
+    if (sig.chain > 0 && enemy.hp > 0) chainLightning(enemy, Math.round(dmg * 0.5), sig.chain, source, 0, by, true);
   }
   if (enemy.hp <= 0) {
     killEnemy(enemy, source, by);
@@ -7824,6 +7889,13 @@ function killEnemy(enemy, source, by) {
     triggerShake(enemy.isDragonOgre ? 0.9 : 0.6, 0.5);
   }
   if (enemy.isElite) runStats.elitesKilled++;
+  // Quickened Hand: a kill by this weapon pulls its own next shot forward.
+  // Written against `weaponTimers` so it works for any weapon that has one,
+  // and floored at zero so a good wave cannot bank negative cooldown.
+  const refund = sigMod(by, source, 'refund');
+  if (refund > 0 && by.weaponTimers && by.weaponTimers[source] != null) {
+    by.weaponTimers[source] = Math.max(0, by.weaponTimers[source] - refund);
+  }
   registerKill(by);
   dropLoot(enemy);
   if (enemy.isFinalBoss) triggerVictory();
@@ -8364,7 +8436,7 @@ function updateEnemies(dt) {
 
     // Archers and shamans keep their distance; archers shoot, shamans heal the horde
     if (enemy.isArcher || enemy.isShaman) {
-      const moveSpeed = enemy.speed * getEventEnemySpeedMul();
+      const moveSpeed = enemy.speed * enemySpeedMul(enemy);
       let mx = 0, mz = 0;
       // They hold a band around their `range` (back off inside range−4, close from
       // beyond range+2, strafe between; loose from inside range+6). The band used
@@ -8456,7 +8528,7 @@ function updateEnemies(dt) {
       const baseSpeed = (enemy.isDragonOgre && !enemy.isFinalBoss && dist < enemy.attackRange) ? enemy.speed * 0.4 : enemy.speed;
       // Bats fly; everything else wades.
       const mireMul = (mires.length && !enemy.isBat && inMire(enemy.mesh.position.x, enemy.mesh.position.z)) ? MIRE_ENEMY : 1;
-      const moveSpeed = baseSpeed * getEventEnemySpeedMul() * mireMul;
+      const moveSpeed = baseSpeed * enemySpeedMul(enemy) * mireMul;
       let newX, newZ;
 
       if (enemy.isWolf && dist < 12 && dist > 2.5) {
@@ -8669,7 +8741,7 @@ function updateWeapons(p, dt) {
     wt.dagger -= dt;
     if (wt.dagger <= 0) {
       wt.dagger = stats.cooldown[dLvl] * (dEvo ? 0.6 : 1);
-      const count = stats.count[dLvl] + (dEvo ? 2 : 0);
+      const count = stats.count[dLvl] + (dEvo ? 2 : 0) + sigMod(p, 'dagger', 'count');
       _daggerTargets.length = 0;
       const dRange = engageRange(stats.range[dLvl]);
       const _daggerRangeSq = dRange * dRange;
@@ -8692,8 +8764,8 @@ function updateWeapons(p, dt) {
         const target = enemies[_daggerTargets[n * 2]];
         _tv2.subVectors(target.mesh.position, pmesh.position).normalize();
         const daggerDmg = Math.round((dEvo ? stats.damage[dLvl] * 1.5 : stats.damage[dLvl]) * (ps._projDmgMul || 1));
-        const daggerPierce = stats.pierce[dLvl] + (dEvo ? 3 : 0);
-        spawnProjectile('dagger', pmesh.position, _tv2, daggerDmg, stats.speed * (dEvo ? 1.3 : 1), dRange, daggerPierce, p);
+        const daggerPierce = stats.pierce[dLvl] + (dEvo ? 3 : 0) + sigMod(p, 'dagger', 'pierce');
+        spawnProjectile('dagger', pmesh.position, _tv2, daggerDmg, stats.speed * (dEvo ? 1.3 : 1), dRange, daggerPierce, p, 'dagger');
       }
     }
   }
@@ -8706,7 +8778,7 @@ function updateWeapons(p, dt) {
     wt.holyAura -= dt;
     if (wt.holyAura <= 0) {
       wt.holyAura = stats.cooldown[haLvl] * (haEvo ? 0.7 : 1);
-      const radius = (stats.radius[haLvl] + (haEvo ? 3 : 0)) * (ps._aoeMul || 1);
+      const radius = (stats.radius[haLvl] + (haEvo ? 3 : 0) + sigMod(p, 'holyAura', 'radius')) * (ps._aoeMul || 1);
       const dmg = haEvo ? Math.round(stats.damage[haLvl] * 1.8) : stats.damage[haLvl];
       const _auraRadiusSq = radius * radius;
       const kbAmount = stats.knockback + (haEvo ? 0.8 : 0);
@@ -8721,6 +8793,15 @@ function updateWeapons(p, dt) {
         // "Divine Judgement — massive radius, stuns enemies briefly"
         if (haEvo && !enemy.isBoss && !enemy.isDying) enemy.stunTimer = 0.9;
       }
+      // Searing Light: the pulse leaves the ground burning where it stood. One
+      // patch per pulse, at the knight, so this cannot carpet the map.
+      if (sigMod(p, 'holyAura', 'scorch') > 0) {
+        burnPatches.push({
+          pos: new THREE.Vector3(pmesh.position.x, 0, pmesh.position.z),
+          radius: radius * 0.8, damage: Math.max(2, Math.round(dmg * 0.35)),
+          life: 2.2, tickTimer: 0, source: 'holyAura', burst: false, owner: p,
+        });
+      }
       // "A divine ring smites those who draw near" — gold light, not blue magic
       vfx.holyPulse(pmesh.position, radius, haEvo);
     }
@@ -8734,14 +8815,14 @@ function updateWeapons(p, dt) {
     wt.arrowVolley -= dt;
     if (wt.arrowVolley <= 0) {
       wt.arrowVolley = stats.cooldown[avLvl] * (avEvo ? 0.5 : 1);
-      const count = stats.count[avLvl] * (avEvo ? 2 : 1);
+      const count = stats.count[avLvl] * (avEvo ? 2 : 1) + sigMod(p, 'arrowVolley', 'count');
       const avDmg = Math.round((avEvo ? stats.damage[avLvl] * 1.5 : stats.damage[avLvl]) * (ps._projDmgMul || 1));
       if (avEvo) {
         // Meteor Shower: arrows rain in all directions
         for (let i = 0; i < count; i++) {
           const angle = (i / count) * Math.PI * 2;
           _arrowDir.set(Math.sin(angle), 0, Math.cos(angle));
-          spawnProjectile('arrow', pmesh.position, _arrowDir, avDmg, stats.speed, engageRange(stats.range), 1, p);
+          spawnProjectile('arrow', pmesh.position, _arrowDir, avDmg, stats.speed, engageRange(stats.range), 1 + sigMod(p, 'arrowVolley', 'pierce'), p, 'arrowVolley', sigMod(p, 'arrowVolley', 'homing'));
         }
       } else {
         const baseAngle = pmesh.rotation.y;
@@ -8749,7 +8830,7 @@ function updateWeapons(p, dt) {
         for (let i = 0; i < count; i++) {
           const angle = baseAngle - totalSpread / 2 + stats.spread * i;
           _arrowDir.set(Math.sin(angle), 0, Math.cos(angle));
-          spawnProjectile('arrow', pmesh.position, _arrowDir, avDmg, stats.speed, engageRange(stats.range), 0, p);
+          spawnProjectile('arrow', pmesh.position, _arrowDir, avDmg, stats.speed, engageRange(stats.range), sigMod(p, 'arrowVolley', 'pierce'), p, 'arrowVolley', sigMod(p, 'arrowVolley', 'homing'));
         }
       }
     }
@@ -8763,7 +8844,7 @@ function updateWeapons(p, dt) {
     wt.orbitalBomb -= dt;
     if (wt.orbitalBomb <= 0) {
       wt.orbitalBomb = stats.cooldown[obLvl] * (obEvo ? 0.6 : 1);
-      const bombCount = stats.count[obLvl] + (obEvo ? 2 : 0);
+      const bombCount = stats.count[obLvl] + (obEvo ? 2 : 0) + sigMod(p, 'orbitalBomb', 'count');
       const obRange = engageRange(stats.range);
       const obRangeSq = obRange * obRange;
       for (let b = 0; b < bombCount; b++) {
@@ -8780,7 +8861,7 @@ function updateWeapons(p, dt) {
           targetPos.z + (Math.random() - 0.5) * 3
         );
         const obDmg = obEvo ? Math.round(stats.damage[obLvl] * 2) : stats.damage[obLvl];
-        const obRad = (stats.radius[obLvl] + (obEvo ? 2 : 0)) * (ps._aoeMul || 1);
+        const obRad = (stats.radius[obLvl] + (obEvo ? 2 : 0) + sigMod(p, 'orbitalBomb', 'radius')) * (ps._aoeMul || 1);
         spawnOrbitalBomb(bombPos, obDmg, obRad, obEvo, p);
       }
     }
@@ -8791,7 +8872,7 @@ function updateWeapons(p, dt) {
     const wsLvl = Math.min(5, pw.wardShields.level);
     const wsEvo = pw.wardShields.evolved;
     const stats = WEAPON_STATS.wardShields;
-    const count = wsEvo ? 6 : stats.count[wsLvl];
+    const count = (wsEvo ? 6 : stats.count[wsLvl]) + sigMod(p, 'wardShields', 'count');
     const radius = (stats.radius[wsLvl] + (wsEvo ? 1.2 : 0)) * (ps._aoeMul || 1);
     const dmg = wsEvo ? Math.round(stats.damage[wsLvl] * 1.6) : stats.damage[wsLvl];
     const hitInterval = stats.cooldown[wsLvl];
@@ -8811,7 +8892,7 @@ function updateWeapons(p, dt) {
         if (distSqXZ(sh.position, enemy.mesh.position) > r * r) continue;
         if (enemy._shieldHitTime != null && state.time - enemy._shieldHitTime < hitInterval) continue;
         enemy._shieldHitTime = state.time;
-        applyDamage(enemy, dmg, { source: 'wardShields', by: p, color: '#e8dcae', flash: 0.1, knockback: wsEvo ? 1.0 : 0.6, kbFrom: sh.position, kbTimer: 0.12 });
+        applyDamage(enemy, dmg, { source: 'wardShields', by: p, color: '#e8dcae', flash: 0.1, knockback: (wsEvo ? 1.0 : 0.6) + sigMod(p, 'wardShields', 'knockback'), kbFrom: sh.position, kbTimer: 0.12 });
         vfx.meleeImpact(enemy.mesh.position, _tv2.subVectors(enemy.mesh.position, sh.position).normalize(), 'sword');
       }
       // Bulwark of Ages swats arrows out of the air. Swatting one raises the
@@ -8857,7 +8938,7 @@ function updateWeapons(p, dt) {
         vfx.stunSpark(best.mesh.position);
         applyDamage(best, dmg, { source: 'stormCall', by: p, canCrit: true, color: '#bfe6ff', flash: 0.15 });
         if (scEvo && !best.isBoss && !best.isDying) best.stunTimer = Math.max(best.stunTimer || 0, 0.4);
-        chainLightning(best, Math.round(dmg * 0.6), stats.chains[scLvl], 'stormCall', scEvo ? 0.4 : 0, p);
+        chainLightning(best, Math.round(dmg * 0.6), stats.chains[scLvl] + sigMod(p, 'stormCall', 'chain'), 'stormCall', scEvo ? 0.4 : 0, p);
       }
       if (_chainHit.size > 0) {
         AudioSystem.play('thunder', { volume: 0.7, pitch: scEvo ? 0.85 : 1 });
@@ -8880,9 +8961,9 @@ function updateWeapons(p, dt) {
       p.emberLastX = pmesh.position.x; p.emberLastZ = pmesh.position.z;
       burnPatches.push({
         pos: new THREE.Vector3(pmesh.position.x, 0, pmesh.position.z),
-        radius: (stats.radius + (etEvo ? 1.0 : 0)) * (ps._aoeMul || 1),
+        radius: (stats.radius + (etEvo ? 1.0 : 0) + sigMod(p, 'emberTrail', 'radius')) * (ps._aoeMul || 1),
         damage: etEvo ? Math.round(stats.damage[etLvl] * 1.3) : stats.damage[etLvl],
-        life: stats.life[etLvl] + (etEvo ? 1 : 0),
+        life: stats.life[etLvl] + (etEvo ? 1 : 0) + sigMod(p, 'emberTrail', 'life'),
         tickTimer: 0,
         source: 'emberTrail',
         burst: etEvo,
@@ -8962,8 +9043,15 @@ const _chainHit = new Set();
 // `sourceId` credits the damage; `stun` (seconds) is applied to each arc target.
 // Storm Call pre-fills _chainHit with its own strike targets so bolts do not
 // arc back onto them; the dagger path clears it.
-function chainLightning(fromEnemy, damage, jumps, sourceId = 'dagger', stun = 0, by) {
-  if (sourceId === 'dagger') _chainHit.clear();
+// `noSigil` is passed straight through to every arc, so a Splitting Bolt cannot
+// fork off its own fork.
+function chainLightning(fromEnemy, damage, jumps, sourceId = 'dagger', stun = 0, by, noSigil = false) {
+  // Storm Call owns `_chainHit` across its three strikes so they do not re-hit
+  // each other's targets; every other caller wants a fresh set. This used to
+  // read `sourceId === 'dagger'`, which was the same thing when the daggers
+  // were the only other caller -- a sigil fork on a third weapon would have
+  // inherited whatever the last chain had already struck and fizzled.
+  if (sourceId !== 'stormCall') _chainHit.clear();
   _chainHit.add(fromEnemy);
   let source = fromEnemy;
   for (let j = 0; j < jumps; j++) {
@@ -8980,7 +9068,7 @@ function chainLightning(fromEnemy, damage, jumps, sourceId = 'dagger', stun = 0,
     _chainTo.copy(best.mesh.position); _chainTo.y += 1.0;
     vfx.lightning(_chainFrom, _chainTo);
 
-    applyDamage(best, damage, { source: sourceId, by, color: '#bfe6ff', flash: 0.12 });
+    applyDamage(best, damage, { source: sourceId, by, color: '#bfe6ff', flash: 0.12, noSigil });
     if (stun > 0 && !best.isBoss && !best.isDying) best.stunTimer = Math.max(best.stunTimer || 0, stun);
     source = best;
   }
@@ -9086,7 +9174,14 @@ const _PROJ_POOL_MAX = 30;
 
 // `owner` is the knight who fired it: the crit roll and the relics that scale
 // the hit are theirs, and so is the kill credit.
-function spawnProjectile(type, origin, direction, damage, speed, maxRange, pierce, owner) {
+// `sourceId` is what the hit credits. It defaults to the projectile's own type,
+// which is right for the daggers and the arrows -- but Parker's staff bolt is
+// spawned AS a dagger (same mesh, same flight), so every bolt he has ever fired
+// was filed under Throwing Daggers: in the run-end breakdown, in weapon mastery
+// (which ranks by source, so his staff kills were levelling a weapon he does
+// not carry), and in any sigil or relic keyed on the weapon that fired.
+// `homing` is Fletcher's Eye.
+function spawnProjectile(type, origin, direction, damage, speed, maxRange, pierce, owner, sourceId, homing = 0) {
   const geo = type === 'arrow' ? _sharedArrowGeo : _sharedDaggerGeo;
   // Evolved shots are "Meteor Shower" and "Storm Kunai", so they burn and crackle
   // instead of just flying faster.
@@ -9122,7 +9217,8 @@ function spawnProjectile(type, origin, direction, damage, speed, maxRange, pierc
   scene.add(mesh);
   projectiles.push({
     mesh, direction: direction.clone(), speed, damage,
-    distTraveled: 0, maxRange, pierce, pierced: 0, type, trailType,
+    distTraveled: 0, maxRange, pierce, pierced: 0, type, trailType, homing,
+    source: sourceId || (type === 'arrow' ? 'arrowVolley' : 'dagger'),
     owner: owner || players[0],
   });
 }
@@ -9130,6 +9226,30 @@ function spawnProjectile(type, origin, direction, damage, speed, maxRange, pierc
 function updateProjectiles(dt) {
   for (let i = projectiles.length - 1; i >= 0; i--) {
     const p = projectiles[i];
+    // Fletcher's Eye: the arrow bends toward the nearest foe rather than
+    // turning on the spot, so a volley still misses something that dodges far
+    // enough -- a hard lock would make the sigil an auto-win at any range.
+    if (p.homing > 0) {
+      let best = null, bestD = 400;
+      for (let ei = 0; ei < enemies.length; ei++) {
+        const e = enemies[ei];
+        if (e.isDying) continue;
+        const d = distSqXZ(p.mesh.position, e.mesh.position);
+        if (d < bestD) { bestD = d; best = e; }
+      }
+      if (best) {
+        _tv3.subVectors(best.mesh.position, p.mesh.position); _tv3.y = 0;
+        if (_tv3.lengthSq() > 0.01) {
+          _tv3.normalize();
+          const turn = Math.min(1, 3.5 * dt);
+          p.direction.x += (_tv3.x - p.direction.x) * turn;
+          p.direction.z += (_tv3.z - p.direction.z) * turn;
+          const l = Math.hypot(p.direction.x, p.direction.z) || 1;
+          p.direction.x /= l; p.direction.z /= l;
+          p.mesh.rotation.y = Math.atan2(p.direction.x, p.direction.z);
+        }
+      }
+    }
     const move = p.speed * dt;
     p.mesh.position.x += p.direction.x * move;
     p.mesh.position.z += p.direction.z * move;
@@ -9152,7 +9272,7 @@ function updateProjectiles(dt) {
       if (quickDist > hitRadius * hitRadius) continue;
       {
         const finalDmg = applyDamage(enemy, p.damage, {
-          source: p.type === 'arrow' ? 'arrowVolley' : 'dagger', canCrit: true, by: p.owner,
+          source: p.source, canCrit: true, by: p.owner,
           color: p.type === 'arrow' ? '#ddaa44' : '#aaddff', flash: 0.1, hitFreeze: 0.03,
           knockback: 0.5, kbFrom: p.mesh.position, kbTimer: 0.1,
         });
@@ -9165,7 +9285,7 @@ function updateProjectiles(dt) {
         // winning run's total damage: every other weapon in the build was
         // decoration. Gated, it pays off the crit stat the evolution requires.
         if (p.trailType === 'storm' && _lastHitCrit) {
-          chainLightning(enemy, Math.round(finalDmg * 0.6), 2, 'dagger', 0, p.owner);
+          chainLightning(enemy, Math.round(finalDmg * 0.6), 2, p.source, 0, p.owner);
         }
         p.pierced++;
         if (p.pierced > p.pierce) { hitSomething = true; break; }
@@ -9633,19 +9753,21 @@ function beginPickContext(p) {
     // these objects (clearRun, the Forge, a test) without updating players[0].
     p.state = state.player; p.weapons = playerWeapons; p.ranks = upgradeRanks;
     p.banished = banishedUpgrades; p.synergies = _activeSynergies;
+    p.sigils = weaponSigils;
     return;
   }
   _pickSaved = {
     p,
     player: state.player, weapons: playerWeapons, ranks: upgradeRanks,
     banished: banishedUpgrades, synergies: _activeSynergies, mesh: playerMesh,
-    reroll: rerollCharges, banish: banishCharges,
+    reroll: rerollCharges, banish: banishCharges, sigils: weaponSigils,
   };
   state.player = p.state;
   playerWeapons = p.weapons;
   upgradeRanks = p.ranks || (p.ranks = {});
   banishedUpgrades = p.banished || (p.banished = new Set());
   _activeSynergies = p.synergies || (p.synergies = new Set());
+  weaponSigils = p.sigils || (p.sigils = {});
   rerollCharges = p.rerollCharges || 0;
   banishCharges = p.banishCharges || 0;
   if (p.mesh) playerMesh = p.mesh;   // level-up burst and shockwave land on them
@@ -9659,6 +9781,7 @@ function endPickContext() {
   s.p.banishCharges = banishCharges;
   state.player = s.player; playerWeapons = s.weapons; upgradeRanks = s.ranks;
   banishedUpgrades = s.banished; _activeSynergies = s.synergies; playerMesh = s.mesh;
+  weaponSigils = s.sigils;
   rerollCharges = s.reroll; banishCharges = s.banish;
 }
 
@@ -9768,6 +9891,139 @@ function primaryUpgrade(id, title, desc) {
   return u;
 }
 
+
+// ─── WEAPON SIGILS ───
+// The pick pool's depth problem, which three press reviews named and which the
+// level-up screen makes obvious: at wave 15 you are choosing between Assassin's
+// Eye 2/5, Champion's Resolve 1/5 and Whetstone 1/5. Fourteen stat lines and a
+// rank counter is not a build, it is a number going up.
+//
+// A sigil is a one-off card that changes how a weapon you ALREADY carry
+// behaves. That is the important half: a sigil is only ever offered for a
+// weapon you own and have taken to rank 2, so the pool gets deeper and at the
+// same time narrows toward the build you are actually playing. Eighteen of
+// them, two per weapon, none repeatable.
+//
+// `mods` are numbers the weapon's own fire code reads (`sigMod`). `onHit` is a
+// single shared code path in `applyDamage`, keyed by the damage source, so a
+// burn, a chill, a mark or an execute costs one branch rather than one per
+// weapon.
+const WEAPON_SIGILS = [
+  // Dad's sweep: wider, or lethal at the end of a swing.
+  { id: 'sword_reaver', weapon: 'sword', name: "Reaver's Arc", icon: '⚔',
+    desc: 'The sweep strikes two more foes at full force', mods: { cleave: 2 } },
+  { id: 'sword_headsman', weapon: 'sword', name: "Headsman's Edge", icon: '☠',
+    desc: 'A sweep finishes any foe already below a tenth of its life', onHit: { exec: 0.10 } },
+
+  // Brennan's thrust: the whole line, or the line held in place.
+  { id: 'spear_impaler', weapon: 'spear', name: "Impaler's Line", icon: '🔱',
+    desc: 'Every foe in the thrust takes the full blow, not half', mods: { fullCone: 1 } },
+  { id: 'spear_harry', weapon: 'spear', name: 'Harrying Point', icon: '❄',
+    desc: 'A thrust leaves what it strikes a third slower for two seconds',
+    onHit: { chill: 0.35, chillFor: 2 } },
+
+  // Parker's bolt: two targets, or one softened for everything else he owns.
+  { id: 'staff_split', weapon: 'staff', name: 'Splitting Bolt', icon: '✦',
+    desc: 'The bolt forks to one more foe', onHit: { chain: 1 } },
+  { id: 'staff_brand', weapon: 'staff', name: 'Arcane Brand', icon: '◈',
+    desc: 'A struck foe takes a quarter more from every source for three seconds',
+    onHit: { mark: 0.25, markFor: 3 } },
+
+  { id: 'dagger_whetted', weapon: 'dagger', name: 'Whetted Blades', icon: '🗡',
+    desc: 'Daggers pass through two more foes', mods: { pierce: 2 } },
+  { id: 'dagger_quick', weapon: 'dagger', name: 'Quickened Hand', icon: '⟳',
+    desc: 'Every foe a dagger kills brings the next volley sooner', mods: { refund: 0.10 } },
+
+  { id: 'aura_widen', weapon: 'holyAura', name: 'Widening Grace', icon: '◎',
+    desc: 'The ring reaches two paces further', mods: { radius: 2 } },
+  { id: 'aura_sear', weapon: 'holyAura', name: 'Searing Light', icon: '🔥',
+    desc: 'Each pulse leaves the ground beneath thee alight', mods: { scorch: 1 } },
+
+  { id: 'arrow_fletcher', weapon: 'arrowVolley', name: "Fletcher's Eye", icon: '🎯',
+    desc: 'Arrows bend toward their mark', mods: { homing: 1 } },
+  { id: 'arrow_barbed', weapon: 'arrowVolley', name: 'Barbed Shafts', icon: '🏹',
+    desc: 'Arrows pass through one more foe and hurl it back', mods: { pierce: 1, knockback: 1.2 } },
+
+  { id: 'bomb_cluster', weapon: 'orbitalBomb', name: 'Cluster Charge', icon: '💣',
+    desc: 'One more bomb falls with every casting', mods: { count: 1 } },
+  { id: 'bomb_frost', weapon: 'orbitalBomb', name: 'Rime Charge', icon: '❄',
+    desc: 'The blast leaves what survives it two-fifths slower', onHit: { chill: 0.4, chillFor: 2 } },
+
+  { id: 'shield_fourth', weapon: 'wardShields', name: 'The Fourth Ward', icon: '🛡',
+    desc: 'One more shield joins the ring', mods: { count: 1 } },
+  { id: 'shield_rebuke', weapon: 'wardShields', name: 'Iron Rebuke', icon: '✹',
+    desc: 'The shields hurl foes back and leave them reeling',
+    mods: { knockback: 1.4 }, onHit: { stun: 0.4 } },
+
+  { id: 'storm_forked', weapon: 'stormCall', name: 'Forked Sky', icon: '🌩',
+    desc: 'The bolt leaps to two more of its kin', mods: { chain: 2 } },
+  { id: 'storm_clap', weapon: 'stormCall', name: 'Thunderclap', icon: '⚡',
+    desc: 'Every bolt leaves its mark stunned', onHit: { stun: 0.45 } },
+
+  { id: 'ember_deeper', weapon: 'emberTrail', name: 'Deeper Scorch', icon: '♨',
+    desc: 'The trail burns wider and lingers longer', mods: { radius: 1.2, life: 2 } },
+  { id: 'ember_brand', weapon: 'emberTrail', name: 'Cinder Brand', icon: '◈',
+    desc: 'Burning foes take a fifth more from every other source',
+    onHit: { mark: 0.20, markFor: 2 } },
+];
+// Sigils are gated on investment, not luck: rank 3 in the weapon they belong to.
+// Rank 1 would turn every new weapon into two extra cards before it had done
+// anything, which is the opposite of narrowing the pool toward a build. Rank 2
+// was the first try and it was measured too generous -- `balance-phase49-a.log`
+// came back 8 wins and a time-out from nine runs with NO deaths, against 6 of 9
+// in each of the two batches before sigils existed. Rank 3 arrives around wave
+// 8-12 rather than wave 4-6, so a sigil is the reward for having committed to a
+// weapon rather than a bonus for having picked one up.
+const SIGIL_MIN_LEVEL = 3;
+function sigilsFor(weapon) { return WEAPON_SIGILS.filter(g => g.weapon === weapon); }
+
+// Player 1's book IS the global, the same aliasing `playerWeapons` relies on.
+let weaponSigils = players[0].sigils;
+function hasSigil(id) { return !!weaponSigils[id]; }
+
+// Two derived caches per knight, rebuilt when a sigil is taken rather than
+// walked per shot: `sigilMods[weapon][key]` for the fire sites, and
+// `onHit[source]` for the single hook in applyDamage.
+function rebuildSigils(pl) {
+  const owned = pl.sigils || (pl.sigils = {});
+  const mods = {}, onHit = {};
+  for (const g of WEAPON_SIGILS) {
+    if (!owned[g.id]) continue;
+    if (g.mods) {
+      const m = mods[g.weapon] || (mods[g.weapon] = {});
+      for (const k in g.mods) m[k] = (m[k] || 0) + g.mods[k];
+    }
+    if (g.onHit) {
+      // Keyed by damage source, which is the weapon id for every weapon that
+      // credits itself -- the same string `runStats.damageBySource` uses.
+      const h = onHit[g.weapon] || (onHit[g.weapon] = {});
+      for (const k in g.onHit) h[k] = Math.max(h[k] || 0, g.onHit[k]);
+    }
+  }
+  pl.sigilMods = mods;
+  pl.onHit = onHit;
+}
+// `0` is the right default for every numeric mod: they are all additive onto a
+// table value, and a flag is "greater than zero".
+function sigMod(pl, weapon, key) {
+  const m = pl && pl.sigilMods && pl.sigilMods[weapon];
+  return m ? (m[key] || 0) : 0;
+}
+
+function sigilUpgrade(g) {
+  return {
+    id: 'sigil_' + g.id, title: g.name, desc: g.desc, isSigil: true, sigil: g,
+    apply: () => {
+      weaponSigils[g.id] = true;
+      rebuildSigils(_pickingPlayer || players[0]);
+    },
+    condition: () => {
+      const w = playerWeapons[g.weapon];
+      return !!w && w.owned && w.level >= SIGIL_MIN_LEVEL && !weaponSigils[g.id];
+    },
+  };
+}
+
 const UPGRADES = [
   { id: 'damage', title: 'Whetstone of the Forge', flavor: 'Thy blade strikes truer', stat: 'Damage', maxRank: 5,
     amount: m => Math.round(4 * m), get: () => state.player.damage,
@@ -9825,11 +10081,13 @@ const UPGRADES = [
   weaponUpgrade('stormCall', 'Storm Call', 'Lightning strikes the nearest foe and leaps to its kin'),
   weaponUpgrade('emberTrail', 'Trail of Embers', 'Thy footsteps leave burning ground behind thee'),
   ...RELICS.map(relicUpgrade),
+  ...WEAPON_SIGILS.map(sigilUpgrade),
 ];
 
 // Card text: description plus a concrete "before → after" line
 function upgradeCardText(upg, mul) {
-  if (upg.isRelic) return { desc: upg.desc, delta: `Relic ${relicCount() + 1} of ${MAX_RELICS}` };
+  if (upg.isRelic) return { desc: upg.desc, delta: `Relic ${relicCount() + 1} of ${maxRelics()}` };
+  if (upg.isSigil) return { desc: upg.desc, delta: WEAPON_NAMES[upg.sigil.weapon] || upg.sigil.weapon };
   if (upg.isWeapon) {
     const w = playerWeapons[upg.id];
     const s = WEAPON_STATS[upg.id];
@@ -10580,7 +10838,7 @@ function pickUpgrades(pool, count) {
 function upgradeAvailable(u) {
   if (banishedUpgrades.has(u.id)) return false;
   if (u.condition && !u.condition()) return false;
-  if (!u.isWeapon && !u.isRelic && upgradeRank(u.id) >= (u.maxRank ?? Infinity)) return false;
+  if (!u.isWeapon && !u.isRelic && !u.isSigil && upgradeRank(u.id) >= (u.maxRank ?? Infinity)) return false;
   return true;
 }
 
@@ -10626,11 +10884,12 @@ function populateUpgradeChoices(count, screen, options, isChest) {
     const text = upgradeCardText(upg, rarity.mul);
     const btn = document.createElement('button');
     const curLvl = upg.isWeapon ? (playerWeapons[upg.id]?.level || 0) : 0;
-    const kind = upg.isRelic ? 'relic' : upg.isWeapon ? (curLvl > 0 ? 'weapon-lv' : 'weapon') : 'stat';
-    btn.className = `upgrade-btn card-${kind.split('-')[0]} rarity-${upg.isRelic ? 'relic' : rarity.id}`;
+    const kind = upg.isSigil ? 'sigil' : upg.isRelic ? 'relic' : upg.isWeapon ? (curLvl > 0 ? 'weapon-lv' : 'weapon') : 'stat';
+    btn.className = `upgrade-btn card-${kind.split('-')[0]} rarity-${upg.isSigil ? 'sigil' : upg.isRelic ? 'relic' : rarity.id}`;
     // Four silhouettes: the chip and the detail row differ by kind so the shape
     // says what the card is before the text does.
-    const chip = kind === 'relic' ? '<span class="chip chip-relic">Relic</span>'
+    const chip = kind === 'sigil' ? '<span class="chip chip-sigil">Sigil</span>'
+      : kind === 'relic' ? '<span class="chip chip-relic">Relic</span>'
       : kind === 'weapon' ? '<span class="chip chip-new">New</span>'
       : kind === 'weapon-lv' ? `<span class="chip chip-lv">Lv ${curLvl} → ${curLvl + 1}</span>`
       : (rarity.name ? `<span class="chip chip-${rarity.id}">${rarity.name}</span>` : '');
@@ -10652,12 +10911,22 @@ function populateUpgradeChoices(count, screen, options, isChest) {
       const evo = WEAPON_EVOLUTIONS[upg.id];
       const evoLine = evo ? `<span class="feeds">Evolves into <b>★ ${evo.evoName}</b> <i>with ${UPGRADES.find(u => u.id === evo.requires)?.title || evo.requires}</i></span>` : '';
       detail = `<div class="upgrade-delta">${kind === 'weapon-lv' ? `<span class="k">Level</span>${rankPips(curLvl, 5, true)}` : ''}${chips}</div>${evoLine}`;
+    } else if (kind === 'sigil') {
+      // A sigil is only ever offered for a weapon already in hand, so the card
+      // says which one, and at what rank, rather than showing a rank counter of
+      // its own: it is taken once and never again.
+      const w = playerWeapons[upg.sigil.weapon];
+      detail = `<div class="upgrade-delta"><span class="k">Etched on</span><b class="delta-num">${WEAPON_NAMES[upg.sigil.weapon]}</b>${rankPips(Math.min(5, w.level), 5, true)}</div>`;
     } else {
       let gems = '';
       for (let i = 1; i <= maxRelics(); i++) gems += `<i class="${i <= relicCount() ? 'on' : i === relicCount() + 1 ? 'next' : ''}"></i>`;
       detail = `<div class="upgrade-delta"><span class="k">Relic slots</span><span class="gems">${gems}</span><b class="delta-num">${relicCount() + 1} of ${maxRelics()}</b></div>`;
     }
-    const iconHtml = upg.isRelic
+    const iconHtml = upg.isSigil
+      // The weapon's own art with the sigil's glyph struck over it: the card has
+      // to read as "this weapon, changed" at a glance.
+      ? `<div class="upgrade-icon sigil-icon"><img src="images/upgrades/${upg.sigil.weapon}.png" alt="" onerror="this.style.display='none'"><span>${upg.sigil.icon}</span></div>`
+      : upg.isRelic
       ? `<img class="upgrade-icon" src="images/relics/${upg.relic.id}.png" alt="" onerror="this.outerHTML='<div class=&quot;upgrade-icon relic-icon&quot;>${upg.relic.icon}</div>'">`
       : `<img class="upgrade-icon" src="images/upgrades/${upg.id}.png" onerror="this.style.display='none'" alt="${upg.title}">`;
     btn.innerHTML = `${iconHtml}<div class="upgrade-text"><div class="upgrade-title">${upg.title}${chip}</div><div class="upgrade-desc">${text.desc}</div>${detail}</div>`;
@@ -11043,11 +11312,20 @@ function updateHUD() {
     let pips = '';
     if (wData.evolved) pips = '<b>★</b>';
     else for (let i = 1; i <= 5; i++) pips += `<i class="${i <= lvl ? 'on' : ''}"></i>`;
+    // Sigils are the one thing a slot carries that neither the icon nor the
+    // level pips show, so each one adds a mark above the slot.
+    let sigilMark = '';
+    for (const g of WEAPON_SIGILS) {
+      if (g.weapon === wKey && players[0].sigils && players[0].sigils[g.id]) {
+        sigilMark += `<i title="${g.name}: ${g.desc}">${g.icon}</i>`;
+      }
+    }
+    if (sigilMark) sigilMark = `<span class="ws-sigils">${sigilMark}</span>`;
     hudHtml += `<div class="ws"><div class="weapon-slot active${evoClass}" title="${WEAPON_NAMES[wKey]} Lv${wData.level}${evoTitle}">
       <img class="weapon-slot-img" src="images/upgrades/${wKey}.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
       <span class="weapon-slot-icon" style="display:none">${WEAPON_ICONS[wKey]}</span>
       <div class="weapon-slot-cd"></div>
-    </div><div class="ws-pips">${pips}</div></div>`;
+    </div>${sigilMark}<div class="ws-pips">${pips}</div></div>`;
   }
   for (; slotsShown < maxWeaponSlots(); slotsShown++) {
     hudHtml += `<div class="ws"><div class="weapon-slot empty" title="Empty weapon slot"><span class="weapon-slot-icon" style="opacity:0.35">+</span></div><div class="ws-pips"></div></div>`;
@@ -11680,6 +11958,8 @@ function clearRun() {
   for (const p of enemyProjectiles) scene.remove(p.mesh);
   enemyProjectiles.length = 0;
   for (const k of Object.keys(upgradeRanks)) delete upgradeRanks[k];
+  for (const pl of players) { pl.sigils = {}; rebuildSigils(pl); }
+  weaponSigils = players[0].sigils;
   for (const b of orbitalBombs) { scene.remove(b.mesh); b.mesh.material.dispose(); }
   orbitalBombs.length = 0;
   burnPatches.length = 0;
@@ -14239,6 +14519,19 @@ function populateHelpScreen() {
     </div></div>`;
   }
 
+  advHtml += '<div class="help-section-title">Weapon Sigils</div>';
+  advHtml += `<div class="help-item"><div class="help-item-info"><div class="help-item-desc">A sigil is etched on a weapon thou already carriest, once it has reached <span style="color:#e8c860">rank ${SIGIL_MIN_LEVEL}</span>. It changes how that weapon fights rather than how large its number is, and each may be taken but once. They are offered only for weapons in thy hand, so the longer a quest runs the more the cards bend toward the build thou art actually playing.</div></div></div>`;
+  for (const g of WEAPON_SIGILS) {
+    if (settings.privateMode && PRIVATE_PRIMARIES.has(g.weapon)) continue;
+    advHtml += `<div class="help-item" data-modal-name="${g.name.replace(/"/g,'&quot;')}" data-modal-desc="${g.desc.replace(/"/g,'&quot;')}" data-modal-stats="${(WEAPON_NAMES[g.weapon] || g.weapon).replace(/"/g,'&quot;')}" data-modal-color="#c9a253">
+      <div class="help-item-icon sigil-icon"><img src="images/upgrades/${g.weapon}.png" alt="" onerror="this.style.display='none'"><span>${g.icon}</span></div>
+      <div class="help-item-info">
+      <div class="help-item-name">${g.name}</div>
+      <div class="help-item-desc">${g.desc}</div>
+      <div class="help-item-stats">${WEAPON_NAMES[g.weapon] || g.weapon}</div>
+    </div></div>`;
+  }
+
   advHtml += '<div class="help-section-title">Omens</div>';
   advHtml += `<div class="help-item"><div class="help-item-info"><div class="help-item-desc">On the wave after each boss falls &mdash; <span style="color:#e8c860">${OMEN_WAVES.join(', ')}</span> &mdash; two omens are laid before the party. Each takes three waves to come into its full strength. Each carries a curse for the rest of the quest and a boon that pays for it, and there is no third card. Three omens are read in a full quest, so no two quests run the same road.</div></div></div>`;
   for (const o of OMENS) {
@@ -14716,6 +15009,16 @@ init().then(() => {
         if (!abilityReady(pl)) return false;
         triggerKnightAbility(pl, readInput(pl));
         return true;
+      },
+      // Weapon sigils: the table, the knight's book, and the derived caches
+      // the fire sites and applyDamage actually read.
+      WEAPON_SIGILS, SIGIL_MIN_LEVEL, sigilsFor, rebuildSigils, sigMod,
+      get weaponSigils() { return weaponSigils; },
+      grantSigil(id, pl) {
+        const who = pl || players[0];
+        who.sigils[id] = true;
+        rebuildSigils(who);
+        return who.sigils[id] === true;
       },
       // Omens: the pool, what this run has taken, and a way to force the choice.
       OMENS, OMEN_WAVES, omens, omenMul, hasOmen, offerOmen, takeOmen, resetOmens,

@@ -1,0 +1,250 @@
+loaded in 5.3s
+
+=== dad / kingsfield / Ogre 0 / bot=kite: VICTORY at wave 20, 16:50, level 54, 7136 kills (33s wall)
+    weapons: sword★ dagger★ arrowVolley★ wardShields L5  relics: windwalker berserker bloodletter wolfsbane
+    damage taken by: dragonOgre 194, archer arrow 47, boulder 35, rat 6
+    omens: bloodmoon horde quickening
+    sigils: dagger_whetted shield_rebuke dagger_quick sword_headsman arrow_barbed
+    damage by: dagger 897501, arrowVolley 220561, sword 34649, friendlyFire 4529, ability 2229, wardShields 1192
+    boss fights: w5 1200hp in 15.7s (76 dps) | w10 7900hp in 38s (208 dps) | w15 13454hp in 17.4s (773 dps) | w20 KING 110000hp in 35.7s (3081 dps)
+    actives: 30 used, 2229 damage
+    time   wave  hp        lvl  kills  enemies   at
+     0:01     1  115/115     1      0       1   -4,-4
+     1:01     2  115/115     3     35      10   -22,-15
+     2:02     4  115/115     6     89      39   4,25
+     3:03     5  115/115    13    222      28   -29,72
+     4:04     7  115/115    17    410      33   -39,65
+     5:04     8  115/115    19    620      30   -37,59
+     6:05     9  115/115    22    858      21   -64,44
+     7:06    10  115/115    24   1090      11   -70,72
+     8:06    11  115/115    26   1358      19   -66,35
+     9:06    12  115/115    29   1790      30   -33,13
+    10:06    13  115/115    31   2150      47   -40,25
+    11:06    14  115/115    33   2648      49   -72,16
+    12:06    15  130/130    35   3182      50   -59,9
+    13:07    16  130/130    39   3855      64   -49,7
+    14:08    17  130/130    43   4682      92   -75,-43
+    15:09    18  130/130    47   5546     139   -67,-26
+    16:09    19  184/184    51   6509     137   -36,-2
+    snagged 3% of 10s intervals
+    died at -3,0; last 90s: 918s:-71,-21 928s:-76,-31 939s:-70,-18 950s:-71,15 960s:-77,-1 970s:-41,-6 980s:-13,-13 991s:-9,-11 1001s:-5,0
+
+=== brennan / kingsfield / Ogre 0 / bot=kite: VICTORY at wave 20, 18:19, level 50, 7002 kills (36s wall)
+    weapons: spear L5 dagger★ orbitalBomb★ wardShields★  relics: wolfsbane hooves phoenix
+    damage taken by: archer arrow 363, dragonOgre 289, wolf 126, rat 98, elite ogre 60, goblin 53, ogre 45, elite goblin 37, boulder 36
+    omens: quickening longnight famine
+    sigils: bomb_cluster bomb_frost shield_rebuke shield_fourth spear_impaler spear_harry dagger_quick
+    damage by: dagger 720457, orbitalBomb 160832, spear 84872, wardShields 10659, ability 8882, friendlyFire 1479
+    boss fights: w6 1200hp in 78.5s (15 dps) | w13 7900hp in 213.3s (37 dps) | w15 13454hp in 15.1s (891 dps) | w20 KING 110000hp in 40.3s (2730 dps)
+    actives: 61 used, 8882 damage
+    time   wave  hp        lvl  kills  enemies   at
+     0:01     1  110/110     1      0       1   4,-4
+     1:02     2  110/110     3     36       9   -3,-64
+     2:03     4  98/110      8    112      15   -10,-17
+     3:03     5  110/110    12    198      10   -34,-23
+     4:04     7  74/110     15    344      35   -48,-15
+     5:04     8  78/110     18    534      32   -56,-37
+     6:05     9  110/110    20    726      78   -45,-13
+     7:06    10  75/110     22    971      70   17,-22
+     8:06    11  56/110     24   1178      35   -47,-32
+     9:06    12  33/125     26   1438      47   -60,53
+    10:07    13  64/125     29   1754      51   -34,78
+    11:07    14  125/125    31   2211      54   -46,42
+    12:08    15  125/125    33   2701      35   -58,57
+    13:08    16  149/164    36   3243      42   -30,61
+    14:09    17  164/164    39   3845      57   -29,53
+    15:10    18  164/164    41   4571      76   15,51
+    16:10    18  179/179    44   5363      78   56,35
+    17:10    19  179/179    47   6204      79   14,47
+    18:11    20  194/194    50   6917      48   2,-15
+    snagged 1% of 10s intervals
+    died at -8,10; last 90s: 1006s:32,17 1016s:32,37 1027s:32,39 1037s:27,27 1048s:12,16 1059s:0,-7 1070s:-16,-34 1081s:-8,-28 1092s:2,-21
+
+=== parker / kingsfield / Ogre 0 / bot=kite: VICTORY at wave 20, 16:39, level 45, 6125 kills (31s wall)
+    weapons: staff★ dagger★ arrowVolley★ orbitalBomb★  relics: berserker windwalker hooves
+    damage taken by: archer arrow 450, dragonOgre 154, boulder 49, wolf 29, rat 3
+    omens: famine quickening arrowstorm
+    sigils: bomb_cluster arrow_barbed staff_brand
+    damage by: dagger 540372, staff 437193, arrowVolley 182091, orbitalBomb 25030, ability 10990, friendlyFire 1494
+    boss fights: w6 1200hp in 59.8s (20 dps) | w11 7900hp in 53s (149 dps) | w15 13454hp in 25.4s (530 dps) | w20 KING 110000hp in 24.7s (4453 dps)
+    actives: 65 used, 10990 damage
+    time   wave  hp        lvl  kills  enemies   at
+     0:01     1  85/85       1      0       1   5,-3
+     1:01     2  85/85       4     37       8   4,2
+     2:01     4  88/100      9    122      26   47,-32
+     3:02     5  58/100     12    220      17   9,-47
+     4:03     7  115/115    16    374      14   48,-20
+     5:03     8  107/115    19    565      28   74,-6
+     6:03     9  105/115    21    789      27   47,3
+     7:03    10  94/115     23   1042      28   21,-17
+     8:03    11  154/154    25   1278      31   74,-23
+     9:04    12  154/154    28   1669      43   75,-24
+    10:04    13  154/154    29   2010      91   71,-42
+    11:04    14  154/154    32   2476      49   7,-47
+    12:05    15  149/154    33   2910      59   22,-74
+    13:06    16  154/154    36   3556      55   26,-72
+    14:06    17  154/154    38   4178      51   -20,-67
+    15:06    18  154/154    41   4925      56   -41,-75
+    16:07    19  154/154    44   5764      72   -48,-56
+    snagged 0% of 10s intervals
+    died at -48,-6; last 90s: 908s:-39,-66 919s:-60,-51 930s:-50,-47 941s:-27,-55 952s:-39,-74 963s:-6,-44 974s:-30,-12 984s:-42,-12 995s:-40,9
+
+=== dad / darkwood / Ogre 0 / bot=kite: VICTORY at wave 20, 16:58, level 57, 7882 kills (35s wall)
+    weapons: sword★ dagger★ orbitalBomb★ wardShields★  relics: berserker hooves runes windwalker
+    damage taken by: dragonOgre 350, archer arrow 150, boss stomp 51, wolf 17, rat 13, bomb goblin 9, boulder 3
+    omens: horde bloodmoon quickening
+    sigils: sword_headsman bomb_frost
+    damage by: dagger 993057, orbitalBomb 132856, sword 125223, wardShields 17688, ability 5162, friendlyFire 1563
+    boss fights: w6 1200hp in 44s (27 dps) | w11 7900hp in 61.1s (129 dps) | w15 13454hp in 16.9s (796 dps) | w20 KING 110000hp in 44s (2500 dps)
+    actives: 39 used, 5162 damage
+    time   wave  hp        lvl  kills  enemies   at
+     0:01     1  115/115     1      0       1   -4,-4
+     1:02     2  100/115     4     39      14   -43,3
+     2:02     4  110/115     7     98      37   -77,-22
+     3:02     5  115/115    12    221      20   -68,-3
+     4:03     7  115/115    16    394      32   -54,6
+     5:03     8  130/130    19    591      28   -75,22
+     6:04     9  130/130    22    873      60   -68,20
+     7:04    10  154/154    24   1153      36   -53,41
+     8:05    11  154/154    28   1500      35   -65,2
+     9:05    12  154/154    31   1962      57   -50,27
+    10:05    13  154/154    34   2433      32   -74,43
+    11:06    14  178/178    36   2947      55   -6,63
+    12:06    15  178/178    39   3565      65   -48,16
+    13:07    16  178/178    43   4366      63   4,45
+    14:07    17  178/178    46   5189      62   42,40
+    15:08    18  193/193    50   6124      81   5,6
+    16:08    19  217/217    54   7235     110   19,1
+    snagged 2% of 10s intervals
+    died at -46,10; last 90s: 928s:-13,6 939s:8,-4 949s:3,-17 960s:12,1 970s:-1,-3 981s:-44,11 991s:-51,4 1002s:-50,4 1013s:-43,2
+
+=== brennan / darkwood / Ogre 0 / bot=kite: DIED at wave 20, 18:27, level 48, 6267 kills (38s wall)
+    weapons: spear L5 holyAura★ arrowVolley★ wardShields★ stormCall★  relics: phoenix berserker wolfsbane
+    damage taken by: dragonOgre 636, archer arrow 602, boulder 463, boss 178, boss stomp 148, bomb goblin 99, elite ogre 63, rat 60, ogre 42, goblin 8
+    omens: arrowstorm giants horde
+    sigils: spear_impaler aura_widen shield_fourth storm_forked
+    damage by: stormCall 414967, holyAura 205734, spear 188272, arrowVolley 185983, wardShields 118793, ability 24068
+    boss fights: w5 1200hp in 36.2s (33 dps) | w12 7900hp in 163.3s (48 dps) | w16 13454hp in 83.8s (161 dps)
+    actives: 75 used, 24068 damage
+    time   wave  hp        lvl  kills  enemies   at
+     0:01     1  110/110     1      0       1   -6,0
+     1:02     2  101/110     3     40       5   43,1
+     2:03     4  107/110     8    120      19   19,13
+     3:03     5  110/110    12    202       8   -13,38
+     4:04     7  106/110    15    334      24   -11,44
+     5:04     8  110/110    18    502      40   8,30
+     6:04     9  102/110    20    756      48   -9,70
+     7:04    10  110/110    23   1020      22   9,66
+     8:05    11  77/110     24   1224      31   -25,78
+     9:06    12  67/110     26   1501      47   -14,60
+    10:06    13  110/110    28   1856      44   -26,18
+    11:07    14  125/125    30   2267      52   -53,14
+    12:08    15  75/125     32   2707      47   -46,39
+    13:09    16  125/125    35   3193     135   -58,2
+    14:10    17  80/125     37   3653     168   -77,-22
+    15:10    18  140/140    40   4291     153   -77,-11
+    16:11    19  138/140    43   5029     159   -68,24
+    17:11    20  140/140    46   5661      50   -72,10
+    18:12    20  103/155    47   6137      66   -68,25
+    snagged 2% of 10s intervals
+    died at -46,20; last 90s: 1018s:-77,9 1028s:-71,15 1039s:-67,2 1050s:-82,15 1060s:-62,13 1070s:-62,14 1081s:-61,27 1092s:-68,25 1102s:-39,22
+
+=== parker / darkwood / Ogre 0 / bot=kite: DIED at wave 11, 8:07, level 25, 1176 kills (16s wall)
+    weapons: staff L5 arrowVolley L3 orbitalBomb L2 wardShields L5  relics: greed hooves
+    damage taken by: archer arrow 110, boulder 90, dragonOgre 62, wolf 56, rat 23
+    omens: famine bloodmoon
+    sigils: arrow_fletcher shield_rebuke
+    damage by: staff 96816, arrowVolley 9123, ability 7551, wardShields 5647, orbitalBomb 1397, shockwave 496
+    boss fights: w6 1200hp in 43.9s (27 dps)
+    actives: 39 used, 7551 damage
+    time   wave  hp        lvl  kills  enemies   at
+     0:01     1  85/85       1      0       1   0,8
+     1:02     2  82/85       4     41       8   72,74
+     2:02     4  73/85      10    126      15   63,28
+     3:02     5  79/85      13    226      10   40,17
+     4:03     7  93/100     16    356      29   -22,53
+     5:03     8  86/100     19    547      30   -58,41
+     6:04     9  100/100    21    771      33   -65,62
+     7:04    10  124/124    23    950      31   -56,15
+     8:04    11  1/124      25   1160      40   -69,72
+    snagged 0% of 10s intervals
+    died at -53,72; last 90s: 394s:-53,5 405s:-60,21 416s:-40,30 427s:-48,28 437s:-59,35 447s:-50,53 458s:-54,67 469s:-13,68 479s:-22,78
+
+=== dad / bloodmarch / Ogre 0 / bot=kite: DIED at wave 8, 5:32, level 18, 561 kills (15s wall)
+    weapons: sword L5 arrowVolley L2 orbitalBomb L2 stormCall L3  relics: greed
+    damage taken by: archer arrow 320, boss 37, rat 9, goblin 6, wolf 3
+    omens: arrowstorm
+    sigils: sword_headsman sword_reaver
+    damage by: sword 24938, stormCall 7097, arrowVolley 1069, ability 876, orbitalBomb 718, lupin 392
+    boss fights: w6 1200hp in 70.4s (17 dps)
+    actives: 19 used, 876 damage
+    time   wave  hp        lvl  kills  enemies   at
+     0:01     1  115/115     1      0       1   -1,-3
+     1:02     2  115/115     4     39       6   36,-43
+     2:02     4  110/115     7    109      14   -3,-2
+     3:03     5  89/115     11    182      11   -20,15
+     4:04     7  87/115     15    328      19   -28,-15
+     5:04     8  76/115     17    480      58   -48,-28
+    snagged 0% of 10s intervals
+    died at -27,-75; last 90s: 243s:-25,-15 253s:-2,4 264s:-11,-33 274s:-33,-15 285s:-9,-17 296s:-44,-53 307s:-30,-23 318s:-25,-54 329s:-34,-71
+
+=== brennan / bloodmarch / Ogre 0 / bot=kite: DIED at wave 11, 8:07, level 25, 1240 kills (17s wall)
+    weapons: spear L5 holyAura L3 arrowVolley L5 orbitalBomb L2
+    damage taken by: archer arrow 266, dragonOgre 226, rat 105, wolf 74, boss 64, boulder 41, goblin 25, elite goblin 10
+    omens: arrowstorm bloodmoon
+    damage by: spear 95363, arrowVolley 12695, holyAura 4981, ability 4780, orbitalBomb 3328, lupin 698
+    boss fights: w6 1200hp in 57.3s (21 dps)
+    actives: 35 used, 4780 damage
+    time   wave  hp        lvl  kills  enemies   at
+     0:01     1  110/110     1      0       1   4,-4
+     1:02     2  104/110     4     37       8   11,-38
+     2:02     4  125/125    10    125      22   20,-77
+     3:03     5  125/125    13    214      12   25,-35
+     4:04     7  125/125    16    371      26   67,-30
+     5:04     8  147/149    19    544      65   22,2
+     6:05     9  145/149    21    775      44   44,51
+     7:06    10  144/149    23   1020      32   7,1
+     8:06    11  5/149      25   1239      23   38,-12
+    snagged 0% of 10s intervals
+    died at 38,-11; last 90s: 392s:35,-22 403s:43,30 414s:35,-1 425s:3,0 435s:27,-6 445s:20,4 456s:36,8 467s:14,-17 477s:23,2
+
+=== parker / bloodmarch / Ogre 0 / bot=kite: VICTORY at wave 20, 16:48, level 48, 6496 kills (34s wall)
+    weapons: staff★ dagger L5 arrowVolley★ wardShields★ stormCall L5
+    damage taken by: archer arrow 226, dragonOgre 124, boulder 3
+    omens: giants famine bloodmoon
+    sigils: arrow_barbed shield_fourth staff_brand dagger_quick
+    damage by: arrowVolley 739337, staff 392613, dagger 278828, wardShields 56304, stormCall 19380, ability 7511
+    boss fights: w5 1200hp in 18.4s (65 dps) | w10 7900hp in 28.9s (273 dps) | w15 13454hp in 20.4s (660 dps) | w20 KING 110000hp in 34.2s (3216 dps)
+    actives: 63 used, 7511 damage
+    time   wave  hp        lvl  kills  enemies   at
+     0:01     1  85/85       1      0       1   5,4
+     1:01     2  85/85       5     47       2   -19,65
+     2:02     4  73/85       9    121       7   -6,31
+     3:03     5  85/85      13    223       9   0,45
+     4:03     7  85/85      17    388      21   -39,45
+     5:03     8  85/85      19    571      29   -9,54
+     6:04     9  92/100     22    857      35   -31,29
+     7:04    10  100/100    24   1096      36   6,36
+     8:05    11  100/100    26   1375      29   -5,44
+     9:05    12  100/100    29   1756      49   15,65
+    10:05    13  100/100    31   2175      38   8,76
+    11:06    14  100/100    33   2567      86   1,72
+    12:06    15  100/100    35   3083      62   -7,47
+    13:06    16  124/124    38   3700      45   -16,55
+    14:07    17  124/124    41   4400      62   -17,38
+    15:08    18  124/124    44   5199      96   34,-8
+    16:08    19  102/124    47   6064     113   52,-13
+    snagged 1% of 10s intervals
+    died at -27,-31; last 90s: 913s:36,-24 924s:26,-24 935s:31,-4 946s:1,5 957s:-10,1 967s:40,-15 978s:-6,2 989s:-5,2 1000s:-26,3
+
+SUMMARY
+  dad      kingsfield VICTORY   wave 20  16:50  lvl 54  kills 7136
+  brennan  kingsfield VICTORY   wave 20  18:19  lvl 50  kills 7002
+  parker   kingsfield VICTORY   wave 20  16:39  lvl 45  kills 6125
+  dad      darkwood   VICTORY   wave 20  16:58  lvl 57  kills 7882
+  brennan  darkwood   DIED      wave 20  18:27  lvl 48  kills 6267
+  parker   darkwood   DIED      wave 11  8:07  lvl 25  kills 1176
+  dad      bloodmarch DIED      wave  8  5:32  lvl 18  kills 561
+  brennan  bloodmarch DIED      wave 11  8:07  lvl 25  kills 1240
+  parker   bloodmarch VICTORY   wave 20  16:48  lvl 48  kills 6496
+no JS errors
