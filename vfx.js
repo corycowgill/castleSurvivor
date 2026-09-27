@@ -2267,6 +2267,13 @@ function updateRuneCircles(dt) {
 // ═══════════════════════════════════════════════════════════════════════════
 
 const DISTORT_LAYER = 5;
+// The distortion pass used to render the MAIN scene with a layer mask. Layers
+// filter inside projectObject, so three.js still walked all ~1,400 map objects
+// to find the two or three quads on that layer, and did it on every frame an
+// explosion was on screen. A scene of its own means the pass traverses only
+// what it draws. It needs no lights (the shader is unlit) and no background or
+// fog — a fresh Scene has neither, which also removes the save/restore dance.
+const distortScene = new THREE.Scene();
 const distortions = [];
 const MAX_DISTORTIONS = 10;
 let distortGeo = null;
@@ -2311,7 +2318,7 @@ function spawnHeatDistortion(pos, radius = 3, duration = 0.45, strength = 1.0) {
   mesh.scale.setScalar(radius * 2);
   mesh.layers.set(DISTORT_LAYER);
   mesh.frustumCulled = false;
-  scene.add(mesh);
+  distortScene.add(mesh);
   distortions.push({ mesh, mat, life: duration, maxLife: duration, radius, strength });
 }
 
@@ -2320,7 +2327,7 @@ function updateDistortions(dt) {
     const d = distortions[i];
     d.life -= dt;
     if (d.life <= 0) {
-      scene.remove(d.mesh);
+      distortScene.remove(d.mesh);
       freeMat('distort', d.mat);
       distortions.splice(i, 1);
       continue;
@@ -2355,19 +2362,13 @@ function renderDistortion() {
   renderer.setRenderTarget(distortRT);
   renderer.setClearColor(_distortNeutral, 1);
   renderer.clear(true, false, false);
-  if (distortions.length > 0) {
-    // scene.background would be painted over the neutral clear, filling the
-    // offset buffer with the sky colour and skewing the whole screen forever.
-    const prevBg = scene.background;
-    const prevFog = scene.fog;
-    scene.background = null;
-    scene.fog = null;
-    camera.layers.set(DISTORT_LAYER);
-    renderer.render(scene, camera);
-    camera.layers.mask = prevMask;
-    scene.background = prevBg;
-    scene.fog = prevFog;
-  }
+  // Its own scene, so this traverses the handful of quads it draws rather than
+  // the whole map. No background or fog to null out either — a fresh Scene has
+  // neither, and background would otherwise paint over the neutral clear and
+  // skew the entire screen's offset.
+  camera.layers.set(DISTORT_LAYER);
+  renderer.render(distortScene, camera);
+  camera.layers.mask = prevMask;
   renderer.setRenderTarget(prevTarget);
   renderer.setClearColor(_prevClear, prevAlpha);
   return distortRT.texture;
@@ -5025,7 +5026,7 @@ const manager = {
     slashArcs.length = 0;
     for (const b of lightningBolts) disposeBolt(b);
     lightningBolts.length = 0;
-    for (const d of distortions) { scene.remove(d.mesh); freeMat('distort', d.mat); }
+    for (const d of distortions) { distortScene.remove(d.mesh); freeMat('distort', d.mat); }
     distortions.length = 0;
     for (const rc of runeCircles) for (const l of rc.layers) { scene.remove(l.mesh); freeMat('rune', l.mat); }
     runeCircles.length = 0;

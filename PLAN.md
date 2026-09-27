@@ -866,3 +866,19 @@ than inspection.
 - [ ] 40.5 Open: ~614 meshes remain (multi-mesh props, breakables, transparent); `renderDistortion`
   is still a second full `renderer.render` and doubles every traversal above it; the unexplained
   ~400 ms stalls are still unattributed and are not GC (39.2)
+
+## Phase 41 - Distortion gets its own scene (2026-09-26)
+- [x] 41.1 **The second render was traversing the whole map.** `renderDistortion` already early-outs
+  when nothing is distorting (so it is not a cost on quiet frames, contrary to 23.5's framing), but
+  when an explosion IS on screen it rendered the *main* scene with `camera.layers.set(DISTORT_LAYER)`.
+  Layers filter inside `projectObject`, so three.js still walked all ~1,400 objects to find the two
+  or three quads on that layer — and that is on top of the main render, every frame the effect lives
+- [x] 41.2 **`distortScene`.** Distortion quads live in a Scene of their own now, so the pass
+  traverses only what it draws. It needs no lights (the shader is unlit) and a fresh Scene has no
+  background or fog, which also deletes the save/restore of `scene.background` / `scene.fog` that
+  existed to stop the sky painting over the neutral clear
+- [x] 41.3 **Verified.** `distort-kingsfield-1.png` (two distortions fired via `tour --post`) shows
+  the cobbles rippling as before; `npm test` clean, enemy regression clean, a full Parker run to
+  victory at wave 20 with no errors
+- [ ] 41.4 Open: ~614 meshes still outside the instancing fold; the unexplained ~400 ms stalls
+  (not GC, see 39.2); bloom and GTAO are full-screen passes that will dominate on a weak GPU
