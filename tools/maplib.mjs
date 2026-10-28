@@ -41,6 +41,15 @@ for (const [k, v] of Object.entries({
   landmark_obsidian_arch_01: { scale: 13.5, r: 3.2 }, landmark_ogre_idol_01: { scale: 12, r: 3.4 },
   burnt_tree_giant_01: { scale: 11.7, r: 1.8 },
 })) if (ASSET[k]) ASSET[k] = v;   // only once the mesh is registered
+// Mirefen's and Bloodmarch's trees, same rule as the dead tree above: collision is
+// the trunk you walk into, not the canopy. Their registered radii are half the
+// canopy (2.6-5.2), harmless while the generators placed them knee-high by mistake
+// (see scaleMul in add) and a wall of trees once they stood at full height: Mirefen's
+// centre went from 19% to 39% unwalkable on that alone.
+for (const [k, r] of Object.entries({
+  swamp_cypress_01: 1.1, swamp_cypress_02: 1.1, swamp_mangrove_01: 1.5,
+  bog_dead_tree_01: 1.3, bog_dead_tree_02: 1.3, war_oak_burnt_01: 1.5,
+})) if (ASSET[k]) ASSET[k] = { ...ASSET[k], r };
 // Fence sets: the picket set (re-tinted oak) and the rail set from Trellis batch 8
 export const FENCE_SETS = {
   picket: { straight: 'village_fence_straight_01', broken: 'village_fence_broken_01', corner: 'village_fence_corner_01', gate: 'village_fence_gate_01' },
@@ -297,10 +306,15 @@ export class MapBuilder {
   // isClear comparison against NaN is false, so the prop skipped every obstacle,
   // keep-out, road and barrier check and serialised `radius: null`. That put 560
   // phantom obstacles into Mirefen, some of them standing in impassable water.
-  add(key, x, z, { rotY = 0, scale, force = false, ignoreRoads = false, ignoreKeepOut = false, pad = 0 } = {}) {
+  // `scaleMul` is the same thing relative to the asset's calibrated scale, which is
+  // what a size variation almost always means. Mirefen and Bloodmarch passed
+  // `scale: R.range(0.85, 1.25)` for trees whose calibrated scale is 5-10, so
+  // every cypress stand and the whole burnt wood came out knee-high.
+  add(key, x, z, { rotY = 0, scale, scaleMul, force = false, ignoreRoads = false, ignoreKeepOut = false, pad = 0 } = {}) {
     const a = ASSET[key]; if (!a) throw new Error('unknown asset ' + key);
     let s = scale ?? a.scale;
     if (Array.isArray(s)) s = this.rnd.range(s[0], s[1]);
+    if (scaleMul != null) s = a.scale * (Array.isArray(scaleMul) ? this.rnd.range(scaleMul[0], scaleMul[1]) : scaleMul);
     if (!Number.isFinite(s)) throw new Error(`bad scale for ${key}: ${JSON.stringify(scale)}`);
     const r = a.r > 0 ? a.r * (s / a.scale) : 0.5;
     if (!Number.isFinite(r)) throw new Error(`bad radius for ${key} (scale ${s})`);

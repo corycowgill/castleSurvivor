@@ -4328,6 +4328,30 @@ const manager = {
     }
   },
 
+  // Wading through bog (Mirefen's mires): a flat ripple spreading from the feet
+  // and a few droplets of dark water kicked up. The ripple is what says "this
+  // ground is water" from the play camera; the droplets give it weight.
+  wadeSplash(position, tint = 0x7f9f8a) {
+    spawnShockwave(position, tint, 1.7, 0.6, 0.06);
+    const group = getGroup('dust', THREE.NormalBlending);
+    const count = Math.ceil(3 * quality.particleMul);
+    for (let i = 0; i < count; i++) {
+      group.emit({
+        x: position.x + (Math.random() - 0.5) * 0.5,
+        y: 0.1,
+        z: position.z + (Math.random() - 0.5) * 0.5,
+        vx: (Math.random() - 0.5) * 2.2,
+        vy: 1.6 + Math.random() * 1.4,
+        vz: (Math.random() - 0.5) * 2.2,
+        color: 0x2e3d33,
+        sizeStart: 0.12 + Math.random() * 0.1, sizeEnd: 0.05,
+        life: 0.35 + Math.random() * 0.15,
+        opacityStart: 0.75, opacityEnd: 0,
+        gravity: 12,
+      });
+    }
+  },
+
   // ─── CRITICAL HIT BURST ───
   criticalHit(position) {
     // Golden starburst

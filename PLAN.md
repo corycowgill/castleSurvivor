@@ -1351,3 +1351,62 @@ section of `node tools/playtest.mjs systems` (19 new checks, 83 total).
   do the balancing. An omen-shaped sigil - "the sweep reaches two further, and costs a third of its
   speed" - would let a strong effect exist without a rank gate holding it back, and is the obvious
   next shape to try.
+
+## Phase 50 - The edge of the world, a horde with colour, and maps built at the size they were drawn (2026-10-28)
+
+A graphics and level-design pass, from headless captures of all five maps and before/after
+comparisons against the previous build (`tools/reports/review-graphics-levels-2026-10-28.md`).
+Starting points: the open "world edge is never fogged" item from `press-review-2026-09-26.md`, the
+Darkwood comment admitting wolves, bats and rats were still black silhouettes, and the Bloodmarch
+snag rate.
+
+- [x] 50.1 **The world has an edge you cannot see.** The ground plane stopped at the clamp, and the
+  camera sees ~24 units past the knight, so every edge ended in a hard band of flat background. The
+  plane now runs `GROUND_SKIRT` (40) past the clamp, the splat is mapped onto the play area only (its
+  clamped edge carries out over the skirt) and the skirt darkens outward. `worldBorderObjects` rings
+  each map with its own trees and rocks just outside the clamp (`MAPS[].border`, median scale of each
+  key on that map, seeded, no collision, kept off rivers that run off the map, thinner in low quality).
+  The south edge, the camera's side, gets rocks only: a tree there stood between camera and knight.
+  Cost at an edge: +0.4% draw calls, +11% triangles; at the spawn, nothing.
+- [x] 50.2 **Enemy lift.** `look.enemyLift` adds each enemy's own albedo back as emission
+  (`applyEnemyLift`, one shared `onBeforeCompile`, so warm-up still covers it and a map change never
+  relinks). Wolves, rats and bats read as animals on Darkwood instead of holes in the ground, without
+  the tints the recolour purge removed. A fresnel rim was tried first and dropped: the Trellis meshes'
+  normals are noisy enough that any rim band sparkled into white speckle.
+- [x] 50.3 **Mirefen tells you it is slowing you.** `ps._inMire` was computed and never read. Wading
+  now throws a ripple and a splash every few strides (`vfx.wadeSplash`), and the first step into the
+  bog each run says `BOG: SLOWED`.
+- [x] 50.4 **Mirefen and Bloodmarch trees were placed knee-high.** Both generators passed
+  `scale: R.range(0.85, 1.25)` meaning a multiplier, but `add` takes an absolute scale, so cypress
+  (calibrated 5.46), dead trees (7.8) and the burnt wood (7-10.4) came out at a fifth to an eighth of
+  their size: Mirefen's "dense tree clumps that break the sightlines" and Bloodmarch's north-east wood
+  were ankle-height scrub. `add` takes `scaleMul` now, and an audit of every map for props under 40%
+  of their calibrated scale is empty. Their collision radii were half-canopy (2.6-5.2) and are now the
+  trunk (1.1-1.5), the same rule as `nature_dead_tree_03`. Cypress run 0.7-1.05x: a cypress canopy is
+  twice a pine's, and at full size they roofed the knight over. Snags and bog rocks were thinned to
+  match. Mirefen's centre 60x60 goes from 19.5% to 28% obstructed (Kingsfield is 37%).
+- [x] 50.5 **Bloodmarch is no longer inside out.** Its centre was the most obstructed ground in the
+  game (48% of the 60x60 round the spawn) and two quadrants were near-empty (4-17%). The spawn's
+  keep-out was registered after the field scatter, so twelve blockers landed within nine units of the
+  spawn point; it goes in first now, and the upright statue standing in for the fallen one moved north
+  of the spawn, out of the camera's line. Three trampled kiting lanes (a ring at r 15-20 and both
+  diagonals) are kept clear of props, painted and churned so they read; field litter is thinned.
+  Centre now 35%. The empty south and north-east get set pieces with a supply cache each: the pyres,
+  the baggage train and the last stand. Seven caches place now, against four before.
+- [x] 50.6 **Measured, not just looked at.** Kite bot, Dad, ten minutes, ten runs per build on
+  Bloodmarch: 8/10 survived on both, snag 0-7% against 0-6% (the 2026-09-26 review recorded 13%).
+  Smaller Mirefen samples are inside the harness's variance. Every death on both builds is led by
+  archer arrows. `npm test` passes with no JS errors.
+- [x] 50.7 **The harness runs on Linux and offline.** `findBrowser` knows Playwright's Chromium and
+  `CHROME_PATH`; `CS_THREE_DIR` serves the import map's CDN files (and Draco) from a local `three`
+  package for sandboxes without CDN access.
+- [ ] 50.8 Open: Emberreach shares `char_dead_tree_*` with Bloodmarch and still has canopy-sized
+  collision on them (it is the most obstructed map, 51%). Trunk radii there would change its layout,
+  so it wants its own look.
+- [ ] 50.9 Open: a huge dark band crosses Mirefen around (30, -62) in every build: a shadow from
+  something tall. Not traced.
+- [ ] 50.10 Open: nothing fades a prop standing between the camera and the knight. Full-size trees
+  make that matter more on Mirefen and in Bloodmarch's woods.
+- [ ] 50.11 Open: Kingsfield's fog colour is a saturated grass green. Single-player framing never
+  reaches the fog, but the co-op party camera pulls back 1.7x and probably does. Look at it there
+  before changing it.

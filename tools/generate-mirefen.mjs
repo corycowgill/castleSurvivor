@@ -155,7 +155,7 @@ for (const [ix, iz] of ISLANDS) {
   m.paintCircle(3, ix, iz, 9, 0.9, 0.55);            // matted sedge on top
   m.paintCircle(1, ix, iz, 12, 0.5, 0.7);
   for (let i = 0; i < Math.floor(R.range(2, 4.99)); i++) ring(HUMMOCK(), ix, iz, 4, 9, { scale: R.range(0.9, 1.5) });
-  if (R() < 0.75) ring(SNAG(), ix, iz, 3, 7, { scale: R.range(0.9, 1.3) });
+  if (R() < 0.75) ring(SNAG(), ix, iz, 3, 7, { scaleMul: R.range(0.9, 1.3) });
   if (R() < 0.5) ring(BOGROCK(), ix, iz, 4, 8, {});
   if (R() < 0.4) add(WISPSTONE(), ix + R.range(-3, 3), iz + R.range(-3, 3), { rotY: R.angle() });
   if (R() < 0.35) add('chest', ix + R.range(-4, 4), iz + R.range(-4, 4), { rotY: R.angle() });
@@ -173,7 +173,7 @@ const stand = (cx, cz, r, n) => {
     const a = R.angle(), d = Math.sqrt(R()) * r;
     const x = cx + Math.cos(a) * d, z = cz + Math.sin(a) * d;
     const k = R() < 0.45 ? CYPRESS() : R() < 0.6 ? CYPRESS_B() : MANGROVE();
-    add(k, x, z, { rotY: R.angle(), scale: R.range(0.85, 1.25) });
+    add(k, x, z, { rotY: R.angle(), scaleMul: R.range(0.7, 1.05) });   // a cypress canopy is twice a pine's; at 1x+ they roofed the knight over
     if (R() < 0.5) add(MOSSFALL(), x + R.range(-4, 4), z + R.range(-4, 4), { rotY: R.angle() });
   }
   m.paintCircle(1, cx, cz, r * 1.1, 0.7, 0.7);
@@ -217,7 +217,7 @@ m.paintCircle(3, VILLAGE.x, VILLAGE.z, 24, 0.4, 0.8);
 if (m.landmark('landmark_great_cypress', -6, -84, { rotY: 0.3, keepOut: 20 })) {
   m.paintCircle(1, -6, -84, 26, 0.85, 0.5);
 } else {
-  for (let i = 0; i < 20; i++) ring(CYPRESS(), -6, -84, 8, 22, { scale: R.range(1.3, 2.1) });
+  for (let i = 0; i < 20; i++) ring(CYPRESS(), -6, -84, 8, 22, { scaleMul: R.range(0.8, 1.1) });   // 1.3-2.1x loomed into the camera
   m.keepOut(-6, -84, 16);
   m.paintCircle(1, -6, -84, 24, 0.8, 0.5);
 }
@@ -251,18 +251,20 @@ const region = { x: 0, z: 0, r: 96 };
 const bogDensity = (x, z) => Math.max(0.05, Math.min(1, bogField(x, z) * 2 + 0.35));
 const dryDensity = (x, z) => Math.max(0.05, 1 - bogField(x, z) * 2);
 
-scatter(REEDS(), 170, region, { density: (x, z) => Math.max(0.1, bogDensity(x, z) * 1.1), scale: [0.8, 1.5] });
+scatter(REEDS(), 170, region, { density: (x, z) => Math.max(0.1, bogDensity(x, z) * 1.1), scaleMul: [0.8, 1.5] });
 scatter(CATTAILS(), 110, region, { density: (x, z) => Math.max(0.05, 0.9 - nearWater(x, z) / 20), scale: [0.8, 1.4] });
 scatter(LILIES(), 70, region, { density: (x, z) => Math.max(0, 0.95 - nearWater(x, z) / 14), scale: [0.9, 1.6] });
 scatter(HUMMOCK(), 110, region, { density: bogDensity, scale: [0.8, 1.6] });
 scatter(ROTLOG(), 130, region, { density: (x, z) => bogDensity(x, z) * 0.8 + canopy(x, z) * 0.4, scale: [0.9, 1.4] });
 scatter(STUMP(), 110, region, { density: (x, z) => canopy(x, z) * 0.8 + 0.15, scale: [0.9, 1.4] });
 scatter(FUNGUS(), 70, region, { density: (x, z) => canopy(x, z) * 0.9, scale: [0.8, 1.3] });
-scatter(SNAG(), 90, region, { density: (x, z) => bogDensity(x, z) * 0.7, scale: [0.9, 1.4] });
-scatter(BLEACHED(), 70, region, { density: (x, z) => dryDensity(x, z) * 0.6, scale: [0.9, 1.3] });
+// Fewer than before scaleMul: these are full-size trees and boulders now, not
+// knee-high ones, and the same count walled off a third of the spawn
+scatter(SNAG(), 55, region, { density: (x, z) => bogDensity(x, z) * 0.7, scaleMul: [0.9, 1.4] });
+scatter(BLEACHED(), 70, region, { density: (x, z) => dryDensity(x, z) * 0.6, scaleMul: [0.9, 1.3] });
 scatter(DRIFTWOOD(), 80, region, { density: (x, z) => Math.max(0.05, 0.8 - nearWater(x, z) / 22), scale: [0.9, 1.5] });
-scatter(MOSSFALL(), 90, region, { density: (x, z) => canopy(x, z), scale: [0.9, 1.5] });
-scatter(BOGROCK(), 80, region, { density: dryDensity, scale: [0.8, 1.3] });
+scatter(MOSSFALL(), 90, region, { density: (x, z) => canopy(x, z), scaleMul: [0.9, 1.5] });
+scatter(BOGROCK(), 45, region, { density: dryDensity, scaleMul: [0.8, 1.3] });
 scatter(ROCKMID(), 90, region, { density: dryDensity, scale: [0.8, 1.3] });
 scatter(P('bog_fern_01', 'nature_fern_01'), 110, region, { density: (x, z) => canopy(x, z) * 0.8 + 0.2, scale: [0.9, 1.5] });
 scatter(P('bog_flowers_01', 'nature_flowers_02'), 90, region, { density: (x, z) => 0.4 + canopy(x, z) * 0.4, scale: [0.9, 1.5] });

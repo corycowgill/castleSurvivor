@@ -4218,6 +4218,9 @@ const MAPS = {
     bg: 0x2d5a1e, fog: [60, 100], ground: 0x3a7a28, ambient: 0.6, hemi: 0.4,
     // Splat-painted ground: base texture plus four layers weighted by the RGBA of
     // the splat map the generator writes (tools/generate-kingsfield.mjs)
+    // The treeline past the world edge (see worldBorderObjects): the woods the
+    // generator thickens toward the edge simply carry on into the fog
+    border: { trees: ['pineTree'], rocks: ['boulder', 'nature_rock_cluster_02'] },
     terrain: { base: 'grass', layers: ['dirt', 'litter', 'mud', 'cobble'], splat: 'map.kingsfield.splat.png', tile: 4.6, layerScale: [0.85, 1.3, 1.1, 3.5] },
     look: {
       key: 0xffdcb0, keyIntensity: 1.45, ambient: 0xa9b6d0, ambientIntensity: 0.5,
@@ -4225,6 +4228,7 @@ const MAPS = {
       grade: { lift: [0.0, 0.0, 0.008], gain: [1.05, 1.0, 0.93], gamma: [1, 1, 1], saturation: 1.12, vignette: 0.3 },
       lantern: { color: 0xffb060, intensity: 7, distance: 11 }, forge: { color: 0xff7a30, intensity: 12, distance: 9 },
       ao: 0.8,
+      enemyLift: 0.15,   // see applyEnemyLift; a bright map needs little
     },
     weights: {},
   },
@@ -4236,6 +4240,7 @@ const MAPS = {
       return generateDarkwoodMap();
     },
     bg: 0x16261c, fog: [40, 80], ground: 0x24401e, ambient: 0.42, hemi: 0.3,
+    border: { trees: ['pineTree'], rocks: ['nature_rock_cluster_02', 'prop_tree_stump_02'] },
     terrain: { base: 'grass', layers: ['dirt', 'needles', 'mud', 'moss'], splat: 'map.darkwood.splat.png', tile: 4.2, layerScale: [0.85, 1.3, 1.1, 1.6] },
     look: {
       key: 0xa8bcff, keyIntensity: 1.3, ambient: 0x5c6b8e, ambientIntensity: 1.3,
@@ -4244,17 +4249,13 @@ const MAPS = {
       lantern: { color: 0xffa040, intensity: 24, distance: 16 }, forge: { color: 0xff7a30, intensity: 18, distance: 11 },
       shafts: { color: 0xa9c4ff, opacity: 0.07 },
       ao: 1.0,
+      enemyLift: 0.4,    // moonlight: the map the horde vanished on
     },
     weights: { wolf: 1.6, bat: 1.4, rat: 0.5, archer: 1.1, goblin: 0.8, ogre: 0.9 },
-    // There was a paragraph here describing a moonlit rim on every spawn and a
-    // faint ground disc under un-ringed enemies, both added in 18.4 so that
-    // wolves, bats and rats would read against dark ground away from the
-    // lanterns. Neither exists: the recolour purge took the rim with the tints
-    // and the disc with the identity rings, and only the comment survived.
-    // Those three models are still near-black silhouettes here -- see
-    // tools/shots/lineup-darkwood.png. Leaving it that way deliberately rather
-    // than re-adding what was cut on purpose; a real fix is a rim term in the
-    // material shader, not another tint.
+    // Wolves, bats and rats are near-black models on near-black ground here. The
+    // tints and rings that once marked them were cut on purpose; what they get
+    // now is look.enemyLift, an albedo lift in the material shader
+    // (applyEnemyLift) that leaves every model its own colours.
   },
   emberreach: {
     name: 'Emberreach', desc: 'The ogre homeland. Rivers of lava run off the burning cone, and the warcamp between them is theirs.',
@@ -4268,6 +4269,7 @@ const MAPS = {
     // smoke rather than showing an empty edge, and the ground colour under the
     // splat is ash so anything unpainted still reads as volcanic.
     bg: 0x1a1013, fog: [38, 78], ground: 0x4a4440, ambient: 0.4, hemi: 0.28,
+    border: { trees: ['burnt_tree_giant_01', 'char_dead_tree_01', 'char_dead_tree_03'], rocks: ['basalt_cluster_01', 'basalt_boulder_01'] },
     terrain: { base: 'ash', layers: ['basalt', 'cinder', 'lavaCrust', 'sulfur'], splat: 'map.emberreach.splat.png',
                tile: 4.4, layerScale: [1.1, 1.0, 1.6, 0.65], tufts: ['ashTuft', 'cinderTuft', 'ashTuft', 'cinderTuft'], flow: 'lava' },
     look: {
@@ -4299,6 +4301,7 @@ const MAPS = {
       lava: { color: 0xff8c1a, emissive: 1.35 },
       ambientParticles: 'embers',
       ao: 0.95,
+      enemyLift: 0.28,
     },
     // Their homeland: ogres and their bombers lead, and the shamans are at home
     // here too. Wolves and rats barely live on this rock.
@@ -4315,6 +4318,7 @@ const MAPS = {
     // Heavy low fog: a bog should close in around you. The ground under the splat
     // is peat, so anything unpainted still reads as wet earth rather than grass.
     bg: 0x1b241e, fog: [34, 74], ground: 0x2f3a28, ambient: 0.44, hemi: 0.34,
+    border: { trees: ['swamp_cypress_01', 'swamp_cypress_02', 'bog_dead_tree_02'], rocks: ['bog_rock_cluster_01', 'swamp_stump_mossy_01'] },
     terrain: { base: 'peat', layers: ['silt', 'bogMoss', 'algae', 'sedgeMat'], splat: 'map.mirefen.splat.png',
                tile: 4.4, layerScale: [1.0, 1.2, 1.5, 0.9], tufts: ['reeds', 'sedge', 'reeds', 'tuft3'], flow: 'swampWater' },
     look: {
@@ -4348,6 +4352,7 @@ const MAPS = {
       water: { color: 0x44584a, emissive: 0 },
       ambientParticles: 'spores',
       ao: 1.0,
+      enemyLift: 0.32,   // against black peat
     },
     // A bog breeds vermin and things that fly over it. Rats and bats lead, the
     // shamans are at home, and the heavies bog down -- which the mires enforce
@@ -4370,6 +4375,7 @@ const MAPS = {
     // red-ember gravel and yellow bamboo; the base is Kingsfield's packed dirt (its `mud` is orange cracked clay), the burn
     // is Emberreach's cinder, the grass is the dry meadow, and rustMud is Mirefen's peat
     // tinted rust (tools: sharp, no SD). Re-roll the three when ComfyUI is next up.
+    border: { trees: ['war_pine_burnt_01', 'war_oak_burnt_01', 'char_dead_tree_01'], rocks: ['basalt_cluster_01', 'char_fallen_log_01'] },
     terrain: { base: 'dirt', layers: ['cinder', 'grassDry', 'rubbleGround', 'rustMud'], splat: 'map.bloodmarch.splat.png',
                tile: 4.4, layerScale: [1.0, 1.15, 1.3, 1.0], tufts: ['trampledTuft', 'ashTuft', 'cinderTuft', 'tuft3'] },
     look: {
@@ -4399,6 +4405,7 @@ const MAPS = {
       shafts: { color: 0x9a8878, opacity: 0.06 },
       ambientParticles: 'warsmoke',
       ao: 0.9,
+      enemyLift: 0.28,
     },
     // Two armies' worth of soldiery: goblins and their archers in numbers, the
     // ogres and their bombers behind them. The wild things keep clear of a war.
@@ -4406,7 +4413,34 @@ const MAPS = {
   },
 };
 // Shared time uniform for the animated materials (water scroll, grass sway)
-const lookUniforms = { uTime: { value: 0 } };
+const lookUniforms = { uTime: { value: 0 }, uEnemyLift: { value: 0 } };
+
+// ─── Enemy lift ───
+// At play distance the horde read as dark smudges: goblins, rats, wolves and bats
+// are dark-skinned models seen from above against dark ground, and the old fixes
+// (brightness multipliers, tints, ground rings) all recoloured the model and were
+// cut. This adds the model's own albedo back as a little emission, which lifts
+// near-black hides into readable midtones without shifting their hue: a wolf
+// reads brown and white, an archer red, a goblin green. The amount is per map
+// (look.enemyLift) through a shared uniform, so a map change never relinks.
+//
+// A fresnel rim was tried first and dropped: the Trellis meshes have noisy
+// geometric normals (fur especially), and any rim band on them sparkled into
+// white speckle across the whole body.
+//
+// One function object for every enemy material, so they all share one program
+// cache key and warmUpScene's compile covers it.
+function _enemyLiftCompile(shader) {
+  shader.uniforms.uEnemyLift = lookUniforms.uEnemyLift;
+  shader.fragmentShader = shader.fragmentShader
+    .replace('#include <common>', '#include <common>\nuniform float uEnemyLift;')
+    .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
+      totalEmissiveRadiance += diffuseColor.rgb * uEnemyLift;`);
+}
+function applyEnemyLift(mat) {
+  if (!mat.isMeshStandardMaterial && !mat.isMeshPhongMaterial && !mat.isMeshLambertMaterial) return;
+  mat.onBeforeCompile = _enemyLiftCompile;
+}
 const _texCache = {};
 const textureLoader = new THREE.TextureLoader();
 function loadTex(url, srgb) {
@@ -4432,7 +4466,8 @@ let _glowTex = null, _canopyTex = null, _contactTex = null, _shaftTex = null;
 // layers sample the same transformed uv, the splat samples raw uv, and a very low
 // frequency sample of the base breaks up tiling.
 function makeGroundMaterial(terrain) {
-  const repeat = (WORLD_SIZE * 2) / terrain.tile;
+  // Tiled over the whole plane, skirt included, so texel density is unchanged
+  const repeat = ((WORLD_SIZE + GROUND_SKIRT) * 2) / terrain.tile;
   const base = loadTex(`images/ground/${terrain.base}.webp`, true); base.repeat.set(repeat, repeat);
   const baseN = loadTex(`images/ground/${terrain.base}_n.webp`, false); baseN.repeat.set(repeat, repeat);
   const splat = textureLoader.load(terrain.splat); splat.colorSpace = THREE.NoColorSpace; splat.wrapS = splat.wrapT = THREE.ClampToEdgeWrapping;
@@ -4442,15 +4477,19 @@ function makeGroundMaterial(terrain) {
   mat.onBeforeCompile = (shader) => {
     shader.uniforms.uSplat = { value: splat };
     shader.uniforms.uLayerScale = { value: new THREE.Vector4().fromArray(terrain.layerScale || [1, 1, 1, 1]) };
+    // Splat UVs cover the play area only (the clamped texture carries its edge
+    // out over the skirt); uEdge is (plane half-size, world half-size, skirt)
+    shader.uniforms.uEdge = { value: new THREE.Vector3(WORLD_SIZE + GROUND_SKIRT, WORLD_SIZE, GROUND_SKIRT) };
     shader.uniforms.uL1 = { value: layers[0] }; shader.uniforms.uL2 = { value: layers[1] }; shader.uniforms.uL3 = { value: layers[2] }; shader.uniforms.uL4 = { value: layers[3] };
     shader.uniforms.uN1 = { value: layerN[0] }; shader.uniforms.uN2 = { value: layerN[1] }; shader.uniforms.uN3 = { value: layerN[2] }; shader.uniforms.uN4 = { value: layerN[3] };
     shader.vertexShader = shader.vertexShader
       .replace('#include <common>', '#include <common>\nvarying vec2 vWuv;')
       .replace('#include <uv_vertex>', '#include <uv_vertex>\nvWuv = uv;');
     shader.fragmentShader = shader.fragmentShader
-      .replace('#include <common>', '#include <common>\nvarying vec2 vWuv;\nuniform vec4 uLayerScale;\nuniform sampler2D uSplat, uL1, uL2, uL3, uL4, uN1, uN2, uN3, uN4;')
+      .replace('#include <common>', '#include <common>\nvarying vec2 vWuv;\nuniform vec4 uLayerScale;\nuniform vec3 uEdge;\nuniform sampler2D uSplat, uL1, uL2, uL3, uL4, uN1, uN2, uN3, uN4;')
       .replace('#include <map_fragment>', `
-        vec4 sp = texture2D(uSplat, vWuv);
+        vec2 cuv = vWuv - 0.5;
+        vec4 sp = texture2D(uSplat, cuv * (uEdge.x / uEdge.y) + 0.5);
         float wb = max(0.0, 1.0 - (sp.r + sp.g + sp.b + sp.a));
         float wsum = max(0.001, wb + sp.r + sp.g + sp.b + sp.a);
         vec3 col = texture2D(map, vMapUv).rgb * wb + texture2D(uL1, vMapUv * uLayerScale.x).rgb * sp.r + texture2D(uL2, vMapUv * uLayerScale.y).rgb * sp.g + texture2D(uL3, vMapUv * uLayerScale.z).rgb * sp.b + texture2D(uL4, vMapUv * uLayerScale.w).rgb * sp.a;
@@ -4459,6 +4498,10 @@ function makeGroundMaterial(terrain) {
         vec2 muv = vec2(vMapUv.x * 0.091 + vMapUv.y * 0.113, vMapUv.y * 0.091 - vMapUv.x * 0.067);
         float macro = dot(texture2D(map, muv).rgb, vec3(0.333));
         col *= 0.86 + macro * 0.32;
+        // Past the clamp the ground falls into shade under the border treeline, so
+        // the far skirt meets the fog dark instead of as a lit, flat sheet
+        float past = max(abs(cuv.x), abs(cuv.y)) * 2.0 * uEdge.x - uEdge.y;
+        col *= mix(1.0, 0.5, smoothstep(0.0, uEdge.z * 0.6, past));
         diffuseColor.rgb *= col;`)
       .replace('#include <normal_fragment_maps>', `
         vec3 mapN = (texture2D(normalMap, vNormalMapUv).xyz * wb + texture2D(uN1, vNormalMapUv * uLayerScale.x).xyz * sp.r + texture2D(uN2, vNormalMapUv * uLayerScale.y).xyz * sp.g + texture2D(uN3, vNormalMapUv * uLayerScale.z).xyz * sp.b + texture2D(uN4, vNormalMapUv * uLayerScale.w).xyz * sp.a) / wsum;
@@ -4650,6 +4693,7 @@ function applyLook(def) {
   u.uLift.value.fromArray(g.lift); u.uGain.value.fromArray(g.gain); u.uGamma.value.fromArray(g.gamma);
   u.uSaturation.value = g.saturation; u.uVignette.value = g.vignette;
   gtaoPass.blendIntensity = L.ao;
+  lookUniforms.uEnemyLift.value = L.enemyLift ?? 0.15;
   applyGfx(L); // intensities and exposure, so any user override survives the map load
 }
 let selectedMap = 'kingsfield';
@@ -4885,6 +4929,76 @@ function unloadMap() {
   loadedMap = null;
 }
 
+// ─── World edge ───
+// The play area is clamped to ±WORLD_SIZE, and the camera sees ~24 units past the
+// knight, so at any edge the frame used to end in a hard band where the ground
+// plane stopped and flat background began (fog starts too far out to hide it).
+// Two things close it: the ground runs GROUND_SKIRT units past the clamp and
+// darkens outward (makeGroundMaterial), and a ring of the map's own trees and rocks
+// stands just outside the clamp, so the edge reads as the woods closing in rather
+// than the end of the world. The ring is decoration only: no collision, and each
+// key takes the median scale it already has on this map so nothing looks foreign.
+const GROUND_SKIRT = 40;
+function worldBorderObjects(def, mapData) {
+  const b = def.border;
+  if (!b) return [];
+  const W = WORLD_SIZE;
+  const scaleOf = {};
+  for (const k of [...b.trees, ...(b.rocks || [])]) {
+    const sc = mapData.objects.filter(o => o.key === k).map(o => o.scale).sort((a, c) => a - c);
+    if (sc.length && ASSET_FILE_MAP[k]) scaleOf[k] = sc[sc.length >> 1];
+  }
+  const trees = b.trees.filter(k => scaleOf[k]), rocks = (b.rocks || []).filter(k => scaleOf[k]);
+  if (!trees.length) return [];
+  // Seeded per map, so the treeline is the same every run
+  let seed = 0; for (const ch of def.name) seed = (seed * 31 + ch.charCodeAt(0)) >>> 0;
+  const rnd = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+  // Rivers (water or lava) that run off the map keep running: keep the ring off
+  // their line past the end point, or trees stand in the stream
+  const outflows = [];
+  for (const st of mapData.streams || []) {
+    const p = st.pts; if (!p || p.length < 2) continue;
+    for (const [a, c] of [[p[0], p[1]], [p[p.length - 1], p[p.length - 2]]]) {
+      if (Math.max(Math.abs(a[0]), Math.abs(a[1])) < W - 8) continue;
+      const dx = a[0] - c[0], dz = a[1] - c[1], l = Math.hypot(dx, dz) || 1;
+      outflows.push({ x: a[0], z: a[1], dx: dx / l, dz: dz / l, half: (st.w || 4) / 2 + 3.5 });
+    }
+  }
+  const inRiver = (x, z) => outflows.some(f => {
+    const t = (x - f.x) * f.dx + (z - f.z) * f.dz;
+    return t > -4 && Math.abs((x - f.x) * f.dz - (z - f.z) * f.dx) < f.half;
+  });
+  const out = [];
+  const put = (key, x, z, mul) => inRiver(x, z) || out.push({ key, x, z, rotX: 0, rotY: rnd() * Math.PI * 2, rotZ: 0,
+    scale: scaleOf[key] * mul, obstacle: false, radius: 0 });
+  // Walk the perimeter of a square of half-size `d`, one prop every ~`step`
+  const ring = (d, step, fn) => {
+    const n = Math.ceil((2 * d) / step);
+    for (let side = 0; side < 4; side++) for (let i = 0; i < n; i++) {
+      const t = -d + (i + rnd() * 0.8) * (2 * d / n);
+      const [x, z] = side === 0 ? [t, -d] : side === 1 ? [d, t] : side === 2 ? [-t, d] : [-d, -t];
+      fn(x, z, side);
+    }
+  };
+  const lowq = LOW_QUALITY ? 1.8 : 1;            // a sparser ring on phones
+  const jitter = (v, a) => v + (rnd() - 0.5) * a;
+  const out1 = (x, z, side, d) => side === 0 ? [x, z - d] : side === 1 ? [x + d, z] : side === 2 ? [x, z + d] : [x - d, z];
+  // Front row hugs the clamp; the second row is bigger, staggered and mostly in
+  // fog. Side 2 is the south edge, the camera's side: a tree there stands between
+  // the camera and a knight at the clamp, so that edge gets low rocks instead and
+  // the darkening skirt does the rest.
+  const SOUTH = 2;
+  ring(W + 4, 5.5 * lowq, (x, z, side) => {
+    const [px, pz] = out1(x, z, side, jitter(0, 3));
+    if (side !== SOUTH) put(trees[(rnd() * trees.length) | 0], px, pz, 0.85 + rnd() * 0.35);
+    else if (rocks.length) put(rocks[(rnd() * rocks.length) | 0], px, pz, 0.7 + rnd() * 0.5);
+  });
+  ring(W + 12, 9 * lowq, (x, z, side) => { if (side === SOUTH) return; const [px, pz] = out1(x, z, side, jitter(0, 5)); put(trees[(rnd() * trees.length) | 0], px, pz, 1.05 + rnd() * 0.4); });
+  // Rocks scattered just inside the treeline break up the trunk line at its foot
+  if (rocks.length && !LOW_QUALITY) ring(W + 2.5, 14, (x, z, side) => { if (side === SOUTH) return; const [px, pz] = out1(x, z, side, jitter(0, 1.5)); put(rocks[(rnd() * rocks.length) | 0], px, pz, 0.8 + rnd() * 0.5); });
+  return out;
+}
+
 async function loadMap(mapId) {
   if (loadedMap === mapId) return;
   unloadMap();
@@ -4926,7 +5040,9 @@ async function loadMap(mapId) {
   // The ground plane itself outlives the map; only its geometry is rebuilt when
   // WORLD_SIZE changes, so the old one has to go or it is a leak per map change.
   if (ground.geometry) ground.geometry.dispose();
-  ground.geometry = new THREE.PlaneGeometry(WORLD_SIZE * 2, WORLD_SIZE * 2);
+  // The plane runs GROUND_SKIRT past the clamp so the edge of the world is never
+  // in frame; makeGroundMaterial maps the splat onto the inner square only
+  ground.geometry = new THREE.PlaneGeometry((WORLD_SIZE + GROUND_SKIRT) * 2, (WORLD_SIZE + GROUND_SKIRT) * 2);
   if (ground.material !== _flatGroundMat) ground.material.dispose();
   ground.material = (def.terrain && mapData.splat !== false) ? makeGroundMaterial(def.terrain) : _flatGroundMat;
   ground.material.color?.setHex?.(def.terrain ? 0xffffff : def.ground);
@@ -4970,6 +5086,10 @@ async function loadMap(mapId) {
     mapData.objects = mapData.objects.filter((o, i) => lowqKeepObject(o, i));
     _lowqCulledCount = before - mapData.objects.length;
   }
+
+  // The treeline past the clamp (see worldBorderObjects); added after the low
+  // quality cull because it thins itself
+  mapData.objects.push(...worldBorderObjects(def, mapData));
 
   // Load any assets referenced by the map that aren't already loaded
   const neededKeys = [...new Set(mapData.objects.map(o => o.key))];
@@ -5267,6 +5387,8 @@ function makePlayerState() {
     dashStrike: false, primaryWeapon: 'sword',
     relics: null, _phoenixUsed: false, _runesUntil: -1, _runesReady: 0,
     _crowdCount: 0, _moving: false,
+    // Wading (Mirefen): splash cadence, and whether the "bog slows you" line has shown
+    _inMire: false, _wadeT: 0, _wadeHinted: false,
   };
 }
 function makeWeaponTable() {
@@ -5949,6 +6071,7 @@ function spawnEnemy(type, fixedAngle, opts) {
   for (const mat of _materials) {
     if (mat.metalness != null) mat.metalness = Math.min(mat.metalness, 0.3);
     if (mat.roughness != null) mat.roughness = Math.min(mat.roughness, 0.85);
+    applyEnemyLift(mat);
   }
 
   // No `colorMul` any more. Goblins and archers carried 0.55, which multiplied
@@ -7500,6 +7623,14 @@ function updatePlayer(p, dt) {
 
     const wade = mires.length && inMire(pmesh.position.x, pmesh.position.z) ? MIRE_PLAYER : 1;
     ps._inMire = wade < 1;
+    // The bog has to say it is slowing you. Without this the only evidence was the
+    // knight feeling sluggish: a ripple and splash every few strides while wading,
+    // and once per run a line over the knight the first time they step in.
+    if (ps._inMire && _renderEnabled && !p.riding) {
+      ps._wadeT -= dt;
+      if (ps._wadeT <= 0) { ps._wadeT = 0.32; vfx.wadeSplash(pmesh.position); }
+      if (!ps._wadeHinted) { ps._wadeHinted = true; spawnDamageNumber(pmesh.position, 'BOG: SLOWED', '#a8e0b8', true); }
+    }
     const stride = ps.speed * wade * (p.riding ? HORSE.speedMul : 1);
     let newX = pmesh.position.x + dx * stride * dt;
     let newZ = pmesh.position.z + dz * stride * dt;
@@ -14925,6 +15056,7 @@ function warmUpScene() {
     for (const m of mats) {
       if (m.metalness != null) m.metalness = Math.min(m.metalness, 0.3);
       if (m.roughness != null) m.roughness = Math.min(m.roughness, 0.85);
+      applyEnemyLift(m);
     }
     keepShadersWarm(key, mats);
     // Far below the map and never culled, so compile sees it but no frame does.

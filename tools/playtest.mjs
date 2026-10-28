@@ -49,8 +49,9 @@ function findBrowser() {
     'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
     'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',
     'C:/Program Files/Microsoft/Edge/Application/msedge.exe',
+    process.env.CHROME_PATH, '/opt/pw-browsers/chromium', '/usr/bin/chromium', '/usr/bin/google-chrome',
   ];
-  for (const p of c) if (fs.existsSync(p)) return p;
+  for (const p of c) if (p && fs.existsSync(p)) return p;
   throw new Error('No Chrome/Edge found');
 }
 
@@ -74,10 +75,26 @@ async function openGame(headed) {
     // because it works on any machine and never competes with ComfyUI for VRAM.
     args: [...(flag('gpu') ? ['--use-gl=angle', '--use-angle=d3d11', '--enable-gpu-rasterization', '--ignore-gpu-blocklist', '--headless=new']
                           : ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist']),
-           '--autoplay-policy=no-user-gesture-required', '--window-size=1280,800', '--mute-audio'],
+           '--autoplay-policy=no-user-gesture-required', '--window-size=1280,800', '--mute-audio', ...(process.platform === 'linux' ? ['--no-sandbox'] : [])],
     defaultViewport: { width: 1280, height: 800 },
   });
   const page = await browser.newPage();
+  // Offline / sandboxed runs: CS_THREE_DIR points at a local `three` package
+  // (npm i three@<importmap version>), and the CDN requests are served from it.
+  // Draco's decoder comes from the same package; web fonts are dropped.
+  if (process.env.CS_THREE_DIR) {
+    const threeDir = process.env.CS_THREE_DIR;
+    await page.setRequestInterception(true);
+    page.on('request', req => {
+      const u = req.url();
+      const cdn = u.match(/^https:\/\/cdn\.jsdelivr\.net\/npm\/three@[^/]+\/(.*)$/);
+      const draco = u.match(/^https:\/\/www\.gstatic\.com\/draco\/versioned\/decoders\/[^/]+\/(.*)$/);
+      const local = cdn ? path.join(threeDir, cdn[1]) : draco ? path.join(threeDir, 'examples/jsm/libs/draco', draco[1]) : null;
+      if (local && fs.existsSync(local)) return req.respond({ status: 200, contentType: MIME[path.extname(local)] || 'application/octet-stream', headers: { 'Access-Control-Allow-Origin': '*' }, body: fs.readFileSync(local) });
+      if (/^https:\/\/fonts\.(googleapis|gstatic)\.com\//.test(u)) return req.respond({ status: 200, contentType: 'text/css', body: '' });
+      req.continue();
+    });
+  }
   const errors = [];
   page.on('pageerror', e => errors.push('pageerror: ' + (e.message || e)));
   // Missing optional audio files are expected 404s; everything else is a real error

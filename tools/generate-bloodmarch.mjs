@@ -121,6 +121,7 @@ const SMOULDERING = new Set(['war_house_ruin_02', 'war_house_01', 'war_tavern_01
 const WRECKS = new Set(['war_cart_gutted_01', 'field_broken_cart_burnt_01', 'combat_burned_cart_01', 'war_supply_wagon_wreck_01',
   'war_trebuchet_wreck_01', 'orc_catapult_wreck_01', 'war_watchtower_wreck_01', 'field_charred_beam_pile_01', 'char_logs_01', 'war_stall_01', 'war_market_stall_ruin_01']);
 const SCORCH = 0; // splat channel painted under every fire (assigned below with the others)
+const RUB_CH = 2; // rubbleGround, the same channel as RUB below (needed before the splat section)
 const fireAt = (key, x, z, scale) => {
   if (GUTTED.has(key)) {
     const big = scale / 6;
@@ -344,11 +345,36 @@ const O_LINE = { x: 30, z: 8, rot: PI * 1.25 };   // facing north-west
   m.keepOut(O_LINE.x, O_LINE.z, 6);
 }
 
+// ══ Kiting lanes ═══════════════════════════════════════════════════════════
+// The field used to be the most obstructed ground in the game exactly where the
+// player fights first: 92 small blockers within 30 units of the spawn, 48% of
+// that square unwalkable for a knight against 19-37% on the other maps, and the
+// bot's highest snag rate on record (13%) with 171 enemies piled up at wave 8.
+// So the clutter keeps off three trampled lanes the armies wore into the field:
+// a ring round the spawn where they wheeled, and both diagonals, the King's Road
+// line and the cross line between the flanks. Forced set pieces ignore this, so
+// they are placed clear of it by hand. The lanes are painted and churned below,
+// so a player can see the way out before they need it.
+const LANE = { r0: 15, r1: 20, half: 3.2, reach: 58 };
+const laneDist = (x, z) => {
+  const d = Math.hypot(x, z);
+  const ring = Math.max(LANE.r0 - d, d - LANE.r1, 0);
+  const diag = d < LANE.reach ? Math.max(Math.min(Math.abs(U(x, z)), Math.abs(V(x, z))) - LANE.half, 0) : Infinity;
+  return Math.min(ring, diag);     // 0 inside a lane
+};
+const inLane = (x, z, r = 0) => laneDist(x, z) <= r && Math.hypot(x, z) > 11;
+const laneBlocker = (x, z, r) => inLane(x, z, r);
+m.blockers.push(laneBlocker);    // props only: lifted again before the ground marks (see Splat)
+
 // ══ The field ═════════════════════════════════════════════════════════════
 // The diagonal band between the two lines. Craters and wrecks in the middle,
 // then the thrown-up detail: stones, ladders, shield walls, cairns, banners
 // down, the two great human engines that never made it to the wall.
 const FIELD = { x: 0, z: 0, r: 34 };
+// The spawn's keep-out goes in before the field is scattered. It used to be
+// registered after, so the scatter landed on it: twelve blockers within nine units
+// of where the knight appears, a shield wall 1.2 units off the spawn point.
+m.keepOut(0, 0, 11);
 const inField = (x, z) => Math.abs(V(x, z)) < 30 && Math.abs(U(x, z)) < 40;
 for (let i = 0; i < 14; i++) {
   const a = R.angle(), d = Math.sqrt(R()) * 30;
@@ -360,15 +386,17 @@ for (let i = 0; i < 14; i++) {
 }
 put(SIEGE_TOWER(), -14, 6, { rotY: PI * 0.3, force: true }); m.keepOut(-14, 6, 5);
 put(TREBUCHET(), 10, -22, { rotY: PI * 0.7, force: true });
-put(WATCHTOWER_FALLEN(), 22, 18, { rotY: PI * 1.1, force: true });
+put(WATCHTOWER_FALLEN(), 27, 11, { rotY: PI * 1.1, force: true });   // off the x = z lane
 put(RAM(), -8, 28, { rotY: PI * 0.1 });
-scatter(SIEGE_STONE(), 16, FIELD, { tries: 6, density: inField });
-scatter(LADDER(), 12, FIELD, { tries: 6, density: inField });
-scatter(SHIELD_WALL(), 10, FIELD, { tries: 6, density: inField });
-scatter(EARTHWORK(), 8, FIELD, { tries: 6, density: inField });
-scatter(WRECK(), 12, FIELD, { tries: 6, density: inField });
-scatter(BEAMS(), 10, FIELD, { tries: 6, density: inField });
-scatter(SHIELDS(), 18, FIELD, { tries: 6, density: inField });
+// Fewer of the knee-high blockers than before (see Kiting lanes): the field
+// should read as wreckage you weave through, not a pinball table
+scatter(SIEGE_STONE(), 10, FIELD, { tries: 6, density: inField });
+scatter(LADDER(), 10, FIELD, { tries: 6, density: inField });
+scatter(SHIELD_WALL(), 7, FIELD, { tries: 6, density: inField });
+scatter(EARTHWORK(), 6, FIELD, { tries: 6, density: inField });
+scatter(WRECK(), 8, FIELD, { tries: 6, density: inField });
+scatter(BEAMS(), 8, FIELD, { tries: 6, density: inField });
+scatter(SHIELDS(), 10, FIELD, { tries: 6, density: inField });
 scatter(SWORD(), 14, FIELD, { tries: 6, density: inField });
 scatter(ARROWS(), 16, FIELD, { tries: 6, density: inField });
 scatter(CAIRN(), 12, FIELD, { tries: 6, density: inField });
@@ -378,11 +406,13 @@ scatter(BONES(), 10, FIELD, { tries: 6, density: inField });
 scatter(SPIKES(), 8, FIELD, { tries: 6, density: inField });
 scatter(RUBBLE(), 8, FIELD, { tries: 6, density: inField });
 // The spawn: the middle of it all. Somewhere to stand, and a cairn to fight beside.
-add(STATUE_FALLEN(), -5, 4, { rotY: PI * 0.4, ignoreKeepOut: true, force: true });
+// North of the spawn, not south: the camera sits south of the knight, and until the
+// fallen-statue mesh lands its stand-in is an upright statue that stood between the
+// two for the opening seconds of every run
+add(STATUE_FALLEN(), -4, -7, { rotY: PI * 0.4, ignoreKeepOut: true, force: true });
 for (let i = 0; i < 3; i++) ring(CAIRN(), 0, 0, 6, 10, { ignoreKeepOut: true });
 for (let i = 0; i < 2; i++) ring(SHIELD_WALL(), 0, 0, 7, 11, { ignoreKeepOut: true, facing: 'out' });
 add('chest', 6, -6, { rotY: R.angle(), ignoreKeepOut: true });
-m.keepOut(0, 0, 11);
 
 // ══ The burnt woods (north-east) ══════════════════════════════════════════
 // What was the king's forest, burnt through by the retreat. A stand of it holds
@@ -396,19 +426,78 @@ const woods = (x, z) => {
   return Math.max(0, Math.min(1, (ne * 2.2 + east * 0.8) * (0.55 + noise(x, z) * 0.9)));
 };
 const region = { x0: -94, z0: -94, x1: 94, z1: 94 };
+// The corner cache goes in before the trees so the wood grows round it, and the
+// last stand's clearing (see the outskirts) is reserved for the same reason
+add('chest', 88, -88, { rotY: R.angle() });
+const STAND = { x: 40, z: -70 };
+m.keepOut(STAND.x, STAND.z, 15);
 let treesPlaced = 0;
 for (let i = 0; i < 160 * 30 && treesPlaced < 160; i++) {
   const x = R.range(region.x0, region.x1), z = R.range(region.z0, region.z1);
   if (R() > woods(x, z)) continue;
-  if (m.add(R() < 0.55 ? DEADTREE() : DEADPINE(), x, z, { rotY: R.angle(), pad: 0.4, scale: R.range(0.75, 1.15) * (R() < 0.55 ? 0.9 : 1) })) treesPlaced++;
+  if (m.add(R() < 0.55 ? DEADTREE() : DEADPINE(), x, z, { rotY: R.angle(), pad: 0.4, scaleMul: R.range(0.75, 1.15) * (R() < 0.55 ? 0.9 : 1) })) treesPlaced++;
 }
 scatter(STUMP(), 40, region, { density: woods, tries: 6 });
 scatter(P('char_fallen_log_01', 'nature_fallen_log_01'), 22, region, { density: woods, tries: 6 });
 scatter(P('char_shrub_01', 'char_bush_01'), 30, region, { density: (x, z) => woods(x, z) * 0.7, tries: 5 });
-add('chest', 88, -88, { rotY: R.angle() });
 m.paintFn(SCORCH, (x, z) => woods(x, z) * 0.9 - 0.1, 2);
 // Fires still smouldering in the wood
 for (let i = 0; i < 6; i++) { const x = R.range(30, 90), z = R.range(-90, -30); if (woods(x, z) > 0.4) m.fire(x, z, { r: 0.7, y: 0.4, h: 7, s: 0.5 }); }
+
+// ══ The outskirts: reasons to leave the field ══════════════════════════════
+// The south and the north-east were the emptiest ground on any map (4-17% of
+// each quadrant walled, against 48% in the field), so the waves came out of a
+// featureless plain and nothing there was worth the walk. Three set pieces, each
+// with a supply cache, so a run has somewhere to go when the middle fills up.
+
+// The pyres (south): where the dead of both sides were brought after the battle.
+// Grave mounds in rough rows round two burning pyres, banners planted at the
+// head of each row.
+const PYRES = { x: -26, z: 70 };
+for (const [dx, dz] of [[-5, 0], [6, 3]]) {
+  m.fire(PYRES.x + dx, PYRES.z + dz, { r: 1.3, y: 0.6, h: 12, s: 0.9 });
+  put(BEAMS(), PYRES.x + dx, PYRES.z + dz, { rotY: R.angle(), force: true });
+  m.paintCircle(SCORCH, PYRES.x + dx, PYRES.z + dz, 5, 0.95, 0.5);
+}
+m.keepOut(PYRES.x, PYRES.z + 1.5, 9);
+for (let row = 0; row < 4; row++) for (let col = 0; col < 7; col++) {
+  if (R() < 0.2) continue;
+  const x = PYRES.x - 15 + col * 5 + R.range(-0.8, 0.8), z = PYRES.z + 11 + row * 4.5 + R.range(-0.6, 0.6);
+  if (Math.abs(z) > 94) continue;
+  add(CAIRN(), x, z, { rotY: R.range(-0.3, 0.3) });
+  if (col === 0 && R() < 0.8) add(R() < 0.5 ? H_BANNER() : O_BANNER(), x - 3, z, { rotY: R.angle() });
+}
+for (let i = 0; i < 6; i++) ring(BONES(), PYRES.x, PYRES.z, 9, 14, {});
+for (let i = 0; i < 4; i++) ring(SHIELDS(), PYRES.x, PYRES.z, 8, 13, {});
+add('chest', PYRES.x + 1, PYRES.z - 6, { rotY: R.angle(), ignoreKeepOut: true });
+m.paintCircle(RUB_CH, PYRES.x, PYRES.z + 10, 20, 0.45, 0.7);
+
+// The baggage train (south-west): the king's wagons, caught on the farm track as
+// the line broke. A column of wrecks and tents strung along a curve, burning.
+for (let i = 0; i < 9; i++) {
+  const t = i / 8, x = -82 + t * 34, z = 78 - Math.sin(t * PI) * 12;
+  const key = i % 3 === 1 ? TENT() : WAGON();
+  if (put(key, x + R.range(-1.5, 1.5), z + R.range(-1.5, 1.5), { rotY: -0.35 + t * 0.7 + R.range(-0.4, 0.4) }) && R() < 0.6)
+    put(R() < 0.5 ? P('barrel') : SHIELDS(), x + R.range(-3, 3), z + R.range(2.5, 4.5), { rotY: R.angle() });
+  m.paintCircle(RUB_CH, x, z, 5, 0.4, 0.7);
+}
+for (let i = 0; i < 2; i++) ring(H_BANNER(), -66, 72, 4, 12, {});
+add('chest', -64, 84, { rotY: R.angle() });
+
+// The last stand (north-east): a clearing in the burnt wood where the king's
+// rearguard formed a shield ring and did not leave it. The fallen statue is
+// their standard; the cache is inside the ring.
+for (let a = 0; a < PI * 2 - 0.01; a += PI / 5) {
+  if (R() < 0.25) continue;                                 // where the ring broke
+  add(SHIELD_WALL(), STAND.x + Math.cos(a) * 9, STAND.z + Math.sin(a) * 9, { rotY: a + PI / 2, ignoreKeepOut: true });
+}
+put(STATUE_FALLEN(), STAND.x - 2, STAND.z + 1, { rotY: PI * 0.8, force: true, ignoreKeepOut: true });
+for (let i = 0; i < 3; i++) ring(H_BANNER(), STAND.x, STAND.z, 4, 8, { ignoreKeepOut: true });
+for (let i = 0; i < 5; i++) ring(SWORD(), STAND.x, STAND.z, 3, 12, { ignoreKeepOut: true });
+for (let i = 0; i < 6; i++) ring(BONES(), STAND.x, STAND.z, 10, 15, {});
+add('chest', STAND.x + 3, STAND.z - 2, { rotY: R.angle(), ignoreKeepOut: true });
+m.paintCircle(RUB_CH, STAND.x, STAND.z, 13, 0.5, 0.6);
+m.fire(STAND.x + 12, STAND.z + 6, { r: 0.7, y: 0.4, h: 7, s: 0.5 });
 
 // ══ Open ground between the districts ═════════════════════════════════════
 // Sparse: this is where the waves come from. Trampled grass, the odd cairn.
@@ -419,6 +508,10 @@ scatter(WRECK(), 8, region, { density: open, tries: 5 });
 scatter(P('nature_rock_cluster_02'), 16, region, { density: open, tries: 5 });
 scatter(P('nature_rock_small_02'), 20, region, { density: open, tries: 5 });
 scatter(DEADTREE(), 14, region, { density: (x, z) => open(x, z) * 0.5, tries: 5 });
+
+// Props are placed. The lanes stop blocking here, because the decals and tufts
+// below go through the same clearance test and the churn has to land IN them.
+m.blockers.splice(m.blockers.indexOf(laneBlocker), 1);
 
 // ══ Splat ═════════════════════════════════════════════════════════════════
 // base churnedMud; 0 scorchedEarth (fires, craters, the woods), 1 battleGrass
@@ -436,6 +529,8 @@ m.paintFn(GRASS, (x, z) => {
 // strength the whole middle of the map read as red cobbles from the air.
 m.paintFn(IRON, (x, z) => (inField(x, z) ? (churn(x, z) - 0.45) * 1.1 : (churn(x, z) - 0.7) * 0.8), 2);
 m.paintCircle(IRON, 0, 0, 14, 0.35, 0.7);
+// The kiting lanes read as worn tracks: churned rust mud, feathered at the edges
+m.paintFn(IRON, (x, z) => (Math.hypot(x, z) > 11 ? 0.75 - laneDist(x, z) * 0.35 : 0), 1);
 // Scorched patches through the field as well, so the ground carries the burning
 m.paintFn(SCORCH, (x, z) => (inField(x, z) ? (noise(x, z) - 0.55) * 1.2 : 0), 2);
 m.paintCircle(RUB, KEEP.x, KEEP.z, PAL_R + 6, 0.5, 0.7);
@@ -448,6 +543,9 @@ m.suppress(GRASS, SCORCH); m.suppress(GRASS, RUB); m.suppress(IRON, RUB, 0.8); m
 const fieldD = (x, z) => (inField(x, z) ? 1 : 0.15);
 m.scatterDecals('bootChurn', 90, region, { density: (x, z) => fieldD(x, z) * 0.9, scale: [2.4, 4.2], ignoreKeepOut: true });
 m.scatterDecals('hoofPrints', 50, region, { density: (x, z) => fieldD(x, z) * 0.7, scale: [2, 3.6], ignoreKeepOut: true });
+// Boots and hooves wore the lanes in; more of both along them
+m.scatterDecals('bootChurn', 50, { x0: -60, z0: -60, x1: 60, z1: 60 }, { density: (x, z) => (inLane(x, z) ? 0.9 : 0), scale: [2.4, 4], ignoreKeepOut: true });
+m.scatterDecals('hoofPrints', 30, { x0: -60, z0: -60, x1: 60, z1: 60 }, { density: (x, z) => (inLane(x, z) ? 0.8 : 0), scale: [2, 3.4], ignoreKeepOut: true });
 m.scatterDecals('arrowStorm', 60, region, { density: (x, z) => fieldD(x, z) * 0.8 + (Math.hypot(x - CASTLE.x, z - CASTLE.z) < WALL_R + 12 ? 0.6 : 0), scale: [2.2, 3.8], ignoreKeepOut: true });
 m.scatterDecals('shieldScatter', 55, region, { density: (x, z) => fieldD(x, z) * 0.8, scale: [2.4, 4], ignoreKeepOut: true });
 m.scatterDecals('warStain', 70, region, { density: (x, z) => fieldD(x, z) * 0.9, scale: [1.8, 3.2], ignoreKeepOut: true });

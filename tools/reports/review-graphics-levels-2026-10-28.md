@@ -1,0 +1,102 @@
+# Castle Survivor: Graphics and Level Design Review
+
+**Date:** 2026-10-28
+**Build reviewed:** master at `29bb537`, with changes recorded in PLAN Phase 50
+**Method:** headless Chromium (SwiftShader) captures from the gameplay camera at zoom 2.0:
+overheads of all five maps, edge tours, a fixed enemy line-up at each spawn, and staged shots
+of every new set piece. Each "before" frame came from a worktree of `29bb537`, each "after"
+from the working tree. Obstruction was measured from the map JSON as the share of each area a
+knight can't stand in (obstacle radius + 1.1). Balance comes from `playtest.mjs balance` with
+the kite bot.
+
+---
+
+## Verdict
+
+The art direction holds up: splat-painted ground, per-map light rigs, burning buildings and
+lava all work. What let the game down was the frame around the action:
+
+1. **Every map ended in a hard band.** The ground plane stopped exactly at the movement clamp,
+   so near any edge the top of the frame was flat background.
+2. **The horde was still dark.** Deleting `colorMul` fixed goblins, but wolves, rats and bats
+   were black shapes on Darkwood. The code said so itself (`MAPS.darkwood`).
+3. **Two maps weren't built at the size they were designed.** Mirefen's cypress stands and
+   Bloodmarch's burnt wood were placed at one fifth to one eighth of their calibrated scale.
+   The generator's own comment describes "dense tree clumps that break the sightlines"; what
+   shipped was ankle-height scrub. This is the biggest level-design finding: Mirefen had no
+   trees and Bloodmarch had no wood.
+4. **Bloodmarch was inside out.** The fight-heavy centre was the most cluttered ground in the
+   game, the outskirts were empty, and the spawn point itself was buried in props.
+
+## What changed (all verified by capture)
+
+| Area | Before | After | Evidence |
+|---|---|---|---|
+| World edge | Ground stops at ±100, flat background beyond | Ground runs 40 past the clamp and darkens outward; each map's own trees/rocks ring the edge (rocks only on the camera side) | `edge-*`, `final-kingsfield-*`, `overhead-*` |
+| Enemy readability | Wolf, rat and bat render as black silhouettes (Darkwood worst) | Per-map albedo lift: wolf reads brown and white, archer red, goblins green; no recolour | `lineup-before-*` vs `final-lineup-*` |
+| Mirefen wading | `_inMire` computed, never shown | Ripple and splash while wading, plus a one-time `BOG: SLOWED` | `wade2-mirefen-1` |
+| Mirefen trees | Cypress at scale ~1.0 (calibrated 5.46): knee-high blobs | Real stands at 0.7-1.05x, trunk-sized collision | `mf-mirefen-1` vs `final3-mirefen-*` |
+| Bloodmarch woods | Burnt trees at ~0.9 (calibrated 7-10) | Full-size burnt wood in the NE and the eastern belt | `final-bloodmarch-1..4` |
+| Bloodmarch centre | 48% obstructed, 92 small blockers, 12 within 9 units of spawn, a statue between camera and knight | 35%; spawn clear; statue north of spawn; three painted kiting lanes (ring + diagonals) | JSON audit, `final2-lineup-bloodmarch-1` |
+| Bloodmarch outskirts | NE/SW quadrants 4-17% obstructed, nothing to find | Pyres, baggage train and last stand, each with a supply cache (7 caches, was 4) | `bm-bloodmarch-1..3` |
+
+### Obstruction (share of ground a knight can't stand on)
+
+| Map | Centre 60×60 before → after | Whole map before → after |
+|---|---|---|
+| Kingsfield | 37% (unchanged) | 30% |
+| Darkwood | 19% (unchanged) | 31% |
+| Emberreach | 37% (unchanged) | 51% |
+| Mirefen | 19.5% → 28% | 29% → 32% |
+| Bloodmarch | 48% → 35% | 25% → 32% |
+
+### Balance check (kite bot, 10 minutes)
+
+| | Before | After |
+|---|---|---|
+| Dad, Bloodmarch, 10 runs | 8/10 survived, snag 0-6% | 8/10 survived, snag 0-7% |
+| Dad, Mirefen (smaller samples) | 2/5 | 2/4 to 3/5 across batches |
+
+That's within the harness's known ±2-in-6 variance. Archer arrows lead every death list on
+both builds. `npm test` passes with no JS errors.
+
+### Cost
+
+At a map edge, draw calls rise 0.4% and triangles 11% (Kingsfield, 5-frame sample). At the
+spawn there's no change. Enemy lift is one added line in an existing shader; all enemies share
+one program, and warm-up compiles it.
+
+## Tried and dropped
+
+- **Fresnel rim light on enemies.** The Trellis meshes have noisy normals (fur especially), so
+  any rim band sparkled into white speckle, mapped normal or geometric (`iso-*` captures). Albedo
+  lift alone was clean.
+- **Lighter Kingsfield fog.** The "green wall" I first saw came from the action-mode camera caught
+  mid-lerp. Single-player framing never reaches the fog's near distance, so I reverted the change
+  rather than ship something I couldn't see working. It may matter at co-op zoom (PLAN 50.11).
+- **Full-scale cypress (1.0-2.1×).** Their canopies loomed into the camera and roofed the knight
+  over. Settled at 0.7-1.05×.
+
+## Recommendations, by impact per hour
+
+1. **Fade props between camera and knight.** Full-size trees now make this matter on Mirefen
+   and in Bloodmarch's woods; Darkwood's pines always had it. Raycast or distance-test props
+   south of each knight and lower their opacity. Size: M.
+2. **Trunk-sized collision on Emberreach's dead trees.** It's the most obstructed map (51%), and
+   `char_dead_tree_*` collide at half-canopy (3.9). Add them to the `maplib` override, then
+   regenerate and re-measure. Size: S, plus a look.
+3. **Trace the dark band on Mirefen at (30, -62).** It's in every build: a very large shadow
+   from something tall. Size: S.
+4. **Keep the bot out of the orc fortress on Bloodmarch.** Several bot deaths happen inside the
+   palisade at (58-78, 70-80). A human wouldn't go there, but it costs the harness signal.
+   Size: S.
+5. **Check Kingsfield's fog at co-op party zoom** before changing its colour. Size: S.
+
+## What I couldn't assess
+
+- Real-GPU frame time. SwiftShader timings are meaningless; only draw-call and triangle deltas
+  were compared.
+- How the border treeline and enemy lift look on a phone in low-quality mode (the ring thins
+  itself at 1.8× spacing there, but I didn't capture that mode).
+- Human play on the reshaped Bloodmarch field: the lanes are designed for kiting, but the bot
+  doesn't use them deliberately.
