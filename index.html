@@ -4437,6 +4437,68 @@ function _enemyLiftCompile(shader) {
     .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
       totalEmissiveRadiance += diffuseColor.rgb * uEnemyLift;`);
 }
+// ─── See-through props ───
+// A prop standing between the camera and a knight hides the knight. The camera
+// sits south of the party looking down at ~50 degrees, so anything tall just
+// south of a knight -- a pine, a cypress, a house -- covered them, and full-size
+// trees on Mirefen and Bloodmarch made it common. Static props are instanced and
+// share materials, so per-object opacity is not on the table; instead every map
+// prop material discards a dithered share of its fragments inside a capsule from
+// the camera to each knight's chest. Only fragments nearer the camera than the
+// knight are touched, so a tree behind them stays solid, and shadows come from
+// the separate depth pass, so the tree still shades the ground it stands on.
+const OCC_MAX = 3;   // knights
+const occUniforms = {
+  uOccCam: { value: new THREE.Vector3() },
+  uOccP: { value: Array.from({ length: OCC_MAX }, () => new THREE.Vector4()) },   // xyz chest, w 1 = live
+};
+function _occluderCompile(shader) {
+  shader.uniforms.uOccCam = occUniforms.uOccCam;
+  shader.uniforms.uOccP = occUniforms.uOccP;
+  shader.vertexShader = shader.vertexShader
+    .replace('#include <common>', '#include <common>\nvarying vec3 vOccW;')
+    .replace('#include <worldpos_vertex>', `#include <worldpos_vertex>
+      vec4 occW = vec4(transformed, 1.0);
+      #ifdef USE_INSTANCING
+        occW = instanceMatrix * occW;
+      #endif
+      vOccW = (modelMatrix * occW).xyz;`);
+  shader.fragmentShader = shader.fragmentShader
+    .replace('#include <common>', `#include <common>
+      varying vec3 vOccW;
+      uniform vec3 uOccCam;
+      uniform vec4 uOccP[${OCC_MAX}];`)
+    .replace('#include <clipping_planes_fragment>', `#include <clipping_planes_fragment>
+      float occ = 0.0;
+      for (int i = 0; i < ${OCC_MAX}; i++) {
+        if (uOccP[i].w < 0.5) continue;
+        vec3 ray = uOccP[i].xyz - uOccCam;
+        float len = length(ray);
+        vec3 dir = ray / len;
+        float t = dot(vOccW - uOccCam, dir);
+        if (t < 0.0 || t > len - 1.2) continue;               // behind the camera, or at/behind the knight
+        float r = mix(1.0, 3.4, t / len);                     // the capsule widens toward the knight
+        float d = length(vOccW - (uOccCam + dir * t));
+        occ = max(occ, 1.0 - smoothstep(r * 0.5, r, d));
+      }
+      // Screen-door: interleaved gradient noise; at the core 88% of the prop is gone
+      if (occ > 0.0 && fract(52.9829189 * fract(dot(gl_FragCoord.xy, vec2(0.06711056, 0.00583715)))) < occ * 0.88) discard;`);
+}
+function applyOccluderFade(mat) {
+  if (mat._occ || mat.transparent) return;
+  if (!mat.isMeshStandardMaterial && !mat.isMeshPhongMaterial && !mat.isMeshLambertMaterial && !mat.isMeshBasicMaterial) return;
+  if (mat.onBeforeCompile !== THREE.Material.prototype.onBeforeCompile) return;   // already has its own shader hook (water)
+  mat.onBeforeCompile = _occluderCompile;
+  mat._occ = true;
+}
+function updateOccluders() {
+  occUniforms.uOccCam.value.copy(camera.position);
+  for (let i = 0; i < OCC_MAX; i++) {
+    const p = players[i], v = occUniforms.uOccP.value[i];
+    if (p && p.mesh && !p.state.bledOut) v.set(p.mesh.position.x, p.mesh.position.y + 1.2, p.mesh.position.z, 1);
+    else v.w = 0;
+  }
+}
 function applyEnemyLift(mat) {
   if (!mat.isMeshStandardMaterial && !mat.isMeshPhongMaterial && !mat.isMeshLambertMaterial) return;
   mat.onBeforeCompile = _enemyLiftCompile;
@@ -4594,6 +4656,7 @@ function buildStreamRibbon(pts, w, tex, flow = 'water', look = null) {
     const scroll = isLava ? 0.012 : still ? 0.009 : 0.05;
     const shimmerRate = isLava ? 0.006 : still ? 0.005 : 0.021;
     const shimmerMix = isLava ? 0.45 : still ? 0.3 : 0.25;
+    const sky = new THREE.Color(look?.water?.sky ?? 0x8fa69a).multiplyScalar(look?.water?.skyIntensity ?? 0.16);
     mat.onBeforeCompile = (shader) => {
       shader.uniforms.uTime = lookUniforms.uTime;
       shader.vertexShader = shader.vertexShader
@@ -4608,8 +4671,19 @@ function buildStreamRibbon(pts, w, tex, flow = 'water', look = null) {
           vec4 shimmer = texture2D( map, wuv * 1.7 + vec2(fract(uTime * ${shimmerRate.toFixed(3)}), 0.0) );
           sampledDiffuseColor.rgb = mix(sampledDiffuseColor.rgb, shimmer.rgb, ${shimmerMix.toFixed(2)});
           diffuseColor *= sampledDiffuseColor;
+          wRip = dot(shimmer.rgb, vec3(0.333));
           #endif
-          diffuseColor.a *= vAlpha;`);
+          diffuseColor.a *= vAlpha;`)
+        .replace('void main() {', 'void main() {\n  float wRip = 0.5;');
+      // Still water has nothing to reflect (no environment map), so Mirefen's
+      // channels rendered near-black and read from the play camera as a shadow
+      // or a hole, not water. Standing water is mostly the sky it mirrors: a pale
+      // sky tint as emission, rippled by the shimmer texture, a little stronger
+      // toward grazing angles.
+      if (still) shader.fragmentShader = shader.fragmentShader
+        .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
+          float wFres = 1.0 - saturate(dot(normal, normalize(vViewPosition)));
+          totalEmissiveRadiance += vec3(${sky.r.toFixed(3)}, ${sky.g.toFixed(3)}, ${sky.b.toFixed(3)}) * (0.55 + 0.9 * wFres * wFres) * (0.45 + 1.1 * wRip);`);
     };
     mat.customProgramCacheKey = () => 'stream-ribbon-' + flow;
     _streamMats[flow] = mat;
@@ -5132,6 +5206,7 @@ async function loadMap(mapId) {
         for (const m of mats) {
           if (m.metalness != null) m.metalness = Math.min(m.metalness, 0.3);
           if (m.roughness != null) m.roughness = Math.min(m.roughness, 0.85);
+          if (obj.key !== 'grass' && obj.key !== 'road' && obj.key !== 'stream') applyOccluderFade(m);
         }
       }
     });
@@ -12299,6 +12374,7 @@ function gameLoop() {
 
     camera.lookAt(_partyCenter.x, 0, _partyCenter.z);
   }
+  updateOccluders();
 
   // Shadow light follows player
   if (playerMesh) {
@@ -15189,7 +15265,7 @@ init().then(() => {
       },
       THREE,
       // Spawning, for regression checks that exercise every enemy and formation
-      ENEMY_TYPES, FORMATIONS, spawnEnemy, spawnBoss, spawnDragonOgreBoss, spawnFormation,
+      occUniforms, get scene() { return scene; }, ENEMY_TYPES, FORMATIONS, spawnEnemy, spawnBoss, spawnDragonOgreBoss, spawnFormation,
       enemyTypeCounts() { const c = {}; for (const e of enemies) if (!e.isDying) c[e.type] = (c[e.type] || 0) + 1; return c; },
       // Telegraphed danger the bot should step out of: boulder landing zones,
       // boss slam/stomp rings, charge lanes, bomb goblins on a lit fuse

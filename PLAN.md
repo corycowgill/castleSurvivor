@@ -1400,13 +1400,26 @@ snag rate.
 - [x] 50.7 **The harness runs on Linux and offline.** `findBrowser` knows Playwright's Chromium and
   `CHROME_PATH`; `CS_THREE_DIR` serves the import map's CDN files (and Draco) from a local `three`
   package for sandboxes without CDN access.
-- [ ] 50.8 Open: Emberreach shares `char_dead_tree_*` with Bloodmarch and still has canopy-sized
-  collision on them (it is the most obstructed map, 51%). Trunk radii there would change its layout,
-  so it wants its own look.
-- [ ] 50.9 Open: a huge dark band crosses Mirefen around (30, -62) in every build: a shadow from
-  something tall. Not traced.
-- [ ] 50.10 Open: nothing fades a prop standing between the camera and the knight. Full-size trees
-  make that matter more on Mirefen and in Bloodmarch's woods.
-- [ ] 50.11 Open: Kingsfield's fog colour is a saturated grass green. Single-player framing never
+- [x] 50.8 **Props between the camera and a knight go see-through.** Static props are instanced and
+  share materials, so it is a shader (`applyOccluderFade`): fragments inside a capsule from the camera
+  to each knight's chest, and nearer than the knight, are discarded in a dithered screen-door (88% at
+  the core). Trees behind a knight stay solid; shadows come from the depth pass and stay too. Up to
+  three knights, so co-op is covered.
+- [x] 50.9 **Mirefen's black water reads as water.** The "dark band" across Mirefen at (30, -62) was
+  not a shadow or AO: hiding the shafts, AO and shadows in turn left it alone. It is a bog channel,
+  and with no environment map to reflect, still water rendered near-black and looked like a hole.
+  Still-water ribbons now add a pale sky sheen as emission, rippled by the shimmer texture and
+  stronger at grazing angles. Streams and lava are unchanged.
+- [x] 50.10 **Emberreach's charred trees collide on the trunk.** `char_dead_tree_*` carried a 3.9
+  radius even placed at 0.6-0.75x, and were the biggest single blocker on the most obstructed map.
+  Now 1.3, the same rule as 50.4. Emberreach goes from 51% to 35% obstructed (centre 37% to 20%),
+  all seven caches still place; kite bot 6/10 -> 5/10 survived (noise), worst snag 16% -> 5%.
+  Bloodmarch shares the keys and was regenerated with it.
+- [ ] 50.11 Open: the bot still walks into the orc fortress on Bloodmarch and dies to archers inside
+  the palisade; a human would not, but it costs the harness signal.
+- [ ] 50.12 Open: Kingsfield's fog colour is a saturated grass green. Single-player framing never
   reaches the fog, but the co-op party camera pulls back 1.7x and probably does. Look at it there
   before changing it.
+- [ ] 50.13 Open: GTAO's own depth/normal pass draws transparent effect planes (shafts, glows) as
+  solid, since `GTAOPass.overrideVisibility` only hides points and lines. It was not the cause of the
+  Mirefen band, and no visible artefact has been traced to it yet.

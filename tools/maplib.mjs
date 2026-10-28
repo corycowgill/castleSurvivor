@@ -41,7 +41,7 @@ for (const [k, v] of Object.entries({
   landmark_obsidian_arch_01: { scale: 13.5, r: 3.2 }, landmark_ogre_idol_01: { scale: 12, r: 3.4 },
   burnt_tree_giant_01: { scale: 11.7, r: 1.8 },
 })) if (ASSET[k]) ASSET[k] = v;   // only once the mesh is registered
-// Mirefen's and Bloodmarch's trees, same rule as the dead tree above: collision is
+// Mirefen's, Bloodmarch's and Emberreach's trees, same rule as the dead tree above: collision is
 // the trunk you walk into, not the canopy. Their registered radii are half the
 // canopy (2.6-5.2), harmless while the generators placed them knee-high by mistake
 // (see scaleMul in add) and a wall of trees once they stood at full height: Mirefen's
@@ -49,6 +49,9 @@ for (const [k, v] of Object.entries({
 for (const [k, r] of Object.entries({
   swamp_cypress_01: 1.1, swamp_cypress_02: 1.1, swamp_mangrove_01: 1.5,
   bog_dead_tree_01: 1.3, bog_dead_tree_02: 1.3, war_oak_burnt_01: 1.5,
+  // Emberreach's (and Bloodmarch's) charred trees: 3.9 made them the largest single
+  // blocker on the most obstructed map in the game
+  char_dead_tree_01: 1.3, char_dead_tree_02: 1.3, char_dead_tree_03: 1.3,
 })) if (ASSET[k]) ASSET[k] = { ...ASSET[k], r };
 // Fence sets: the picket set (re-tinted oak) and the rail set from Trellis batch 8
 export const FENCE_SETS = {

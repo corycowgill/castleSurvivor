@@ -100,3 +100,16 @@ one program, and warm-up compiles it.
   itself at 1.8× spacing there, but I didn't capture that mode).
 - Human play on the reshaped Bloodmarch field: the lanes are designed for kiting, but the bot
   doesn't use them deliberately.
+
+---
+
+## Second pass (same day)
+
+| Item | Result |
+|---|---|
+| Props hiding the knight | Dithered see-through in the prop shader for anything between the camera and a knight. A cypress over the knight on Mirefen is now cut through (`occ2-mirefen-1`); trees behind stay solid (`occ2-kingsfield-*`) |
+| Mirefen "dark band" | Not a shadow: hiding shafts, AO and shadows in turn left it unchanged. It's a black-water bog channel rendering near-black with nothing to reflect. Still water now gets a rippled sky sheen and reads as water (`band-noshaft-mirefen-1` vs `water-mirefen-1`) |
+| Emberreach obstruction | `char_dead_tree_*` collide on the trunk (3.9 → 1.3). 51% → 35% obstructed, centre 37% → 20%; bot 6/10 → 5/10 survived (noise), worst snag 16% → 5% |
+
+Recommendations 1-3 above are done. Still open: the bot wandering into Bloodmarch's fortress,
+and Kingsfield fog at co-op zoom.
