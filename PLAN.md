@@ -1472,4 +1472,11 @@ snag rate.
   death archer-led, snag 0-7%, three of the new build's six deaths on the east side near the
   pre-existing boulder field at (70, 20) with the knight moving freely. Read as variance, but it is
   the first thing to look at if Darkwood starts killing people.
+- [x] 50.20 **Emberreach gets a third causeway on each lava flow.** Three of nine bot deaths were
+  pinned against the west flow, which ran 82 units unbroken south of z 16; the east ran 70 north of
+  z -4. New fords at west z 70 and east z -40, dressed like the others. Kite bot, 14 runs per build
+  (12 Dad, Parker, Brennan): **4/14 -> 11/14 survived**, worst snag 20% -> 7%; pens 61 -> 36.
+  Six of the old build's deaths, and two of the new one's, sit at exactly (38, 80) on the east
+  flow's bank with a 7-unit gap to the nearest tree: the bot walking into the lava at the same spot,
+  not a pen. Worth a look if the bot is ever taught about lava.
 

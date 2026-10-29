@@ -65,8 +65,12 @@ for (let gx = -96; gx <= 96; gx += 8) for (let gz = -96; gz <= 96; gz += 8) m.ti
 
 // ══ The lava ══════════════════════════════════════════════════════════════
 // Two flows off the cone. Each is a curve x = f(z); the causeways are the gaps.
-const EAST_FORDS = [-4, 54];
-const WEST_FORDS = [16, -46];
+// Three each: with two, the west flow ran 82 units unbroken south of z 16 and
+// the east 70 north of z -4, and a knight kited into either stretch had a wall
+// of lava at his back -- three of nine bot deaths were pinned against the west
+// flow there (PLAN 50.20). The third crossings split those runs.
+const EAST_FORDS = [-4, 54, -40];
+const WEST_FORDS = [16, -46, 70];
 const eastX = (z) => 44 + Math.sin(z * 0.052) * 11 + Math.cos(z * 0.021) * 5;
 const westX = (z) => -42 + Math.sin(z * 0.046) * 9 - Math.cos(z * 0.030) * 6;
 
