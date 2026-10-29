@@ -1463,4 +1463,13 @@ snag rate.
     the huts and a cache at the witch's hut: 50 breakables.
   - Emberreach's re-roll moves the spire maze round the cone (pens 44 -> 61, all at the cone, the
     same maze either way).
+- [x] 50.19 **Darkwood's empty north-east.** The audit's loot grid had the forest north of the
+  ford, between the track and the stream, at zero breakables in two 50-unit blocks. Two lit
+  clearings, placed before the forest so the pines grow round them: a charcoal burners' camp
+  (22, -64) and a hunters' lodge east of the stream (80, -38), each with stores to break and a
+  cache. The corner "lost caches" use `m.cache()`. Caches 7 -> 9, breakables 223 -> 250, pens
+  6 -> 7. The forest re-rolled; kite bot, Dad, 20 runs per build: 17/20 -> 14/20 survived, every
+  death archer-led, snag 0-7%, three of the new build's six deaths on the east side near the
+  pre-existing boulder field at (70, 20) with the knight moving freely. Read as variance, but it is
+  the first thing to look at if Darkwood starts killing people.
 

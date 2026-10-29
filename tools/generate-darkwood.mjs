@@ -152,6 +152,25 @@ for (const [cx, cz] of [[-70, -20], [70, 20]]) {
   for (let i = 0; i < 3; i++) m.ring('nature_fern_01', cx, cz, 3, 12, {});
 }
 
+// ── Charcoal burners' clearing (north) and the hunters' lodge (east) ───
+// tools/map-audit.py found the forest north of the ford, between the track and
+// the stream, held no breakables and nothing to walk to: the waves came out of
+// it and nothing drew a knight in. Two lit clearings with stores to break and a
+// cache each, placed before the forest so the pines grow round them.
+const camp = (cx, cz, building, rot, stores) => {
+  m.keepOut(cx, cz, 12);
+  m.add(building, cx - 6, cz - 5, { rotY: rot, force: true, ignoreKeepOut: true });
+  for (const [k, n] of stores) for (let i = 0; i < n; i++) m.ring(k, cx, cz, 3.5, 9.5, { ignoreKeepOut: true });
+  m.add('village_lantern_post_01', cx + 5, cz + 4, { ignoreKeepOut: true, force: true });
+  m.cache(cx + 3, cz - 2);
+  m.paintCircle(0, cx, cz, 14, 0.8, 0.6);
+  m.shaft(cx + R.range(-3, 3), cz + R.range(-3, 3), { w: 6, h: 26, rotY: R.range(0.3, 0.9) });
+};
+camp(22, -64, 'farmHouse', PI * 0.2, [['prop_logs_02', 3], ['prop_firewood_stack_02', 4], ['barrel', 3],
+  ['prop_wood_crate_large_01', 2], ['prop_wood_crate_small_01', 2], ['prop_wheelbarrow_01', 1]]);
+camp(80, -38, 'house', PI * 1.4, [['hayBales', 2], ['village_weapon_rack_01', 2], ['barrel', 4],
+  ['prop_wood_crate_large_01', 2], ['prop_grain_sack_stack_01', 2], ['prop_table_wood_01', 1], ['prop_stool_wood_01', 2]]);
+
 // ── Forest ─────────────────────────────────────────────────────────────
 const forestDensity = (x, z) => {
   if (nearStream(x, z)) return 0;
@@ -183,7 +202,7 @@ m.scatter('boulder', 22, region, { density: (x, z) => forestDensity(x, z) * 0.8,
 m.scatter('prop_wood_crate_broken_01', 6, region, { density: forestDensity, tries: 8 });
 for (const o of m.objects) if (o.key === 'shrubbery' && o.scale === 4) o.scale = +(3 + R() * 1.8).toFixed(1);
 // Lost caches for explorers
-m.add('chest', -80, -80, { rotY: R.angle() }); m.add('chest', 84, 84, { rotY: R.angle() }); m.add('chest', 0, 88, { rotY: R.angle() });
+m.cache(-80, -80); m.cache(84, 84); m.cache(0, 88);
 
 // ── Ground paint: R dirt, G pine needles, B mud, A moss (see MAPS.darkwood.terrain)
 const DIRT = 0, NEEDLES = 1, MUD = 2, MOSS = 3;
