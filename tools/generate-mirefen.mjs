@@ -72,7 +72,12 @@ const WITCHHUT = () => P('fen_witch_hut_01', 'apothecary', 'house');
 const FISHRACK = () => P('fen_fish_rack_01', 'village_weapon_rack_01');
 const CORACLE = () => P('fen_coracle_01', 'bog_crate_01', 'prop_wood_crate_large_01');
 const TRAPS = () => P('fen_wicker_trap_01', 'prop_grain_sack_stack_01', 'bog_crate_01');
-const BOARDWALK = () => P('fen_boardwalk_01', 'bog_fence_01');
+// fen_boardwalk_01 is not a walkway: Trellis produced a narrow plank on 0.9 units
+// of legs, catalogued at 0.4 m, so at the fords it read as knee-high benches
+// scattered beside the crossing (tools/shots/bw-mirefen-1.png). The fords are
+// marked by their silt path, wisp lanterns and reeds until a flat walkway mesh
+// exists; regenerate this asset as one and put BOARDWALK back where it was used.
+const BOARDWALK = null;
 const TOTEM = () => P('fen_totem_01', 'village_signpost_01');
 const WISPPOST = () => P('fen_lantern_post_01', 'village_lantern_post_01');
 const WISPSTONE = () => P('swamp_wisp_stone_01', 'bog_rock_01');
@@ -86,8 +91,11 @@ for (let gx = -96; gx <= 96; gx += 8) for (let gz = -96; gz <= 96; gz += 8) m.ti
 // Two channels, each a curve x = f(z), crossed only at the fords. Wider than
 // Emberreach's lava (8 vs 6) because water reads as a bigger obstacle and a bog
 // wants the frame broken up more.
-const EAST_FORDS = [-10, 48];
-const WEST_FORDS = [12, -52];
+// A third ford each (PLAN 50.21), for the reason Emberreach got one: the west
+// channel ran 86 units unbroken south of z 12 and the east 50 south of z 48, and
+// the kite bot's deaths sat on exactly those banks (4/12 survived, snag to 30%).
+const EAST_FORDS = [-10, 48, 76];
+const WEST_FORDS = [12, -52, 60];
 const eastX = (z) => 40 + Math.sin(z * 0.048) * 13 + Math.cos(z * 0.025) * 6;
 const westX = (z) => -38 + Math.sin(z * 0.041) * 10 - Math.cos(z * 0.033) * 7;
 
@@ -98,14 +106,13 @@ for (const [fn, fords, z0, z1] of [[eastX, EAST_FORDS, -78, 98], [westX, WEST_FO
 m.blockers.push((x, z, r) => Math.abs(x - eastX(z)) < 5.6 + r || Math.abs(x - westX(z)) < 5.6 + r);
 const nearWater = (x, z) => Math.min(Math.abs(x - eastX(z)), Math.abs(x - westX(z)));
 
-// ── The two crossings: plank boardwalk, a wisp lantern each side, reeds crowding in
+// ── The crossings: a silt path, a wisp lantern each side, reeds crowding in
 const CROSSINGS = [];
 for (const [fn, fords] of [[eastX, EAST_FORDS], [westX, WEST_FORDS]]) {
   for (const f of fords) {
     const cx = fn(f);
     CROSSINGS.push({ x: cx, z: f });
     for (let d = -8; d <= 8; d += 3.5) m.tile('road', cx + d * 0.2, f + d);
-    for (let d = -7; d <= 7; d += 3.2) add(BOARDWALK(), cx + d * 0.2, f + d, { rotY: 0, force: true });
     for (const side of [-1, 1]) {
       add(WISPPOST(), cx + side * 5.5, f - side * 4.5, { force: true });
       add(CATTAILS(), cx + side * 7.0, f + side * 3, { rotY: R.angle() });
@@ -130,7 +137,7 @@ for (const c of CROSSINGS) DRY.push({ x: c.x, z: c.z, r: 9 });
 add(TOTEM(), -8, -6, { rotY: PI * 1.15, ignoreKeepOut: true, force: true });
 for (let i = 0; i < 4; i++) ring(WISPSTONE(), 0, 0, 7, 10, { ignoreKeepOut: true });
 for (let i = 0; i < 3; i++) ring(HUMMOCK(), 0, 0, 8, 12, { ignoreKeepOut: true });
-add('chest', 9, -8, { rotY: R.angle(), ignoreKeepOut: true });
+m.cache(9, -8);
 m.keepOut(0, 0, 12);
 
 // ══ The bog ═══════════════════════════════════════════════════════════════
@@ -213,8 +220,8 @@ for (let i = 0; i < 4; i++) ring(BARRICADE(), VILLAGE.x, VILLAGE.z, 18, 24, {});
 for (let i = 0; i < 12; i++) ring(P('bog_crate_01', 'barrel'), VILLAGE.x, VILLAGE.z, 4, 19, {});
 for (let i = 0; i < 6; i++) ring('barrel', VILLAGE.x, VILLAGE.z, 5, 18, {});
 cache(VILLAGE.x - 4, VILLAGE.z + 36);
-// A boardwalk out of the village into the bog, so the district has a front door
-for (let d = 0; d < 9; d++) add(BOARDWALK(), VILLAGE.x + 22 + d * 3.2, VILLAGE.z + d * 1.1, { rotY: 0.32, force: true });
+// A track out of the village into the bog, so the district has a front door
+for (let d = 0; d < 9; d++) m.paintCircle(0, VILLAGE.x + 22 + d * 3.2, VILLAGE.z + d * 1.1, 3, 0.85, 0.5);   // a silt track (see BOARDWALK)
 m.paintCircle(0, VILLAGE.x, VILLAGE.z, 20, 0.8, 0.6);
 m.paintCircle(3, VILLAGE.x, VILLAGE.z, 24, 0.4, 0.8);
 

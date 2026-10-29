@@ -1479,4 +1479,14 @@ snag rate.
   Six of the old build's deaths, and two of the new one's, sit at exactly (38, 80) on the east
   flow's bank with a 7-unit gap to the nearest tree: the bot walking into the lava at the same spot,
   not a pen. Worth a look if the bot is ever taught about lava.
+- [x] 50.21 **Mirefen gets a third ford on each channel, and loses its benches.** A 12-run sweep
+  of every map not yet checked by death location put Kingsfield at 9/12 and Mirefen at 4/12
+  (snag to 30%), its deaths on the south banks of both channels: the west ran 86 units unbroken
+  south of z 12, the east 50 south of z 48. New fords at west z 60 and east z 76; the spawn cache
+  uses `m.cache()` (it had dropped out in the re-roll). Kite bot, 12 runs per build: **2/12 ->
+  6/12 survived**, worst snag 21% -> 13%, no deaths left on the south banks; caches 6, pens
+  8 -> 13. The fords' "plank boardwalk", `fen_boardwalk_01`, is not a walkway: Trellis made a
+  narrow plank on 0.9 units of legs and the catalogue has it at 0.4 m, so every ford was dotted
+  with knee-high benches (`bw-mirefen-1`). Removed from the fords and the village approach (now a
+  painted silt track); the asset wants regenerating as a flat walkway.
 
