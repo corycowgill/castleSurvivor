@@ -132,6 +132,30 @@ const cache = (x, z) => m.cache(x, z);   // see MapBuilder.cache
 const DRY = [{ x: 0, z: 0, r: 16 }];
 for (let z = -80; z <= 86; z += 6) DRY.push({ x: causewayX(z), z, r: 7.5 });
 for (const c of CROSSINGS) DRY.push({ x: c.x, z: c.z, r: 9 });
+// Spurs: a dry track from the spine out to every ford (PLAN 50.22). The bog is
+// 61% of the map and five of six kite-bot deaths after 50.21 were in it; the
+// fords had dry pads but nothing dry led to them, so reaching a crossing meant
+// wading. A spur is a straight segment spine -> ford: it dries bogField (so the
+// paint still matches what you wade through), keeps mire discs off itself, and
+// is laid with road tiles so it paints as a silt track like the causeway.
+const SPURS = CROSSINGS.map(c => ({ x0: causewayX(c.z), z0: c.z, x1: c.x, z1: c.z }));
+const spurDist = (x, z) => {
+  let best = Infinity;
+  for (const s of SPURS) {
+    const dx = s.x1 - s.x0, dz = s.z1 - s.z0, l2 = dx * dx + dz * dz;
+    const t = Math.max(0, Math.min(1, ((x - s.x0) * dx + (z - s.z0) * dz) / l2));
+    best = Math.min(best, Math.hypot(x - (s.x0 + dx * t), z - (s.z0 + dz * t)));
+  }
+  return best;
+};
+for (const s of SPURS) {
+  const len = Math.hypot(s.x1 - s.x0, s.z1 - s.z0), n = Math.ceil(len / 5);
+  for (let k = 1; k < n; k++) {
+    const x = s.x0 + (s.x1 - s.x0) * k / n, z = s.z0 + (s.z1 - s.z0) * k / n;
+    m.tile('road', x, z);
+    DRY.push({ x, z, r: 5 });
+  }
+}
 
 // The spawn clearing: a stand of wisp stones on dry peat, somewhere to read the map from
 add(TOTEM(), -8, -6, { rotY: PI * 1.15, ignoreKeepOut: true, force: true });
@@ -147,7 +171,8 @@ const bogField = (x, z) => {
   const low = wet(x, z) - 0.42;                       // the low half of the basin
   const bank = Math.max(0, 0.55 - nearWater(x, z) / 26);  // wetter near the channels
   const spine = Math.max(0, 0.5 - Math.abs(x - causewayX(z)) / 22); // drier on the causeway
-  return low + bank * 0.9 - spine * 1.3;
+  const spur = Math.max(0, 0.5 - spurDist(x, z) / 12);                // and on the spurs to the fords
+  return low + bank * 0.9 - spine * 1.3 - spur * 1.3;
 };
 m.mireField((x, z) => bogField(x, z), { step: 6.5, r: [5, 9], dry: DRY });
 

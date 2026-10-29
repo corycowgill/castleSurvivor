@@ -1489,4 +1489,13 @@ snag rate.
   narrow plank on 0.9 units of legs and the catalogue has it at 0.4 m, so every ford was dotted
   with knee-high benches (`bw-mirefen-1`). Removed from the fords and the village approach (now a
   painted silt track); the asset wants regenerating as a flat walkway.
+- [x] 50.22 **Mirefen: dry spurs from the causeway to every ford.** After 50.21 the bog was still
+  61% of the map and five of six deaths were in it; the fords had dry pads but nothing dry led to
+  them. Each ford now has a straight spur from the spine: it dries `bogField` (so the algae paint
+  still matches what you wade through), keeps mire discs off itself (0% wet along all six) and is
+  laid with road tiles so it paints as a silt track (`spur-mirefen-1`). Caches 6 -> 7, pens 13 -> 20.
+  **The bot cannot see it**: 36 runs with spurs against 48 without, 21/36 vs 28/48 survived (58%
+  each), snag median ~5% vs ~3.5% (worst run, 41%, was the bot parked at full HP by the fen
+  village). The kite bot circles and does not follow paths; the spurs are for a player choosing a
+  route to a crossing, and that is unmeasured.
 
