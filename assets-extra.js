@@ -400,7 +400,7 @@ export const EXTRA_ASSETS = [
     "defaultScale": 0.75,
     "obstacle": false,
     "radius": 0,
-    "breakable": false,
+    "breakable": true,
     "icon": "📦",
     "charredFrom": "prop_wood_crate_broken_01"
   },

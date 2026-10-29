@@ -121,6 +121,7 @@ for (const [fn, fords] of [[eastX, EAST_FORDS], [westX, WEST_FORDS]]) {
 // the fast line and the map's spine; everything either side of it is soft.
 const causewayX = (z) => Math.sin(z * 0.035) * 5;
 for (let z = -80; z <= 86; z += 5) m.tile('road', causewayX(z), z);
+const cache = (x, z) => m.cache(x, z);   // see MapBuilder.cache
 const DRY = [{ x: 0, z: 0, r: 16 }];
 for (let z = -80; z <= 86; z += 6) DRY.push({ x: causewayX(z), z, r: 7.5 });
 for (const c of CROSSINGS) DRY.push({ x: c.x, z: c.z, r: 9 });
@@ -206,6 +207,12 @@ add(WITCHHUT(), VILLAGE.x - 4, VILLAGE.z + 30, { rotY: PI * 0.15, force: true })
 for (let i = 0; i < 3; i++) ring(TOTEM(), VILLAGE.x - 4, VILLAGE.z + 30, 7, 11, {});
 for (let i = 0; i < 5; i++) ring(WISPPOST(), VILLAGE.x, VILLAGE.z, 10, 20, {});
 for (let i = 0; i < 4; i++) ring(BARRICADE(), VILLAGE.x, VILLAGE.z, 18, 24, {});
+// The loot district's loot: the fen-folk's stores stacked between the huts (the
+// swollen crates break now; they were registered as scenery), and the witch keeps
+// a cache behind her hut
+for (let i = 0; i < 12; i++) ring(P('bog_crate_01', 'barrel'), VILLAGE.x, VILLAGE.z, 4, 19, {});
+for (let i = 0; i < 6; i++) ring('barrel', VILLAGE.x, VILLAGE.z, 5, 18, {});
+cache(VILLAGE.x - 4, VILLAGE.z + 36);
 // A boardwalk out of the village into the bog, so the district has a front door
 for (let d = 0; d < 9; d++) add(BOARDWALK(), VILLAGE.x + 22 + d * 3.2, VILLAGE.z + d * 1.1, { rotY: 0.32, force: true });
 m.paintCircle(0, VILLAGE.x, VILLAGE.z, 20, 0.8, 0.6);
@@ -232,7 +239,7 @@ if (m.landmark('landmark_sunken_temple', 74, 4, { rotY: -0.4, keepOut: 16 })) {
 }
 for (let i = 0; i < 10; i++) ring(P('bog_rock_cluster_01', 'nature_rock_cluster_02'), 74, 4, 12, 24, {});
 for (let i = 0; i < 6; i++) ring(WISPSTONE(), 74, 4, 10, 20, {});
-add('chest', 78, 12, { rotY: R.angle(), ignoreKeepOut: true });
+cache(78, 12);
 
 if (!m.landmark('landmark_drowned_bell_tower', 60, -78, { rotY: 0.5, keepOut: 14 })) {
   add(P('landmark_destroyed_watchtower', 'landmark_ruined_tower'), 60, -78, { rotY: 0.5, force: true });
@@ -240,7 +247,7 @@ if (!m.landmark('landmark_drowned_bell_tower', 60, -78, { rotY: 0.5, keepOut: 14
 }
 m.paintCircle(2, 60, -78, 20, 0.7, 0.6);
 for (let i = 0; i < 8; i++) ring(BLEACHED(), 60, -78, 12, 24, {});
-add('chest', 54, -84, { rotY: R.angle(), ignoreKeepOut: true });
+cache(54, -84);
 
 // A fourth corner prize, as in Darkwood
 add('chest', -80, 80, { rotY: R.angle(), ignoreKeepOut: true, force: true });

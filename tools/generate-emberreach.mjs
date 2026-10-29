@@ -100,7 +100,7 @@ for (const [fn, fords] of [[eastX, EAST_FORDS], [westX, WEST_FORDS]]) {
 m.add(TOTEM(), -7, -7, { rotY: PI * 1.2, ignoreKeepOut: true, force: true });
 for (let i = 0; i < 4; i++) ring(BRAZIER(), 0, 0, 7, 9, { ignoreKeepOut: true });
 for (let i = 0; i < 3; i++) ring(BONES(), 0, 0, 6, 10, { ignoreKeepOut: true });
-add('chest', 8, -8, { rotY: R.angle(), ignoreKeepOut: true });
+m.cache(8, -8);
 m.keepOut(0, 0, 12);
 // The main track south into the camp and north toward the cone
 for (let z = -56; z <= 62; z += 6) m.tile('road', Math.sin(z * 0.04) * 3, z);
@@ -148,7 +148,7 @@ for (let i = 0; i < 4; i++) ring(BRAZIER(), CAMP.x, CAMP.z, 6, 9, {});
 for (let i = 0; i < 3; i++) ring(P('ogre_banner_01', 'village_signpost_01'), CAMP.x, CAMP.z, 8, 12, {});
 for (let i = 0; i < 4; i++) ring(P('barrel'), CAMP.x, CAMP.z, 5, 10, {});
 for (let i = 0; i < 3; i++) ring(P('ogre_bone_pile_01', 'combat_bones_01'), CAMP.x, CAMP.z, 6, 12, {});
-add('chest', CAMP.x + 6, CAMP.z + 8, { rotY: R.angle() });
+m.cache(CAMP.x + 6, CAMP.z + 8);
 m.keepOut(CAMP.x, CAMP.z, 5);
 
 // Cages and butchery on the camp's west edge; the spoils are in the middle
@@ -226,7 +226,7 @@ scatter(P('volcanic_spire_01', BOULDER()), 16, OBS, { tries: 8, minSpacing: 2 })
 scatter(P('volcanic_spire_02', ROCK_MID()), 20, OBS, { tries: 8, minSpacing: 1.5 });
 scatter(BOULDER(), 18, OBS, { tries: 6 });
 scatter(ROCK_SMALL(), 26, OBS, { tries: 5 });
-add('chest', 90, 70, { rotY: R.angle() });
+m.cache(90, 70);
 for (const [x, z] of [[64, 8], [82, 52], [70, 66]]) { add(P('volcanic_vent_01', 'volcanic_lava_rock_01', ROCK_MID()), x, z, {}); m.shaft(x, z, { w: 4, h: 15, rotY: R.range(0.2, 1) }); m.paintCircle(3, x, z, 7, 0.85, 0.5); }
 
 // ══ The ash barrens (west) ════════════════════════════════════════════════
@@ -239,8 +239,8 @@ scatter(P('combat_skull_01', 'combat_bones_01'), 14, BARRENS, { tries: 5 });
 scatter(ROCK_SMALL(), 22, BARRENS, { tries: 5 });
 scatter(P('combat_abandoned_sword_01', 'combat_arrow_cluster_01'), 9, BARRENS, { tries: 5 });
 scatter(P('combat_abandoned_shield_01', 'combat_arrow_cluster_01'), 8, BARRENS, { tries: 5 });
-add('chest', -88, -86, { rotY: R.angle() });
-add('chest', -86, 82, { rotY: R.angle() });
+m.cache(-88, -86);
+m.cache(-86, 82);
 // A boneyard: the thing to walk toward in an otherwise empty quarter
 for (let i = 0; i < 9; i++) ring(P('ogre_skull_pile_01', 'ogre_bone_pile_01', 'combat_bones_01'), -70, 24, 3, 12, {});
 for (let i = 0; i < 6; i++) ring(STAKE(), -70, 24, 8, 13, { facing: 'in' });
@@ -292,8 +292,8 @@ scatter(P('combat_burned_cart_01', 'combat_broken_cart_01', 'char_barricade_01')
 scatter(P('combat_wall_rubble_01', ROCK_MID()), 16, region, { density: (x, z) => burnt(x, z) * 0.5, tries: 7 });
 scatter('prop_wood_crate_broken_01', 8, region, { density: burnt, tries: 8 });
 // Scattered caches to reward walking to the edges
-add('chest', 88, -88, { rotY: R.angle() });
-add('chest', 0, 90, { rotY: R.angle() });
+m.cache(88, -88);
+m.cache(0, 90);
 
 // ══ Ground paint ══════════════════════════════════════════════════════════
 // R basalt (bare rock), G cinder (burnt ground), B lavaCrust (hot banks), A sulfur

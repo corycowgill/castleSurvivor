@@ -129,7 +129,9 @@ const VARIANTS = [
   { from: 'char_fallen_log_01',    key: 'bog_driftwood_01',   name: 'Driftwood',           grade: 'bleached' },
   { from: 'prop_logs_02',          key: 'bog_logs_01',        name: 'Rotting Log Stack',   grade: 'sunken' },
   { from: 'village_fence_broken_01', key: 'bog_fence_01',     name: 'Rotted Fence',        grade: 'sunken' },
-  { from: 'prop_wood_crate_broken_01', key: 'bog_crate_01',   name: 'Swollen Crate',       grade: 'sunken' },
+  // breakable: the source is the BROKEN crate, which is scenery, but a swollen crate
+  // is a whole one and Mirefen's fen village is meant to be its loot district
+  { from: 'prop_wood_crate_broken_01', key: 'bog_crate_01',   name: 'Swollen Crate',       grade: 'sunken', breakable: true },
   { from: 'combat_barricade_01',   key: 'bog_barricade_01',   name: 'Rotted Barricade',    grade: 'sunken' },
   { from: 'combat_broken_cart_01', key: 'bog_cart_01',        name: 'Sunken Cart',         grade: 'sunken' },
 
@@ -244,7 +246,7 @@ async function main() {
     const entry = {
       key: v.key, name: v.name, file: `${v.key}.glb`, category: src.category,
       defaultScale: src.defaultScale, obstacle: !!src.obstacle, radius: src.radius || 0,
-      breakable: !!src.breakable, icon: ICONS[src.category] || '🌿', charredFrom: v.from,
+      breakable: v.breakable ?? !!src.breakable, icon: ICONS[src.category] || '🌿', charredFrom: v.from,
     };
     // The registry is always complete, even under --only, so re-grading one asset
     // never drops the other eleven out of charred.json

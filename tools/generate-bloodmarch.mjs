@@ -175,7 +175,14 @@ for (let a = gateA - PI * 0.62; a <= gateA + PI * 0.62; a += 0.125) {
   const da = Math.abs(a - gateA);
   if (da < 0.16) continue;                                 // the gate
   const rot = a + PI / 2;
-  if (da > 0.9 && da < 1.02 || da > 1.5 && da < 1.62) { put(BREACH(), x, z, { rotY: rot, force: true }); continue; }
+  // The breaches are openings you can run through. They used to be one breach
+  // mesh each, and its collision (r 4) blocked more than the wall it replaced, so
+  // "smashed open in two more places" was solid. Wall pieces are 3.4 apart with
+  // r 3.6, so a real gap means leaving out about four: the middle stays empty
+  // and the ruined pieces stand at its two ends. Centres sit clear of the towers.
+  const bd = Math.min(Math.abs(da - 0.55), Math.abs(da - 1.45));
+  if (bd < 0.2) continue;
+  if (bd < 0.3) { put(BREACH(), x, z, { rotY: rot, force: true }); continue; }
   if (R() < 0.06) continue;                                // knocked flat
   put(CURTAIN(), x, z, { rotY: rot, force: true, scale: m.has('war_castle_wall_01') ? undefined : 5 });
 }
@@ -222,7 +229,7 @@ for (let i = 0; i < 3; i++) ring(STALL(), SQUARE.x, SQUARE.z, 5, 9, {});
 for (let i = 0; i < 3; i++) ring(H_BANNER(), SQUARE.x, SQUARE.z, 6, 11, {});
 for (let i = 0; i < 4; i++) ring(BEAMS(), SQUARE.x, SQUARE.z, 4, 10, {});
 for (let i = 0; i < 4; i++) ring(P('barrel'), SQUARE.x, SQUARE.z, 4, 9, {});
-add('chest', SQUARE.x + 8, SQUARE.z + 6, { rotY: R.angle() });
+m.cache(SQUARE.x + 8, SQUARE.z + 6);
 m.paintCircle(2, SQUARE.x, SQUARE.z, 11, 0.8, 0.5);
 // Town litter that ignores the keep-outs: it belongs in the streets
 scatter(SHIELDS(), 10, { x0: -66, z0: -66, x1: -14, z1: -18 }, { tries: 6, ignoreKeepOut: true });
@@ -251,7 +258,7 @@ for (const [x0, z0, x1, z1] of [[-88, -14, -66, 4], [-72, 22, -50, 44], [-90, 36
   m.scatterDecals('hayScatter', 6, { x0, z0, x1, z1 }, { scale: [2, 3.4] });
   if (R() < 0.6) scatter('cornTile', 3, { x0, z0, x1, z1 }, { tries: 4 });
 }
-add('chest', -86, 60, { rotY: R.angle() });
+m.cache(-86, 60);
 
 // ══ The human siege line ══════════════════════════════════════════════════
 // Where the king's host stood: tents, engines and earthworks facing the orcs
@@ -286,7 +293,12 @@ for (let a = oGate - PI * 0.6; a <= oGate + PI * 0.6; a += 0.1) {
   const da = Math.abs(a - oGate);
   if (da < 0.2) continue;
   const rot = a + PI / 2;
-  if (da > 0.7 && da < 0.85 || da > 1.35 && da < 1.5) { put(PALISADE_BROKEN(), x, z, { rotY: rot, force: true }); continue; }
+  // Same as the castle's breaches: the broken lengths were still solid, so the camp
+  // had one way in and out (the gate) and a knight who went in with the horde
+  // behind him did not come out -- the bot's most common death on this map
+  const bd = Math.min(Math.abs(da - 0.7), Math.abs(da - 1.42));
+  if (bd < 0.18) continue;
+  if (bd < 0.27) { put(PALISADE_BROKEN(), x, z, { rotY: rot, force: true }); continue; }
   if (R() < 0.08) continue;
   put(PALISADE(), x, z, { rotY: rot, force: true });
 }
@@ -325,7 +337,7 @@ for (let i = 0; i < 5; i++) ring(LOOT(), KEEP.x, KEEP.z, 12, 22, {});
 for (let i = 0; i < 5; i++) ring(TOTEM(), KEEP.x, KEEP.z, 13, 24, {});
 for (let i = 0; i < 6; i++) ring(BONES(), KEEP.x, KEEP.z, 12, 24, {});
 for (let i = 0; i < 4; i++) ring(P('barrel'), KEEP.x, KEEP.z, 12, 22, {});
-add('chest', 66, 82, { rotY: R.angle() }); add('chest', 90, 66, { rotY: R.angle() });
+m.cache(66, 82); m.cache(90, 66);
 m.keepOut(70, 60, 3);
 
 // ══ The orc siege line ════════════════════════════════════════════════════
@@ -412,7 +424,7 @@ scatter(RUBBLE(), 8, FIELD, { tries: 6, density: inField });
 add(STATUE_FALLEN(), -4, -7, { rotY: PI * 0.4, ignoreKeepOut: true, force: true });
 for (let i = 0; i < 3; i++) ring(CAIRN(), 0, 0, 6, 10, { ignoreKeepOut: true });
 for (let i = 0; i < 2; i++) ring(SHIELD_WALL(), 0, 0, 7, 11, { ignoreKeepOut: true, facing: 'out' });
-add('chest', 6, -6, { rotY: R.angle(), ignoreKeepOut: true });
+m.cache(6, -6);
 
 // ══ The burnt woods (north-east) ══════════════════════════════════════════
 // What was the king's forest, burnt through by the retreat. A stand of it holds
@@ -428,7 +440,7 @@ const woods = (x, z) => {
 const region = { x0: -94, z0: -94, x1: 94, z1: 94 };
 // The corner cache goes in before the trees so the wood grows round it, and the
 // last stand's clearing (see the outskirts) is reserved for the same reason
-add('chest', 88, -88, { rotY: R.angle() });
+m.cache(88, -88);
 const STAND = { x: 40, z: -70 };
 m.keepOut(STAND.x, STAND.z, 15);
 let treesPlaced = 0;
@@ -469,7 +481,7 @@ for (let row = 0; row < 4; row++) for (let col = 0; col < 7; col++) {
 }
 for (let i = 0; i < 6; i++) ring(BONES(), PYRES.x, PYRES.z, 9, 14, {});
 for (let i = 0; i < 4; i++) ring(SHIELDS(), PYRES.x, PYRES.z, 8, 13, {});
-add('chest', PYRES.x + 1, PYRES.z - 6, { rotY: R.angle(), ignoreKeepOut: true });
+m.cache(PYRES.x + 1, PYRES.z - 6);
 m.paintCircle(RUB_CH, PYRES.x, PYRES.z + 10, 20, 0.45, 0.7);
 
 // The baggage train (south-west): the king's wagons, caught on the farm track as
@@ -482,7 +494,7 @@ for (let i = 0; i < 9; i++) {
   m.paintCircle(RUB_CH, x, z, 5, 0.4, 0.7);
 }
 for (let i = 0; i < 2; i++) ring(H_BANNER(), -66, 72, 4, 12, {});
-add('chest', -64, 84, { rotY: R.angle() });
+m.cache(-64, 84);
 
 // The last stand (north-east): a clearing in the burnt wood where the king's
 // rearguard formed a shield ring and did not leave it. The fallen statue is
@@ -495,7 +507,7 @@ put(STATUE_FALLEN(), STAND.x - 2, STAND.z + 1, { rotY: PI * 0.8, force: true, ig
 for (let i = 0; i < 3; i++) ring(H_BANNER(), STAND.x, STAND.z, 4, 8, { ignoreKeepOut: true });
 for (let i = 0; i < 5; i++) ring(SWORD(), STAND.x, STAND.z, 3, 12, { ignoreKeepOut: true });
 for (let i = 0; i < 6; i++) ring(BONES(), STAND.x, STAND.z, 10, 15, {});
-add('chest', STAND.x + 3, STAND.z - 2, { rotY: R.angle(), ignoreKeepOut: true });
+m.cache(STAND.x + 3, STAND.z - 2);
 m.paintCircle(RUB_CH, STAND.x, STAND.z, 13, 0.5, 0.6);
 m.fire(STAND.x + 12, STAND.z + 6, { r: 0.7, y: 0.4, h: 7, s: 0.5 });
 

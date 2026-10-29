@@ -1415,8 +1415,8 @@ snag rate.
   Now 1.3, the same rule as 50.4. Emberreach goes from 51% to 35% obstructed (centre 37% to 20%),
   all seven caches still place; kite bot 6/10 -> 5/10 survived (noise), worst snag 16% -> 5%.
   Bloodmarch shares the keys and was regenerated with it.
-- [ ] 50.11 Open: the bot still walks into the orc fortress on Bloodmarch and dies to archers inside
-  the palisade; a human would not, but it costs the harness signal.
+- [x] 50.11 The bot dying inside Bloodmarch's orc fortress was the level, not the bot: the
+  palisade's "broken" lengths were solid, so the camp had one way out. See 50.18.
 - [x] 50.12 Kingsfield's fog colour at co-op zoom: checked with a three-knight party spread 70
   units (camera at 1.7x, `party-*`). The top of the frame still never reaches the fog; no change.
 - [ ] 50.13 Open: GTAO's own depth/normal pass draws transparent effect planes (shafts, glows) as
@@ -1443,4 +1443,24 @@ snag rate.
   (emissive 0.45, 0.75 on a crit) and fade over the 0.08-0.3 s flash to their own emissive, the
   genre's standard tell; probe: 0.45 at the hit, 0.26 after 50 ms, restored by 0.15 s
   (`hitpop-kingsfield-1`).
+- [x] 50.18 **Level pass from a layout audit** (`tools/map-audit.py`: reachability, pens, caches,
+  loot per block).
+  - **Breaches you can run through.** Bloodmarch's castle breaches were one breach mesh each, whose
+    collision (r 4) blocked more than the wall (r 3.6) it replaced, and the orc palisade's "broken"
+    lengths were solid too, so the camp had one exit and was the map's worst pen. Wall pieces sit
+    3.4 apart, so a real opening leaves out about four; the ruined pieces now stand at its ends.
+    Centres moved clear of the towers. Pens on the map 49 -> 37; the fortress block is gone.
+    Kite bot, Dad x10: 9/10 on both builds, worst snag 15% -> 9%, and the old build's death was
+    inside the fortress again.
+  - **Caches that exist.** Fixed-point `add('chest', x, z)` fails silently on a rock or a wall:
+    Bloodmarch placed 6 of 11, Mirefen 3, Emberreach 7 of 10. `MapBuilder.cache()` walks out to the
+    nearest clear ground: Bloodmarch 10, Emberreach 10, Mirefen 6. (Kingsfield and Darkwood fall
+    short in ring placements instead, and converting them only re-rolled their layouts, so they
+    were left alone.)
+  - **Mirefen had 17 breakables** against 180-390 on every other map. Its "loot district" was built
+    from `bog_crate_01`, a regrade of the BROKEN crate, so it inherited "scenery". `char-glb.mjs`
+    takes a per-variant `breakable`; the swollen crate breaks, and the village gets stores between
+    the huts and a cache at the witch's hut: 50 breakables.
+  - Emberreach's re-roll moves the spire maze round the cone (pens 44 -> 61, all at the cone, the
+    same maze either way).
 

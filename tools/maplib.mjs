@@ -327,6 +327,19 @@ export class MapBuilder {
     this.counts[key] = (this.counts[key] || 0) + 1;
     return true;
   }
+  // A supply cache AT a place rather than on one exact point. A fixed-point add
+  // fails silently when a rock, a wall or the water's edge sits there, which is
+  // how Mirefen shipped three of its caches and Bloodmarch six of eleven. This
+  // walks outward from the spot to the nearest clear ground. Keep-outs are
+  // ignored on purpose: a cache usually belongs inside the district it rewards.
+  cache(x, z, { maxR = 9 } = {}) {
+    for (let r = 0; r <= maxR; r += 1.5) for (let k = 0; k < 10; k++) {
+      const a = this.rnd.angle();
+      if (this.add('chest', x + Math.cos(a) * r, z + Math.sin(a) * r, { rotY: this.rnd.angle(), ignoreKeepOut: true })) return true;
+    }
+    this.counts['cache-failed'] = (this.counts['cache-failed'] || 0) + 1;
+    return false;
+  }
   // Landmark: placed only if the mesh made it through validation (so the generators
   // keep working while a batch is pending), with a keep-out ring and a painted apron
   landmark(key, x, z, { rotY = 0, keepOut = 0, apron = null, ...rest } = {}) {
