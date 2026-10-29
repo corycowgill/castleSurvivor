@@ -983,13 +983,13 @@ async function main() {
     await g.close(); return;
   }
   if (mode === 'tour') {
-    // Close-ups of several map locations in one session: --map, --zoom, --at "x,z;x,z;..." --tag name
+    // Close-ups of several map locations in one session: --map, --zoom, --at "x,z;x,z;..." --tag name [--char dad|brennan|parker]
     const tmap = opt('map', 'kingsfield');
     const tzoom = parseFloat(opt('zoom', '0.8'));
     const tag = opt('tag', 'tour');
     const spots = (opt('at', '0,0')).split(';').map(s => s.split(',').map(Number));
     const g = await openGame(headed);
-    await g.page.evaluate(async (m) => { await window.__cs.startRun({ character: 'dad', map: m, ogre: 0 }); }, tmap);
+    await g.page.evaluate(async (m, c) => { await window.__cs.startRun({ character: c, map: m, ogre: 0 }); }, tmap, opt('char', 'dad'));
     const aoOff = opt('ao', 'on') === 'off';
     const evalJs = opt('eval', null);          // JS run once before the shots, e.g. GTAO parameter experiments
     const canvasOnly = !flag('page');          // default: read the WebGL canvas directly (no HUD, no partial frames)

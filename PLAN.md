@@ -1434,3 +1434,9 @@ snag rate.
   are collected at the knight, so a fight stacked text on him; only coins worth more than 1 label
   themselves now. The shaman heal ring peaks at 0.5 opacity instead of 0.9: two of them were the
   loudest thing on screen.
+- [x] 50.16 **Damage numbers keep their shape.** The black outline was 6px on a 128px canvas,
+  about 1.4 screen pixels at play zoom, and bloom ate it; now 12-14px with a soft drop shadow.
+  The title's "Defend Your Kingdom" was #a08040 with one shadow over a busy castle; brighter, with
+  the title's dark halo. Verified the x-ray on Brennan and Parker (`x-*`, `xa-*`); `tour` takes
+  `--char`.
+

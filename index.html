@@ -124,9 +124,10 @@ canvas { display: block; }
   text-shadow: 0 0 30px rgba(201,162,83,0.4), 0 3px 8px rgba(0,0,0,1), 0 0 60px rgba(0,0,0,0.8);
 }
 #start-screen h2 {
-  font-family: 'MedievalSharp', cursive; font-size: 18px; color: #a08040;
+  font-family: 'MedievalSharp', cursive; font-size: 18px; color: #dcc184;
   margin-top: 2px; margin-bottom: 10px; letter-spacing: 3px; font-weight: normal;
-  text-shadow: 0 2px 6px rgba(0,0,0,1);
+  /* #a08040 with one shadow vanished into the castle behind it; the title's dark halo holds it */
+  text-shadow: 0 2px 6px rgba(0,0,0,1), 0 0 18px rgba(0,0,0,0.9), 0 0 4px rgba(0,0,0,0.9);
 }
 #start-screen .divider {
   width: 280px; height: 2px; margin: 0 auto 16px;
@@ -7205,9 +7206,14 @@ function _drawDmgText(ctx, text, color, big) {
   ctx.font = `700 ${big ? 50 : 42}px Cinzel, Georgia, serif`;
   ctx.textAlign = 'center';
   ctx.lineJoin = 'round';
+  // The outline is what keeps a number legible on bright grass and in bloom. At 6px
+  // on this 128px canvas it came out about 1.4 screen pixels at play zoom and the
+  // digits washed into the ground; twice that, plus a soft drop shadow, holds.
+  ctx.shadowColor = 'rgba(0,0,0,0.7)'; ctx.shadowBlur = 6; ctx.shadowOffsetY = 2;
   ctx.strokeStyle = '#000';
-  ctx.lineWidth = big ? 7 : 6;
+  ctx.lineWidth = big ? 14 : 12;
   ctx.strokeText(text, 64, 47);
+  ctx.shadowColor = 'transparent';
   ctx.fillStyle = color;
   ctx.fillText(text, 64, 47);
 }
