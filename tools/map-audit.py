@@ -11,6 +11,8 @@ Per map:
   pens               1-unit cells where less than 35% of the ground within 6 units
                      is reachable: where a kiting player gets cornered. The five
                      worst 20-unit blocks are listed by centre
+  props              interpenetrating solids, clutter inside buildings, solids on
+                     roads, solids within 8 units of the spawn
   loot grid          breakables (the game's own list from assets-extra.js, plus
                      barrels and chests) per 50-unit block, rows north to south
 
@@ -95,7 +97,52 @@ def audit(path, breakables):
         print('    ' + ' '.join(f'{grid[(col, row)]:4d}' for col in range(N // 50)))
 
 
+WALLISH = re.compile(r'wall|fence|palisade|barricade|stake|spike|breach|gate|hedge')
+
+
+def props(path):
+    """Placement problems a map-scale look misses."""
+    d = json.load(open(path))
+    objs = d['objects']
+    solid = [o for o in objs if o.get('obstacle') and o.get('radius', 0) > 0]
+    big = [o for o in solid if o['radius'] >= 1.5]
+    # Interpenetration: two different solid props sunk into each other. Walls and
+    # fences are laid overlapping on purpose, so pairs of those are skipped.
+    clash = []
+    for i, a in enumerate(big):
+        for b in big[i + 1:]:
+            if WALLISH.search(a['key']) and WALLISH.search(b['key']):
+                continue
+            dd = ((a['x'] - b['x']) ** 2 + (a['z'] - b['z']) ** 2) ** 0.5
+            if dd < 0.6 * (a['radius'] + b['radius']):
+                clash.append((round(dd, 1), a['key'], (a['x'], a['z']), b['key'], (b['x'], b['z'])))
+    # Clutter inside a building: a walk-through prop within 70% of a building's radius
+    houses = [o for o in solid if o['radius'] >= 3 and not WALLISH.search(o['key'])]
+    inside = []
+    for o in objs:
+        if o.get('obstacle') or o['key'] in ('grass', 'road', 'stream', 'chest'):
+            continue
+        for h in houses:
+            if (o['x'] - h['x']) ** 2 + (o['z'] - h['z']) ** 2 < (0.7 * h['radius']) ** 2:
+                inside.append((o['key'], (o['x'], o['z']), h['key']))
+                break
+    roads = [(o['x'], o['z']) for o in objs if o['key'] == 'road']
+    on_road = [(o['key'], (o['x'], o['z'])) for o in solid
+               if any(abs(o['x'] - rx) < 2.6 and abs(o['z'] - rz) < 2.6 for rx, rz in roads)]
+    sx, sz = d.get('spawnX', 0), d.get('spawnZ', 0)
+    spawn = [(o['key'], (o['x'], o['z'])) for o in solid if (o['x'] - sx) ** 2 + (o['z'] - sz) ** 2 < 64]
+    print(f"  props: {len(clash)} interpenetrating pairs, {len(inside)} inside buildings, "
+          f"{len(on_road)} solid on roads, {len(spawn)} solid within 8 of spawn")
+    for c in sorted(clash)[:6]:
+        print(f"    clash {c[0]:4}  {c[1]} {c[2]}  x  {c[3]} {c[4]}")
+    for c in inside[:4]:
+        print(f"    inside {c[0]} {c[1]} in {c[2]}")
+    for c in on_road[:4]:
+        print(f"    on road {c[0]} {c[1]}")
+
+
 if __name__ == '__main__':
     keys = breakable_keys()
     for p in (sys.argv[1:] or [os.path.join(ROOT, m) for m in MAPS]):
         audit(p, keys)
+        props(p)

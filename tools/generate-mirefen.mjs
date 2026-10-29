@@ -106,18 +106,17 @@ for (const [fn, fords, z0, z1] of [[eastX, EAST_FORDS, -78, 98], [westX, WEST_FO
 m.blockers.push((x, z, r) => Math.abs(x - eastX(z)) < 5.6 + r || Math.abs(x - westX(z)) < 5.6 + r);
 const nearWater = (x, z) => Math.min(Math.abs(x - eastX(z)), Math.abs(x - westX(z)));
 
+// The causeway's line (see below) is needed first: the spurs run from it to the fords
+const causewayX = (z) => Math.sin(z * 0.035) * 5;
+
 // ── The crossings: a silt path, a wisp lantern each side, reeds crowding in
+// (the dressing goes in after the spurs, below, so it can stay off them)
 const CROSSINGS = [];
 for (const [fn, fords] of [[eastX, EAST_FORDS], [westX, WEST_FORDS]]) {
   for (const f of fords) {
     const cx = fn(f);
     CROSSINGS.push({ x: cx, z: f });
     for (let d = -8; d <= 8; d += 3.5) m.tile('road', cx + d * 0.2, f + d);
-    for (const side of [-1, 1]) {
-      add(WISPPOST(), cx + side * 5.5, f - side * 4.5, { force: true });
-      add(CATTAILS(), cx + side * 7.0, f + side * 3, { rotY: R.angle() });
-      add(ROTLOG(), cx + side * 8.5, f + side * 6, { rotY: R.angle() });
-    }
     m.keepOut(cx, f, 6);
     m.paintCircle(0, cx, f, 8, 0.9, 0.5);        // silt under the crossing
   }
@@ -126,7 +125,6 @@ for (const [fn, fords] of [[eastX, EAST_FORDS], [westX, WEST_FORDS]]) {
 // ══ The causeway (spawn) ══════════════════════════════════════════════════
 // A raised dry track running the length of the map through the middle. This is
 // the fast line and the map's spine; everything either side of it is soft.
-const causewayX = (z) => Math.sin(z * 0.035) * 5;
 for (let z = -80; z <= 86; z += 5) m.tile('road', causewayX(z), z);
 const cache = (x, z) => m.cache(x, z);   // see MapBuilder.cache
 const DRY = [{ x: 0, z: 0, r: 16 }];
@@ -138,23 +136,41 @@ for (const c of CROSSINGS) DRY.push({ x: c.x, z: c.z, r: 9 });
 // wading. A spur is a straight segment spine -> ford: it dries bogField (so the
 // paint still matches what you wade through), keeps mire discs off itself, and
 // is laid with road tiles so it paints as a silt track like the causeway.
-const SPURS = CROSSINGS.map(c => ({ x0: causewayX(c.z), z0: c.z, x1: c.x, z1: c.z }));
+// Each spur bows to one side and wanders a little: drawn as straight bars they
+// read from above as a ladder laid on the bog.
+const SPURS = CROSSINGS.map(c => {
+  const x0 = causewayX(c.z), x1 = c.x, n = Math.max(4, Math.ceil(Math.abs(x1 - x0) / 5));
+  const bow = R.range(6, 9) * (R() < 0.5 ? -1 : 1), pts = [];
+  for (let k = 0; k <= n; k++) {
+    const t = k / n;
+    // sin^2 keeps both ends square to the spine and the ford, the middle bowed
+    pts.push([x0 + (x1 - x0) * t, c.z + Math.sin(t * PI) ** 2 * bow + (k > 0 && k < n ? R.range(-1, 1) : 0)]);
+  }
+  return pts;
+});
 const spurDist = (x, z) => {
   let best = Infinity;
-  for (const s of SPURS) {
-    const dx = s.x1 - s.x0, dz = s.z1 - s.z0, l2 = dx * dx + dz * dz;
-    const t = Math.max(0, Math.min(1, ((x - s.x0) * dx + (z - s.z0) * dz) / l2));
-    best = Math.min(best, Math.hypot(x - (s.x0 + dx * t), z - (s.z0 + dz * t)));
+  for (const pts of SPURS) for (let k = 0; k < pts.length - 1; k++) {
+    const [ax, az] = pts[k], [bx, bz] = pts[k + 1];
+    const dx = bx - ax, dz = bz - az, l2 = dx * dx + dz * dz;
+    const t = Math.max(0, Math.min(1, ((x - ax) * dx + (z - az) * dz) / l2));
+    best = Math.min(best, Math.hypot(x - (ax + dx * t), z - (az + dz * t)));
   }
   return best;
 };
-for (const s of SPURS) {
-  const len = Math.hypot(s.x1 - s.x0, s.z1 - s.z0), n = Math.ceil(len / 5);
-  for (let k = 1; k < n; k++) {
-    const x = s.x0 + (s.x1 - s.x0) * k / n, z = s.z0 + (s.z1 - s.z0) * k / n;
-    m.tile('road', x, z);
-    DRY.push({ x, z, r: 5 });
-  }
+for (const [i, pts] of SPURS.entries()) for (let k = 1; k < pts.length - 1; k++) {
+  const [x, z] = pts[k];
+  DRY.push({ x, z, r: 5 });
+  // The ford has its own paved pad; tiles stop short of it so the two do not
+  // overlap and the crossing's dressing has room
+  if (Math.hypot(x - CROSSINGS[i].x, z - CROSSINGS[i].z) > 7) m.tile('road', x, z);
+}
+// Crossing dressing, now that the spurs exist to keep off: a wisp lantern each
+// side, reeds and a rotten log crowding in
+for (const c of CROSSINGS) for (const side of [-1, 1]) {
+  add(WISPPOST(), c.x + side * 5.5, c.z - side * 4.5, { force: true });
+  add(CATTAILS(), c.x + side * 7.0, c.z + side * 3, { rotY: R.angle() });
+  add(ROTLOG(), c.x + side * 8.5, c.z + side * 6, { rotY: R.angle() });
 }
 
 // The spawn clearing: a stand of wisp stones on dry peat, somewhere to read the map from
@@ -182,7 +198,7 @@ const ISLANDS = [
   [-58, -34], [-30, 30], [24, -46], [52, 22], [-66, 40], [18, 62], [-14, -64],
   [62, -14], [-46, 66], [34, 44], [-22, 4], [44, -70],
 ];
-for (const [ix, iz] of ISLANDS) {
+for (const [n, [ix, iz]] of ISLANDS.entries()) {
   DRY.push({ x: ix, z: iz, r: 10 });
   m.keepOut(ix, iz, 3);
   m.paintCircle(3, ix, iz, 9, 0.9, 0.55);            // matted sedge on top
@@ -191,7 +207,9 @@ for (const [ix, iz] of ISLANDS) {
   if (R() < 0.75) ring(SNAG(), ix, iz, 3, 7, { scaleMul: R.range(0.9, 1.3) });
   if (R() < 0.5) ring(BOGROCK(), ix, iz, 4, 8, {});
   if (R() < 0.4) add(WISPSTONE(), ix + R.range(-3, 3), iz + R.range(-3, 3), { rotY: R.angle() });
-  if (R() < 0.35) add('chest', ix + R.range(-4, 4), iz + R.range(-4, 4), { rotY: R.angle() });
+  // Every third island holds a cache: a 35% roll per island shipped anywhere from
+  // none to four, and the islands are meant to be the footing worth the wade
+  if (n % 3 === 1) m.cache(ix + R.range(-3, 3), iz + R.range(-3, 3), { maxR: 6 });
 }
 // The mire discs were placed before the islands were known, so clear any that
 // sit on one: an island that is still soft underfoot is a lie the player will

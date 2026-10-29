@@ -114,11 +114,30 @@ for (let z = -56; z <= 62; z += 6) m.tile('road', Math.sin(z * 0.04) * 3, z);
 if (m.landmark('landmark_volcano_cone_01', 0, -84, { rotY: 0, keepOut: 24 })) {
   m.paintCircle(0, 0, -84, 30, 0.9, 0.4);
 } else {
-  // Until the mesh ships, a ridge of spires holds the north so the map is not
-  // simply empty up there
-  for (let i = 0; i < 26; i++) ring(P('volcanic_spire_01', 'basalt_boulder_01', 'boulder'), 0, -84, 10, 26, { scale: R.range(5, 9) });
-  m.keepOut(0, -84, 22);
+  // Until the mesh ships: a caldera. This used to be a full ring of 26 spires
+  // round an empty clearing -- with no spire mesh they fell back to basalt
+  // boulders, so the map's anchor read as a field of rocks, and the ring was the
+  // worst maze on the map (map-audit). Now the summit is a lava lake, drawn and
+  // blocked like the flows it feeds, and the rock stands as a crescent on the
+  // north rim only, so the crater faces the map and is open from the south.
+  const LAKE = [[-8, -85], [-3, -87], [3, -86], [8, -83]];
+  m.streams.push({ w: 13, pts: LAKE });
+  for (let k = 0; k < LAKE.length - 1; k++) for (let t = 0; t < 1; t += 0.34) {
+    const [ax, az] = LAKE[k], [bx, bz] = LAKE[k + 1];
+    m.barrier(ax + (bx - ax) * t, az + (bz - az) * t, 5.6);
+  }
+  m.barrier(LAKE[3][0], LAKE[3][1], 5.6);
+  // Two flanking ridges (west-north-west and east-north-east), not a closed
+  // crescent: a crescent filled the strip between the lake and the map edge
+  // with narrow alleys, which is where a kiting knight gets cornered.
+  for (let i = 0; i < 16; i++) {
+    const t = (i % 8) / 7, a = i < 8 ? PI * (1.02 + 0.26 * t) : PI * (1.72 + 0.26 * t);
+    const d = R.range(13, 19);
+    add(P('volcanic_spire_01', 'basalt_boulder_01', 'boulder'), Math.cos(a) * d, -84 + Math.sin(a) * d * 0.8 + R.range(-1, 1), { rotY: R.angle(), scale: R.range(5, 8.5) });
+  }
+  m.keepOut(0, -84, 14);
   m.paintCircle(0, 0, -84, 28, 0.85, 0.4);
+  m.paintCircle(3, 0, -85, 16, 0.9, 0.5);       // sulfur crust round the lake
 }
 for (let i = 0; i < 14; i++) ring(BOULDER(), 0, -84, 24, 34, { scale: R.range(3, 5) });
 for (let i = 0; i < 10; i++) ring(P('volcanic_lava_rock_01', 'basalt_cluster_01'), 0, -84, 24, 36, {});

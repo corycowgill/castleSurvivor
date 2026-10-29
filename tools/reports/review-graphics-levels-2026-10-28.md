@@ -127,3 +127,19 @@ five maps (`horde0-*`).
 | "+N XP" labels only for coins worth more than 1 (they stacked on the knight) | `horde3-mirefen-1` |
 | Shaman heal ring peak opacity 0.9 → 0.5 | `horde2-*` |
 
+## Fourth pass (2026-10-29): whole-map layout and prop placement
+
+Overheads of all five maps (`overhead-*`) for composition, plus a prop check in
+`tools/map-audit.py` for what map scale hides.
+
+| Map | Read | Changed |
+|---|---|---|
+| Kingsfield | Strong: walled castle district open to a meadow, crossroads town, farms, corner keeps, woods at the edge. 9-10/10 bot survival | Postern where the west lane met the curtain wall (`postern-kingsfield-1`); oak moved out of the windmill; caches use `m.cache()` |
+| Darkwood | Track-and-ford forest with clearings (charcoal camp, lodge from 50.19) | Nothing new |
+| Emberreach | Two lava flows and causeways frame it well; the anchor did not exist | Caldera: a lava lake at the summit with two flanking ridges, replacing a boulder ring that was the map's worst maze (`caldera-emberreach-*`). Bot 3/10 -> 6/10 |
+| Mirefen | Spine, channels, fords, islands, village | Spurs bow and wander instead of reading as a ladder; crossing dressing keeps off them; every third island holds a cache (`overhead-mirefen`) |
+| Bloodmarch | Diagonal war between castle and fortress, with the outskirts from 50.6 | Towers no longer stacked on wall segments; wall rubble out of the smithy; a cottage off the King's Road; the orc idol out of the gate ruin |
+
+Still open: `fen_boardwalk_01` wants regenerating as a flat walkway; the cone and spire meshes
+for Emberreach were never made, and the caldera is a stand-in for them.
+

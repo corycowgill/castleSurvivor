@@ -53,7 +53,10 @@ m.keepOut(0, -38, 13);
 // (the bot playtest showed a continuous 90-unit wall pins a kiting player against
 // the horde; the breaches keep the wall readable without making it a trap), then
 // it turns north at both ends
-for (let x = -45; x <= 45; x += 5) { if (Math.abs(x) < 6 || Math.abs(Math.abs(x) - 27.5) <= 4) continue; m.add('wall', x, -20, { rotY: 0, force: true }); }
+// ...and a postern at x -42, where the lane from the high street to the mill road
+// comes through: it used to run straight into the wall (map-audit, "solid on road")
+for (let x = -45; x <= 45; x += 5) { if (Math.abs(x) < 6 || Math.abs(Math.abs(x) - 27.5) <= 4 || Math.abs(x + 42) < 4) continue; m.add('wall', x, -20, { rotY: 0, force: true }); }
+m.add('village_lantern_post_01', -36, -17.5, { force: true }); m.add('village_lantern_post_01', -48, -17.5, { force: true });
 for (const bx of [-27.5, 27.5]) { m.add('boulder', bx - 3, -21, { rotY: R.angle(), scale: 2.6, force: true }); m.add('prop_wood_crate_broken_01', bx + 2.5, -19, { rotY: R.angle(), force: true }); }
 for (let z = -25; z >= -55; z -= 5) { m.add('wall', -45, z, { rotY: PI / 2, force: true }); m.add('wall', 45, z, { rotY: PI / 2, force: true }); }
 // Gatehouse dressing: lanterns, barricades, guard racks
@@ -214,7 +217,7 @@ field('pumpkinPatch', 22, 68, 42, 80, 'north', 5);
 m.add('farm_scarecrow_01', 44, 66, { rotY: R.angle() }); m.add('hayBales', 20, 60, { rotY: R.angle() }); m.add('prop_hay_bale_01', 17, 62, { rotY: R.angle() });
 m.add('horse', 40, 60, { rotY: R.angle() }); m.add('village_hitching_post_01', 42, 58, { rotY: 0 });
 // Farm greenery: oaks by the farmhouses, wildflowers, rocks along the stream
-for (const [x, z] of [[62, 66], [84, 30], [-62, 60], [-46, 54], [-60, -4], [50, 70], [-90, 40], [-92, -50]]) m.add(R() < 0.5 ? 'oakTree' : 'nature_oak_large_01', x, z, { rotY: R.angle(), scale: R.range(8, 11) });
+for (const [x, z] of [[62, 66], [88, 40], [-62, 60], [-46, 54], [-60, -4], [50, 70], [-90, 40], [-92, -50]]) m.add(R() < 0.5 ? 'oakTree' : 'nature_oak_large_01', x, z, { rotY: R.angle(), scale: R.range(8, 11) });
 m.scatter('nature_flowers_02', 30, { x0: 44, z0: 4, x1: 92, z1: 66 }, { tries: 4 });
 m.scatter('nature_flowers_02', 30, { x0: -92, z0: 4, x1: -44, z1: 66 }, { tries: 4 });
 m.scatter('shrubbery', 20, { x0: 44, z0: 4, x1: 92, z1: 66 }, { tries: 4 });
@@ -232,7 +235,7 @@ for (let z = -90; z <= 90; z += 7) {
 // ── Landmarks (Trellis batch 7; each is skipped if its mesh is not registered) ──
 // Fountain on the square between the spawn and the gate; the road forks around it
 m.landmark('landmark_village_fountain', 0, -12.5, { rotY: 0, keepOut: 3.5 });
-// Windmill on the rise behind the east farm
+// Windmill on the rise behind the east farm (the oak that stood here moved to 88, 40)
 m.landmark('landmark_windmill', 82, 30, { rotY: -PI * 0.6, keepOut: 7 });
 m.add('prop_grain_sack_stack_01', 76, 34, { rotY: R.angle() }); m.add('prop_grain_sack_01', 78, 25, { rotY: R.angle() }); m.add('horseCart', 74, 26, { rotY: PI * 0.3 });
 // Ruined tower in the north-west woods, watching the mill road
@@ -305,7 +308,7 @@ m.scatter('prop_logs_02', 8, woodRegion, { density: (x, z) => woodDensity(x, z) 
 for (const [cx, cz] of [[-80, -80], [80, -80], [-80, 80], [80, 80]]) for (let i = 0; i < 3; i++) m.ring('nature_dead_tree_03', cx, cz, 18, 28, { scale: R.range(6.5, 8.5) });
 m.scatter('nature_dead_tree_03', 6, woodRegion, { density: (x, z) => woodDensity(x, z) * 0.5, tries: 8 });
 // A hunter's cache and a ruined cart deep in the south woods
-m.add('chest', 0, 90, { rotY: R.angle() }); m.add('chest', -70, 88, { rotY: R.angle() }); m.add('chest', 88, -20, { rotY: R.angle() });
+m.cache(0, 90); m.cache(-70, 88); m.cache(88, -20);   // see MapBuilder.cache
 m.add('horseCart', -8, 78, { rotY: PI * 0.7 }); m.add('prop_cart_wheel_01', -12, 80, { rotY: R.angle() }); m.add('prop_wood_crate_broken_01', -5, 81, { rotY: R.angle() });
 // Loose barrels along the roads for the player to break
 for (let x = -60; x <= 60; x += 12) if (x !== 0 && R() < 0.7) m.add('barrel', x + R.range(-2, 2), (R() < 0.5 ? -1 : 1) * R.range(4.5, 6), { rotY: R.angle() });

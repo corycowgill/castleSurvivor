@@ -1498,4 +1498,26 @@ snag rate.
   each), snag median ~5% vs ~3.5% (worst run, 41%, was the bot parked at full HP by the fen
   village). The kite bot circles and does not follow paths; the spurs are for a player choosing a
   route to a crossing, and that is unmeasured.
+- [x] 50.23 **Whole-map layout and placement pass.** Overheads of all five maps for composition,
+  and `map-audit.py` grew a prop check: interpenetrating solids (walls/fences excepted),
+  clutter inside buildings, solids on roads, solids at the spawn.
+  - **Bloodmarch:** every wall tower stood on a wall segment at the same spot (15 interpenetrating
+    pairs): the tower now replaces the segment. The castle's wall rubble was laid before the town,
+    whose buildings go in by force, so a length of wall sat inside the smithy: rubble now follows
+    the town. A cottage stood on the King's Road (dropped); the orc idol was forced into the gate
+    ruin (now finds clear ground in the camp). Left: walls abutting towers, gates on their roads.
+  - **Kingsfield:** the west lane ran into the curtain wall; there is a lantern-flanked postern
+    now. An oak grew through the windmill (moved to 88, 40). Corner caches use `m.cache()`.
+    Otherwise left alone: castle district, crossroads town, farms and corner keeps already read
+    well and the bot is at 9-10/10 there.
+  - **Emberreach's cone was a ring of boulders.** Neither the cone nor the spire mesh exists, so
+    the stand-in was 26 basalt boulders round an empty clearing: the map's anchor read as rocks and
+    was its worst maze. Now a caldera: a lava lake at the summit (drawn and blocked like the flows)
+    and two flanking ridges, open to the south. Pens 36 -> 24 (61 at the start of 50.20).
+  - **Mirefen:** the spurs bow and wander (straight, they read as a ladder from above), stop short
+    of each ford's paved pad, and the crossing dressing is placed after them so it keeps off them.
+    Every third island holds a cache instead of a 35% roll each: caches 7 -> 9.
+  - Kite bot, previous commit vs this, Dad: Kingsfield 10/10 -> 8/10, Emberreach **3/10 -> 6/10**
+    (worst snag 30% -> 7%), Mirefen 6/10 -> 5/10, Bloodmarch 17/24 -> 18/24 over two batches (the
+    first read 7/10 -> 4/10). Only Emberreach moves outside the noise.
 

@@ -173,6 +173,9 @@ for (let a = gateA - PI * 0.62; a <= gateA + PI * 0.62; a += 0.125) {
   const x = WALL_C.x + Math.cos(a) * WALL_R, z = WALL_C.z + Math.sin(a) * WALL_R;
   if (Math.abs(x) > 96 || Math.abs(z) > 96) continue;
   const da = Math.abs(a - gateA);
+  // A tower stands at +-0.3 and +-0.62 turns (below): the tower IS the wall there,
+  // so no segment underneath it. They were stacked on the same spot (map-audit).
+  if (Math.abs(da - PI * 0.3) < 0.11 || Math.abs(da - PI * 0.62) < 0.11) continue;
   if (da < 0.16) continue;                                 // the gate
   const rot = a + PI / 2;
   // The breaches are openings you can run through. They used to be one breach
@@ -194,8 +197,6 @@ for (const a of [gateA - PI * 0.62, gateA + PI * 0.62, gateA - PI * 0.3, gateA +
   if (Math.abs(x) < 96 && Math.abs(z) < 96) put(TOWER(), x, z, { rotY: a, force: true });
 }
 // Rubble spilled out of every breach and along the foot of the wall
-for (let i = 0; i < 14; i++) ring(RUBBLE(), WALL_C.x, WALL_C.z, WALL_R + 2, WALL_R + 8, {});
-for (let i = 0; i < 8; i++) ring(P('war_wall_01', 'wall'), WALL_C.x, WALL_C.z, WALL_R + 3, WALL_R + 7, { scale: 3 });
 m.paintCircle(2, GATE.x, GATE.z, 12, 0.85, 0.5);
 
 // ══ The battered town ═════════════════════════════════════════════════════
@@ -214,13 +215,18 @@ const TOWN = [
   [-52, -30, PI * 0.25, 'cottage'], [-40, -42, PI * 0.25, 'cottage'], [-30, -54, PI * 0.25, 'cottage'],
   [-33, -35, -PI * 0.75, 'tavern'], [-45, -22, -PI * 0.75, 'cottage'], [-58, -42, PI * 0.25, 'smithy'],
   [-22, -46, -PI * 0.75, 'cottage'], [-62, -30, PI * 0.6, 'cottage'], [-26, -62, PI * 0.1, 'chapel'],
-  [-38, -56, PI * 0.25, 'cottage'], [-48, -50, PI * 0.25, 'cottage'], [-18, -34, -PI * 0.75, 'cottage'],
+  [-38, -56, PI * 0.25, 'cottage'], [-18, -34, -PI * 0.75, 'cottage'],   // (-48, -50) stood on the King's Road
 ];
 for (const [x, z, rot, kind] of TOWN) {
   const key = kind === 'tavern' ? TAVERN() : kind === 'smithy' ? SMITHY() : kind === 'chapel' ? CHAPEL() : COTTAGE();
   if (put(key, x, z, { rotY: rot, force: true })) yard(x, z, rot);
   m.paintCircle(2, x, z, 8, 0.55, 0.7);
 }
+// Rubble spilled out of every breach and along the foot of the wall. Placed
+// after the town, because the town's buildings go in by force and landed on top of
+// it (a length of wall inside the smithy, map-audit).
+for (let i = 0; i < 14; i++) ring(RUBBLE(), WALL_C.x, WALL_C.z, WALL_R + 2, WALL_R + 8, {});
+for (let i = 0; i < 8; i++) ring(P('war_wall_01', 'wall'), WALL_C.x, WALL_C.z, WALL_R + 3, WALL_R + 7, { scale: 3 });
 // The square: the well, the fallen statue, wrecked stalls
 const SQUARE = { x: -40, z: -34 };
 put(WELL(), SQUARE.x + 4, SQUARE.z - 5, { rotY: R.angle() });
@@ -291,6 +297,7 @@ for (let a = oGate - PI * 0.6; a <= oGate + PI * 0.6; a += 0.1) {
   const x = KEEP.x + Math.cos(a) * PAL_R, z = KEEP.z + Math.sin(a) * PAL_R;
   if (Math.abs(x) > 96 || Math.abs(z) > 96) continue;
   const da = Math.abs(a - oGate);
+  if (Math.abs(da - PI * 0.32) < 0.09 || Math.abs(da - PI * 0.6) < 0.09) continue;   // the watchtowers' own spots
   if (da < 0.2) continue;
   const rot = a + PI / 2;
   // Same as the castle's breaches: the broken lengths were still solid, so the camp
@@ -331,7 +338,7 @@ for (const [x, z, rot] of CAMP) {
 put(LONGHOUSE(), 70, 60, { rotY: PI * 1.25, force: true });
 put(DRUM(), 62, 74, { rotY: PI * 1.25 });
 put(ORC_SMITHY(), 84, 74, { rotY: PI * 1.1, force: true });
-put(IDOL(), 58, 58, { rotY: PI * 1.25, force: true });
+ring(IDOL(), 62, 62, 0, 8, { facing: PI * 1.25 });   // was forced onto (58, 58), into the gate ruin
 for (const [x, z] of [[90, 90], [82, 92]]) put(R() < 0.5 ? PEN() : CAGE(), x, z, { rotY: R.angle() });
 for (let i = 0; i < 5; i++) ring(LOOT(), KEEP.x, KEEP.z, 12, 22, {});
 for (let i = 0; i < 5; i++) ring(TOTEM(), KEEP.x, KEEP.z, 13, 24, {});
