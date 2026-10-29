@@ -2859,13 +2859,25 @@ let _streakDisplayEl = null;
 function getStreakDisplay() { return _streakDisplayEl || (_streakDisplayEl = document.getElementById('streak-display')); }
 let _comboDisplayEl = null;
 function getComboDisplay() { return _comboDisplayEl || (_comboDisplayEl = document.getElementById('combo-display')); }
-// Damage feedback is VFX only. This used to repaint every material on the
-// creature bright red, which made a wounded goblin read as a different,
-// scarlet creature rather than a goblin that had just been hit.
+// Damage feedback. This used to repaint every material on the creature bright
+// red for the whole flash, which made a wounded goblin read as a different,
+// scarlet creature rather than a goblin that had just been hit, so it was cut to
+// VFX only -- and hits lost their snap. What the genre does instead is a WHITE
+// pop that is gone within a few frames: it says "struck" and never "different
+// creature". It fades over the flash (updateEnemies) and the restore below and
+// at the end of the flash put the model's own emissive back.
+const HIT_POP = 0.45, HIT_POP_CRIT = 0.75;
 function setHitFlash(enemy, duration, crit) {
   enemy.hitFlash = duration;
+  enemy._flashDur = duration;
+  enemy._flashPeak = crit ? HIT_POP_CRIT : HIT_POP;
   if (_renderEnabled && enemy.mesh) {
     vfx.enemyHit(enemy.mesh.position, !!crit, Math.max(0.8, (enemy.radius || 0.5) * 1.8));
+    const mats = enemy._materials;
+    if (mats) for (let m = 0; m < mats.length; m++) {
+      const mat = mats[m];
+      if (mat.emissive) { mat.emissive.setHex(0xffffff); mat.emissiveIntensity = enemy._flashPeak; }
+    }
   }
 }
 function restoreEmissive(enemy) {
@@ -8560,6 +8572,10 @@ function updateEnemies(dt) {
           const mat = mats[m];
           if (mat.emissive) { mat.emissive.setHex(mat._origEmissive || 0); mat.emissiveIntensity = mat._origEmissiveI || 0; }
         }
+      } else if (mats && _renderEnabled && enemy._flashDur) {
+        // The white pop fades out over the flash (see setHitFlash)
+        const k = enemy._flashPeak * enemy.hitFlash / enemy._flashDur;
+        for (let m = 0; m < mats.length; m++) if (mats[m].emissive) mats[m].emissiveIntensity = k;
       }
     }
 

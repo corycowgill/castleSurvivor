@@ -1417,9 +1417,8 @@ snag rate.
   Bloodmarch shares the keys and was regenerated with it.
 - [ ] 50.11 Open: the bot still walks into the orc fortress on Bloodmarch and dies to archers inside
   the palisade; a human would not, but it costs the harness signal.
-- [ ] 50.12 Open: Kingsfield's fog colour is a saturated grass green. Single-player framing never
-  reaches the fog, but the co-op party camera pulls back 1.7x and probably does. Look at it there
-  before changing it.
+- [x] 50.12 Kingsfield's fog colour at co-op zoom: checked with a three-knight party spread 70
+  units (camera at 1.7x, `party-*`). The top of the frame still never reaches the fog; no change.
 - [ ] 50.13 Open: GTAO's own depth/normal pass draws transparent effect planes (shafts, glows) as
   solid, since `GTAOPass.overrideVisibility` only hides points and lines. It was not the cause of the
   Mirefen band, and no visible artefact has been traced to it yet.
@@ -1439,4 +1438,9 @@ snag rate.
   The title's "Defend Your Kingdom" was #a08040 with one shadow over a busy castle; brighter, with
   the title's dark halo. Verified the x-ray on Brennan and Parker (`x-*`, `xa-*`); `tour` takes
   `--char`.
+- [x] 50.17 **Hits snap again.** Enemy damage feedback was particles only, since the old red
+  full-body repaint made a wounded goblin read as a different creature. Struck enemies now pop white
+  (emissive 0.45, 0.75 on a crit) and fade over the 0.08-0.3 s flash to their own emissive, the
+  genre's standard tell; probe: 0.45 at the hit, 0.26 after 50 ms, restored by 0.15 s
+  (`hitpop-kingsfield-1`).
 
