@@ -5434,6 +5434,52 @@ const MAX_PLAYERS = 3;
 const players = [];
 // Ring colours per player slot, so three knights stay tellable apart.
 const PLAYER_RING_COLORS = ['rgba(255,235,190,', 'rgba(150,215,255,', 'rgba(180,255,180,'];
+// The same slots as solid colours, for the x-ray silhouette (see addKnightXray)
+// Dimmer than the ring tints: a flat silhouette at full brightness went white under bloom
+const PLAYER_XRAY_COLORS = [0xa88a58, 0x5f93bd, 0x6fae6f];
+const _xrayMats = [];
+
+// ─── Knight x-ray ───
+// A survivors game lives or dies on the player always knowing where they are, and
+// at play distance a closing horde buried the knight completely, ring and all
+// (tools/shots/horde0-*.png: five maps, five knights you could not find). So every
+// mesh of the knight gets a twin in a flat slot colour that draws only where
+// something is IN FRONT of him (depthFunc Greater). The twins are opaque and
+// ordered between the world (renderOrder 0) and the knight (2): at that point the
+// knight is not in the depth buffer yet, so his own arm across his chest cannot
+// trigger the silhouette, which is the usual artefact of this trick.
+function addKnightXray(p, index) {
+  let mat = _xrayMats[index];
+  if (!mat) {
+    mat = _xrayMats[index] = new THREE.MeshBasicMaterial({
+      color: PLAYER_XRAY_COLORS[index] || PLAYER_XRAY_COLORS[0], depthFunc: THREE.GreaterDepth, depthWrite: false, fog: false,
+    });
+    // The boots dip a few centimetres into the ground plane, which then counts as
+    // "in front" and drew gold slivers under the soles of a knight standing alone.
+    // Nothing that stands on the ground hides the bottom 0.3 units, so skip them.
+    mat.onBeforeCompile = (shader) => {
+      shader.vertexShader = shader.vertexShader
+        .replace('#include <common>', '#include <common>\nvarying float vXrayY;')
+        .replace('#include <project_vertex>', '#include <project_vertex>\nvXrayY = (modelMatrix * vec4(transformed, 1.0)).y;');
+      shader.fragmentShader = shader.fragmentShader
+        .replace('#include <common>', '#include <common>\nvarying float vXrayY;')
+        .replace('#include <clipping_planes_fragment>', '#include <clipping_planes_fragment>\nif (vXrayY < 0.3) discard;');
+    };
+  }
+  const meshes = [];
+  // hasXray: createPlayer can run twice on the shared fallback model; never stack twins
+  p.mesh.traverse(c => { if (c.isMesh && !c.userData.xray && !c.userData.hasXray) meshes.push(c); });
+  for (const c of meshes) {
+    c.renderOrder = 2;
+    let x;
+    if (c.isSkinnedMesh) { x = new THREE.SkinnedMesh(c.geometry, mat); x.bind(c.skeleton, c.bindMatrix); x.bindMode = c.bindMode; }
+    else x = new THREE.Mesh(c.geometry, mat);
+    x.position.copy(c.position); x.quaternion.copy(c.quaternion); x.scale.copy(c.scale);
+    x.renderOrder = 1; x.castShadow = false; x.receiveShadow = false; x.frustumCulled = c.frustumCulled;
+    x.userData.xray = true; c.userData.hasXray = true;
+    c.parent.add(x);
+  }
+}
 
 // THE player sheet: every field a knight carries for one run, in one place. Used
 // for `state.player`, for every companion `makePlayer` builds, and by `clearRun`
@@ -5749,6 +5795,12 @@ async function createPlayer(index = 0) {
     ctx.fillStyle = grd; ctx.fillRect(0, 0, 128, 128);
     glow.material.map = new THREE.CanvasTexture(c); glow.material.map.colorSpace = THREE.SRGBColorSpace;
     glow.scale.setScalar(3.6); glow.renderOrder = 23;
+    // Drawn over whatever stands on it: enemies crowding the knight used to cover
+    // the ring completely, which is exactly when you need to find it. It sits in
+    // the OPAQUE pass (three keeps additive blending on a non-transparent material)
+    // between the world (0) and the knight (2), so it covers the horde but the
+    // knight's own legs still cover it.
+    glow.material.depthTest = false; glow.material.transparent = false; glow.renderOrder = 1.5;
     p.ring = new THREE.Group(); p.ring.add(shadow); p.ring.add(glow);
     p.ring.position.y = 0.07;
     // Co-op nameplate: a sprite in the ring group (which already follows the
@@ -5790,6 +5842,7 @@ async function createPlayer(index = 0) {
   // Weapon and shield. Shared with the title-screen preview so the card and the
   // knight you play can never disagree again.
   attachCharacterGear(p.mesh, p.character, true);
+  addKnightXray(p, index);
 
   // Stats (passive + Forge ranks) are applied by clearRun(), never here:
   // createPlayer runs at init AND on Begin Quest, and used to apply the passive
@@ -7883,7 +7936,10 @@ function updatePlayer(p, dt) {
         runStats.coinsCollected += value;
         AudioSystem.play('coinPickup', { volume: value > 1 ? 0.7 : 0.5, pitch: (value > 1 ? 0.8 : 1.0) + Math.random() * 0.3 });
         vfx.collectEffect(pickup.mesh.position, 'coin');
-        spawnDamageNumber(pickup.mesh.position, `+${coinXP} XP`, value > 1 ? '#ffe680' : '#e8c860');
+        // Only the big coins say so: every coin labelled itself, and coins are
+        // collected AT the knight, so in a fight a stack of "+1 XP" sat on top of
+        // him. The sparkle, the sound and the bar already report a plain coin.
+        if (value > 1) spawnDamageNumber(pickup.mesh.position, `+${coinXP} XP`, '#ffe680');
       } else if (pickup.type === 'food') {
         const foodHeal = Math.max(8, Math.round(ps.maxHp * 0.08));
         ps.hp = Math.min(ps.maxHp, ps.hp + foodHeal);
@@ -8674,7 +8730,9 @@ function updateEnemies(dt) {
           playEnemyAnim(enemy, 'Spell_Simple_Shoot', false);
           enemy._atkAnimResetTimer = 0.6;
           const hp = enemy.mesh.position;
-          vfx.runeCircle(hp, { color: 0x9944ff, radius: 6, duration: 0.9, sweep: 0.2, peakOpacity: 0.9 });
+          // Half the old 0.9 peak: two shamans' rings were the loudest thing on
+          // screen in a fight, louder than the knight and the arrows that kill him.
+          vfx.runeCircle(hp, { color: 0x9944ff, radius: 6, duration: 0.9, sweep: 0.2, peakOpacity: 0.5 });
           const near = queryEnemies(hp.x, hp.z, 7.5);
           let healed = 0;
           for (let n = 0; n < near.length; n++) {

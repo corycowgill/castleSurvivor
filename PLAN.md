@@ -1423,3 +1423,14 @@ snag rate.
 - [ ] 50.13 Open: GTAO's own depth/normal pass draws transparent effect planes (shafts, glows) as
   solid, since `GTAOPass.overrideVisibility` only hides points and lines. It was not the cause of the
   Mirefen band, and no visible artefact has been traced to it yet.
+- [x] 50.14 **The knight can be found in a crowd.** Staged fights of 30 mixed enemies
+  (`horde0-*`) buried the knight completely on all five maps, ring and all. Every knight mesh now
+  has an x-ray twin (`addKnightXray`): a flat slot-coloured silhouette drawn only where something is
+  in front of him (`depthFunc: Greater`), opaque and ordered between the world (renderOrder 0) and
+  the knight (2) so his own limbs cannot trigger it, and skipped in the bottom 0.3 units so the
+  ground does not light up his boot soles. The ring's glow moved into the opaque pass at 1.5 with
+  depth testing off: it now draws over the horde, and the knight's legs still cover it.
+- [x] 50.15 **Less noise over the knight.** Every coin collected spawned a "+N XP" label, and coins
+  are collected at the knight, so a fight stacked text on him; only coins worth more than 1 label
+  themselves now. The shaman heal ring peaks at 0.5 opacity instead of 0.9: two of them were the
+  loudest thing on screen.

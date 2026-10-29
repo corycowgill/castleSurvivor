@@ -113,3 +113,17 @@ one program, and warm-up compiles it.
 
 Recommendations 1-3 above are done. Still open: the bot wandering into Bloodmarch's fortress,
 and Kingsfield fog at co-op zoom.
+
+## Third pass (2026-10-29): the knight in a crowd
+
+Staged fights (30 mixed enemies closing on the knight, 1.5 s of combat) on every map showed the
+real-play problem the static line-ups hid: the knight and his ring vanished inside the pile on all
+five maps (`horde0-*`).
+
+| Change | Evidence |
+|---|---|
+| X-ray silhouette of the knight wherever something is in front of him; nothing when he is in the open (no self-overlap, no boot-sole slivers) | `horde0-*` vs `horde3-*`, `alone3-kingsfield-1` |
+| Ring glow drawn over the horde, still under the knight's own legs | `horde3-*`, `alone3-kingsfield-1` |
+| "+N XP" labels only for coins worth more than 1 (they stacked on the knight) | `horde3-mirefen-1` |
+| Shaman heal ring peak opacity 0.9 → 0.5 | `horde2-*` |
+
