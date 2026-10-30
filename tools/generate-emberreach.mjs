@@ -114,7 +114,7 @@ for (let z = -56; z <= 62; z += 6) m.tile('road', Math.sin(z * 0.04) * 3, z);
 if (m.landmark('landmark_volcano_cone_01', 0, -84, { rotY: 0, keepOut: 24 })) {
   m.paintCircle(0, 0, -84, 30, 0.9, 0.4);
 } else {
-  // Until the mesh ships: a caldera. This used to be a full ring of 26 spires
+  // The cone is built in code (tools/build-models.mjs); if its GLB is missing: a caldera. This used to be a full ring of 26 spires
   // round an empty clearing -- with no spire mesh they fell back to basalt
   // boulders, so the map's anchor read as a field of rocks, and the ring was the
   // worst maze on the map (map-audit). Now the summit is a lava lake, drawn and

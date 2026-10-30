@@ -112,6 +112,19 @@ if (fs.existsSync(CHARRED)) {
   }
   console.log(`charred variants merged: ${n}`);
 }
+// Procedural models built in code (tools/build-models.mjs) for shapes the pipeline
+// never produced. They carry their own registry entry, written by that script.
+const PROCEDURAL = path.join(ROOT, 'AssetFactory/catalog/procedural.json');
+if (fs.existsSync(PROCEDURAL)) {
+  const have = new Set(out.map(e => e.key));
+  let n = 0;
+  for (const e of JSON.parse(fs.readFileSync(PROCEDURAL, 'utf8'))) {
+    if (have.has(e.key)) continue;
+    if (!fs.existsSync(path.join(ROOT, 'Game3DAssets', e.file))) { console.log('MISSING procedural GLB:', e.file); continue; }
+    out.push(e); n++;
+  }
+  console.log(`procedural models merged: ${n}`);
+}
 
 out.sort((a, b) => a.category.localeCompare(b.category) || a.key.localeCompare(b.key));
 

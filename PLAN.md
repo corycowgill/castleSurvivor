@@ -1521,3 +1521,11 @@ snag rate.
     (worst snag 30% -> 7%), Mirefen 6/10 -> 5/10, Bloodmarch 17/24 -> 18/24 over two batches (the
     first read 7/10 -> 4/10). Only Emberreach moves outside the noise.
 
+- [x] 50.24 **Models built in code for what the pipeline never produced.** `tools/build-models.mjs`
+  writes `landmark_volcano_cone_01` (flared cone, gullies, crater with a lava pool, five lava
+  streaks; basalt textures, emissive lava) and `fen_walkway_01` (flat decking on two stringers,
+  one plank missing, mooring stakes) plus `AssetFactory/catalog/procedural.json`, which
+  `add-assets.mjs` merges like the charred variants. Emberreach's landmark branch now places the
+  cone (the caldera stays as the fallback). Mirefen lays three walkway sections bank to bank
+  across every ford and eight along the village track, which is kept clear of trees. Walkways
+  are walk-through; adding them moved nothing else. Bot comparison in the review report.

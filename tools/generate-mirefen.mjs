@@ -72,12 +72,10 @@ const WITCHHUT = () => P('fen_witch_hut_01', 'apothecary', 'house');
 const FISHRACK = () => P('fen_fish_rack_01', 'village_weapon_rack_01');
 const CORACLE = () => P('fen_coracle_01', 'bog_crate_01', 'prop_wood_crate_large_01');
 const TRAPS = () => P('fen_wicker_trap_01', 'prop_grain_sack_stack_01', 'bog_crate_01');
-// fen_boardwalk_01 is not a walkway: Trellis produced a narrow plank on 0.9 units
-// of legs, catalogued at 0.4 m, so at the fords it read as knee-high benches
-// scattered beside the crossing (tools/shots/bw-mirefen-1.png). The fords are
-// marked by their silt path, wisp lanterns and reeds until a flat walkway mesh
-// exists; regenerate this asset as one and put BOARDWALK back where it was used.
-const BOARDWALK = null;
+// fen_walkway_01 is built in code (tools/build-models.mjs): flat decking, 4.2 long
+// and 1.5 wide. The Trellis fen_boardwalk_01 was a narrow plank on 0.9 units of
+// legs and read as knee-high benches beside the fords (tools/shots/bw-mirefen-1.png).
+const BOARDWALK = () => P('fen_walkway_01');
 const TOTEM = () => P('fen_totem_01', 'village_signpost_01');
 const WISPPOST = () => P('fen_lantern_post_01', 'village_lantern_post_01');
 const WISPSTONE = () => P('swamp_wisp_stone_01', 'bog_rock_01');
@@ -167,6 +165,12 @@ for (const [i, pts] of SPURS.entries()) for (let k = 1; k < pts.length - 1; k++)
 }
 // Crossing dressing, now that the spurs exist to keep off: a wisp lantern each
 // side, reeds and a rotten log crowding in
+// Duckboards across each ford, laid east-west over the silt from bank to bank so
+// the way over reads from a distance. Walk-through: they mark the line, not block it.
+const WALK = 4.2;
+for (const c of CROSSINGS) for (let k = -1; k <= 1; k++) {
+  add(BOARDWALK(), c.x + k * (WALK - 0.15), c.z + k * 0.25, { rotY: 0.04 * k - 0.02, force: true });
+}
 for (const c of CROSSINGS) for (const side of [-1, 1]) {
   add(WISPPOST(), c.x + side * 5.5, c.z - side * 4.5, { force: true });
   add(CATTAILS(), c.x + side * 7.0, c.z + side * 3, { rotY: R.angle() });
@@ -264,7 +268,13 @@ for (let i = 0; i < 12; i++) ring(P('bog_crate_01', 'barrel'), VILLAGE.x, VILLAG
 for (let i = 0; i < 6; i++) ring('barrel', VILLAGE.x, VILLAGE.z, 5, 18, {});
 cache(VILLAGE.x - 4, VILLAGE.z + 36);
 // A track out of the village into the bog, so the district has a front door
-for (let d = 0; d < 9; d++) m.paintCircle(0, VILLAGE.x + 22 + d * 3.2, VILLAGE.z + d * 1.1, 3, 0.85, 0.5);   // a silt track (see BOARDWALK)
+// a silt track, kept clear of trees and logs so the duckboards along it run unbroken
+for (let d = 0; d < 9; d++) {
+  m.paintCircle(0, VILLAGE.x + 22 + d * 3.2, VILLAGE.z + d * 1.1, 3, 0.85, 0.5);
+  m.keepOut(VILLAGE.x + 22 + d * 3.2, VILLAGE.z + d * 1.1, 2.6);
+}
+for (let d = 0; d < 8; d++) add(BOARDWALK(), VILLAGE.x + 23.6 + d * 3.9, VILLAGE.z + 0.55 + d * 1.34,
+  { rotY: -Math.atan2(1.1, 3.2) + (d % 3 - 1) * 0.03, force: true });   // duckboards along it
 m.paintCircle(0, VILLAGE.x, VILLAGE.z, 20, 0.8, 0.6);
 m.paintCircle(3, VILLAGE.x, VILLAGE.z, 24, 0.4, 0.8);
 

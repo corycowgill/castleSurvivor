@@ -1,0 +1,26 @@
+[
+  {
+    "key": "landmark_volcano_cone_01",
+    "file": "landmark_volcano_cone_01.glb",
+    "name": "Volcano Cone",
+    "category": "village",
+    "defaultScale": 27,
+    "obstacle": true,
+    "radius": 13,
+    "breakable": false,
+    "icon": "🏘",
+    "procedural": true
+  },
+  {
+    "key": "fen_walkway_01",
+    "file": "fen_walkway_01.glb",
+    "name": "Fen Walkway",
+    "category": "props",
+    "defaultScale": 4.2,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "📦",
+    "procedural": true
+  }
+]

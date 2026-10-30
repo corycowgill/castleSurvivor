@@ -553,6 +553,18 @@ export const EXTRA_ASSETS = [
     "icon": "📦"
   },
   {
+    "key": "fen_walkway_01",
+    "file": "fen_walkway_01.glb",
+    "name": "Fen Walkway",
+    "category": "props",
+    "defaultScale": 4.2,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "📦",
+    "procedural": true
+  },
+  {
     "key": "field_broken_cart_burnt_01",
     "name": "Burnt Wagon Wreck",
     "file": "field_broken_cart_burnt_01.glb",
@@ -1299,6 +1311,18 @@ export const EXTRA_ASSETS = [
     "radius": 1.8,
     "breakable": false,
     "icon": "🏘"
+  },
+  {
+    "key": "landmark_volcano_cone_01",
+    "file": "landmark_volcano_cone_01.glb",
+    "name": "Volcano Cone",
+    "category": "village",
+    "defaultScale": 27,
+    "obstacle": true,
+    "radius": 13,
+    "breakable": false,
+    "icon": "🏘",
+    "procedural": true
   },
   {
     "key": "landmark_windmill",
