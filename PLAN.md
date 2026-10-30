@@ -1528,4 +1528,5 @@ snag rate.
   `add-assets.mjs` merges like the charred variants. Emberreach's landmark branch now places the
   cone (the caldera stays as the fallback). Mirefen lays three walkway sections bank to bank
   across every ford and eight along the village track, which is kept clear of trees. Walkways
-  are walk-through; adding them moved nothing else. Bot comparison in the review report.
+  are walk-through. Kite bot, 10 mixed runs, previous vs this: Emberreach 7/10 -> 7/10,
+  Mirefen 4/10 -> 8/10 (noise and re-rolled scatter; the walkways block nothing).

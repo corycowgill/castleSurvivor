@@ -143,3 +143,23 @@ Overheads of all five maps (`overhead-*`) for composition, plus a prop check in
 Still open: `fen_boardwalk_01` wants regenerating as a flat walkway; the cone and spire meshes
 for Emberreach were never made, and the caldera is a stand-in for them.
 
+
+## Fifth pass (2026-10-30): the missing models, built in code
+
+The asset pipeline isn't available in this environment, so `tools/build-models.mjs` builds the
+two meshes the maps were waiting on, and `add-assets.mjs` registers them from
+`AssetFactory/catalog/procedural.json`.
+
+| Model | Where | Evidence |
+|---|---|---|
+| `landmark_volcano_cone_01`: flared cone, gullies, crater with a lava pool, five lava streaks | Emberreach's anchor at (0, -84), replacing the caldera stand-in | `overhead-emberreach`, `coneb-emberreach-1/3` |
+| `fen_walkway_01`: flat weathered decking, one plank missing, corner stakes | Bank to bank across all six Mirefen fords; along the village track, now kept clear of trees | `walk2-mirefen-1/2` |
+
+Walkways are walk-through, and adding them moved nothing else on Mirefen. The first walkway
+build looked like new lumber because sRGB colours were written as linear vertex colours. The
+builder now converts them.
+
+Kite bot, 10 runs each (5 Dad, 3 Brennan, 2 Parker), previous commit vs this one:
+Emberreach 7/10 → 7/10, Mirefen 4/10 → 8/10. The Mirefen jump is more than the walkways could
+cause, since they don't block anything. Read it as noise plus the re-rolled scatter (the track
+keep-out reshuffles later placements), not as a measured gain.
