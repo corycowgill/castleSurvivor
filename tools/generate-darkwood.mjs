@@ -193,6 +193,45 @@ const camp = (cx, cz, building, rot, kind) => {
 camp(22, -64, 'farmHouse', PI * 0.2, 'charcoal');
 camp(80, -38, 'house', PI * 1.4, 'lodge');
 
+// ── Places in the wood ─────────────────────────────────────────────────
+// The thinnest ground left after the camps (a 25-unit cell census): the north
+// wood, the west bank below the ford, the south-east corner. Each is laid out in
+// its own frame (m.frame), facing the map, and goes in before the forest so the
+// trees grow round it.
+const place = (x, z, rot, label) => {
+  const f = m.frame(x, z, rot);
+  return { ...f, put: (key, ...a) => f.put(key, ...a) || console.warn(label + ': no room for', key, ...a.slice(0, 2)) };
+};
+{ // The forgotten chapel (north): a ruin the forest took back, its dead in rows
+  // before the door, two lanterns someone still lights
+  const { put, decal, at } = place(26, -84, Math.atan2(-26, 84), 'chapel');
+  put(m.pick('war_chapel_ruin_01', 'landmark_ruined_tower'), -3, 0, 0, { force: true });
+  for (const f of [4.5, 7.5]) for (const s of [-4.5, -1.5, 1.5, 4.5]) if (!(f > 6 && s === 1.5)) put('field_grave_mound_01', f, s + (f > 6 ? 0.5 : 0), R.range(-0.15, 0.15));
+  put('village_lantern_post_01', 3, -7, 0, { force: true }); put('village_lantern_post_01', 3, 7, 0, { force: true });
+  put('nature_dead_tree_03', 9.5, 7.5, null, { scale: 7 });
+  decal('mossPatch', 6, 0, 4.5); decal('leafPile', 9, -2, 3); decal('bones', 7.5, 1.5, 2);
+  m.cache(...at(1, -8.5)); m.keepOut(26, -84, 14); m.paintCircle(3, 26, -84, 13, 0.7, 0.6);   // moss (channel 3)
+}
+{ // The watch post below the ford: a fallen tower that once kept the crossing,
+  // its barricade still across the bank, the watch's stores beside it
+  const { put, decal, at } = place(24, -25, PI / 2, 'watch post');    // facing the ford (east)
+  put('landmark_destroyed_watchtower', -4, -3, 0.2, { force: true });
+  put('combat_barricade_01', 5, -0.5, PI / 2); put('combat_barricade_01', 5.5, -4.2, PI / 2 + 0.15);
+  put('village_weapon_rack_01', 0.5, 3.4, 0); put('barrel', -1.5, 5, null);
+  put('prop_logs_02', 2.6, 6, 0.1); put('village_lantern_post_01', 3.5, 2.5, 0, { force: true });
+  decal('hoofPrints', 4, 4, 3); decal('puddle', 6, -6.5, 2.6);
+  m.cache(...at(-1, -7.5)); m.keepOut(24, -25, 10);
+}
+{ // The wolf den (south-east): boulders heaped into a cave mouth, the gnawed
+  // bones of what the pack dragged home in front of it. The boulders are a heap on
+  // purpose (forced); the corner cache at (84, 84) lies behind it, the den's hoard
+  const { put, decal } = place(80, 74, Math.atan2(-80, -74), 'wolf den');
+  for (const [f, sd, sc] of [[-4, -4.5, 4.6], [-5.5, 0, 5.4], [-4, 4.6, 4.4], [-1.5, -6.8, 3.4], [-1.2, 6.8, 3.2]]) put('boulder', f, sd, null, { scale: sc, force: true });
+  put('nature_rock_cluster_02', 1.5, -4, null); put('nature_fallen_log_01', 3.5, 4.5, 0.6);
+  decal('bones', 1, 0, 2.6); decal('bones', 3, -2, 2.1); decal('bones', 2.5, 2.4, 1.8); decal('rootsMud', -1, 0, 4.2);
+  m.keepOut(80, 74, 10);
+}
+
 // ── Forest ─────────────────────────────────────────────────────────────
 const forestDensity = (x, z) => {
   if (nearStream(x, z)) return 0;

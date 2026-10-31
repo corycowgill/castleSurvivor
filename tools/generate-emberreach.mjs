@@ -281,6 +281,38 @@ const burnt = (x, z) => {
   const edge = Math.max(Math.abs(x), Math.abs(z)) / 94;
   return Math.max(0, Math.min(1, 0.26 + edge * 0.45 + (n - 0.5) * 0.85));
 };
+// ══ The west edge ═════════════════════════════════════════════════════════
+// The thinnest ground on the map (a 25-unit cell census): west of the western flow
+// it was burnt trees and loose basalt to the edge. Two places, in their own frames
+// (m.frame), facing the map, before the trees so the stand grows round them.
+const place = (x, z, label) => {
+  const f = m.frame(x, z, Math.atan2(-x, -z));
+  return { ...f, put: (key, ...a) => f.put(key, ...a) || (m.has(key) && console.warn(label + ': no room for', key, ...a.slice(0, 2))) };
+};
+const cacheOnce = (x, z) => m.objects.some(o => o.key === 'chest' && Math.hypot(o.x - x, o.z - z) < 12) || m.cache(x, z);
+{ // The obsidian quarry (south-west): cut blocks, the rollers and tools, the
+  // overseers' fire and pot
+  const { put, decal, at } = place(-80, 84, 'quarry');
+  put(P('volcanic_boulder_01', 'basalt_boulder_01'), -4, -3.5, 0.2, { scale: 4.2 }); put(P('volcanic_boulder_01', 'basalt_boulder_01'), -4.5, 1.5, -0.1, { scale: 3.8 });
+  put(BOULDER(), -1, -6.5, null, { scale: 3.2 });
+  for (const [f, sd] of [[0.5, -2], [1.8, -0.6], [0, 1.6], [2.6, 2.6], [-1.6, 4.6]]) put(P('basalt_small_02', 'basalt_small_01'), f, sd, null);
+  put(P('char_logs_01', 'prop_logs_02'), 2.5, -4.2, PI / 2); put('prop_wheelbarrow_01', 3.5, 0.8, 0.7);
+  put('blacksmith_tool_rack_01', -1.5, 6.5, 0); put(BRAZIER(), 5, -2.5, 0, { force: true }); put(P('ogre_cook_pot_01', 'barrel'), 4.5, 3.5, null);
+  decal('slag', 0, -1, 3.4); decal('cracks', -2, 3, 3); decal('rubble', 1.5, -4.5, 2.8);
+  cacheOnce(...at(-1, -1)); m.keepOut(-80, 84, 11);
+}
+{ // The bone yard (west): where the ogres throw what is left, behind a spiked
+  // fence, a totem over it and fires at the gap
+  const { put, decal, at } = place(-84, 52, 'bone yard');
+  for (const a of [-1.9, -1.2, -0.5, 0.5, 1.2, 1.9]) put(P('ogre_spike_wall_01', 'char_barricade_01'), -Math.cos(a) * 6.5, Math.sin(a) * 6.5, -a, { force: true });   // r = -a lays the piece along the arc
+  put(TOTEM(), -2.5, 0, 0, { force: true });
+  put(BONES(), -0.5, -3, null); put(BONES(), 0.5, 2.6, null); put(P('ogre_skull_pile_01', 'combat_skull_01'), -3.5, 3.4, null);
+  put(BRAZIER(), 6.5, -3, 0, { force: true }); put(BRAZIER(), 6.5, 3, 0, { force: true });
+  put(STAKE(), 4.5, -5.5, null); put(STAKE(), 4.5, 5.5, null);
+  decal('bones', 0, 0, 3.4); decal('bones', 2.5, -1.5, 2.4); decal('scorch', -1, 1, 4.2);
+  cacheOnce(...at(1.5, 0)); m.keepOut(-84, 52, 10);
+}
+
 const region = { x0: -94, z0: -94, x1: 94, z1: 94 };
 // Standing dead only. One interleaved pass rather than one scatter per variant:
 // scattering them in sequence let the first variant take every good spot (81 / 19 / 8
