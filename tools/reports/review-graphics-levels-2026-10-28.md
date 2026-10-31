@@ -201,3 +201,24 @@ now holds an authored set piece with a cache (PLAN 50.26):
 
 `MapBuilder.frame()` places a piece's props in its own frame, facing a point, so they read as
 arranged by someone rather than dropped.
+
+## Eighth pass (2026-10-31): Darkwood and Emberreach set pieces
+
+Darkwood got a forgotten chapel, a ford watch post and a wolf den; Emberreach's west edge got
+an obsidian quarry and a bone yard (PLAN 50.27).
+
+Kite bot, 10 mixed runs per map after 50.26 and 50.27:
+
+| Map | Survived |
+|---|---|
+| Kingsfield | 8/10 |
+| Bloodmarch | 8/10 |
+| Darkwood | 10/10 |
+| Emberreach | 9/10 |
+| Mirefen | 4/10, then 3/10 |
+
+Mirefen is the open question. Its earlier batches ran 2/12, 6/12, 5/10, 8/10 and 7/10, so 7/20
+is inside the map's range but at the low end. The deaths are spread over the map (village
+edge, spawn, both channels, the north-east) and none are near the new corner pieces. The
+early ones are underlevelled builds (level 7 at 3:00) killed by archers. Worth a larger
+sample before anyone tunes the map for it.
