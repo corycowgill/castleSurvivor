@@ -1578,3 +1578,16 @@ snag rate.
     is re-graded (`fen_totem_mossy_01`) map-wide.
   - `hoofPrints` was drawn as orange sausages and is now a generated horseshoe trail.
     `tools/fix-decals.py` is documented as run-once on the originals; it is not idempotent.
+- [x] 50.27 **Richer places, Darkwood and Emberreach.** Same census, same method as 50.26.
+  - **Darkwood:** a forgotten chapel in the north wood (the ruin, eight graves in two rows
+    before its door, two lit lanterns); a watch post below the ford (the fallen tower, a
+    barricade across the bank, the watch's stores); a wolf den in the south-east (a boulder
+    heap round a cave mouth and gnawed bones, with the corner cache behind it as the hoard).
+  - **Emberreach, the west edge:** an obsidian quarry in the south-west (cut volcanic blocks
+    with lava in the seams, chips, rollers, tool rack, the overseers' brazier and pot) and a
+    bone yard (a ring of spiked stakes open to the map, a totem, skull and bone piles, fires
+    at the gap).
+  - `map-audit`: Darkwood pens 8 -> 6, no props overlapping; Emberreach unchanged at 22.
+  - Kite bot after 50.26, 10 mixed runs: Kingsfield 8/10, Bloodmarch 8/10, Mirefen 4/10. The
+    Mirefen deaths are spread over the map (village edge, spawn, both channels), none near
+    the corners. A second batch is in the review report.
