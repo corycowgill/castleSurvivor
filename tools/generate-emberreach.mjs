@@ -49,7 +49,7 @@ const DEADTREE = () => P('char_dead_tree_01', 'nature_dead_tree_03');
 // Three value grades of the one dead-tree mesh that validated, plus the burnt tree
 // and giant from the Trellis batches when they land. No conifers: this is a lava map.
 const DEADTREES = () => ['char_dead_tree_01', 'char_dead_tree_02', 'char_dead_tree_03',
-                         'combat_burned_tree_01', 'burnt_tree_giant_01'].filter(k => m.has(k));
+                         'combat_burned_tree_01', P('char_tree_giant_01', 'burnt_tree_giant_01')].filter(k => m.has(k));
 const STAKE = () => P('combat_skull_stake_01', 'ogre_totem_01', 'village_signpost_01');
 const TOTEM = () => P('ogre_totem_01', 'combat_enemy_totem_01', 'townStatue');
 const BONES = () => P('ogre_bone_pile_01', 'combat_bones_01', 'combat_skull_01');
@@ -296,8 +296,9 @@ for (let i = 0; i < 240 * 30 && deadPlaced < 240; i++) {
   if (m.add(R.pick(deads), x, z, { rotY: R.angle(), pad: 0.4 })) deadPlaced++;
 }
 for (const o of m.objects) if (DEADSET.has(o.key)) o.scale = +(4.5 + R() * 4.2).toFixed(1);
-m.landmark('burnt_tree_giant_01', -34, -34, { rotY: R.angle(), keepOut: 4 });
-m.landmark('burnt_tree_giant_01', 30, 78, { rotY: R.angle(), keepOut: 4 });
+m.landmark(P('char_tree_giant_01', 'burnt_tree_giant_01'), -34, -34, { rotY: R.angle(), keepOut: 4 });
+m.landmark(P('char_tree_giant_01', 'burnt_tree_giant_01'), 17, 80,   // was (30, 78), 5 off the east flow: its crown hung over the lava
+   { rotY: R.angle(), keepOut: 4 });
 
 // Floor of the burnt woods
 scatter(P('char_stump_01', 'prop_tree_stump_02'), 60, region, { density: burnt, tries: 7 });
@@ -341,7 +342,7 @@ for (const [fn, fords] of [[eastX, EAST_FORDS], [westX, WEST_FORDS]]) for (let z
   m.paintCircle(CRUST, fn(z), z, 7.5, 0.95, 0.55);
 }
 // Burnt ground follows the burnt forest
-m.paintFn(CINDER, (x, z) => burnt(x, z) * 1.15 - 0.08, 2);
+m.paintFn(CINDER, (x, z) => burnt(x, z) * 1.15 - 0.08, 2, { blur: 5 });
 m.paintCircle(CINDER, SLAG.x, SLAG.z, 20, 0.7, 0.6);
 for (let z = 14; z <= 72; z += 7) for (let x = -30; x <= 30; x += 8)
   m.paintCircle(CINDER, x + R.range(-4, 4), z + R.range(-4, 4), R.range(8, 13), R.range(0.3, 0.55), 0.9);

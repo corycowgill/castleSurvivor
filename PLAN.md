@@ -1530,3 +1530,32 @@ snag rate.
   across every ford and eight along the village track, which is kept clear of trees. Walkways
   are walk-through. Kite bot, 10 mixed runs, previous vs this: Emberreach 7/10 -> 7/10,
   Mirefen 4/10 -> 8/10 (noise and re-rolled scatter; the walkways block nothing).
+- [x] 50.25 **Prop, decal and placement review across all five maps.** Overheads plus eight
+  gameplay-camera stops per map, looking for what reads as wrong rather than measuring it.
+  - **Ground paint had hard edges.** The density functions behind the splat are written for
+    placement and are full of steps (`z > 62`, `inField`, a grove threshold), so Bloodmarch's
+    field painted as a red diamond and Darkwood's groves as rectangles. `paintFn` takes a
+    `blur` now. fn is evaluated at the same points in the same order, so placement is
+    byte-identical. Roads can paint as hashed discs (`paintRoads(..., { round: true })`), which
+    stops the King's Road stair-stepping on its diagonal, and Bloodmarch's lanes are painted
+    through a small warp so they wander.
+  - **Decals:** `tools/fix-decals.py`. arrowStorm and shieldScatter sat on an opaque grey
+    backdrop (keyed out); scorch was a spiky black wing (now a generated burn); ashDrift was
+    paper-white; cracks was orange sandstone on every meadow; puddle had a cyan blob (now a
+    generated muddy puddle); sulfurStain was paint-yellow; bogScum and bogPool were neon lime
+    round sky-blue water.
+  - **Models:** Mirefen's `swamp_reed_cluster_01` (170 placed) and `swamp_cattail_clump_01` (50)
+    were flat lime slabs, the "neon squares" all over the map. They are rebuilt in code as
+    `fen_reeds_01` / `fen_cattails_01` (tapered double-sided blades, cattail heads). The hanging
+    moss is re-graded (`bog_moss_curtain_01`), and so is Emberreach's giant snag, which stood on
+    bright green turf (`char_tree_giant_01`).
+  - **Placement:** Kingsfield's two west ogre keeps stood in the stream and are now on its east
+    bank. Darkwood's camps lay out round the building (wood against a wall, stores at the back
+    corner, the work in the yard) instead of ringing crates at random. Its main track meanders
+    and paints with a ragged verge. Mirefen's village has a broken palisade with three gates
+    instead of 40 fence pieces strewn over it, stores stacked between the huts, and the bog's
+    scatter (reeds, moss, lily pads) is kept out of it. Lily pads float on the channels
+    instead of lying on the banks. Emberreach's second giant snag moved off the lava's edge.
+  - **Still water** has a crisper bank and a faint wet rim, so Mirefen's channels read as
+    water rather than a soft shadow lying over the ground.
+  - Kite bot, 10 mixed runs each: Kingsfield 9/10, Darkwood 9/10, Mirefen 7/10. `npm test` passes.

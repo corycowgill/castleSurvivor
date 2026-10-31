@@ -22,5 +22,29 @@
     "breakable": false,
     "icon": "📦",
     "procedural": true
+  },
+  {
+    "key": "fen_reeds_01",
+    "file": "fen_reeds_01.glb",
+    "name": "Fen Reeds",
+    "category": "nature",
+    "defaultScale": 1.9,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🌿",
+    "procedural": true
+  },
+  {
+    "key": "fen_cattails_01",
+    "file": "fen_cattails_01.glb",
+    "name": "Cattails",
+    "category": "nature",
+    "defaultScale": 2,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🌿",
+    "procedural": true
   }
 ]

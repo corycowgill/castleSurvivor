@@ -586,5 +586,29 @@
     "breakable": false,
     "icon": "🌳",
     "charredFrom": "pineTree"
+  },
+  {
+    "key": "bog_moss_curtain_01",
+    "name": "Hanging Moss",
+    "file": "bog_moss_curtain_01.glb",
+    "category": "nature",
+    "defaultScale": 2.97,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🌿",
+    "charredFrom": "swamp_moss_curtain_01"
+  },
+  {
+    "key": "char_tree_giant_01",
+    "name": "Ashen Giant Snag",
+    "file": "char_tree_giant_01.glb",
+    "category": "tree",
+    "defaultScale": 11.7,
+    "obstacle": true,
+    "radius": 5.5,
+    "breakable": false,
+    "icon": "🌳",
+    "charredFrom": "burnt_tree_giant_01"
   }
 ]

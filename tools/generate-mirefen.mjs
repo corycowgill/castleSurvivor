@@ -56,9 +56,10 @@ const BLEACHED = () => P('bog_dead_tree_02', 'bog_dead_tree_01');
 // placed 797 copies of one 48k-triangle mesh and rendered 284M triangles a frame.
 // The stand-ins are spread across three different meshes now and the counts are
 // well down; batch 11 gives each role its own purpose-built low-poly mesh.
-const MOSSFALL = () => P('swamp_moss_curtain_01', 'bog_fern_01');
-const REEDS = () => P('swamp_reed_cluster_01', 'bog_fern_01');
-const CATTAILS = () => P('swamp_cattail_clump_01', 'bog_flowers_01');
+const MOSSFALL = () => P('bog_moss_curtain_01', 'swamp_moss_curtain_01', 'bog_fern_01');
+// Built in code (tools/build-models.mjs): the pipeline's reed and cattail clumps were flat lime slabs
+const REEDS = () => P('fen_reeds_01', 'swamp_reed_cluster_01', 'bog_fern_01');
+const CATTAILS = () => P('fen_cattails_01', 'swamp_cattail_clump_01', 'bog_flowers_01');
 const LILIES = () => P('swamp_lilypads_01', 'bog_flowers_01');
 const ROTLOG = () => P('swamp_rotten_log_01', 'bog_log_01', 'nature_fallen_log_01');
 const STUMP = () => P('swamp_stump_mossy_01', 'bog_stump_01', 'prop_tree_stump_02');
@@ -260,13 +261,45 @@ for (const [x, z, rot] of [[-70, -22, PI / 2], [-54, -18, -PI / 2], [-72, -2, PI
 add(WITCHHUT(), VILLAGE.x - 4, VILLAGE.z + 30, { rotY: PI * 0.15, force: true });
 for (let i = 0; i < 3; i++) ring(TOTEM(), VILLAGE.x - 4, VILLAGE.z + 30, 7, 11, {});
 for (let i = 0; i < 5; i++) ring(WISPPOST(), VILLAGE.x, VILLAGE.z, 10, 20, {});
-for (let i = 0; i < 4; i++) ring(BARRICADE(), VILLAGE.x, VILLAGE.z, 18, 24, {});
+// The village's edge: a rotted palisade on a ring, broken into runs, with three
+// gaps that are its ways in -- north-east to the ford, north to the witch, south to
+// the bog. On the east the channel itself is the boundary, so no fence stands within
+// reach of the water. Each gap is flanked by a barricade. (Barricades used to ring at
+// random and the fence pieces were scattered over the whole district like litter.)
+const GATES = [0.62, PI / 2, -PI / 2];          // angles from the village centre (+x east, +z north)
+// An ellipse, long north-south like the two rows of huts; a piece that would stand
+// in a hut is simply not placed (add's clearance check), which reads as a gap
+const FC = { x: VILLAGE.x, z: VILLAGE.z + 3 }, FRX = 19, FRZ = 29;
+const onFence = (a, wob = 0) => [FC.x + Math.cos(a) * (FRX + wob), FC.z + Math.sin(a) * (FRZ + wob)];
+const fenceYaw = (a) => -Math.atan2(Math.cos(a) * FRZ, -Math.sin(a) * FRX);
+for (let a = -PI; a < PI; a += 0.06) {
+  if (GATES.some(g => Math.abs(Math.atan2(Math.sin(a - g), Math.cos(a - g))) < 0.13)) continue;
+  if (Math.sin(a * 5.3) + Math.sin(a * 11.7) > 1.1) continue;  // fallen runs
+  const [x, z] = onFence(a, Math.sin(a * 3.1) * 1.2);
+  if (nearWater(x, z) < 7) continue;
+  add(P('bog_fence_01', 'village_fence_broken_01'), x, z, { rotY: fenceYaw(a) + R.range(-0.12, 0.12), ignoreKeepOut: true });
+}
+for (const g of GATES) for (const side of [-1, 1]) {
+  const [x, z] = onFence(g + side * 0.17, 0.4);
+  if (nearWater(x, z) < 7) continue;
+  add(BARRICADE(), x, z, { rotY: fenceYaw(g), ignoreKeepOut: true });
+}
 // The loot district's loot: the fen-folk's stores stacked between the huts (the
 // swollen crates break now; they were registered as scenery), and the witch keeps
 // a cache behind her hut
-for (let i = 0; i < 12; i++) ring(P('bog_crate_01', 'barrel'), VILLAGE.x, VILLAGE.z, 4, 19, {});
-for (let i = 0; i < 6; i++) ring('barrel', VILLAGE.x, VILLAGE.z, 5, 18, {});
+// Stacked in twos and threes on the lane between the huts, a barrel beside each
+// stack, rather than rung at random over the whole district
+for (const [x, z] of [[-67, -12], [-57, -8], [-67, 6], [-57, 11], [-62, -29], [-57.5, 27]]) {
+  const t = R.angle(), c = Math.cos(t), sn = Math.sin(t);
+  const offs = R() < 0.6 ? [[0, 0], [1.05, 0], [0.5, 0.95]] : [[0, 0], [1.05, 0.1]];
+  for (const [u, v] of offs) add(P('bog_crate_01', 'barrel'), x + u * c - v * sn, z + u * sn + v * c, { rotY: t + R.range(-0.15, 0.15), force: true });
+  add('barrel', x - 1.9 * c, z - 1.9 * sn, { rotY: R.angle() });
+  if (R() < 0.5) add('barrel', x - 1.9 * c + 1.8 * sn, z - 1.9 * sn - 1.8 * c, { rotY: R.angle() });
+}
 cache(VILLAGE.x - 4, VILLAGE.z + 36);
+// The village is dry, trodden ground: the bog's scatter (reeds, moss curtains, lily
+// pads, scum, pools) stays outside the palisade instead of growing between the huts
+m.keepOut(FC.x, FC.z, 15); m.keepOut(FC.x, FC.z - 12, 11); m.keepOut(FC.x, FC.z + 12, 11);
 // A track out of the village into the bog, so the district has a front door
 // a silt track, kept clear of trees and logs so the duckboards along it run unbroken
 for (let d = 0; d < 9; d++) {
@@ -320,7 +353,14 @@ const dryDensity = (x, z) => Math.max(0.05, 1 - bogField(x, z) * 2);
 
 scatter(REEDS(), 170, region, { density: (x, z) => Math.max(0.1, bogDensity(x, z) * 1.1), scaleMul: [0.8, 1.5] });
 scatter(CATTAILS(), 110, region, { density: (x, z) => Math.max(0.05, 0.9 - nearWater(x, z) / 20), scale: [0.8, 1.4] });
-scatter(LILIES(), 70, region, { density: (x, z) => Math.max(0, 0.95 - nearWater(x, z) / 14), scale: [0.9, 1.6] });
+// Lily pads float on the channels in rafts of two or three, clear of the fords. They
+// were scattered on the banks, where a flat lime square on dry mud read as a texture
+// error. The water plane sits a hair above them, so they read as afloat.
+for (const [fn, fords] of [[eastX, EAST_FORDS], [westX, WEST_FORDS]]) for (let z = -76; z <= 94; z += R.range(5, 11)) {
+  if (fords.some(f => Math.abs(z - f) < 8)) continue;
+  const n = 2 + (R() < 0.4), side = R.range(-2.4, 2.4);
+  for (let i = 0; i < n; i++) add(LILIES(), fn(z) + side + R.range(-0.9, 0.9), z + R.range(-1.4, 1.4), { rotY: R.angle(), scale: R.range(0.9, 1.5), force: true });
+}
 scatter(HUMMOCK(), 110, region, { density: bogDensity, scale: [0.8, 1.6] });
 scatter(ROTLOG(), 130, region, { density: (x, z) => bogDensity(x, z) * 0.8 + canopy(x, z) * 0.4, scale: [0.9, 1.4] });
 scatter(STUMP(), 110, region, { density: (x, z) => canopy(x, z) * 0.8 + 0.15, scale: [0.9, 1.4] });
@@ -335,7 +375,6 @@ scatter(BOGROCK(), 45, region, { density: dryDensity, scaleMul: [0.8, 1.3] });
 scatter(ROCKMID(), 90, region, { density: dryDensity, scale: [0.8, 1.3] });
 scatter(P('bog_fern_01', 'nature_fern_01'), 110, region, { density: (x, z) => canopy(x, z) * 0.8 + 0.2, scale: [0.9, 1.5] });
 scatter(P('bog_flowers_01', 'nature_flowers_02'), 90, region, { density: (x, z) => 0.4 + canopy(x, z) * 0.4, scale: [0.9, 1.5] });
-scatter(P('bog_fence_01', 'village_fence_broken_01'), 40, { x: VILLAGE.x, z: VILLAGE.z, r: 26 }, { density: () => 0.8 });
 scatter(P('bog_cart_01', 'combat_broken_cart_01'), 18, region, { density: dryDensity });
 scatter(P('bog_crate_01', 'prop_wood_crate_broken_01'), 30, region, { density: (x, z) => Math.max(0.05, 0.7 - nearWater(x, z) / 24) });
 

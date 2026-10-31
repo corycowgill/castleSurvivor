@@ -459,7 +459,7 @@ for (let i = 0; i < 160 * 30 && treesPlaced < 160; i++) {
 scatter(STUMP(), 40, region, { density: woods, tries: 6 });
 scatter(P('char_fallen_log_01', 'nature_fallen_log_01'), 22, region, { density: woods, tries: 6 });
 scatter(P('char_shrub_01', 'char_bush_01'), 30, region, { density: (x, z) => woods(x, z) * 0.7, tries: 5 });
-m.paintFn(SCORCH, (x, z) => woods(x, z) * 0.9 - 0.1, 2);
+m.paintFn(SCORCH, (x, z) => woods(x, z) * 0.9 - 0.1, 2, { blur: 7 });
 // Fires still smouldering in the wood
 for (let i = 0; i < 6; i++) { const x = R.range(30, 90), z = R.range(-90, -30); if (woods(x, z) > 0.4) m.fire(x, z, { r: 0.7, y: 0.4, h: 7, s: 0.5 }); }
 
@@ -537,21 +537,26 @@ m.blockers.splice(m.blockers.indexOf(laneBlocker), 1);
 // (what survived away from the field), 2 rubbleGround (the castle precinct and
 // the road), 3 ironMud (the field itself, churned and stained)
 const GRASS = 1, RUB = 2, IRON = 3;
-m.paintRoads(RUB, IRON);
+m.paintRoads(RUB, IRON, { round: true });   // the King's Road runs on the diagonal
 m.paintUnderObstacles(IRON, 3.0, 0.4);
 m.paintFn(GRASS, (x, z) => {
   if (inField(x, z)) return 0;
   const d = Math.min(Math.hypot(x, z) / 60, 1);
   return (0.25 + d * 0.7) * (0.6 + noise(x, z) * 0.6) - woods(x, z) * 0.8;
-}, 2);
+}, 2, { blur: 8 });   // the field's edge is a rotated rectangle: feather it
 // Rust mud is an accent in the worst-fought ground, not the field's floor: at full
 // strength the whole middle of the map read as red cobbles from the air.
-m.paintFn(IRON, (x, z) => (inField(x, z) ? (churn(x, z) - 0.45) * 1.1 : (churn(x, z) - 0.7) * 0.8), 2);
+m.paintFn(IRON, (x, z) => (inField(x, z) ? (churn(x, z) - 0.45) * 1.1 : (churn(x, z) - 0.7) * 0.8), 2, { blur: 8 });
 m.paintCircle(IRON, 0, 0, 14, 0.35, 0.7);
 // The kiting lanes read as worn tracks: churned rust mud, feathered at the edges
-m.paintFn(IRON, (x, z) => (Math.hypot(x, z) > 11 ? 0.75 - laneDist(x, z) * 0.35 : 0), 1);
+// Painted through a gentle warp so the worn ground wanders a unit or two either
+// side of the cleared line instead of running dead straight
+m.paintFn(IRON, (x, z) => {
+  const wx = x + (noise(x * 2.3, z * 2.3) - 0.5) * 5, wz = z + (noise(z * 2.3 + 50, x * 2.3) - 0.5) * 5;
+  return Math.hypot(x, z) > 11 ? 0.75 - laneDist(wx, wz) * 0.35 : 0;
+}, 1, { blur: 2 });
 // Scorched patches through the field as well, so the ground carries the burning
-m.paintFn(SCORCH, (x, z) => (inField(x, z) ? (noise(x, z) - 0.55) * 1.2 : 0), 2);
+m.paintFn(SCORCH, (x, z) => (inField(x, z) ? (noise(x, z) - 0.55) * 1.2 : 0), 2, { blur: 8 });
 m.paintCircle(RUB, KEEP.x, KEEP.z, PAL_R + 6, 0.5, 0.7);
 m.paintCircle(SCORCH, KEEP.x, KEEP.z, PAL_R + 2, 0.45, 0.7);
 for (let z = -66; z <= -16; z += 6) for (let x = -66; x <= -16; x += 6)

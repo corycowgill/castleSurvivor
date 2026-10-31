@@ -39,7 +39,7 @@ Object.assign(ASSET, {
 for (const [k, v] of Object.entries({
   landmark_ogre_gate: { scale: 19, r: 7.0 }, landmark_volcano_cone_01: { scale: 27, r: 13.0 },
   landmark_obsidian_arch_01: { scale: 13.5, r: 3.2 }, landmark_ogre_idol_01: { scale: 12, r: 3.4 },
-  burnt_tree_giant_01: { scale: 11.7, r: 1.8 },
+  burnt_tree_giant_01: { scale: 11.7, r: 1.8 }, char_tree_giant_01: { scale: 11.7, r: 1.8 },
 })) if (ASSET[k]) ASSET[k] = v;   // only once the mesh is registered
 // Mirefen's, Bloodmarch's and Emberreach's trees, same rule as the dead tree above: collision is
 // the trunk you walk into, not the canopy. Their registered radii are half the
@@ -194,21 +194,50 @@ export class MapBuilder {
       this.splat[i] = Math.max(this.splat[i], strength * t * t * (3 - 2 * t));
     }
   }
-  // Paint with a density function over the whole map (e.g. leaf litter under the woods)
-  paintFn(ch, fn, step = 1) {
+  // Paint with a density function over the whole map (e.g. leaf litter under the woods).
+  // blur (world units) feathers the result before it is laid down: the density
+  // functions are written for placement and are full of steps (z > 62, inside the
+  // field, a grove threshold), which painted straight read from the air as hard
+  // rectangles and diamonds. fn is still evaluated at exactly the same points, in
+  // the same order, so lazily seeded noise draws the same numbers either way.
+  paintFn(ch, fn, step = 1, { blur = 0 } = {}) {
     const S = this.splatSize, u = (this.worldSize * 2) / S;
+    const F = new Float32Array(S * S);
     for (let pz = 0; pz < S; pz += step) for (let px = 0; px < S; px += step) {
       const wx = -this.worldSize + (px + 0.5) * u, wz = -this.worldSize + (pz + 0.5) * u;
-      const w = fn(wx, wz); if (w <= 0) continue;
-      for (let dz = 0; dz < step; dz++) for (let dx = 0; dx < step; dx++) {
-        const i = ((pz + dz) * S + (px + dx)) * 4 + ch; if (i >= this.splat.length) continue;
-        this.splat[i] = Math.max(this.splat[i], Math.min(1, w));
+      const w = Math.min(1, fn(wx, wz)); if (!(w > 0) && !blur) continue;
+      for (let dz = 0; dz < step && pz + dz < S; dz++) for (let dx = 0; dx < step && px + dx < S; dx++) F[(pz + dz) * S + px + dx] = w;
+    }
+    if (blur > 0) {
+      // Three box passes each way approximate a Gaussian of sigma ~ blur / 2
+      const r = Math.max(1, Math.round(blur / u / 1.7)), tmp = new Float32Array(S);
+      for (let pass = 0; pass < 3; pass++) for (const horiz of [true, false]) for (let line = 0; line < S; line++) {
+        const at = (k) => horiz ? line * S + k : k * S + line;
+        let acc = 0;
+        for (let k = -r; k <= r; k++) acc += F[at(Math.min(S - 1, Math.max(0, k)))];
+        for (let k = 0; k < S; k++) {
+          tmp[k] = acc / (2 * r + 1);
+          acc += F[at(Math.min(S - 1, k + r + 1))] - F[at(Math.max(0, k - r))];
+        }
+        for (let k = 0; k < S; k++) F[at(k)] = tmp[k];
       }
     }
+    for (let p = 0; p < S * S; p++) if (F[p] > 0) this.splat[p * 4 + ch] = Math.max(this.splat[p * 4 + ch], F[p]);
   }
   // Roads and buildings paint themselves: cobble under road tiles with a dirt fringe,
   // dirt under and around anything with a footprint
-  paintRoads(cobbleCh, dirtCh) {
+  // round: a disc per tile with a hashed width instead of a square, for tracks that
+  // are not laid on the grid (a square per tile stair-steps along a diagonal or a
+  // curve). The hash keeps it off the RNG, so the layout does not move.
+  paintRoads(cobbleCh, dirtCh, { round = false } = {}) {
+    if (round) {
+      for (const rd of this.roads) {
+        const h = Math.abs(Math.sin(rd.x * 12.9898 + rd.z * 78.233) * 43758.5453) % 1;
+        this.paintCircle(cobbleCh, rd.x, rd.z, 3.5 + h * 1.1, 1, 0.45);
+        this.paintCircle(dirtCh, rd.x, rd.z, 5.8 + h * 1.5, 0.7, 0.7);
+      }
+      return;
+    }
     for (const rd of this.roads) {
       this.paintRect(cobbleCh, rd.x - 3, rd.z - 3, rd.x + 3, rd.z + 3, 1, 0.8);
       this.paintRect(dirtCh, rd.x - 3, rd.z - 3, rd.x + 3, rd.z + 3, 0.7, 3.2);

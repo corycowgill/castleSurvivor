@@ -256,7 +256,11 @@ if (m.landmark('landmark_graveyard_gate', -40, 62, { rotY: 0, keepOut: 3 })) {
 m.landmark('landmark_ancient_oak', 30, 22, { rotY: R.angle(), keepOut: 5 });
 
 // ── Ogre keeps in the corners ──────────────────────────────────────────
-for (const [cx, cz] of [[-80, -80], [80, -80], [-80, 80], [80, 80]]) {
+// The west pair stand on the stream's east bank: at x -80 both sat in the water
+// (the stream runs at -74 and -83 there), the keep wading and its boulder ring
+// and barrels on the far bank.
+const KEEPS = [[-80, -80], [80, -80], [-80, 80], [80, 80]].map(([x, z]) => [x < 0 ? +(streamX(z) + 15).toFixed(1) : x, z]);
+for (const [cx, cz] of KEEPS) {
   const toCenter = Math.atan2(-cx, -cz);
   m.add('ogreCastle', cx, cz, { rotY: toCenter, force: true });
   m.keepOut(cx, cz, 9);
@@ -305,7 +309,7 @@ for (const o of m.objects) if (o.key === 'shrubbery' && o.scale === 4) o.scale =
 // Woodcutting: stumps, log stacks and firewood where trees were felled; dead trees near the keeps
 m.scatter('prop_tree_stump_02', 22, woodRegion, { density: (x, z) => woodDensity(x, z) * 0.8, tries: 8 });
 m.scatter('prop_logs_02', 8, woodRegion, { density: (x, z) => woodDensity(x, z) * 0.6, tries: 8 });
-for (const [cx, cz] of [[-80, -80], [80, -80], [-80, 80], [80, 80]]) for (let i = 0; i < 3; i++) m.ring('nature_dead_tree_03', cx, cz, 18, 28, { scale: R.range(6.5, 8.5) });
+for (const [cx, cz] of KEEPS) for (let i = 0; i < 3; i++) m.ring('nature_dead_tree_03', cx, cz, 18, 28, { scale: R.range(6.5, 8.5) });
 m.scatter('nature_dead_tree_03', 6, woodRegion, { density: (x, z) => woodDensity(x, z) * 0.5, tries: 8 });
 // A hunter's cache and a ruined cart deep in the south woods
 m.cache(0, 90); m.cache(-70, 88); m.cache(88, -20);   // see MapBuilder.cache
@@ -322,9 +326,9 @@ m.paintRect(COBBLE, -13, -28, 13, -19, 0.8, 2.5);                 // castle fore
 m.paintRect(COBBLE, -8, -50, 8, -28, 0.6, 3);                     // keep approach
 m.paintUnderObstacles(DIRT, 2.0, 0.85);                           // yards around buildings and big props
 for (const f of fields) m.paintRect(DIRT, f[0], f[1], f[2], f[3], 0.9, 2);
-for (const [cx, cz] of [[-80, -80], [80, -80], [-80, 80], [80, 80]]) m.paintCircle(DIRT, cx, cz, 20, 0.55, 0.6);
+for (const [cx, cz] of KEEPS) m.paintCircle(DIRT, cx, cz, 20, 0.55, 0.6);
 for (let z = -96; z <= 96; z += 1.5) m.paintCircle(MUD, streamX(z), z, 5.2, 0.9, 0.55);
-m.paintFn(LITTER, (x, z) => woodDensity(x, z) * 0.95 - 0.25, 2);
+m.paintFn(LITTER, (x, z) => woodDensity(x, z) * 0.95 - 0.25, 2, { blur: 6 });   // woodDensity is banded (z > 62, rim, corners)
 m.paintFn(DIRT, (x, z) => { const d = Math.hypot(x, z); return d < 22 ? 0 : (noise(x * 1.7, z * 1.7) - 0.62) * 1.2; }, 2); // worn patches in the meadows
 m.suppress(DIRT, COBBLE, 0.75); m.suppress(LITTER, DIRT); m.suppress(LITTER, MUD); m.suppress(LITTER, COBBLE);
 
@@ -339,7 +343,7 @@ m.scatterDecals('hayScatter', 8, { x: -52, z: 13, r: 11 }, { scale: [1.6, 2.4] }
 m.scatterDecals('hoofPrints', 5, { x: -52, z: 13, r: 12 }, { scale: [3, 4.5] });
 for (const [x, z] of [[52, 38], [-50, 30], [30, 62]]) { m.scatterDecals('hayScatter', 5, { x, z, r: 12 }, { scale: [1.6, 2.4] }); m.scatterDecals('hoofPrints', 3, { x, z, r: 12 }, { scale: [3, 4.5] }); }
 m.scatterDecals('hoofPrints', 6, { x0: -60, z0: -6, x1: 60, z1: 6 }, { scale: [3, 4.5] });
-for (const [cx, cz] of [[-80, -80], [80, -80], [-80, 80], [80, 80]]) {
+for (const [cx, cz] of KEEPS) {
   m.scatterDecals('rubble', 12, { x: cx, z: cz, r: 20 }, { scale: [2.5, 4] });
   m.scatterDecals('bones', 5, { x: cx, z: cz, r: 20 }, { scale: [2, 3.2] });
   m.scatterDecals('cracks', 6, { x: cx, z: cz, r: 22 }, { scale: [3, 5] });

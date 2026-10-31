@@ -160,6 +160,11 @@ const VARIANTS = [
   { from: 'village_rail_fence_straight_01', key: 'war_fence_01', name: 'Smashed Fence', grade: 'gutted' },
   { from: 'oakTree',      key: 'war_oak_burnt_01',    name: 'Burnt Oak',             grade: 'charFoliage' },
   { from: 'pineTree',     key: 'war_pine_burnt_01',   name: 'Burnt Pine',            grade: 'charFoliage' },
+  // Seen from the play camera the hanging moss is a flat sheet, and its lime-yellow
+  // texture read as a neon square on the peat (139 of them on Mirefen)
+  { from: 'swamp_moss_curtain_01', key: 'bog_moss_curtain_01', name: 'Hanging Moss', grade: 'bogMoss' },
+  // Emberreach's giant snag shipped on a disc of bright green turf
+  { from: 'burnt_tree_giant_01', key: 'char_tree_giant_01', name: 'Ashen Giant Snag',  grade: 'ash' },
 ];
 
 // Source entries for the legacy (non-pipeline) assets that have no assets-extra.js row

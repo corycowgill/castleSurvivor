@@ -226,11 +226,58 @@ function walkway(doc) {
   return [{ mesh: m, material: mat }];
 }
 
+// ── Reeds and cattails ──────────────────────────────────────────────────────
+// The pipeline's swamp_reed_cluster_01 and swamp_cattail_clump_01 came back as flat
+// lime slabs (0.17 and 0.22 of their width tall), which the play camera saw as
+// neon squares lying on the peat. These are real clumps of tapering blades, drawn
+// double-sided, green at the root and dry straw at the tip.
+function blade(m, R, bx, bz, h, w, colBase, colTip) {
+  const th = R() * Math.PI * 2, lean = 0.12 + R() * 0.28, face = th + Math.PI / 2 + (R() - 0.5) * 0.8;
+  const dx = Math.cos(th), dz = Math.sin(th), sx = Math.cos(face), sz = Math.sin(face);
+  const SEG = 4;
+  let prev = null;
+  for (let k = 0; k <= SEG; k++) {
+    const t = k / SEG, bend = lean * t * t * h;
+    const cx = bx + dx * bend, cz = bz + dz * bend, cy = h * t * (1 - 0.18 * t * t);
+    const half = w * (1 - t * 0.92) / 2;
+    const col = colBase.map((c, i) => c + (colTip[i] - c) * t * t);
+    const a = m.vert([cx - sx * half, cy, cz - sz * half], [0, t], col);
+    const b = m.vert([cx + sx * half, cy, cz + sz * half], [1, t], col);
+    if (prev) m.quad(prev[0], prev[1], b, a);
+    prev = [a, b];
+  }
+}
+function reedClump(seed, { blades, heads }) {
+  return (doc) => {
+    const R = rng(seed);
+    const m = new Mesh();
+    for (let i = 0; i < blades; i++) {
+      const r = Math.sqrt(R()) * 0.32, a = R() * Math.PI * 2;
+      const v = 0.85 + R() * 0.3, dry = R() < 0.3;
+      const base = [0.2 * v, 0.25 * v, 0.12 * v];
+      const tip = dry ? [0.6 * v, 0.53 * v, 0.32 * v] : [0.42 * v, 0.47 * v, 0.22 * v];
+      blade(m, R, Math.cos(a) * r, Math.sin(a) * r * 0.8, 0.65 + R() * 0.35, 0.035 + R() * 0.025, base, tip);
+    }
+    // Cattail heads: a brown spike on a bare stalk, standing above the leaves
+    for (let i = 0; i < heads; i++) {
+      const r = Math.sqrt(R()) * 0.22, a = R() * Math.PI * 2, x = Math.cos(a) * r, z = Math.sin(a) * r * 0.8;
+      const h = 0.85 + R() * 0.2, lx = (R() - 0.5) * 0.08, lz = (R() - 0.5) * 0.08;
+      m.box(x + lx / 2, h / 2, z + lz / 2, 0.012, h, 0.012, 0, [0.3, 0.33, 0.17]);
+      m.box(x + lx, h - 0.06, z + lz, 0.045, 0.14, 0.045, R(), [0.34, 0.21, 0.11]);
+      m.box(x + lx, h + 0.05, z + lz, 0.008, 0.08, 0.008, 0, [0.42, 0.38, 0.25]);
+    }
+    const mat = doc.createMaterial('fen_reeds').setBaseColorFactor([1, 1, 1, 1]).setRoughnessFactor(0.85).setMetallicFactor(0).setDoubleSided(true);
+    return [{ mesh: m, material: mat }];
+  };
+}
+
 // Registry entries in charred.json's format. defaultScale and radius are the
 // game's world units: the cone stands 27 across (maplib already reserves that),
 // a walkway section is 4.2 long and 1.5 wide.
 const MODELS = {
   landmark_volcano_cone_01: { build: volcano, entry: { name: 'Volcano Cone', category: 'village', defaultScale: 27, obstacle: true, radius: 13, breakable: false, icon: '🏘' } },
+  fen_reeds_01: { build: reedClump(311, { blades: 46, heads: 0 }), entry: { name: 'Fen Reeds', category: 'nature', defaultScale: 1.9, obstacle: false, radius: 0, breakable: false, icon: '🌿' } },
+  fen_cattails_01: { build: reedClump(523, { blades: 30, heads: 7 }), entry: { name: 'Cattails', category: 'nature', defaultScale: 2.0, obstacle: false, radius: 0, breakable: false, icon: '🌿' } },
   fen_walkway_01: { build: walkway, entry: { name: 'Fen Walkway', category: 'props', defaultScale: 4.2, obstacle: false, radius: 0, breakable: false, icon: '📦' } },
 };
 

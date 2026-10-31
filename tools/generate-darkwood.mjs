@@ -27,7 +27,10 @@ const PI = Math.PI;
 
 // ── Ground, tracks, stream ─────────────────────────────────────────────
 for (let gx = -96; gx <= 96; gx += 8) for (let gz = -96; gz <= 96; gz += 8) m.tile('grass', gx, gz);
-for (let z = -54; z <= 60; z += 6) m.tile('road', 0, z);                  // main track
+// The main track wanders a little: dead straight, it read from above as a ruler line
+// laid through the forest. It runs true through the crossing clearing.
+const trackX = (z) => Math.sin(z * 0.05) * 3.4 * Math.min(1, Math.abs(z) / 22) + Math.sin(z * 0.13) * 0.8 * Math.min(1, Math.abs(z) / 14);
+for (let z = -54; z <= 60; z += 6) m.tile('road', +trackX(z).toFixed(2), z);   // main track
 for (let x = 6; x <= 48; x += 6) m.tile('road', x, -12);                   // track to the ford
 m.keepOut(0, 0, 12);
 const streamX = (z) => 40 + Math.sin(z * 0.06) * 8 + Math.cos(z * 0.023) * 4;
@@ -48,8 +51,8 @@ m.add('townStatue', -7, -7, { rotY: PI * 1.25, ignoreKeepOut: true });
 m.add('village_lantern_post_01', 6, 6, { ignoreKeepOut: true }); m.add('village_lantern_post_01', -6, 6, { ignoreKeepOut: true });
 m.add('village_signpost_01', 6, -6, { rotY: PI * 0.3, ignoreKeepOut: true });
 m.add('prop_bench_wood_01', -9, -4, { rotY: PI / 2, ignoreKeepOut: true });
-for (let z = -48; z <= 56; z += 16) m.add('village_lantern_post_01', (z / 16) % 2 === 0 ? 5 : -5, z, {});
-for (let z = -44; z <= 52; z += 12) if (R() < 0.7) m.add('barrel', (R() < 0.5 ? -1 : 1) * R.range(4.5, 6.5), z + R.range(-3, 3), { rotY: R.angle() });
+for (let z = -48; z <= 56; z += 16) m.add('village_lantern_post_01', trackX(z) + ((z / 16) % 2 === 0 ? 5 : -5), z, {});
+for (let z = -44; z <= 52; z += 12) if (R() < 0.7) m.add('barrel', trackX(z) + (R() < 0.5 ? -1 : 1) * R.range(4.5, 6.5), z + R.range(-3, 3), { rotY: R.angle() });
 
 // ── Logging village (south of the crossing, both sides of the track) ───
 const yard = (x, z, rot, kind) => {
@@ -157,24 +160,43 @@ for (const [cx, cz] of [[-70, -20], [70, 20]]) {
 // the stream, held no breakables and nothing to walk to: the waves came out of
 // it and nothing drew a knight in. Two lit clearings with stores to break and a
 // cache each, placed before the forest so the pines grow round them.
-const camp = (cx, cz, building, rot, stores) => {
+// A camp is laid out round its building, the way the village yards are: wood
+// stacked against one wall, stores at the back corner, the work in the front yard,
+// the door's path left clear. (It used to ring the stores at random 3.5-9.5 out,
+// which sprayed crates and barrels evenly over the clearing like dropped loot.)
+// put(key, f, s): f along the building's facing, s to its right, both from its centre.
+// Barrels are 0.85 in radius and need 2 between centres, or add() turns them away.
+const camp = (cx, cz, building, rot, kind) => {
   m.keepOut(cx, cz, 12);
-  m.add(building, cx - 6, cz - 5, { rotY: rot, force: true, ignoreKeepOut: true });
-  for (const [k, n] of stores) for (let i = 0; i < n; i++) m.ring(k, cx, cz, 3.5, 9.5, { ignoreKeepOut: true });
+  const hx = cx - 6, hz = cz - 5;
+  m.add(building, hx, hz, { rotY: rot, force: true, ignoreKeepOut: true });
+  const fx = Math.sin(rot), fz = Math.cos(rot), sx = fz, sz = -fx;
+  const put = (key, f, s, r) => m.add(key, hx + fx * f + sx * s, hz + fz * f + sz * s, { rotY: r ?? rot + R.range(-0.25, 0.25), ignoreKeepOut: true }) || console.warn('camp: no room for', key, f, s);
+  if (kind === 'charcoal') {
+    put('prop_logs_02', -0.5, -5.6, rot + PI / 2); put('prop_logs_02', -3, -5.8, rot + PI / 2 + 0.08); put('prop_logs_02', -1.8, -7.4, rot + PI / 2 - 0.1);
+    put('prop_firewood_stack_02', 2.4, -5.4, rot + PI / 2); put('prop_firewood_stack_02', 4.9, -5.6, rot + PI / 2);
+    put('barrel', -4.6, 4.4); put('barrel', -6.4, 3.2); put('barrel', -4.0, 6.4);
+    put('prop_wood_crate_large_01', 1.5, 5.6); put('prop_wood_crate_small_01', 3.5, 6.4, R.angle());
+    put('prop_wheelbarrow_01', 6.5, -2.5, rot + 0.6); put('prop_tree_stump_02', 7.5, 2.5);
+  } else if (kind === 'lodge') {
+    put('hayBales', -5.2, -3.5, rot + PI / 2); put('hayBales', -5.2, 0, rot + PI / 2);
+    put('village_weapon_rack_01', 1, -5.6, rot + PI / 2); put('village_weapon_rack_01', 3.4, -5.6, rot + PI / 2);
+    put('prop_grain_sack_stack_01', -2.4, 5.6); put('prop_grain_sack_stack_01', -4.3, 6.3);
+    put('prop_wood_crate_large_01', 0, 5.8); put('barrel', 2, 5.6); put('barrel', 3.8, 6.8); put('barrel', -5.9, 4.4); put('barrel', -6.9, 2.5);
+    put('prop_table_wood_01', 7, 1.5, rot + PI / 2); put('prop_stool_wood_01', 7, 3.1); put('prop_stool_wood_01', 8.3, 0.5); put('prop_stool_wood_01', 5.8, -0.2);
+  }
   m.add('village_lantern_post_01', cx + 5, cz + 4, { ignoreKeepOut: true, force: true });
   m.cache(cx + 3, cz - 2);
   m.paintCircle(0, cx, cz, 14, 0.8, 0.6);
   m.shaft(cx + R.range(-3, 3), cz + R.range(-3, 3), { w: 6, h: 26, rotY: R.range(0.3, 0.9) });
 };
-camp(22, -64, 'farmHouse', PI * 0.2, [['prop_logs_02', 3], ['prop_firewood_stack_02', 4], ['barrel', 3],
-  ['prop_wood_crate_large_01', 2], ['prop_wood_crate_small_01', 2], ['prop_wheelbarrow_01', 1]]);
-camp(80, -38, 'house', PI * 1.4, [['hayBales', 2], ['village_weapon_rack_01', 2], ['barrel', 4],
-  ['prop_wood_crate_large_01', 2], ['prop_grain_sack_stack_01', 2], ['prop_table_wood_01', 1], ['prop_stool_wood_01', 2]]);
+camp(22, -64, 'farmHouse', PI * 0.2, 'charcoal');
+camp(80, -38, 'house', PI * 1.4, 'lodge');
 
 // ── Forest ─────────────────────────────────────────────────────────────
 const forestDensity = (x, z) => {
   if (nearStream(x, z)) return 0;
-  if (Math.abs(x) < 7 && z > -58 && z < 64) return 0;           // main track verge
+  if (Math.abs(x - trackX(z)) < 7 && z > -58 && z < 64) return 0;   // main track verge
   if (Math.abs(z + 12) < 7 && x > 0 && x < 52) return 0;          // ford track verge
   const n = noise(x, z);
   const edge = Math.max(Math.abs(x), Math.abs(z)) / 94;
@@ -206,15 +228,18 @@ m.cache(-80, -80); m.cache(84, 84); m.cache(0, 88);
 
 // ── Ground paint: R dirt, G pine needles, B mud, A moss (see MAPS.darkwood.terrain)
 const DIRT = 0, NEEDLES = 1, MUD = 2, MOSS = 3;
-m.paintRoads(DIRT, DIRT);                                         // the tracks are bare earth
+// The tracks are bare earth, painted as a run of overlapping discs of varying width
+// rather than one square per road tile, so the verge is ragged, not stepped
+for (let z = -57; z <= 63; z += 1.2) m.paintCircle(DIRT, trackX(z), z, 3.1 + noise(z * 3.1, 7) * 1.4, 0.95, 0.55);
+for (let x = 3; x <= 51; x += 1.2) m.paintCircle(DIRT, x, -12 + Math.sin(x * 0.2) * 0.6, 2.9 + noise(x * 3.1, 41) * 1.3, 0.95, 0.55);
 m.paintUnderObstacles(DIRT, 2.0, 0.8);
 m.paintRect(DIRT, -75, 8, -57, 24, 0.9, 2); m.paintRect(DIRT, -72, 30, -56, 42, 0.9, 2);
 m.paintCircle(DIRT, 0, 0, 14, 0.7, 0.5);                          // the crossing clearing
 for (const [cx, cz] of [[-48, -46], [52, 48]]) m.paintCircle(DIRT, cx, cz, 13, 0.8, 0.5);
 m.paintCircle(DIRT, 76, -76, 20, 0.7, 0.5);
 for (let z = -96; z <= 96; z += 1.5) m.paintCircle(MUD, streamX(z), z, 5.6, 0.95, 0.5);
-m.paintFn(NEEDLES, (x, z) => (isGrove(x, z) ? 0.2 : 1.15) * forestDensity(x, z) - 0.05, 2);
-m.paintFn(MOSS, (x, z) => isGrove(x, z) ? forestDensity(x, z) * 0.9 + 0.2 : (grove(x, z) - 0.5) * 0.8, 2);
+m.paintFn(NEEDLES, (x, z) => (isGrove(x, z) ? 0.2 : 1.15) * forestDensity(x, z) - 0.05, 2, { blur: 6 });
+m.paintFn(MOSS, (x, z) => isGrove(x, z) ? forestDensity(x, z) * 0.9 + 0.2 : (grove(x, z) - 0.5) * 0.8, 2, { blur: 6 });   // groves are a threshold: feather their edge
 m.paintCircle(MOSS, -34, 66, 12, 0.8, 0.5);                       // the shrine clearing is mossy
 m.suppress(NEEDLES, DIRT); m.suppress(MOSS, DIRT); m.suppress(NEEDLES, MUD); m.suppress(MOSS, MUD);
 

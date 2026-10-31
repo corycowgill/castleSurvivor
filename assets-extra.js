@@ -100,6 +100,18 @@ export const EXTRA_ASSETS = [
     "charredFrom": "nature_fallen_log_01"
   },
   {
+    "key": "bog_moss_curtain_01",
+    "name": "Hanging Moss",
+    "file": "bog_moss_curtain_01.glb",
+    "category": "nature",
+    "defaultScale": 2.97,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🌿",
+    "charredFrom": "swamp_moss_curtain_01"
+  },
+  {
     "key": "bog_rock_01",
     "name": "Algae Boulder",
     "file": "bog_rock_01.glb",
@@ -158,6 +170,30 @@ export const EXTRA_ASSETS = [
     "breakable": false,
     "icon": "🌿",
     "charredFrom": "shrubbery"
+  },
+  {
+    "key": "fen_cattails_01",
+    "file": "fen_cattails_01.glb",
+    "name": "Cattails",
+    "category": "nature",
+    "defaultScale": 2,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🌿",
+    "procedural": true
+  },
+  {
+    "key": "fen_reeds_01",
+    "file": "fen_reeds_01.glb",
+    "name": "Fen Reeds",
+    "category": "nature",
+    "defaultScale": 1.9,
+    "obstacle": false,
+    "radius": 0,
+    "breakable": false,
+    "icon": "🌿",
+    "procedural": true
   },
   {
     "key": "nature_bush_03",
@@ -956,6 +992,18 @@ export const EXTRA_ASSETS = [
     "breakable": false,
     "icon": "🌳",
     "charredFrom": "nature_dead_tree_03"
+  },
+  {
+    "key": "char_tree_giant_01",
+    "name": "Ashen Giant Snag",
+    "file": "char_tree_giant_01.glb",
+    "category": "tree",
+    "defaultScale": 11.7,
+    "obstacle": true,
+    "radius": 5.5,
+    "breakable": false,
+    "icon": "🌳",
+    "charredFrom": "burnt_tree_giant_01"
   },
   {
     "key": "landmark_ancient_oak",

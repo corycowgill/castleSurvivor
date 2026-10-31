@@ -4696,7 +4696,13 @@ function buildStreamRibbon(pts, w, tex, flow = 'water', look = null) {
       if (still) shader.fragmentShader = shader.fragmentShader
         .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
           float wFres = 1.0 - saturate(dot(normal, normalize(vViewPosition)));
-          totalEmissiveRadiance += vec3(${sky.r.toFixed(3)}, ${sky.g.toFixed(3)}, ${sky.b.toFixed(3)}) * (0.55 + 0.9 * wFres * wFres) * (0.45 + 1.1 * wRip);`);
+          totalEmissiveRadiance += vec3(${sky.r.toFixed(3)}, ${sky.g.toFixed(3)}, ${sky.b.toFixed(3)}) * (0.55 + 0.9 * wFres * wFres) * (0.45 + 1.1 * wRip);
+          // The bank: a wet, sky-lit line where the water meets the mud, and a
+          // crisper edge than the linear feather, which faded the channel out over
+          // three units so it read as a soft shadow lying across the ground
+          float wRim = smoothstep(0.5, 0.7, vAlpha) * (1.0 - smoothstep(0.75, 0.92, vAlpha));
+          totalEmissiveRadiance += vec3(${sky.r.toFixed(3)}, ${sky.g.toFixed(3)}, ${sky.b.toFixed(3)}) * wRim * (0.35 + 0.5 * wRip);
+          diffuseColor.a = smoothstep(0.12, 0.55, vAlpha) * (diffuseColor.a / max(vAlpha, 0.001));`);
     };
     mat.customProgramCacheKey = () => 'stream-ribbon-' + flow;
     _streamMats[flow] = mat;
@@ -5155,10 +5161,6 @@ async function loadMap(mapId) {
       im.castShadow = false;
     }
   }
-  // The ground glow under an emitter is now WHITE and tinted by the map's lantern
-  // colour, because it was hard-coded warm orange: Mirefen'"'"'s green wisps were
-  // casting orange pools. White x 0xffb060 reproduces the old warm glow almost
-  // exactly, so Kingsfield, Darkwood and Emberreach are unchanged.
   // The ground glow under an emitter is now WHITE and tinted by the map's lantern
   // colour. It was hard-coded warm orange, so Mirefen's green wisps cast orange
   // pools. White x 0xffb060 reproduces the old warm glow almost exactly, so

@@ -163,3 +163,26 @@ Kite bot, 10 runs each (5 Dad, 3 Brennan, 2 Parker), previous commit vs this one
 Emberreach 7/10 → 7/10, Mirefen 4/10 → 8/10. The Mirefen jump is more than the walkways could
 cause, since they don't block anything. Read it as noise plus the re-rolled scatter (the track
 keep-out reshuffles later placements), not as a measured gain.
+
+## Sixth pass (2026-10-31): what looks wrong
+
+Overheads plus eight gameplay-camera stops per map. The brief this time was what reads as
+wrong, not what measures badly. Details are in PLAN 50.25.
+
+| Problem | Where | Fix |
+|---|---|---|
+| Hard-edged ground paint (a red diamond, rectangles) | Bloodmarch field, Darkwood groves, Kingsfield woods | `paintFn` blur; placement unchanged |
+| Grey "paper scraps" on the grass | arrowStorm, shieldScatter, ashDrift decals | backdrop keyed out, ash greyed |
+| Spiky black wings for burn marks (199 placed) | scorch decal | generated burn mark |
+| Orange flagstones on meadows; cyan blob in puddles; yellow paint | cracks, puddle, sulfurStain | regraded / regenerated |
+| Neon lime squares everywhere | Mirefen reeds and cattails were flat slabs | rebuilt in code as real clumps |
+| Lime blobs, neon algae | moss curtain model, bogScum and bogPool | regraded |
+| Keeps standing in the river | Kingsfield, both west corners | moved to the east bank |
+| Loot sprayed evenly over a clearing | Darkwood camps, Mirefen village | laid out round the buildings |
+| 40 fence pieces strewn like litter | Mirefen village | a palisade with three gates |
+| Ruler-straight track | Darkwood main track, Bloodmarch road and lanes | meander and ragged verge |
+| Green turf under a dead tree; a crown over the lava | Emberreach giant snags | regraded; one moved |
+| Water read as a shadow | Mirefen channels | crisper bank, wet rim |
+
+Not touched: Kingsfield's town and the Bloodmarch set pieces read well already. The muted
+`bog_flowers_01` squares on Mirefen are smaller and dark enough to leave.
