@@ -1251,6 +1251,18 @@ export const EXTRA_ASSETS = [
     "icon": "🏘"
   },
   {
+    "key": "fen_totem_mossy_01",
+    "name": "Mossy Fen Totem",
+    "file": "fen_totem_mossy_01.glb",
+    "category": "village",
+    "defaultScale": 4.05,
+    "obstacle": true,
+    "radius": 1.1,
+    "breakable": true,
+    "icon": "🏘",
+    "charredFrom": "fen_totem_01"
+  },
+  {
     "key": "fen_witch_hut_01",
     "name": "Bog Witch Hut",
     "file": "fen_witch_hut_01.glb",

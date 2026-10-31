@@ -77,7 +77,7 @@ const TRAPS = () => P('fen_wicker_trap_01', 'prop_grain_sack_stack_01', 'bog_cra
 // and 1.5 wide. The Trellis fen_boardwalk_01 was a narrow plank on 0.9 units of
 // legs and read as knee-high benches beside the fords (tools/shots/bw-mirefen-1.png).
 const BOARDWALK = () => P('fen_walkway_01');
-const TOTEM = () => P('fen_totem_01', 'village_signpost_01');
+const TOTEM = () => P('fen_totem_mossy_01', 'fen_totem_01', 'village_signpost_01');
 const WISPPOST = () => P('fen_lantern_post_01', 'village_lantern_post_01');
 const WISPSTONE = () => P('swamp_wisp_stone_01', 'bog_rock_01');
 const BARRICADE = () => P('bog_barricade_01', 'combat_barricade_01');
@@ -345,6 +345,58 @@ cache(54, -84);
 // A fourth corner prize, as in Darkwood
 add('chest', -80, 80, { rotY: R.angle(), ignoreKeepOut: true, force: true });
 for (let i = 0; i < 6; i++) ring(BLEACHED(), -80, 80, 6, 16, {});
+
+// ══ The corners ═══════════════════════════════════════════════════════════
+// The four corners were the emptiest ground on the map (0-5 props in each 25-unit
+// cell against 20-60 elsewhere). Each gets a small place with a story and a cache,
+// laid out in its own frame and facing the middle, so a run that drifts to the
+// edge finds something there. Their keep-outs go in before the scatter.
+const corner = (x, z) => {                                              // facing the map centre
+  const f = m.frame(x, z, Math.atan2(-x, -z));
+  return { ...f, put: (key, ...a) => f.put(key, ...a) || (m.has(key) && console.warn('corner', x, z, ': no room for', key, ...a.slice(0, 2))) };
+};
+// One cache per place: an island's cache can already stand in a corner
+const cacheOnce = (x, z) => m.objects.some(o => o.key === 'chest' && Math.hypot(o.x - x, o.z - z) < 12) || m.cache(x, z);
+{ // South-west: the peat-cutters' camp. Cut peat stacked to dry, the barrow, the cart
+  const { put, decal, at } = corner(-76, 78);
+  for (const s of [-3.4, -0.6, 2.2]) put(P('bog_logs_01', 'prop_logs_02'), -3, s, PI / 2 + R.range(-0.1, 0.1), { scaleMul: 1.5 });
+  put(P('bog_cart_01', 'combat_broken_cart_01'), 1, 5.5, 0.5); put('prop_wheelbarrow_01', 2.4, -2.6, 0.9);
+  put(P('bog_stump_01', 'prop_tree_stump_02'), 3.5, 1, null); put(FISHRACK(), -1, -6.5, 0.2);
+  put(WISPPOST(), 4.5, -5, 0, { force: true }); put('prop_firewood_stack_02', -6, 4, PI / 2);
+  decal('rootsMud', 0, 0, 4.4); decal('puddle', 3, 3.5, 2.6);
+  cacheOnce(...at(-1.5, 2.2)); m.keepOut(-76, 78, 10);
+}
+{ // South-east: the drowned shrine. A ring of fen totems round a wisp stone,
+  // offerings at its foot, two old cypresses standing over it
+  const { put, decal, at } = corner(78, 76);
+  put(WISPPOST(), 0, 0, 0, { force: true });                         // the wisp burns at its heart
+  for (let k = 0; k < 4; k++) { const a = k * PI / 2 + 0.4; put(TOTEM(), Math.cos(a) * 5, Math.sin(a) * 5, a + PI / 2, { scaleMul: 0.8 }); }
+  put('prop_pottery_01', 1.9, 0.6, null); put('prop_water_jug_01', 1.6, -1.5, null); put(P('bog_crate_01', 'barrel'), -1.9, 1.6, null);
+  put(CYPRESS(), -6, -8, null, { scaleMul: 1.05 }); put(CYPRESS_B(), -5.5, 8.5, null, { scaleMul: 0.95 });
+  decal('mossPatch', 0, 0, 5); decal('bones', 3, 3, 2.2); decal('mushrooms', -3, -3, 2.4);
+  cacheOnce(...at(-3.5, 0)); m.keepOut(78, 76, 11);
+}
+{ // North-west: the sunken caravan. Two carts gone in to the axles, the load
+  // spilled into the mud, the drowned logs that were its road
+  const { put, decal, at } = corner(-78, -78);
+  // Ungraded carts and crates: the bog grades go near-black and vanished on the peat
+  put(P('combat_broken_cart_01', 'bog_cart_01'), 0, -2.5, 0.35, { scaleMul: 1.5 }); put(P('combat_broken_cart_01', 'bog_cart_01'), -4, 3.5, -0.4, { scaleMul: 1.4 });
+  put('prop_wood_crate_broken_01', 2.4, 0.6, null); put('prop_wood_crate_small_01', 3.4, 1.8, null); put('prop_wood_crate_large_01', 1.8, 3.2, 0.3);
+  put('barrel', -1.5, -6, null); put('barrel', 3.5, -4.5, null);
+  for (const f of [5, 7.5, 10]) put(P('bog_log_01', 'swamp_rotten_log_01'), f, R.range(-1, 1), PI / 2 + R.range(-0.25, 0.25));
+  put(P('bog_driftwood_01', 'swamp_driftwood_01'), -2, 7, null);
+  decal('bogPool', -1, 0, 4.6); decal('puddle', 3, -2.5, 3);
+  cacheOnce(...at(-6.5, -1)); m.keepOut(-78, -78, 10);
+}
+{ // North-east, below the bell tower: the fishers' landing. Duckboards out over
+  // the mud, coracles drawn up, traps and racks
+  const { put, decal, at } = corner(82, -84);
+  for (const f of [-2.1, 2.1]) put(BOARDWALK(), f, 0, PI / 2, { force: true });
+  put(CORACLE(), 1, 3.2, 0.6); put(CORACLE(), -1.8, 3.6, -0.3); put(TRAPS(), 4.5, -2.6, null);
+  put(FISHRACK(), -1.2, -3.6, 0); put(WISPPOST(), 5, 2.5, 0, { force: true });
+  decal('puddle', -4.5, 1.5, 3.4); decal('rootMat', 2.5, -6, 3.2);
+  cacheOnce(...at(-4.5, -2.5)); m.keepOut(82, -84, 9);
+}
 
 // ══ Scatter ═══════════════════════════════════════════════════════════════
 const region = { x: 0, z: 0, r: 96 };

@@ -1,13 +1,17 @@
-"""One-off clean-up of generated ground decals (PLAN 50.25).
+"""One-off clean-up of generated ground decals (PLAN 50.25, 50.26).
 
+    git checkout 0117da5^ -- images/decals && git reset -q images/decals
     python3 tools/fix-decals.py            # rewrites images/decals/*.webp in place
 
-The image model left some decals sitting on a pale, half-transparent haze that read in
-game as grey paper scraps on the grass (arrowStorm, shieldScatter, ashDrift), drew `scorch` as a spiky black wing,
-painted `cracks` as bright tan flagstone that glowed orange on every meadow, and put a
-cyan blob in the middle of `puddle`, made `sulfurStain` paint-yellow, and
-Mirefen's `bogScum` / `bogPool` neon lime round sky-blue water. Each fix is idempotent enough to run twice
-without visible change; the originals are in git history.
+Run it on the ORIGINAL images (the checkout above). The grades are not idempotent:
+run twice, ash and cracks darken again. The generated decals (puddle, scorch,
+hoofPrints) are drawn from scratch and come out byte-identical either way.
+
+What it fixes: the image model left arrowStorm, shieldScatter and ashDrift on a pale
+haze that read in game as grey paper scraps on the grass, drew `scorch` as a spiky
+black wing, `cracks` as bright tan flagstone that glowed orange on every meadow, a
+cyan blob in the middle of `puddle`, `sulfurStain` paint-yellow, Mirefen's `bogScum`
+and `bogPool` neon lime round sky-blue water, and `hoofPrints` as orange sausages.
 """
 import os
 import numpy as np
@@ -103,6 +107,25 @@ def mute(a, keep=0.5, tint=(1, 1, 1), alpha=1.0):
     return a
 
 
+def hoofprints(n=512):
+    """A short trail of horseshoe dents, alternating either side of the line."""
+    y, x = np.mgrid[0:n, 0:n].astype(np.float32) / n
+    rng = np.random.default_rng(21)
+    alpha = np.zeros((n, n), np.float32)
+    for k in range(6):
+        cy = 0.12 + k * 0.155 + rng.uniform(-0.015, 0.015)
+        cx = 0.5 + (0.09 if k % 2 else -0.09) + rng.uniform(-0.02, 0.02)
+        dx, dy = (x - cx) / 0.055, (y - cy) / 0.065
+        r = np.hypot(dx, dy)
+        ring = np.clip(1 - np.abs(r - 0.8) / 0.22, 0, 1)
+        ring *= ss(-0.55, -0.2, dy)                       # open at the heel
+        alpha = np.maximum(alpha, ring * rng.uniform(0.7, 0.9))
+        alpha = np.maximum(alpha, (1 - ss(0.6, 1.25, r)) * 0.25)   # the pressed ground inside
+    alpha *= 0.85 + 0.3 * (noise(n, 10, 22) - 0.5)
+    rgb = np.ones((n, n, 3), np.float32) * np.array([0.14, 0.1, 0.07])
+    return np.dstack([rgb, np.clip(alpha, 0, 1)]).astype(np.float32)
+
+
 def main():
     for k in ('arrowStorm', 'shieldScatter'):
         save(k, dehaze(colorkey(load(k))))
@@ -131,6 +154,7 @@ def main():
     save('bogScum', mute(a, keep=0.3, tint=(0.5, 0.54, 0.36), alpha=0.8))
     save('bogPool', mute(load('bogPool'), keep=0.35, tint=(0.58, 0.62, 0.42)))
     save('puddle', puddle())
+    save('hoofPrints', hoofprints())
     save('scorch', scorch())
 
 

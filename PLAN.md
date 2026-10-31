@@ -1559,3 +1559,22 @@ snag rate.
   - **Still water** has a crisper bank and a faint wet rim, so Mirefen's channels read as
     water rather than a soft shadow lying over the ground.
   - Kite bot, 10 mixed runs each: Kingsfield 9/10, Darkwood 9/10, Mirefen 7/10. `npm test` passes.
+- [x] 50.26 **Richer places.** A 25-unit cell census of each map found the emptiest ground:
+  Kingsfield's north meadow, all four Mirefen corners, Bloodmarch's castle bailey (a ring of
+  nothing between keep and wall) and its south-centre. Each now holds an authored set piece
+  laid out with `MapBuilder.frame(x, z, rot)`, which places props in the piece's own frame
+  facing a point, instead of ringing or scattering them. Every piece has a cache.
+  - **Kingsfield, the tourney ground:** a clearing kept in the north pines with a jousting list
+    (tilt barrier east-west, so the ground either side stays open), a pavilion at each end,
+    tents, benches and banners for the court, horses at the hitching posts, racks and a trough.
+  - **Bloodmarch, the bailey:** a field hospital inside the gate, an armoury (the forge and
+    anvil, which were never placed before), a shield line behind the north breach, a granary
+    with a burning wagon, the garrison's graves behind the keep, and stores. **The war-drum
+    camp** (south-centre): the orc outriders' fire, the war drums, the broken idol and the
+    standing watchtower, all of which were built and never used.
+  - **Mirefen's corners:** a peat-cutters' camp (SW), a drowned shrine of totems round a wisp
+    under two cypresses (SE), a caravan sunk to its axles on a log road (NW), and a fishers'
+    landing with duckboards and coracles under the bell tower (NE). The fen totem's lime cap
+    is re-graded (`fen_totem_mossy_01`) map-wide.
+  - `hoofPrints` was drawn as orange sausages and is now a generated horseshoe trail.
+    `tools/fix-decals.py` is documented as run-once on the originals; it is not idempotent.

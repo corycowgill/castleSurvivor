@@ -77,7 +77,10 @@ for (const x of [-30, 30]) {
 m.add('horseCart', -22, -44, { rotY: PI * 0.4 }); m.add('horse', -25, -48, { rotY: PI * 0.4 });
 m.add('village_hitching_post_01', 22, -45, { rotY: 0 }); m.add('horse', 24, -49, { rotY: PI * 0.9 });
 m.add('village_water_trough_01', 27, -46, { rotY: PI / 2 });
-// Behind the castle: dark pines right up to the north edge
+// Behind the castle: dark pines right up to the north edge, round a clearing kept
+// for the tourney ground (laid out below)
+const TOURNEY = { x: 8, z: -72 };
+m.keepOut(TOURNEY.x, TOURNEY.z, 18); m.keepOut(TOURNEY.x - 21, TOURNEY.z, 9); m.keepOut(TOURNEY.x + 21, TOURNEY.z, 9);
 m.scatter('pineTree', 70, { x0: -92, z0: -92, x1: 92, z1: -58 }, { density: (x, z) => z < -62 ? 0.8 : 0.35, minSpacing: 1.5, scale: undefined });
 
 // ── Town plaza around the crossroads ───────────────────────────────────
@@ -277,6 +280,33 @@ for (const [cx, cz] of KEEPS) {
   for (let i = 0; i < 4; i++) m.ring('barrel', cx, cz, 9, 13, {});
   m.ring('prop_wood_crate_broken_01', cx, cz, 9, 13, {});
   m.ring('chest', cx, cz, 8, 10, {});
+}
+
+// ── The tourney ground (north meadow) ──────────────────────────────────
+// The meadow between the castle district and the north woods was open grass with
+// nothing in it. The king's knights muster here: a jousting list with a pavilion
+// at each end, benches and banners for the court along the north side, the horses
+// and racks along the south. The tilt barrier runs east-west, so the field stays
+// open either side of it for a kiting player.
+{
+  const T = TOURNEY;
+  const P = (...keys) => m.pick(...keys) || keys[keys.length - 1];
+  const { put: put0, decal, at } = m.frame(T.x, T.z, 0);               // f runs south, s runs east
+  const put = (key, f, s, ...rest) => put0(key, f, s, ...rest) || console.warn('tourney: no room for', key, f, s);
+  for (let s = -13.5; s <= 13.6; s += 3) put('village_rail_fence_straight_01', 0, s, 0, { force: true });
+  put(P('war_command_tent_01', 'village_market_stall_01'), 0, -21, -PI / 2, { force: true });
+  put(P('war_command_tent_01', 'village_market_stall_01'), 0, 21, PI / 2, { force: true });
+  put(P('war_field_tent_01', 'prop_hay_bale_01'), -9, -22, 0.2); put(P('war_field_tent_01', 'prop_hay_bale_01'), -7.5, 24.5, -0.2);
+  for (const s of [-9, -3, 3, 9]) put('prop_bench_wood_01', -5, s, 0);
+  for (const s of [-15, -6, 6, 15]) put(P('war_kingdom_banner_01', 'village_signpost_01'), -8, s, 0, { force: true });
+  for (const s of [-16, 16]) { put('horse', 5.5, s, s > 0 ? -PI / 2 : PI / 2); put('village_hitching_post_01', 7.5, s - 3 * Math.sign(s), 0); }
+  put('village_weapon_rack_01', 5, -10, 0); put('village_weapon_rack_01', 5, 10, 0);
+  put('hayBales', 6.5, -5, PI / 2); put('village_water_trough_01', 6.5, 4.5, 0);
+  put('barrel', 5, -25.5, null); put('barrel', 6.2, -27.4, null); put('prop_wood_crate_large_01', 4, 25, 0.1);
+  for (let s = -12; s <= 12; s += 4) { decal('hoofPrints', -2, s, 3.2); decal('hoofPrints', 2, s + 2, 3.2); }
+  decal('hayScatter', 6, -4, 2.4); decal('hayScatter', 5, 15, 2.2);
+  m.cache(...at(-3, -25));
+  m.paintRect(0, T.x - 15, T.z - 3.5, T.x + 15, T.z + 3.5, 0.75, 3);   // the lists are trodden bare (channel 0, dirt)
 }
 
 // ── Woods: south belt, corner thickets, thin copses elsewhere ──────────

@@ -186,3 +186,18 @@ wrong, not what measures badly. Details are in PLAN 50.25.
 
 Not touched: Kingsfield's town and the Bloodmarch set pieces read well already. The muted
 `bog_flowers_01` squares on Mirefen are smaller and dark enough to leave.
+
+## Seventh pass (2026-10-31): richer places
+
+A prop and decal count per 25-unit cell found the emptiest ground on each map. Each spot
+now holds an authored set piece with a cache (PLAN 50.26):
+
+| Map | Where | Set piece |
+|---|---|---|
+| Kingsfield | north meadow, a clearing in the pines | tourney ground: jousting list, pavilions, court benches, horses |
+| Bloodmarch | the castle bailey | field hospital, armoury, shield line, burning granary, garrison graves |
+| Bloodmarch | south-centre | the orc war-drum camp (first use of the drums, broken idol and watchtower) |
+| Mirefen | the four corners | peat-cutters' camp, drowned shrine, sunken caravan, fishers' landing |
+
+`MapBuilder.frame()` places a piece's props in its own frame, facing a point, so they read as
+arranged by someone rather than dropped.

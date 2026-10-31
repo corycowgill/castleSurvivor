@@ -163,6 +163,8 @@ const VARIANTS = [
   // Seen from the play camera the hanging moss is a flat sheet, and its lime-yellow
   // texture read as a neon square on the peat (139 of them on Mirefen)
   { from: 'swamp_moss_curtain_01', key: 'bog_moss_curtain_01', name: 'Hanging Moss', grade: 'bogMoss' },
+  // The fen totem's cap was a block of lime that outshone the wisps
+  { from: 'fen_totem_01', key: 'fen_totem_mossy_01', name: 'Mossy Fen Totem', grade: 'bogMoss', breakable: true },
   // Emberreach's giant snag shipped on a disc of bright green turf
   { from: 'burnt_tree_giant_01', key: 'char_tree_giant_01', name: 'Ashen Giant Snag',  grade: 'ash' },
 ];

@@ -199,6 +199,65 @@ for (const a of [gateA - PI * 0.62, gateA + PI * 0.62, gateA - PI * 0.3, gateA +
 // Rubble spilled out of every breach and along the foot of the wall
 m.paintCircle(2, GATE.x, GATE.z, 12, 0.85, 0.5);
 
+// ══ The bailey ════════════════════════════════════════════════════════════
+// Between the keep and the curtain wall the garrison is still holding out, and
+// the ground was empty: a ring of nothing round the castle. Each vignette is laid
+// out in its own frame (m.frame), facing the keep, between the gate, breaches and
+// towers so none of them stops up a way in. `bay(da, d)` is a spot da radians
+// round from the gate line and d out from the keep.
+const bay = (da, d) => {
+  const a = gateA + da;
+  const f = m.frame(CASTLE.x + Math.cos(a) * d, CASTLE.z + Math.sin(a) * d, Math.atan2(-Math.cos(a), -Math.sin(a)));
+  return { ...f, put: (key, ...r) => f.put(key, ...r) || (m.has(key) && console.warn('bailey', da.toFixed(2), ': no room for', key, ...r.slice(0, 2))) };
+};
+{ // The field hospital, inside the gate: two tents, the surgeon's table. (+s runs
+  // away from the gate here; the gate side is the gatehouse and a breach)
+  const { put, decal, at } = bay(0.45, 16.5);
+  put(TENT(), -0.5, 1.5); put(P('war_shield_pile_01', 'barrel'), -1.2, 6.2, null);
+  put('prop_table_wood_01', 3, 4.2, PI / 2); put('prop_stool_wood_01', 3.2, 5.8, null); put('prop_bucket_wood_01', 4.2, 2.8, null);
+  put('barrel', 1.8, 11.4, null); put('prop_water_jug_01', 2.8, 9.8, null);
+  put(H_BANNER(), -4.2, -1.2);
+  decal('warStain', 2.5, 4.5, 3.2); decal('bootChurn', 0, 4, 4);
+  m.cache(...at(3.5, -1));
+}
+{ // The armoury: forge, anvil and racks, worked until the wall broke (-s is away
+  // from the gate)
+  const { put, decal } = bay(-0.45, 16.5);
+  put(P('blacksmith_forge_01', 'ogre_forge_01'), -1, -3); put(P('blacksmith_anvil_01', 'prop_tree_stump_02'), 2.2, -3, 0.4);
+  put('blacksmith_coal_pile_01', -1.2, -6.6, null);
+  put('village_weapon_rack_01', -3.8, 1.8, 0);
+  put(SHIELDS(), 3.4, -7.4, null); put('blacksmith_tool_rack_01', -3.8, -3.2, 0);
+  decal('cracks', 1, -3, 3.6);
+}
+{ // A shield line behind the north breach, faced outward where they broke in
+  const { put, decal } = bay(1.2, 18);
+  for (const s of [-3.4, 0, 3.4]) put(SHIELD_WALL(), -2.5, s, PI + (s ? 0.12 * Math.sign(s) : 0), { force: true });
+  put(SWORD(), 0.6, -1.5, null); put(ARROWS(), 1.2, 2.4, null); put(SHIELDS(), 2, 0.5, null);
+  decal('shieldScatter', -0.5, 0, 3.4); decal('arrowStorm', -4.5, 1, 3.6);
+}
+{ // The granary: what the siege was being fought over, one wagon of it burning
+  const { put, at } = bay(-1.2, 18.5);
+  put('prop_grain_sack_stack_01', -2, -2); put('prop_grain_sack_stack_01', -2, 0.2, 0.2); put('prop_grain_sack_01', -0.4, -1, null);
+  put('hayBales', 1.6, -3.4, PI / 2);
+  for (const [f, sd] of [[3.8, -0.6], [-0.5, 5.5]]) if (put(WAGON(), f, sd, PI / 2 + 0.2)) { m.fire(...at(f, sd), { r: 1.2, y: 1.2, h: 8, s: 0.8 }); break; }
+}
+{ // The garrison's dead, buried behind the keep in two rows under the banner
+  const { put, decal } = bay(PI, 19);
+  for (const f of [-1.6, 1.6]) for (const s of [-4.5, -1.5, 1.5, 4.5]) put(CAIRN(), f, s + (f > 0 ? 0.4 : -0.4), PI / 2 + R.range(-0.1, 0.1));
+  put(H_BANNER(), -4.2, -7); put(H_BANNER(), -4.2, 7); put(H_LANTERN(), 4, 0, 0);
+  decal('bones', 0, 8.5, 2.2);
+}
+{ // Stores stacked against the back wall of the keep
+  const { put } = bay(PI - 0.9, 17.5);
+  put('barrel', 0, -1); put('barrel', 0, 1.1, null); put('barrel', 1.8, 0, null);
+  put('prop_firewood_stack_02', -0.5, 3.6, PI / 2); put('prop_logs_02', -0.5, -4, PI / 2);
+}
+{
+  const { put } = bay(PI + 0.9, 17.5);
+  put('prop_wood_crate_large_01', 0, 0); put('prop_wood_crate_large_01', 0, 1.9, 0.1); put('prop_wood_crate_small_01', 1.4, 1, null);
+  put(BEAMS(), -0.6, -3.8, PI / 2);
+}
+
 // ══ The battered town ═════════════════════════════════════════════════════
 // Between the wall and the field, either side of the road. Half of it is gutted
 // and burning, the rest battered; the tavern and the smithy still stand.
@@ -517,6 +576,27 @@ for (let i = 0; i < 6; i++) ring(BONES(), STAND.x, STAND.z, 10, 15, {});
 m.cache(STAND.x + 3, STAND.z - 2);
 m.paintCircle(RUB_CH, STAND.x, STAND.z, 13, 0.5, 0.6);
 m.fire(STAND.x + 12, STAND.z + 6, { r: 0.7, y: 0.4, h: 7, s: 0.5 });
+
+// The war-drum camp (south, between the pyres and the fortress): the orc
+// outriders' fire, where the drums that called the charge still stand. It holds
+// the south-centre, which was empty field to the map edge, and uses the drum,
+// the broken idol and the standing watchtower, which were built and never placed.
+{
+  const DRUMS = { x: 12, z: 80 };
+  const { put, decal, at } = m.frame(DRUMS.x, DRUMS.z, PI);           // facing north, at the field
+  put(WATCHFIRE(), 0, 0, null, { force: true }); m.fire(...at(0, 0), { r: 1.0, y: 0.5, h: 9, s: 0.85 });
+  put(DRUM(), 2.6, -2.4, null); put(DRUM(), 2.8, 2.2, null); put(DRUM(), -0.4, 3.4, null);
+  put(P('orc_idol_broken_01', 'ogre_totem_01'), -5.5, 0, 0, { force: true });
+  put(P('orc_watchtower_01', 'orc_watchtower_broken_01'), -7, 9, 0.3, { force: true });
+  put(LOOT(), -3.2, -5.2, null); put(LOOT(), -4.8, -3.4, null); put(CAGE(), -6.5, -8.5, 0.4);
+  for (const s of [-7, -2.4, 2.4, 7]) put(SPIKES(), 7.5, s, 0);              // the front, toward the field
+  put(O_BANNER(), 6, -10, null); put(O_BANNER(), 6, 10, null);
+  put(BONES(), 3.5, -6, null); put(TOTEM(), 4, 6.5, null);
+  decal('scorch', 0, 0, 4.5); decal('bootChurn', 3, 0, 4); decal('bones', -2, -7, 2.4);
+  m.cache(...at(-2.5, 6.5));
+  m.paintCircle(RUB_CH, DRUMS.x, DRUMS.z, 13, 0.45, 0.7);
+  m.keepOut(DRUMS.x, DRUMS.z, 11);
+}
 
 // ══ Open ground between the districts ═════════════════════════════════════
 // Sparse: this is where the waves come from. Trampled grass, the odd cairn.

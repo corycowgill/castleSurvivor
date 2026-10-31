@@ -600,6 +600,18 @@
     "charredFrom": "swamp_moss_curtain_01"
   },
   {
+    "key": "fen_totem_mossy_01",
+    "name": "Mossy Fen Totem",
+    "file": "fen_totem_mossy_01.glb",
+    "category": "village",
+    "defaultScale": 4.05,
+    "obstacle": true,
+    "radius": 1.1,
+    "breakable": true,
+    "icon": "🏘",
+    "charredFrom": "fen_totem_01"
+  },
+  {
     "key": "char_tree_giant_01",
     "name": "Ashen Giant Snag",
     "file": "char_tree_giant_01.glb",

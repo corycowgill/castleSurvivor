@@ -378,6 +378,21 @@ export class MapBuilder {
     if (apron) this.paintCircle(apron.ch, x, z, apron.r, apron.strength ?? 0.8, 0.5);
     return ok;
   }
+  // A set piece's own frame at (x, z) facing rot: put(key, f, s, r) places key f units
+  // along the facing and s to its right, turned r from the facing (random when r is
+  // null). Authored vignettes read as made by someone; rung or scattered props read
+  // as dropped. Returns whether the piece went in.
+  frame(x, z, rot, defaults = {}) {
+    const fx = Math.sin(rot), fz = Math.cos(rot), sx = fz, sz = -fx;
+    const at = (f, s) => [x + fx * f + sx * s, z + fz * f + sz * s];
+    const put = (key, f, s, r = 0, opts = {}) => {
+      if (!key || !ASSET[key]) return false;          // a stand-in that is not registered yet
+      const [px, pz] = at(f, s);
+      return this.add(key, px, pz, { rotY: r == null ? this.rnd.angle() : rot + r, ignoreKeepOut: true, ...defaults, ...opts });
+    };
+    const decal = (key, f, s, scale = 2.5) => { const [px, pz] = at(f, s); return this.decal(key, px, pz, { scale }); };
+    return { at, put, decal };
+  }
   // Try to place on a ring around (cx, cz); facing: 'in' | 'out' | number | undefined(random)
   ring(key, cx, cz, rMin, rMax, { tries = 16, facing, ...rest } = {}) {
     for (let i = 0; i < tries; i++) {
